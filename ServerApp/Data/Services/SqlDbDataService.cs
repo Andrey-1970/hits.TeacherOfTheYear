@@ -9,15 +9,30 @@ namespace ServerApp.Data.Services
 {
     public class SqlDbDataService(ApplicationDbContext context, IAuthorization auth) : IDataService
     {
-        public async Task<IEnumerable<IdentifierType>> GetIdentifierTypesAsync()
-        {
-            return await context.IdentifierTypes.ToArrayAsync();
-        }
-
-        public async Task<IEnumerable<UserInfo>> GetUserInfosAsync()
+        public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
             var username = await auth.GetUsernameAsync();
-            return await context.UserInfos.Where(x => x.Username == username).ToArrayAsync();
+            return await Task.FromResult(context.UserInfos.FirstOrDefault(x => x.Username == username));
+        }
+
+        public async Task<IEnumerable<IdentifierVal>> GetIdentifierValsAsync()
+        {
+            var username = await auth.GetUsernameAsync();
+            var user = context.UserInfos.FirstOrDefault(x => x.Username == username);
+            var vals = await context.IdentifierVals.ToArrayAsync();
+            if(vals.Length == 0)
+            {
+                vals = await context.IdentifierTypes
+                    .Select(idType => new IdentifierVal() { 
+                        Id = Guid.NewGuid(),
+                        UserInfo = user,
+                        IdentifierType=idType
+                    })
+                    .ToArrayAsync();
+                await context.IdentifierVals.AddRangeAsync(vals);
+                await context.SaveChangesAsync();
+            }
+            return vals;
         }
     }
 }

@@ -4,8 +4,7 @@
 @using ServerApp.Data
 
 @rendermode InteractiveServer
-@attribute [Authorize(Roles="ADMIN")]
-@* @attribute [Authorize] *@
+@attribute [Authorize(Roles="ADMIN, PARTICIPANT")]
 
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager

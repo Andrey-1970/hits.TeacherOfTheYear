@@ -218,8 +218,9 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "NeedValue1", "NeedValue2" },
                 values: new object[,]
                 {
-                    { new Guid("164a2774-5ba6-4631-8cb1-548a29fc3f8b"), "SCOPUS", false, true },
-                    { new Guid("c9cdc9a7-ce6a-4880-a452-92ac3f64dad9"), "WOFSCI", true, false }
+                    { new Guid("7f92113e-0ce2-4990-9e13-c5815a9f3b89"), "SCOPUS", false, true },
+                    { new Guid("91f9f8d4-c4cb-4925-9aff-6a2d0397d1a6"), "ORCID", true, true },
+                    { new Guid("9e3bfe33-b076-479a-b88d-3f9552995805"), "WOFSCI", true, false }
                 });
 
             migrationBuilder.InsertData(
@@ -227,8 +228,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("8a85a482-dc61-47d0-88f3-cfcdcdbaa572"), "User 1", "admin@mail.ru" },
-                    { new Guid("f26a1d82-d1db-47ed-ad11-0c1c6dea127f"), "User 2", "user@mail.ru" }
+                    { new Guid("30dd003e-d918-4f28-8d8f-d8edcad55913"), "User 1", "admin@mail.ru" },
+                    { new Guid("faaac1b0-7c53-43db-abc3-54def2fdff40"), "User 2", "user@mail.ru" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -266,6 +267,12 @@ namespace ServerApp.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentifierTypes_Name",
+                table: "IdentifierTypes",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(

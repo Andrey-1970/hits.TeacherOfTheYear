@@ -14,15 +14,25 @@ namespace ServerApp.Data
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<IdentifierType>().HasIndex(i => i.Name).IsUnique();
             builder.Entity<IdentifierVal>().HasIndex(i => new { i.UserInfoId, i.IdentifierId }).IsUnique();
 
-            UserInfo user1 = new() { Id = Guid.NewGuid(), Name = "User 1", Username = "admin@mail.ru" };
-            UserInfo user2 = new() { Id = Guid.NewGuid(), Name = "User 2", Username = "user@mail.ru" };
-            builder.Entity<UserInfo>().HasData([user1, user2]);
+            builder.Entity<UserInfo>().HasData([
+                new() { Id = Guid.NewGuid(), Name = "User 1", Username = "admin@mail.ru" },
+                new() { Id = Guid.NewGuid(), Name = "User 2", Username = "user@mail.ru" },
+            ]);
 
-            IdentifierType idType1 = new() { Id = Guid.NewGuid(), Name = "SCOPUS", NeedValue1 = false };
-            IdentifierType idType2 = new() { Id = Guid.NewGuid(), Name = "WOFSCI", NeedValue2 = false };
-            builder.Entity<IdentifierType>().HasData([idType1, idType2]);
+            builder.Entity<IdentifierType>().HasData([
+                new() { Id = Guid.NewGuid(), Name = "SCOPUS", NeedValue1 = false },
+                new() { Id = Guid.NewGuid(), Name = "WOFSCI", NeedValue2 = false },
+                new() { Id = Guid.NewGuid(), Name = "ORCID" },
+            ]);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

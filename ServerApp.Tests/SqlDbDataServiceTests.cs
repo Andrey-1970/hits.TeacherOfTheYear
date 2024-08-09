@@ -42,19 +42,18 @@ namespace ServerApp.Tests
             this.context.Database.EnsureDeleted();
         }
         [TestMethod]
-        public async Task GetUserInfosValid()
+        public async Task GetCurrentUserInfoValid()
         {
-            var userinfos = await service.GetUserInfosAsync();
-            Assert.IsNotNull(userinfos);
-            Assert.AreEqual(1, userinfos.Count());
-            Assert.AreEqual("User 2", userinfos.First().Name);
+            var userinfo = await service.GetCurrentUserInfoAsync();
+            Assert.IsNotNull(userinfo);
+            Assert.AreEqual("User 2", userinfo.Name);
         }
         [TestMethod]
-        public async Task GetIdentifierTypesid()
+        public async Task GetCurrentUserValsValid()
         {
-            var idTypes = await service.GetIdentifierTypesAsync();
-            Assert.IsNotNull(idTypes);
-            Assert.AreEqual(2, idTypes.Count());
+            var vals = await service.GetIdentifierValsAsync();
+            Assert.IsNotNull(vals);
+            Assert.AreEqual(3, vals.Count());
         }
     }
 }

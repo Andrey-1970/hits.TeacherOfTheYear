@@ -226,22 +226,32 @@ namespace ServerApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("IdentifierTypes");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("164a2774-5ba6-4631-8cb1-548a29fc3f8b"),
+                            Id = new Guid("7f92113e-0ce2-4990-9e13-c5815a9f3b89"),
                             Name = "SCOPUS",
                             NeedValue1 = false,
                             NeedValue2 = true
                         },
                         new
                         {
-                            Id = new Guid("c9cdc9a7-ce6a-4880-a452-92ac3f64dad9"),
+                            Id = new Guid("9e3bfe33-b076-479a-b88d-3f9552995805"),
                             Name = "WOFSCI",
                             NeedValue1 = true,
                             NeedValue2 = false
+                        },
+                        new
+                        {
+                            Id = new Guid("91f9f8d4-c4cb-4925-9aff-6a2d0397d1a6"),
+                            Name = "ORCID",
+                            NeedValue1 = true,
+                            NeedValue2 = true
                         });
                 });
 
@@ -295,13 +305,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8a85a482-dc61-47d0-88f3-cfcdcdbaa572"),
+                            Id = new Guid("30dd003e-d918-4f28-8d8f-d8edcad55913"),
                             Name = "User 1",
                             Username = "admin@mail.ru"
                         },
                         new
                         {
-                            Id = new Guid("f26a1d82-d1db-47ed-ad11-0c1c6dea127f"),
+                            Id = new Guid("faaac1b0-7c53-43db-abc3-54def2fdff40"),
                             Name = "User 2",
                             Username = "user@mail.ru"
                         });

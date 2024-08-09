@@ -4,36 +4,45 @@
 
 <PageTitle>Home</PageTitle>
 
-<CardGroup>
-    @foreach (var user in users)
-    {
-        <Card>
-            <CardBody>
-                <p>@user.Name - @user.Username</p>
-            </CardBody>
-        </Card>
-    }
-</CardGroup>
+@if (user == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <Card>
+        <CardBody>
+            <p>@user.Name - @user.Username</p>
+        </CardBody>
+    </Card>
+}
 
-<CardGroup>
-    @foreach (var id in identifierTypes)
-    {
-        <Card>
-            <CardBody>
-                <p>@id.Name - @id.NeedValue1 - @id.NeedValue2</p>
-            </CardBody>
-        </Card>
-    }
-</CardGroup>
+@if (vals == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <CardGroup>
+        @foreach (var val in vals)
+        {
+            <Card>
+                <CardBody>
+                    <p>@val.IdentifierType!.Name - @val.IdentifierType!.NeedValue1 - @val.Value1 - @val.IdentifierType!.NeedValue2 - @val.Value2</p>
+                </CardBody>
+            </Card>
+        }
+    </CardGroup>
+}
 
 @code {
-    IEnumerable<UserInfo> users = [];
-    IEnumerable<IdentifierType> identifierTypes = [];
+    UserInfo? user;
+    IEnumerable<IdentifierVal>? vals;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        users = await service.GetUserInfosAsync();
-        identifierTypes = await service.GetIdentifierTypesAsync();
+        user = await service.GetCurrentUserInfoAsync();
+        vals = await service.GetIdentifierValsAsync();
     }
 }
