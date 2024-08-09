@@ -53,6 +53,20 @@ namespace ServerApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IdentifierTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    NeedValue1 = table.Column<bool>(type: "INTEGER", nullable: false),
+                    NeedValue2 = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentifierTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserInfos",
                 columns: table => new
                 {
@@ -171,13 +185,50 @@ namespace ServerApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "IdentifierVals",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IdentifierId = table.Column<string>(type: "TEXT", nullable: true),
+                    Value1 = table.Column<string>(type: "TEXT", nullable: true),
+                    Value2 = table.Column<string>(type: "TEXT", nullable: true),
+                    UserInfoId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IdentifierTypeId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentifierVals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentifierVals_IdentifierTypes_IdentifierTypeId",
+                        column: x => x.IdentifierTypeId,
+                        principalTable: "IdentifierTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IdentifierVals_UserInfos_UserInfoId",
+                        column: x => x.UserInfoId,
+                        principalTable: "UserInfos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "IdentifierTypes",
+                columns: new[] { "Id", "Name", "NeedValue1", "NeedValue2" },
+                values: new object[,]
+                {
+                    { new Guid("164a2774-5ba6-4631-8cb1-548a29fc3f8b"), "SCOPUS", false, true },
+                    { new Guid("c9cdc9a7-ce6a-4880-a452-92ac3f64dad9"), "WOFSCI", true, false }
+                });
+
             migrationBuilder.InsertData(
                 table: "UserInfos",
                 columns: new[] { "Id", "Name", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("1ecc5f24-8411-4196-a778-6b05d359e065"), "User 2", "user@mail.ru" },
-                    { new Guid("8fc788a7-937a-464c-8565-df68c9531feb"), "User 1", "admin@mail.ru" }
+                    { new Guid("8a85a482-dc61-47d0-88f3-cfcdcdbaa572"), "User 1", "admin@mail.ru" },
+                    { new Guid("f26a1d82-d1db-47ed-ad11-0c1c6dea127f"), "User 2", "user@mail.ru" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -216,6 +267,17 @@ namespace ServerApp.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentifierVals_IdentifierTypeId",
+                table: "IdentifierVals",
+                column: "IdentifierTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentifierVals_UserInfoId_IdentifierId",
+                table: "IdentifierVals",
+                columns: new[] { "UserInfoId", "IdentifierId" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -237,13 +299,19 @@ namespace ServerApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "UserInfos");
+                name: "IdentifierVals");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "IdentifierTypes");
+
+            migrationBuilder.DropTable(
+                name: "UserInfos");
         }
     }
 }

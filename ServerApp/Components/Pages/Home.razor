@@ -4,7 +4,6 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 <CardGroup>
     @foreach (var user in users)
     {
@@ -16,12 +15,25 @@
     }
 </CardGroup>
 
+<CardGroup>
+    @foreach (var id in identifierTypes)
+    {
+        <Card>
+            <CardBody>
+                <p>@id.Name - @id.NeedValue1 - @id.NeedValue2</p>
+            </CardBody>
+        </Card>
+    }
+</CardGroup>
+
 @code {
     IEnumerable<UserInfo> users = [];
+    IEnumerable<IdentifierType> identifierTypes = [];
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         users = await service.GetUserInfosAsync();
+        identifierTypes = await service.GetIdentifierTypesAsync();
     }
 }

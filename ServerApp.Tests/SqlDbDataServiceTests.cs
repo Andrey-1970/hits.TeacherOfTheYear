@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace ServerApp.Tests
 {
     [TestClass]
-    public class SqlDbDataServicetTests
+    public class SqlDbDataServiceTests
     {
 #pragma warning disable CA1859 // Use concrete types when possible for improved performance
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -47,6 +47,14 @@ namespace ServerApp.Tests
             var userinfos = await service.GetUserInfosAsync();
             Assert.IsNotNull(userinfos);
             Assert.AreEqual(1, userinfos.Count());
+            Assert.AreEqual("User 2", userinfos.First().Name);
+        }
+        [TestMethod]
+        public async Task GetIdentifierTypesid()
+        {
+            var idTypes = await service.GetIdentifierTypesAsync();
+            Assert.IsNotNull(idTypes);
+            Assert.AreEqual(2, idTypes.Count());
         }
     }
 }

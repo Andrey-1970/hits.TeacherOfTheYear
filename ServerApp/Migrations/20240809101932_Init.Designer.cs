@@ -11,7 +11,7 @@ using ServerApp.Data;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240809082155_Init")]
+    [Migration("20240809101932_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -212,6 +212,73 @@ namespace ServerApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ServerApp.Data.Entities.IdentifierType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("NeedValue1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NeedValue2")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentifierTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("164a2774-5ba6-4631-8cb1-548a29fc3f8b"),
+                            Name = "SCOPUS",
+                            NeedValue1 = false,
+                            NeedValue2 = true
+                        },
+                        new
+                        {
+                            Id = new Guid("c9cdc9a7-ce6a-4880-a452-92ac3f64dad9"),
+                            Name = "WOFSCI",
+                            NeedValue1 = true,
+                            NeedValue2 = false
+                        });
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.IdentifierVal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdentifierId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("IdentifierTypeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserInfoId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value2")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentifierTypeId");
+
+                    b.HasIndex("UserInfoId", "IdentifierId")
+                        .IsUnique();
+
+                    b.ToTable("IdentifierVals");
+                });
+
             modelBuilder.Entity("ServerApp.Data.Entities.UserInfo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -231,13 +298,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8fc788a7-937a-464c-8565-df68c9531feb"),
+                            Id = new Guid("8a85a482-dc61-47d0-88f3-cfcdcdbaa572"),
                             Name = "User 1",
                             Username = "admin@mail.ru"
                         },
                         new
                         {
-                            Id = new Guid("1ecc5f24-8411-4196-a778-6b05d359e065"),
+                            Id = new Guid("f26a1d82-d1db-47ed-ad11-0c1c6dea127f"),
                             Name = "User 2",
                             Username = "user@mail.ru"
                         });
@@ -292,6 +359,35 @@ namespace ServerApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.IdentifierVal", b =>
+                {
+                    b.HasOne("ServerApp.Data.Entities.IdentifierType", "IdentifierType")
+                        .WithMany("IdentifierVals")
+                        .HasForeignKey("IdentifierTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ServerApp.Data.Entities.UserInfo", "UserInfo")
+                        .WithMany("IdentifierVals")
+                        .HasForeignKey("UserInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentifierType");
+
+                    b.Navigation("UserInfo");
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.IdentifierType", b =>
+                {
+                    b.Navigation("IdentifierVals");
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.UserInfo", b =>
+                {
+                    b.Navigation("IdentifierVals");
                 });
 #pragma warning restore 612, 618
         }
