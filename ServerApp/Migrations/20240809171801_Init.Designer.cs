@@ -11,7 +11,7 @@ using ServerApp.Data;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240809165929_Init")]
+    [Migration("20240809171801_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -371,21 +371,21 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4697b4f8-7d78-4399-9bae-8562b80ded15"),
+                            Id = new Guid("12377262-3cb3-4b25-bd3e-857ed29618cd"),
                             Name = "SCOPUS",
                             NeedValue1 = false,
                             NeedValue2 = true
                         },
                         new
                         {
-                            Id = new Guid("6a988fd0-a9dc-436f-9754-98b1ed37e130"),
+                            Id = new Guid("6b354c62-bef8-46fc-8f31-eae040f21499"),
                             Name = "WOFSCI",
                             NeedValue1 = true,
                             NeedValue2 = false
                         },
                         new
                         {
-                            Id = new Guid("b0d32fa7-9ab0-4431-84f9-8b23b386b6c8"),
+                            Id = new Guid("55424831-0e93-4063-a30f-ef6ef9e80dad"),
                             Name = "ORCID",
                             NeedValue1 = true,
                             NeedValue2 = true
@@ -567,13 +567,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d14d119a-e023-4366-bd01-e8a170036800"),
+                            Id = new Guid("fec549d5-c8e6-4b41-938a-4ae52a92f414"),
                             Name = "User 1",
                             Username = "admin@mail.ru"
                         },
                         new
                         {
-                            Id = new Guid("4da984a3-6df1-43eb-9912-4c2a4640f753"),
+                            Id = new Guid("155521ed-ced2-423c-b2f3-95c49a5fb269"),
                             Name = "User 2",
                             Username = "user@mail.ru"
                         });
@@ -657,14 +657,14 @@ namespace ServerApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ServerApp.Data.Entities.Row", "Column")
-                        .WithMany()
+                    b.HasOne("ServerApp.Data.Entities.Column", "Column")
+                        .WithMany("CellVals")
                         .HasForeignKey("ColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ServerApp.Data.Entities.Row", "Row")
-                        .WithMany()
+                        .WithMany("CellVals")
                         .HasForeignKey("RowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -835,6 +835,11 @@ namespace ServerApp.Migrations
                     b.Navigation("MarkVals");
                 });
 
+            modelBuilder.Entity("ServerApp.Data.Entities.Column", b =>
+                {
+                    b.Navigation("CellVals");
+                });
+
             modelBuilder.Entity("ServerApp.Data.Entities.EditBlock", b =>
                 {
                     b.Navigation("Fields");
@@ -864,6 +869,11 @@ namespace ServerApp.Migrations
                     b.Navigation("Marks");
 
                     b.Navigation("Tables");
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.Row", b =>
+                {
+                    b.Navigation("CellVals");
                 });
 
             modelBuilder.Entity("ServerApp.Data.Entities.Table", b =>

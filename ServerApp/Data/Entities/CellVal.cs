@@ -8,6 +8,6 @@
         public virtual Guid RowId { get; set; }
         public virtual Row? Row { get; set; }
         public virtual Guid ColumnId { get; set; }
-        public virtual Row? Column { get; set; }
+        public virtual Column? Column { get; set; }
     }
 }

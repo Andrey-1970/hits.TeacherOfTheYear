@@ -467,9 +467,9 @@ namespace ServerApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CellVals_Rows_ColumnId",
+                        name: "FK_CellVals_Columns_ColumnId",
                         column: x => x.ColumnId,
-                        principalTable: "Rows",
+                        principalTable: "Columns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -485,9 +485,9 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "NeedValue1", "NeedValue2" },
                 values: new object[,]
                 {
-                    { new Guid("4697b4f8-7d78-4399-9bae-8562b80ded15"), "SCOPUS", false, true },
-                    { new Guid("6a988fd0-a9dc-436f-9754-98b1ed37e130"), "WOFSCI", true, false },
-                    { new Guid("b0d32fa7-9ab0-4431-84f9-8b23b386b6c8"), "ORCID", true, true }
+                    { new Guid("12377262-3cb3-4b25-bd3e-857ed29618cd"), "SCOPUS", false, true },
+                    { new Guid("55424831-0e93-4063-a30f-ef6ef9e80dad"), "ORCID", true, true },
+                    { new Guid("6b354c62-bef8-46fc-8f31-eae040f21499"), "WOFSCI", true, false }
                 });
 
             migrationBuilder.InsertData(
@@ -495,8 +495,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("4da984a3-6df1-43eb-9912-4c2a4640f753"), "User 2", "user@mail.ru" },
-                    { new Guid("d14d119a-e023-4366-bd01-e8a170036800"), "User 1", "admin@mail.ru" }
+                    { new Guid("155521ed-ced2-423c-b2f3-95c49a5fb269"), "User 2", "user@mail.ru" },
+                    { new Guid("fec549d5-c8e6-4b41-938a-4ae52a92f414"), "User 1", "admin@mail.ru" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -678,9 +678,6 @@ namespace ServerApp.Migrations
                 name: "CellVals");
 
             migrationBuilder.DropTable(
-                name: "Columns");
-
-            migrationBuilder.DropTable(
                 name: "FieldVals");
 
             migrationBuilder.DropTable(
@@ -694,6 +691,9 @@ namespace ServerApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Columns");
 
             migrationBuilder.DropTable(
                 name: "Rows");
