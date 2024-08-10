@@ -9,5 +9,6 @@
         public virtual Row? Row { get; set; }
         public virtual Guid ColumnId { get; set; }
         public virtual Column? Column { get; set; }
+        //todo: поле для placeholder
     }
 }
