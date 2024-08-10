@@ -5,7 +5,7 @@ namespace ServerApp.Data.Entities
     public class Field
     {
         public Guid Id { get; set; }
-        [MaxLength(255)] public string? Name { get; set; } //todo: может быть не уникальным?
+        [MaxLength(400)] public string? Name { get; set; } //todo: может быть не уникальным?
         public virtual Guid MarkBlockId { get; set; }
         public virtual MarkBlock? MarkBlock { get; set; }
         public virtual Guid EditBlockId { get; set; }

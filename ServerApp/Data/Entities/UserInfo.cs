@@ -4,7 +4,7 @@ namespace ServerApp.Data.Entities
 {
     public class UserInfo
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [MaxLength(255)] public string? Name { get; set; }
         [MaxLength(255)] public string? Username { get; set; }
         public virtual List<ApplicationForm> Applications { get; set; } = [];

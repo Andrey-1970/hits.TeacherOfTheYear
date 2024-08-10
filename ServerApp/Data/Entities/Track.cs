@@ -4,7 +4,8 @@ namespace ServerApp.Data.Entities
 {
     public class Track
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public int Number { get; set; }
         [MaxLength(255)] public string? Name { get; set; }
         public virtual List<MarkBlock> MarkBlocks { get; set; } = [];
         public virtual List<EditBlock> EditBlocks { get; set; } = [];
