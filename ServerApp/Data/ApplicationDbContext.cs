@@ -31,14 +31,8 @@ namespace ServerApp.Data
             builder.Entity<IdentifierType>().HasIndex(i => i.Name).IsUnique();
             builder.Entity<IdentifierVal>().HasIndex(i => new { i.UserInfoId, i.IdentifierId }).IsUnique();
 
-            builder.Entity<IdentifierType>().HasData([
-                new() { Id = Guid.NewGuid(), Name = "SCOPUS", NeedValue1 = false },
-                new() { Id = Guid.NewGuid(), Name = "WOFSCI", NeedValue2 = false },
-                new() { Id = Guid.NewGuid(), Name = "ORCID" },
-            ]);
-
-
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
+            builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
             // builder.Entity<Field>().HasIndex(f => f.Name).IsUnique(); обсудить
@@ -53,6 +47,15 @@ namespace ServerApp.Data
             builder.Entity<Track>().HasIndex(t => t.Name).IsUnique();
             builder.Entity<UserInfo>().HasIndex(ui => ui.Username).IsUnique();
 
+        }
+
+        void SeedData(ModelBuilder builder)
+        {
+            builder.Entity<IdentifierType>().HasData([
+                new() { Id = Guid.NewGuid(), Name = "SCOPUS", NeedValue1 = false },
+                new() { Id = Guid.NewGuid(), Name = "WOFSCI", NeedValue2 = false },
+                new() { Id = Guid.NewGuid(), Name = "ORCID" },
+            ]);
 
             builder.Entity<Track>().HasData([
                 new() { Number = 1, Name = "Научно-педагогическая деятельность" },

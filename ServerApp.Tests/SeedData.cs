@@ -11,6 +11,7 @@ namespace ServerApp.Tests
     {
         public static void Init(ApplicationDbContext context)
         {
+
             context.SaveChanges();
         }
     }
