@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Data.Entities;
@@ -14,8 +13,6 @@ namespace ServerApp.Data
         public DbSet<EditBlock> EditBlocks { get; set; }
         public DbSet<Field> Fields { get; set; }
         public DbSet<FieldVal> FieldVals { get; set; }
-        public DbSet<IdentifierType> IdentifierTypes { get; set; }
-        public DbSet<IdentifierVal> IdentifierVals { get; set; }
         public DbSet<Mark> Marks { get; set; }
         public DbSet<MarkBlock> MarkBlocks { get; set; }
         public DbSet<MarkVal> MarkVals { get; set; }
@@ -28,14 +25,12 @@ namespace ServerApp.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<IdentifierType>().HasIndex(i => i.Name).IsUnique();
-            builder.Entity<IdentifierVal>().HasIndex(i => new { i.UserInfoId, i.IdentifierId }).IsUnique();
-
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
-            // builder.Entity<Field>().HasIndex(f => f.Name).IsUnique(); обсудить
+            builder.Entity<Field>().HasIndex(f => new { f.EditBlockId, f.Name }).IsUnique();
+            builder.Entity<Field>().HasIndex(f => new { f.MarkBlockId, f.Name }).IsUnique();
             builder.Entity<FieldVal>().HasIndex(fv => new { fv.ApplicationId, fv.FieldId }).IsUnique();
             builder.Entity<Mark>().HasIndex(m => m.Number).IsUnique();
             builder.Entity<Mark>().HasIndex(m => m.Name).IsUnique();
@@ -47,20 +42,46 @@ namespace ServerApp.Data
             builder.Entity<Track>().HasIndex(t => t.Name).IsUnique();
             builder.Entity<UserInfo>().HasIndex(ui => ui.Username).IsUnique();
 
+            // SeedData(builder);
+
+            builder.Entity<Track>()
+                .HasMany(e => e.EditBlocks)
+                .WithMany(e => e.Tracks);
         }
 
         void SeedData(ModelBuilder builder)
         {
-            builder.Entity<IdentifierType>().HasData([
-                new() { Id = Guid.NewGuid(), Name = "SCOPUS", NeedValue1 = false },
-                new() { Id = Guid.NewGuid(), Name = "WOFSCI", NeedValue2 = false },
-                new() { Id = Guid.NewGuid(), Name = "ORCID" },
+            SeedDataTrack(builder);
+            SeedDataEditBlock(builder);
+            SeedDataMarkBlock(builder);
+            SeedDataField(builder);
+            SeedDataTable(builder);
+            SeedDataColumn(builder);
+
+            builder.Entity<Row>().HasData([
+                //Персональные идентификаторы todo: сделать названия строк через ячейки
             ]);
 
+            builder.Entity<Mark>().HasData([
+                //todo: оценка привязывается не только к блоку, а к конкретному полю или таблицы
+                //todo: также может быть несколько оценок к одному полю или таблице
+            ]);
+            builder.Entity<UserInfo>().HasData([
+                new() { Name = "User 1", Username = "admin@mail.ru" },
+                new() { Name = "User 2", Username = "user@mail.ru" },
+            ]);
+        }
+
+        void SeedDataTrack(ModelBuilder builder)
+        {
             builder.Entity<Track>().HasData([
                 new() { Number = 1, Name = "Научно-педагогическая деятельность" },
                 new() { Number = 2, Name = "Научно-исследовательская деятельность" }
             ]);
+        }
+
+        void SeedDataEditBlock(ModelBuilder builder)
+        {
             builder.Entity<EditBlock>().HasData([
                 new() { Number = 1, Name = "Общая информация" }, //Track = Науч-педагогическая + Исследовательская
                 new() { Number = 2, Name = "Категория участников" }, //Track = Науч-педагогическая + Исследовательская
@@ -71,6 +92,10 @@ namespace ServerApp.Data
                 new() { Number = 4, Name = "Деятельность" }, //Track = Науч-педагогическая
                 new() { Number = 5, Name = "Деятельность" } //Track = Науч-исследовательская
             ]);
+        }
+
+        void SeedDataField(ModelBuilder builder)
+        {
             builder.Entity<Field>().HasData([
                 //Трек конкурса???
                 new() { Name = "Трек конкурса" },
@@ -103,6 +128,10 @@ namespace ServerApp.Data
                 new() { Name = "Защитившиеся кандидаты наук" },
                 new() { Name = "Защитившиеся доктора наук" },
             ]);
+        }
+
+        void SeedDataTable(ModelBuilder builder)
+        {
             builder.Entity<Table>().HasData([
                 //Профессиональное развитие
                 new()
@@ -163,6 +192,10 @@ namespace ServerApp.Data
                            "внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)"
                 }
             ]);
+        }
+
+        void SeedDataColumn(ModelBuilder builder)
+        {
             builder.Entity<Column>().HasData([
                 //Награды
                 new() { Name = "Год" },
@@ -232,26 +265,26 @@ namespace ServerApp.Data
                 new() { Name = "Название разработки" },
                 new() { Name = "Название организации в которую внедрена разработка" },
             ]);
-            builder.Entity<Row>().HasData([
-                //Персональные идентификаторы todo: сделать названия строк через ячейки
-            ]);
+        }
+
+        void SeedDataMarkBlock(ModelBuilder builder)
+        {
             builder.Entity<MarkBlock>().HasData([
-                new() { Number = 1, Name = "Основной" },//Track = Педагог+Исслед
-                new() { Number = 2, Name = "Образовательная деятельность" },//Track = Педагог 
-                new() { Number = 3, Name = "Методическая деятельность" },//Track = Педагог 
-                new() { Number = 4, Name = "Профессиональные показатели" },//Track = Педагог 
-                new() { Number = 5, Name = "Научно-исследовательская деятельность" },//Track = Исслед 
-                new() { Number = 6, Name = "Инновационная и иная деятельность" },//Track = Исслед 
-                new() { Number = 7, Name = "Конкурсная работа" },//Track = Педагог+Исслед 
-                new() { Number = 8, Name = "Итог" },//Track = Педагог+Исслед
+                new() { Number = 1, Name = "Основной" }, //Track = Педагог+Исслед
+                new() { Number = 2, Name = "Образовательная деятельность" }, //Track = Педагог 
+                new() { Number = 3, Name = "Методическая деятельность" }, //Track = Педагог 
+                new() { Number = 4, Name = "Профессиональные показатели" }, //Track = Педагог 
+                new() { Number = 5, Name = "Научно-исследовательская деятельность" }, //Track = Исслед 
+                new() { Number = 6, Name = "Инновационная и иная деятельность" }, //Track = Исслед 
+                new() { Number = 7, Name = "Конкурсная работа" }, //Track = Педагог+Исслед 
+                new() { Number = 8, Name = "Итог" }, //Track = Педагог+Исслед
             ]);
+        }
+
+        void SeedDataMark(ModelBuilder builder)
+        {
             builder.Entity<Mark>().HasData([
-                //todo: оценка привязывается не только к блоку, а к конкретному полю или таблицы
-                //todo: также может быть несколько оценок к одному полю или таблице
-            ]);
-            builder.Entity<UserInfo>().HasData([
-                new() { Name = "User 1", Username = "admin@mail.ru" },
-                new() { Name = "User 2", Username = "user@mail.ru" },
+                new() {},
             ]);
         }
 

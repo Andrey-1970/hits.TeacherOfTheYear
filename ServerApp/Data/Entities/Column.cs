@@ -6,7 +6,7 @@ namespace ServerApp.Data.Entities
     {
         public Guid Id { get; set; }
         [MaxLength(255)] 
-        public string? Name { get; set; } //todo: может быть не уникальным?
+        public string? Name { get; set; }
         public virtual Guid TableId { get; set; }
         public virtual Table? Table { get; set; }
         public virtual List<CellVal> CellVals { get; set; } = [];

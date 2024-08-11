@@ -12,6 +12,7 @@ namespace ServerApp.Data.Entities
         public virtual Guid EditBlockId { get; set; }
         public virtual EditBlock? EditBlock { get; set; }
         public virtual List<FieldVal> FieldVals { get; set; } = [];
+        public virtual List<Mark> Marks { get; set; } = [];
         //todo: добавить поле тип вводимого значения
         //todo: поле для placeholder
         //todo: значение по умолчанию

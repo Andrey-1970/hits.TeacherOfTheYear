@@ -17,32 +17,12 @@ else
     </Card>
 }
 
-@if (vals == null)
-{
-    <p>Loading ...</p>
-}
-else
-{
-    <CardGroup>
-        @foreach (var val in vals)
-        {
-            <Card>
-                <CardBody>
-                    <p>@val.IdentifierType!.Name - @val.IdentifierType!.NeedValue1 - @val.Value1 - @val.IdentifierType!.NeedValue2 - @val.Value2</p>
-                </CardBody>
-            </Card>
-        }
-    </CardGroup>
-}
-
 @code {
     UserInfo? user;
-    IEnumerable<IdentifierVal>? vals;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         user = await service.GetCurrentUserInfoAsync();
-        vals = await service.GetIdentifierValsAsync();
     }
 }

@@ -48,12 +48,5 @@ namespace ServerApp.Tests
             Assert.IsNotNull(userinfo);
             Assert.AreEqual("User 2", userinfo.Name);
         }
-        [TestMethod]
-        public async Task GetCurrentUserValsValid()
-        {
-            var vals = await service.GetIdentifierValsAsync();
-            Assert.IsNotNull(vals);
-            Assert.AreEqual(3, vals.Count());
-        }
     }
 }
