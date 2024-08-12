@@ -45,10 +45,8 @@ namespace ServerApp.Data
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
             builder.Entity<Field>().HasIndex(f => new { f.EditBlockId, f.Name }).IsUnique();
-            builder.Entity<Field>().HasIndex(f => new { f.MarkBlockId, f.Name }).IsUnique();
             builder.Entity<FieldVal>().HasIndex(fv => new { fv.ApplicationId, fv.FieldId }).IsUnique();
             builder.Entity<Mark>().HasIndex(m => m.Number).IsUnique();
-            builder.Entity<Mark>().HasIndex(m => new { m.MarkBlockId, m.Name }).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Name).IsUnique();
             builder.Entity<MarkVal>().HasIndex(mv => new { mv.ApplicationId, mv.MarkId }).IsUnique();
@@ -102,7 +100,7 @@ namespace ServerApp.Data
                     "Награждение премиями, наградами в области научно-педагогической деятельности" +
                     " городского, всероссийского или международного уровня (в том числе зарубежными), " +
                     "победы в профессиональных конкурсах за весь период научно-педагогической деятельности",
-                EditBlockId = editBlk3.Id, MarkBlockId = markBlk4.Id
+                EditBlockId = editBlk3.Id
             };
 
             #region Columns4Table1
@@ -145,7 +143,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Name = "Сведения о профессиональном развитии участника конкурса за последние 5 лет " +
                        "(курсы повышения квалификации/ стажировки)",
-                EditBlockId = editBlk3.Id, MarkBlockId = markBlk4.Id
+                EditBlockId = editBlk3.Id
             };
 
             #region Columns4Table2
@@ -169,7 +167,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Учебная нагрузка за предыдущий учебный год (за исключением методической)",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
 
             #region Columns4Table3
@@ -214,7 +212,7 @@ namespace ServerApp.Data
                     "Список подготовленных под руководством участника конкурса студентов, бакалавров, " +
                     "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, " +
                     "получивших самостоятельное признание",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
 
             #region Columns4Table4
@@ -261,7 +259,6 @@ namespace ServerApp.Data
                     " академическом институте, отраслевом научно-исследовательском институте, " +
                     "профессиональной образовательной организации, общеобразовательной организации за предыдущий учебный год",
                 EditBlockId = editBlk4.Id,
-                MarkBlockId = markBlk2.Id //todo: узнать у заказчиков к какому MarkBlock относится и исправить
             };
 
             #region Columns4Table5
@@ -299,7 +296,7 @@ namespace ServerApp.Data
                 Name =
                     "Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, " +
                     "Министерств РФ или государственных академий наук, изданные типографским способом за последние 5 лет",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk3.Id
+                EditBlockId = editBlk4.Id
             };
 
             #region Columns4Table6
@@ -348,7 +345,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Name = "Список лабораторных практикумов и" +
                        " курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk3.Id
+                EditBlockId = editBlk4.Id
             };
 
             #region Columns4Table7
@@ -372,7 +369,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
 
             #region Columns4Table8
@@ -408,7 +405,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Список научных публикаций за последние 5 лет",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk5.Id
+                EditBlockId = editBlk5.Id
             };
 
             #region Columns4Table9
@@ -444,7 +441,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Персональные идентификаторы и показатели",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk5.Id
+                EditBlockId = editBlk5.Id
             };
 
             #region Columns4Table10
@@ -487,7 +484,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Name =
                     "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk5.Id
+                EditBlockId = editBlk5.Id
             };
 
             #region Columns4Table11
@@ -533,7 +530,7 @@ namespace ServerApp.Data
                     "созданных участником конкурса за весь период научно-педагогической деятельности " +
                     "(созданных самостоятельно / в соавторстве), " +
                     "официально зарегистрированных в установленном порядке (в России / за рубежом)",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk6.Id
+                EditBlockId = editBlk5.Id
             };
 
             #region Columns4Table12
@@ -570,7 +567,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Name = "Перечень разработок, " +
                        "внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk6.Id
+                EditBlockId = editBlk5.Id
             };
 
             #region Columns4Table13
@@ -604,151 +601,151 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Трек конкурса",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld2 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "ФИО",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld3 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Дата рождения",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld4 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Домашний адрес",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld5 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Контактный телефон",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld6 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Электронная почта",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld7 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Место работы/учебы",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld8 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Адрес работы/учебы",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld9 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Институт, факультет, кафедра, лаборатория",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld10 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Должность",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Стаж научно-педагогической деятельности по трудовой книжке",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld12 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Дополнительная информация",
-                EditBlockId = editBlk1.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk1.Id
             };
             var fld13 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Направление конкурса",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld14 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Категория участника конкурса",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld15 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Название конкрусной работы",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld16 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Ученое звание",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld17 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Ученая степень",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld18 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Научная специальность (по классификации ВАК)",
-                EditBlockId = editBlk2.Id, MarkBlockId = markBlk1.Id
+                EditBlockId = editBlk2.Id
             };
             var fld19 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся кадидаты наук",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
             var fld20 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся доктора наук",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
             var fld21 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся бакалавры",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
             var fld22 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся специалисты",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
             var fld23 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся магистры",
-                EditBlockId = editBlk4.Id, MarkBlockId = markBlk2.Id
+                EditBlockId = editBlk4.Id
             };
             var fld24 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся кандидаты наук",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk5.Id
+                EditBlockId = editBlk5.Id
             };
             var fld25 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Name = "Защитившиеся доктора наук",
-                EditBlockId = editBlk5.Id, MarkBlockId = markBlk5.Id
+                EditBlockId = editBlk5.Id
             };
             
             #endregion
@@ -760,7 +757,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Баллы за объем учебной нагрузки:",
-                MarkBlockId = markBlk2.Id, TableId = tbl3.Id
+                TableId = tbl3.Id
             };
             var mark2 = new Mark()
             {
@@ -768,7 +765,7 @@ namespace ServerApp.Data
                 Number = 2,
                 Name = "Баллы за количество дисциплин на иностранном языке," +
                        " которые вел претендент, в предыдущем учебном году:",
-                MarkBlockId = markBlk2.Id, TableId = tbl3.Id
+                TableId = tbl3.Id
             };
             var mark3 = new Mark()
             {
@@ -776,21 +773,21 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
-                MarkBlockId = markBlk2.Id, FieldId = fld23.Id
+                FieldId = fld23.Id
             };
             var mark4 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                MarkBlockId = markBlk2.Id, FieldId = fld19.Id
+                FieldId = fld19.Id
             };
             var mark5 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                MarkBlockId = markBlk2.Id, FieldId = fld20.Id
+                FieldId = fld20.Id
             };
             var mark6 = new Mark()
             {
@@ -798,140 +795,140 @@ namespace ServerApp.Data
                 Number = 6,
                 Name = "Баллы за количество подготовленных студентов, бакалавров, " +
                        "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:",
-                MarkBlockId = markBlk2.Id, TableId = tbl4.Id
+                TableId = tbl4.Id
             };
             var mark7 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 7,
                 Name = "Баллы за количество онлайн курсов на открытых площадках:",
-                MarkBlockId = markBlk2.Id, TableId = tbl8.Id
+                TableId = tbl8.Id
             };
             var mark8 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 8,
                 Name = "Баллы за труды с грифом и без соавторства:",
-                MarkBlockId = markBlk3.Id, TableId = tbl6.Id
+                TableId = tbl6.Id
             };
             var mark9 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 9,
                 Name = "Баллы за труды с грифом в соавторстве:",
-                MarkBlockId = markBlk3.Id, TableId = tbl6.Id
+                TableId = tbl6.Id
             };
             var mark10 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 10,
                 Name = "Баллы за труды без грифа и без соавторства:",
-                MarkBlockId = markBlk3.Id, TableId = tbl6.Id
+                TableId = tbl6.Id
             };
             var mark11 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 11,
                 Name = "Баллы за труды без грифа в соавторстве:",
-                MarkBlockId = markBlk3.Id, TableId = tbl6.Id
+                TableId = tbl6.Id
             };
             var mark12 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 12,
                 Name = "Баллы за количество практикумов и курсов лекций:",
-                MarkBlockId = markBlk3.Id, TableId = tbl7.Id
+                TableId = tbl7.Id
             };
             var mark13 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Баллы за ученое звание:",
-                MarkBlockId = markBlk1.Id, FieldId = fld16.Id //todo: вынести в общий марк блок
+                FieldId = fld16.Id
             };
             var mark14 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 14,
                 Name = "Баллы за награды:",
-                MarkBlockId = markBlk4.Id, TableId = tbl1.Id //todo: вынести в общий марк блок
+                TableId = tbl1.Id
             };
             var mark15 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 15,
                 Name = "Баллы за профессиональное развитие:",
-                MarkBlockId = markBlk4.Id, TableId = tbl2.Id //todo: вынести в общий марк блок
+                TableId = tbl2.Id
             };
             var mark16 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 16,
                 Name = "Баллы за научные публикации:",
-                MarkBlockId = markBlk5.Id, TableId = tbl9.Id
+                TableId = tbl9.Id
             };
             var mark17 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 17,
                 Name = "Баллы по базе Scopus:",
-                MarkBlockId = markBlk5.Id, TableId = tbl10.Id
+                TableId = tbl10.Id
             };
             var mark18 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 18,
                 Name = "Баллы по базе РИНЦ:",
-                MarkBlockId = markBlk5.Id, TableId = tbl10.Id
+                TableId = tbl10.Id
             };
             var mark19 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                MarkBlockId = markBlk5.Id, FieldId = fld24.Id
+                FieldId = fld24.Id
             };
             var mark20 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                MarkBlockId = markBlk5.Id, FieldId = fld25.Id
+                FieldId = fld25.Id
             };
             var mark21 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве руководителя:",
-                MarkBlockId = markBlk5.Id, TableId = tbl11.Id
+                TableId = tbl11.Id
             };
             var mark22 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 22,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве исполнителя:",
-                MarkBlockId = markBlk5.Id, TableId = tbl11.Id
+                TableId = tbl11.Id
             };
             var mark23 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 23,
                 Name = "Баллы за количество объектов интеллектуальной собственности:",
-                MarkBlockId = markBlk6.Id, TableId = tbl12.Id
+                TableId = tbl12.Id
             };
             var mark24 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 24,
                 Name = "Баллы за количество разработок:",
-                MarkBlockId = markBlk6.Id, TableId = tbl13.Id
+                TableId = tbl13.Id
             };
             var mark25 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 25,
                 Name = "Оценка уровня предоставленной работы:",
-                MarkBlockId = markBlk6.Id, //todo: добавить Field конкурсной работы
+                //todo: добавить Field конкурсной работы
             };
             var mark26 = new Mark()
             {
@@ -940,7 +937,7 @@ namespace ServerApp.Data
                 Name = "Использование в представленной работе" +
                        " инновационных методов (проблемного и проективного обучения, " +
                        "тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
-                MarkBlockId = markBlk6.Id, 
+                //todo: добавить Field конкурсной работы
             };
 
             #endregion
@@ -998,6 +995,86 @@ namespace ServerApp.Data
                         new { TracksId = track2.Id, MarkBlocksId = markBlk8.Id }
                     ])
                 );
+            builder.Entity<MarkBlock>().HasMany(e => e.Tables).WithMany(e => e.MarkBlocks)
+                .UsingEntity(j => j.HasData([
+                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl3.Id},
+                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl4.Id},
+                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl5.Id},//todo: узнать у заказчика к какому MarkBlock относится и исправить
+                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl8.Id},
+                    new {MarkBlocksId = markBlk3.Id, TablesId = tbl6.Id},
+                    new {MarkBlocksId = markBlk3.Id, TablesId = tbl7.Id},
+                    new {MarkBlocksId = markBlk4.Id, TablesId = tbl1.Id},
+                    new {MarkBlocksId = markBlk4.Id, TablesId = tbl2.Id},
+                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl1.Id},
+                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl9.Id},
+                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl10.Id},
+                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl11.Id},
+                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl2.Id},
+                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id},
+                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id},
+                ]));
+            builder.Entity<MarkBlock>().HasMany(e => e.Fields).WithMany(e => e.MarkBlocks)
+                .UsingEntity(j => j.HasData([
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld1.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld2.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld3.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld4.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld5.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld6.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld7.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld8.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld9.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld10.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld11.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld12.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld13.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld14.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld15.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld17.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld18.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld19.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld20.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld21.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld22.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld23.Id},
+                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld16.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld16.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld25.Id}
+                ]));
+            builder.Entity<MarkBlock>().HasMany(e => e.Marks).WithMany(e => e.MarkBlocks)
+                .UsingEntity(j => j.HasData([
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark1.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark2.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark3.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark4.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark5.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark6.Id},
+                    new {MarkBlocksId = markBlk2.Id, MarksId = mark7.Id},
+                    new {MarkBlocksId = markBlk3.Id, MarksId = mark8.Id},
+                    new {MarkBlocksId = markBlk3.Id, MarksId = mark9.Id},
+                    new {MarkBlocksId = markBlk3.Id, MarksId = mark10.Id},
+                    new {MarkBlocksId = markBlk3.Id, MarksId = mark11.Id},
+                    new {MarkBlocksId = markBlk3.Id, MarksId = mark12.Id},
+                    new {MarkBlocksId = markBlk4.Id, MarksId = mark13.Id},
+                    new {MarkBlocksId = markBlk4.Id, MarksId = mark14.Id},
+                    new {MarkBlocksId = markBlk4.Id, MarksId = mark15.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark13.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark14.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark16.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark17.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark18.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark19.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark20.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark21.Id},
+                    new {MarkBlocksId = markBlk5.Id, MarksId = mark22.Id},
+                    new {MarkBlocksId = markBlk6.Id, MarksId = mark15.Id},
+                    new {MarkBlocksId = markBlk6.Id, MarksId = mark23.Id},
+                    new {MarkBlocksId = markBlk6.Id, MarksId = mark24.Id},
+                    new {MarkBlocksId = markBlk6.Id, MarksId = mark25.Id},
+                    new {MarkBlocksId = markBlk6.Id, MarksId = mark26.Id},
+                ]));
         } 
     }
 }
