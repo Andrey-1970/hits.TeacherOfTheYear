@@ -10,9 +10,9 @@ namespace ServerApp.Data.Entities
         public string? Name { get; set; }
         public virtual Guid MarkBlockId { get; set; }
         public virtual MarkBlock? MarkBlock { get; set; }
-        public virtual Guid FieldId { get; set; }
+        public virtual Guid? FieldId { get; set; }
         public virtual Field? Field { get; set; }
-        public virtual Guid TableId { get; set; }
+        public virtual Guid? TableId { get; set; }
         public virtual Table? Table { get; set; }
         public virtual List<MarkVal> MarkVals { get; set; } = [];
     }
