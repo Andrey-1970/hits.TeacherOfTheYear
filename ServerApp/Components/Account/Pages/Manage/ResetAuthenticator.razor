@@ -1,7 +1,4 @@
-﻿@page "/Account/Manage/ResetAuthenticator"
-
-@using Microsoft.AspNetCore.Identity
-@using ServerApp.Data
+﻿@page "/account/manage/reset-authenticator"
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
@@ -9,24 +6,28 @@
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<ResetAuthenticator> Logger
 
-<PageTitle>Reset authenticator key</PageTitle>
+<PageTitle>Сброс ключа аутентификации</PageTitle>
 
+<h3>Сброс ключа аутентификации</h3>
 <StatusMessage />
-<h3>Reset authenticator key</h3>
+
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+        <strong>Если вы сбросите свой ключ аутентификации, ваше приложение аутентификации не будет работать до тех пор, пока вы не перенастроите его.</strong>
     </p>
     <p>
-        This process disables 2FA until you verify your authenticator app.
-        If you do not complete your authenticator app configuration you may lose access to your account.
+        Этот процесс отключает двуфакторную аутентификацию до тех пор, пока вы не подтвердите свое приложение-аутентификатор.
+        Если вы не завершите настройку приложения-аутентификатора, вы можете потерять доступ к своей учетной записи.
     </p>
 </div>
 <div>
     <form @formname="reset-authenticator" @onsubmit="OnSubmitAsync" method="post">
         <AntiforgeryToken />
-        <button class="btn btn-danger" type="submit">Reset authenticator key</button>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Сбросить ключ
+        </Button>
     </form>
 </div>
 
@@ -40,13 +41,13 @@
         await UserManager.SetTwoFactorEnabledAsync(user, false);
         await UserManager.ResetAuthenticatorKeyAsync(user);
         var userId = await UserManager.GetUserIdAsync(user);
-        Logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", userId);
+        Logger.LogInformation("Пользователь с ID '{UserId}' сбросил свой ключ для приложения-аутентификатора.", userId);
 
         await SignInManager.RefreshSignInAsync(user);
 
         RedirectManager.RedirectToWithStatus(
-            "Account/Manage/EnableAuthenticator",
-            "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+            "account/manage/enable-authenticator",
+            "Ваш ключ для приложения-аутентификатора был сброшен, необходимо настроить приложение с помощью нового ключа.",
             HttpContext);
     }
 }

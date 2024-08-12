@@ -1,17 +1,15 @@
-﻿@page "/Account/ConfirmEmail"
-
-@using System.Text
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.WebUtilities
-@using ServerApp.Data
+﻿@page "/account/confirm-email"
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Confirm email</PageTitle>
+<PageTitle>Подтверждение электронной почты</PageTitle>
 
-<h1>Confirm email</h1>
-<StatusMessage Message="@statusMessage" />
+<div class="form-layout">
+    <p class="form-title">Подтверждение электронной почты</p>
+
+    <StatusMessage Message="@statusMessage" />
+</div>
 
 @code {
     private string? statusMessage;
@@ -36,13 +34,13 @@
         if (user is null)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error loading user with ID {UserId}";
+            statusMessage = $"Ошибка загрузки пользователя с ID {UserId}";
         }
         else
         {
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await UserManager.ConfirmEmailAsync(user, code);
-            statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            statusMessage = result.Succeeded ? "Спасибо за подтверждение адреса электронной почты." : "Ошибка при подтверждении адреса электронной почты.";
         }
     }
 }

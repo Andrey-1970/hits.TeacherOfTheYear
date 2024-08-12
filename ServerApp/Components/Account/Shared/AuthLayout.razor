@@ -1,9 +1,8 @@
-﻿@using ServerApp.Components.Layout
-@inherits LayoutComponentBase
-
-@layout MainLayout
+﻿@inherits LayoutComponentBase
 
 @inject NavigationManager NavigationManager
+
+<NavMenu />
 
 @if (HttpContext is null)
 {
@@ -11,7 +10,11 @@
 }
 else
 {
-    @Body
+    <body class="background">
+        <div class="page-layout-content">
+            @Body
+        </div>
+    </body>
 }
 
 @code {

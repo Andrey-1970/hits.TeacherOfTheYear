@@ -1,0 +1,102 @@
+﻿.nav-item {
+    font-size: 20px;
+}
+
+    .nav-item .btn-outline-light, .navbar-toggler {
+        font-size: 20px;
+        font-weight: 500;
+        border-color: #fff;
+    }
+
+    .nav-item .btn-icon {
+        font-size: 23px;
+        border: none;
+    }
+
+.nav-underline {
+    margin: 0 40px;
+    gap: 40px;
+}
+
+.min-logo {
+    width: 168px;
+    height: auto;
+}
+
+.nav-buttons {
+    flex-direction: row;
+    gap: 5px;
+    padding: 0;
+}
+
+@media (max-width: 1200px) {
+    .nav-item {
+        font-size: 16px;
+    }
+
+        .nav-item .btn-outline-light {
+            font-size: 16px;
+        }
+
+        .nav-item .btn-icon {
+            font-size: 18px;
+        }
+
+    .nav-underline {
+        margin: 0 20px;
+        gap: 15px;
+    }
+
+    .min-logo {
+        width: 140px;
+    }
+
+    .nav-buttons {
+        gap: 3px;
+    }
+
+    .stages-competition {
+        flex-wrap: nowrap;
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-item {
+        font-size: 14px;
+    }
+
+        .nav-item .btn-outline-light {
+            font-size: 14px;
+        }
+
+        .nav-item .btn-icon {
+            font-size: 15px;
+        }
+    .nav-underline {
+        margin: 0 2px;
+        gap: 2px; 
+    }
+
+    .min-logo {
+        width: 120px;
+    }
+
+    .stages-competition {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-underline {
+        text-align: center;
+        margin: 0;
+    }
+
+    .nav-buttons {
+        justify-content: center;
+    }
+
+    .stages-competition {
+        flex-wrap: wrap;
+    }
+}

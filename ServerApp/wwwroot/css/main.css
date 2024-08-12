@@ -1,0 +1,108 @@
+﻿.block-group {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.block-title {
+    text-align: left;
+    border-style: solid;
+    border-color: #d0d0d0;
+    border-width: 2px 0px 2px 0px;
+    padding: 30px 20px 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.block-title-text {
+    color: #000000;
+    text-align: left;
+    font-family: "Inter-ExtraBold", sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    position: relative;
+    align-self: stretch;
+}
+
+.block-subtitle-text {
+    color: #000000;
+    text-align: left;
+    font-size: 30px;
+    font-weight: 600;
+    position: relative;
+    align-self: stretch;
+    margin-bottom: 15px;
+}
+
+.block-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.block-content-border {
+    border-bottom: 2px solid #d0d0d0;
+}
+
+.block-content-text {
+    text-align: left;
+    position: relative;
+    align-self: stretch;
+}
+
+.block-content-photo {
+    background: #d0d0d0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    height: 600px;
+    position: relative;
+}
+
+@media (max-width: 1200px) {
+    .block-title-text {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .block-title-text {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .block-content-text {
+        text-align: center;
+    }
+}

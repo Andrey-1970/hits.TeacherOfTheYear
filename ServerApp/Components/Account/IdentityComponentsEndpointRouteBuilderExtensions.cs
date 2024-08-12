@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -19,9 +19,9 @@ namespace Microsoft.AspNetCore.Routing
         {
             ArgumentNullException.ThrowIfNull(endpoints);
 
-            var accountGroup = endpoints.MapGroup("/Account");
+            var accountGroup = endpoints.MapGroup("/account");
 
-            accountGroup.MapPost("/PerformExternalLogin", (
+            accountGroup.MapPost("/perform-external-login", (
                 HttpContext context,
                 [FromServices] SignInManager<ApplicationUser> signInManager,
                 [FromForm] string provider,
@@ -33,14 +33,14 @@ namespace Microsoft.AspNetCore.Routing
 
                 var redirectUrl = UriHelper.BuildRelative(
                     context.Request.PathBase,
-                    "/Account/ExternalLogin",
+                    "/account/external-login",
                     QueryString.Create(query));
 
                 var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
                 return TypedResults.Challenge(properties, [provider]);
             });
 
-            accountGroup.MapPost("/Logout", async (
+            accountGroup.MapPost("/logout", async (
                 ClaimsPrincipal user,
                 SignInManager<ApplicationUser> signInManager,
                 [FromForm] string returnUrl) =>
@@ -49,9 +49,9 @@ namespace Microsoft.AspNetCore.Routing
                 return TypedResults.LocalRedirect($"~/{returnUrl}");
             });
 
-            var manageGroup = accountGroup.MapGroup("/Manage").RequireAuthorization();
+            var manageGroup = accountGroup.MapGroup("/manage").RequireAuthorization();
 
-            manageGroup.MapPost("/LinkExternalLogin", async (
+            manageGroup.MapPost("/link-external-login", async (
                 HttpContext context,
                 [FromServices] SignInManager<ApplicationUser> signInManager,
                 [FromForm] string provider) =>
@@ -61,7 +61,7 @@ namespace Microsoft.AspNetCore.Routing
 
                 var redirectUrl = UriHelper.BuildRelative(
                     context.Request.PathBase,
-                    "/Account/Manage/ExternalLogins",
+                    "/account/manage/external-logins",
                     QueryString.Create("Action", ExternalLogins.LinkLoginCallbackAction));
 
                 var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, signInManager.UserManager.GetUserId(context.User));
@@ -71,7 +71,7 @@ namespace Microsoft.AspNetCore.Routing
             var loggerFactory = endpoints.ServiceProvider.GetRequiredService<ILoggerFactory>();
             var downloadLogger = loggerFactory.CreateLogger("DownloadPersonalData");
 
-            manageGroup.MapPost("/DownloadPersonalData", async (
+            manageGroup.MapPost("/download-personal-data", async (
                 HttpContext context,
                 [FromServices] UserManager<ApplicationUser> userManager,
                 [FromServices] AuthenticationStateProvider authenticationStateProvider) =>
@@ -79,11 +79,11 @@ namespace Microsoft.AspNetCore.Routing
                 var user = await userManager.GetUserAsync(context.User);
                 if (user is null)
                 {
-                    return Results.NotFound($"Unable to load user with ID '{userManager.GetUserId(context.User)}'.");
+                    return Results.NotFound($"������ �������� ������������ � ID '{userManager.GetUserId(context.User)}'.");
                 }
 
                 var userId = await userManager.GetUserIdAsync(user);
-                downloadLogger.LogInformation("User with ID '{UserId}' asked for their personal data.", userId);
+                downloadLogger.LogInformation("������������ � ID '{UserId}' �������� ���� ������������ ������.", userId);
 
                 // Only include personal data for download
                 var personalData = new Dictionary<string, string>();
@@ -97,10 +97,10 @@ namespace Microsoft.AspNetCore.Routing
                 var logins = await userManager.GetLoginsAsync(user);
                 foreach (var l in logins)
                 {
-                    personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
+                    personalData.Add($"���� �������� ����� {l.LoginProvider}", l.ProviderKey);
                 }
 
-                personalData.Add("Authenticator Key", (await userManager.GetAuthenticatorKeyAsync(user))!);
+                personalData.Add("���� ��������������", (await userManager.GetAuthenticatorKeyAsync(user))!);
                 var fileBytes = JsonSerializer.SerializeToUtf8Bytes(personalData);
 
                 context.Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
