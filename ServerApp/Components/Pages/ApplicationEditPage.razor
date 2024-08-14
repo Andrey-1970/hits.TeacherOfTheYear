@@ -1,0 +1,72 @@
+﻿@page "/application-form"
+
+@inject IDataService data
+
+@if (application != null)
+{
+    <InputSelect Value="application.TrackId" TValue="Guid" ValueExpression="() => application.TrackId" ValueChanged="async (value) => await OnTrackIdChanged(value)">
+        @foreach (var track in tracks!)
+        {
+            <option value="@track.Id">@track.Name</option>
+        }
+    </InputSelect>
+    @if (application.Track != null)
+    {
+        <ul>
+            @foreach (var editBlock in application.Track.EditBlocks.OrderBy(x => x.Number))
+            {
+                <li>@editBlock.Name</li>
+                <ul>
+                    @foreach (var field in editBlock.Fields)
+                    {
+                        <li>@field.Name</li>
+                        <input type="text" />
+                    }
+                    @foreach (var table in editBlock.Tables)
+                    {
+                        <li>@table.Name</li>
+                        <table class="table-stand">
+                            <thead>
+                                <tr>
+                                    @foreach (var column in table.Columns)
+                                    {
+                                        <th>@column.Name</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in table.Rows)
+                                {
+                                    <tr>
+                                        @foreach (var cell in row.CellVals.OrderBy(x => x.Column))
+                                        {
+                                            <input type="text" />
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </ul>
+            }
+        </ul>
+    }
+}
+
+@code {
+    private ApplicationForm? application;
+    private IEnumerable<Track>? tracks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        application = await data.GetCurrentUserApplicationAsync();
+        tracks = await data.GetTracksAsync();
+    }
+
+    private async Task OnTrackIdChanged(Guid trackId)
+    {
+        application!.TrackId = trackId;
+        await data.SaveApplicationFormAsync(application);
+        application = await data.GetCurrentUserApplicationAsync();
+    }
+}
