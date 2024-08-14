@@ -9,10 +9,26 @@ namespace ServerApp.Data.Services
 {
     public class SqlDbDataService(ApplicationDbContext context, IAuthorization auth) : IDataService
     {
+        public async Task<ApplicationForm?> GetCurrentUserApplicationAsync()
+        {
+            var user = await auth.GetUserAsync();
+            var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
+            return await Task.FromResult(application);
+        }
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
-            var username = await auth.GetUsernameAsync();
-            return await Task.FromResult(context.UserInfos.FirstOrDefault(x => x.Username == username));
+            return await auth.GetUserAsync();
+        }
+        public async Task<IEnumerable<Track>> GetTracksAsync()
+        {
+            return await context.Tracks.ToArrayAsync();
+        }
+
+        public async Task SaveApplicationFormAsync(ApplicationForm application)
+        {
+            application.UserInfo = await auth.GetUserAsync();
+            context.ApplicationForms.Attach(application);
+            await context.SaveChangesAsync();
         }
     }
 }

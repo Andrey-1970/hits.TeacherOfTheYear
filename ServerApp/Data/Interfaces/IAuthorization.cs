@@ -1,7 +1,9 @@
-﻿namespace ServerApp.Data.Interfaces
+﻿using ServerApp.Data.Entities;
+
+namespace ServerApp.Data.Interfaces
 {
     public interface IAuthorization
     {
-        Task<string> GetUsernameAsync();
+        Task<UserInfo?> GetUserAsync();
     }
 }
