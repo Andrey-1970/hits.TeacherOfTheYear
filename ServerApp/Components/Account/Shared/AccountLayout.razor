@@ -1,5 +1,8 @@
-﻿@inherits LayoutComponentBase
-@layout ServerApp.Components.Layout.MainLayout
+﻿@using ServerApp.Components.Layout
+@inherits LayoutComponentBase
+
+@layout MainLayout
+
 @inject NavigationManager NavigationManager
 
 @if (HttpContext is null)

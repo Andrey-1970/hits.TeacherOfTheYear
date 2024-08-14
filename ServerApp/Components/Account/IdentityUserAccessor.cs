@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using ServerApp.Data;
 
 namespace ServerApp.Components.Account
@@ -11,7 +11,7 @@ namespace ServerApp.Components.Account
 
             if (user is null)
             {
-                redirectManager.RedirectToWithStatus("Account/InvalidUser", $"Error: Unable to load user with ID '{userManager.GetUserId(context.User)}'.", context);
+                redirectManager.RedirectToWithStatus("account/invalid-user", $"������: ���������� ��������� ������������ � ID '{userManager.GetUserId(context.User)}'.", context);
             }
 
             return user;

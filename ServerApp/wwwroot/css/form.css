@@ -1,0 +1,57 @@
+﻿.form-layout {
+    box-shadow: 2px 2px 40px rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    border: 2px #D0D0D0 solid;
+    padding: 30px;
+    width: 600px;
+    background-color: #fff;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+.form-title {
+    font-size: 40px;
+    font-weight: 500;
+    text-align: center;
+    margin: 0;
+    line-height: 50px;
+}
+
+.form-text {
+    font-size: 22px;
+    color: #000;
+    text-align: left;
+    position: relative;
+    align-self: stretch;
+    margin-bottom: 3px;
+}
+
+.form-input .form-control {
+    border-radius: 8px;
+    border: 2px #D0D0D0 solid;
+}
+
+.form-buttons, .form-links, .checkbox {
+    text-align: center;
+}
+
+    .form-buttons button, .form-buttons a {
+        width: 75%;
+    }
+
+.checkbox {
+    font-size: 18px;
+}
+
+    .checkbox .form-check-input {
+        margin: 0;
+    }
+
+.input-field {
+    width: 100%;
+    margin-bottom: 5px;
+}

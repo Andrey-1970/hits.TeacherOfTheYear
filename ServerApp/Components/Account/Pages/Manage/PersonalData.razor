@@ -1,27 +1,30 @@
-﻿@page "/Account/Manage/PersonalData"
+﻿@page "/account/manage/personal-data"
 
 @inject IdentityUserAccessor UserAccessor
 
-<PageTitle>Personal Data</PageTitle>
+<PageTitle>Персональные данные</PageTitle>
 
+<h3>Персональные данные</h3>
 <StatusMessage />
-<h3>Personal Data</h3>
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form action="Account/Manage/DownloadPersonalData" method="post">
-            <AntiforgeryToken />
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
-        <p>
-            <a href="Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</a>
-        </p>
-    </div>
-</div>
+<p>Ваша учетная запись содержит персональные данные, которые вы нам предоставили. На этой странице вы можете скачать или удалить эти данные.</p>
+<p>
+    <strong>Удаление этих данных приведет к необратимому удалению вашей учетной записи, и восстановить ее будет невозможно.</strong>
+</p>
+<form action="account/manage/download-personal-data" method="post">
+    <AntiforgeryToken />
+
+    <Button Type="ButtonType.Submit"
+            Color="ButtonColor.Primary">
+        Скачать
+    </Button>
+
+    <Button Type="ButtonType.Link"
+            Color="ButtonColor.Danger"
+            To="account/manage/delete-personal-data">
+        Удалить
+    </Button>
+</form>
 
 @code {
     [CascadingParameter]
