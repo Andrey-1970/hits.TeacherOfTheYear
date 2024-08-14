@@ -43,14 +43,21 @@ namespace ServerApp.Data
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
-            builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
+
+            // К сожалению из-за связи многие ко многим уникальность отследить невозможно
+            //builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
+
             builder.Entity<Field>().HasIndex(f => new { f.EditBlockId, f.Name }).IsUnique();
             builder.Entity<FieldVal>().HasIndex(fv => new { fv.ApplicationId, fv.FieldId }).IsUnique();
             builder.Entity<Mark>().HasIndex(m => m.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Name).IsUnique();
             builder.Entity<MarkVal>().HasIndex(mv => new { mv.ApplicationId, mv.MarkId }).IsUnique();
-            builder.Entity<Table>().HasIndex(t => t.Name).IsUnique();
+
+            // Должно быть одинаково с Field
+            //builder.Entity<Table>().HasIndex(t => t.Name).IsUnique();
+            builder.Entity<Table>().HasIndex(t => new { t.EditBlockId, t.Name }).IsUnique();
+
             builder.Entity<Track>().HasIndex(t => t.Number).IsUnique();
             builder.Entity<Track>().HasIndex(t => t.Name).IsUnique();
             builder.Entity<UserInfo>().HasIndex(ui => ui.Username).IsUnique();
@@ -58,11 +65,18 @@ namespace ServerApp.Data
 
         private static void OnConfiguringData(ModelBuilder builder)
         {
+            #region UserInfos
+            builder.Entity<UserInfo>().HasData([
+                new() { Id = Guid.NewGuid(), Name="User 1", Username="admin@mail.ru"},
+                new() { Id = Guid.NewGuid(), Name="User 2", Username="user@mail.ru"},
+            ]);
+            #endregion
+
             #region Tracks
 
             var track1 = new Track() { Id = Guid.NewGuid(), Number = 1, Name = "Научно-педагогическая деятельность" };
             var track2 = new Track()
-                { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
+            { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
 
             #endregion
 
@@ -83,9 +97,9 @@ namespace ServerApp.Data
             var markBlk3 = new MarkBlock() { Id = Guid.NewGuid(), Number = 3, Name = "Методическая деятельность" };
             var markBlk4 = new MarkBlock() { Id = Guid.NewGuid(), Number = 4, Name = "Профессиональные показатели" };
             var markBlk5 = new MarkBlock()
-                { Id = Guid.NewGuid(), Number = 5, Name = "Научно-исследовательская деятельность" };
+            { Id = Guid.NewGuid(), Number = 5, Name = "Научно-исследовательская деятельность" };
             var markBlk6 = new MarkBlock()
-                { Id = Guid.NewGuid(), Number = 6, Name = "Инновационная и иная деятельность" };
+            { Id = Guid.NewGuid(), Number = 6, Name = "Инновационная и иная деятельность" };
             var markBlk7 = new MarkBlock() { Id = Guid.NewGuid(), Number = 7, Name = "Конкурсная работа" };
             var markBlk8 = new MarkBlock() { Id = Guid.NewGuid(), Number = 8, Name = "Итог" };
 
@@ -436,7 +450,7 @@ namespace ServerApp.Data
             };
 
             #endregion
-            
+
             var tbl10 = new Table()
             {
                 Id = Guid.NewGuid(),
@@ -478,7 +492,7 @@ namespace ServerApp.Data
             };
 
             #endregion
-            
+
             var tbl11 = new Table()
             {
                 Id = Guid.NewGuid(),
@@ -521,7 +535,7 @@ namespace ServerApp.Data
             };
 
             #endregion
-            
+
             var tbl12 = new Table()
             {
                 Id = Guid.NewGuid(),
@@ -561,7 +575,7 @@ namespace ServerApp.Data
             };
 
             #endregion
-            
+
             var tbl13 = new Table()
             {
                 Id = Guid.NewGuid(),
@@ -747,7 +761,7 @@ namespace ServerApp.Data
                 Name = "Защитившиеся доктора наук",
                 EditBlockId = editBlk5.Id
             };
-            
+
             #endregion
 
             #region Marks
@@ -941,27 +955,27 @@ namespace ServerApp.Data
             };
 
             #endregion
-            
+
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
             builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7, markBlk8]);
             builder.Entity<Table>().HasData([tbl1, tbl2, tbl3, tbl4, tbl5, tbl6, tbl7, tbl8, tbl9, tbl10, tbl11, tbl12, tbl13]);
             builder.Entity<Column>().HasData([
-                col11, col12, col13, col14, col15, 
-                col21, col22, 
-                col31, col32, col33, col34, col35, 
-                col41, col42, col43, col44, col45, 
-                col51, col52, col53, col54, 
-                col61, col62, col63, col64, col65, col66, 
-                col71, col72, 
+                col11, col12, col13, col14, col15,
+                col21, col22,
+                col31, col32, col33, col34, col35,
+                col41, col42, col43, col44, col45,
+                col51, col52, col53, col54,
+                col61, col62, col63, col64, col65, col66,
+                col71, col72,
                 col81, col82, col83, col84,
                 col91, col92, col93, col94,
                 col101, col102, col103, col104, col105,
-                col111, col112, col113, col114, col115, 
-                col121, col122, col123, col124, 
-                col131, col132, col133  
+                col111, col112, col113, col114, col115,
+                col121, col122, col123, col124,
+                col131, col132, col133
             ]);
-            builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12, 
+            builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
                 fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24, fld25]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14, mark15, mark16, mark17,
@@ -1075,6 +1089,6 @@ namespace ServerApp.Data
                     new {MarkBlocksId = markBlk6.Id, MarksId = mark25.Id},
                     new {MarkBlocksId = markBlk6.Id, MarksId = mark26.Id},
                 ]));
-        } 
+        }
     }
 }
