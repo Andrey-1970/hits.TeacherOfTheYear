@@ -15,10 +15,17 @@ namespace ServerApp.Data.Services
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
             return await Task.FromResult(application);
         }
+
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
             return await auth.GetUserAsync();
         }
+
+        public async Task<Track?> GetTrackByIdAsync(Guid trackId)
+        {
+            return await context.Tracks.FirstOrDefaultAsync(x => x.Id == trackId);
+        }
+
         public async Task<IEnumerable<Track>> GetTracksAsync()
         {
             return await context.Tracks.ToArrayAsync();

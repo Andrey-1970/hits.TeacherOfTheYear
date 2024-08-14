@@ -7,6 +7,7 @@ namespace ServerApp.Data.Interfaces
         Task<ApplicationForm?> GetCurrentUserApplicationAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
         Task<IEnumerable<Track>> GetTracksAsync();
+        Task<Track?> GetTrackByIdAsync(Guid trackId);
         Task SaveApplicationFormAsync(ApplicationForm application);
     }
 }
