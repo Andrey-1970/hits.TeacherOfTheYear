@@ -42,12 +42,14 @@ namespace ServerApp.Data
         {
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
+            builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Number }).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
 
             // К сожалению из-за связи многие ко многим уникальность отследить невозможно
             //builder.Entity<EditBlock>().HasIndex(eb => new { eb.Number, eb.Name }).IsUnique();
 
             builder.Entity<Field>().HasIndex(f => new { f.EditBlockId, f.Name }).IsUnique();
+            builder.Entity<Field>().HasIndex(f => f.Number).IsUnique();
             builder.Entity<FieldVal>().HasIndex(fv => new { fv.ApplicationId, fv.FieldId }).IsUnique();
             builder.Entity<Mark>().HasIndex(m => m.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Number).IsUnique();
@@ -57,6 +59,7 @@ namespace ServerApp.Data
             // Должно быть одинаково с Field
             //builder.Entity<Table>().HasIndex(t => t.Name).IsUnique();
             builder.Entity<Table>().HasIndex(t => new { t.EditBlockId, t.Name }).IsUnique();
+            builder.Entity<Table>().HasIndex(t => t.Number).IsUnique();
 
             builder.Entity<Track>().HasIndex(t => t.Number).IsUnique();
             builder.Entity<Track>().HasIndex(t => t.Name).IsUnique();
@@ -110,6 +113,7 @@ namespace ServerApp.Data
             var tbl1 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name =
                     "Награждение премиями, наградами в области научно-педагогической деятельности" +
                     " городского, всероссийского или международного уровня (в том числе зарубежными), " +
@@ -122,30 +126,35 @@ namespace ServerApp.Data
             var col11 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Год",
                 TableId = tbl1.Id
             };
             var col12 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Название конкурса",
                 TableId = tbl1.Id
             };
             var col13 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Статус конкурса",
                 TableId = tbl1.Id
             };
             var col14 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Награда",
                 TableId = tbl1.Id
             };
             var col15 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Ссылка",
                 TableId = tbl1.Id
             };
@@ -155,6 +164,7 @@ namespace ServerApp.Data
             var tbl2 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Сведения о профессиональном развитии участника конкурса за последние 5 лет " +
                        "(курсы повышения квалификации/ стажировки)",
                 EditBlockId = editBlk3.Id
@@ -165,12 +175,14 @@ namespace ServerApp.Data
             var col21 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название документа, реквизиты",
                 TableId = tbl2.Id
             };
             var col22 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Год получения документа",
                 TableId = tbl2.Id
             };
@@ -180,6 +192,7 @@ namespace ServerApp.Data
             var tbl3 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Учебная нагрузка за предыдущий учебный год (за исключением методической)",
                 EditBlockId = editBlk4.Id
             };
@@ -189,30 +202,35 @@ namespace ServerApp.Data
             var col31 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Наименование курса",
                 TableId = tbl3.Id
             };
             var col32 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Язык преподавания (русск./англ./др.)",
                 TableId = tbl3.Id
             };
             var col33 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Лекции (час.)",
                 TableId = tbl3.Id
             };
             var col34 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Практические занятия (час.)",
                 TableId = tbl3.Id
             };
             var col35 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Итого (час.)",
                 TableId = tbl3.Id
             };
@@ -222,6 +240,7 @@ namespace ServerApp.Data
             var tbl4 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name =
                     "Список подготовленных под руководством участника конкурса студентов, бакалавров, " +
                     "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, " +
@@ -234,30 +253,35 @@ namespace ServerApp.Data
             var col41 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "ФИО",
                 TableId = tbl4.Id
             };
             var col42 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Название конкурса/премии",
                 TableId = tbl4.Id
             };
             var col43 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Год",
                 TableId = tbl4.Id
             };
             var col44 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)",
                 TableId = tbl4.Id
             };
             var col45 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Награда/премия (медаль, диплом с указанием степени)",
                 TableId = tbl4.Id
             };
@@ -267,6 +291,7 @@ namespace ServerApp.Data
             var tbl5 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name =
                     "Сведения о работе, выполняемой участником конкурса в области научно-педагогической " +
                     "деятельности по совместительству (не по основному месту работы) в высшем учебном заведении," +
@@ -280,24 +305,28 @@ namespace ServerApp.Data
             var col51 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название организации/должность/ставка",
                 TableId = tbl5.Id
             };
             var col52 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Место нахождения (субъект РФ, зарубежье)",
                 TableId = tbl5.Id
             };
             var col53 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Вид деятельности (преподавательская)",
                 TableId = tbl5.Id
             };
             var col54 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Количество часов",
                 TableId = tbl5.Id
             };
@@ -307,6 +336,7 @@ namespace ServerApp.Data
             var tbl6 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 6,
                 Name =
                     "Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, " +
                     "Министерств РФ или государственных академий наук, изданные типографским способом за последние 5 лет",
@@ -318,36 +348,42 @@ namespace ServerApp.Data
             var col61 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Вид публикации",
                 TableId = tbl6.Id
             };
             var col62 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Название",
                 TableId = tbl6.Id
             };
             var col63 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Соавторы",
                 TableId = tbl6.Id
             };
             var col64 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Количество печатных листов",
                 TableId = tbl6.Id
             };
             var col65 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Наличие грифа",
                 TableId = tbl6.Id
             };
             var col66 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 6,
                 Name = "Издательство, год",
                 TableId = tbl6.Id
             };
@@ -357,6 +393,7 @@ namespace ServerApp.Data
             var tbl7 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 7,
                 Name = "Список лабораторных практикумов и" +
                        " курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет",
                 EditBlockId = editBlk4.Id
@@ -367,12 +404,14 @@ namespace ServerApp.Data
             var col71 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название дисциплины",
                 TableId = tbl7.Id
             };
             var col72 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Вид (лекции, лабораторные)",
                 TableId = tbl7.Id
             };
@@ -382,6 +421,7 @@ namespace ServerApp.Data
             var tbl8 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 8,
                 Name = "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет",
                 EditBlockId = editBlk4.Id
             };
@@ -391,6 +431,7 @@ namespace ServerApp.Data
             var col81 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название курса",
                 TableId = tbl8.Id
             };
@@ -398,17 +439,20 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Name = "Соавторы",
+                Number = 2,
                 TableId = tbl8.Id
             };
             var col83 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Ссылка на платформу",
                 TableId = tbl8.Id
             };
             var col84 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Год",
                 TableId = tbl8.Id
             };
@@ -418,6 +462,7 @@ namespace ServerApp.Data
             var tbl9 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 9,
                 Name = "Список научных публикаций за последние 5 лет",
                 EditBlockId = editBlk5.Id
             };
@@ -427,24 +472,28 @@ namespace ServerApp.Data
             var col91 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название статьи",
                 TableId = tbl9.Id
             };
             var col92 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Соавторы",
                 TableId = tbl9.Id
             };
             var col93 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Тип публикации (категория ВАК/квартиль МБД)",
                 TableId = tbl9.Id
             };
             var col94 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Издание, год",
                 TableId = tbl9.Id
             };
@@ -454,6 +503,7 @@ namespace ServerApp.Data
             var tbl10 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 10,
                 Name = "Персональные идентификаторы и показатели",
                 EditBlockId = editBlk5.Id
             };
@@ -463,30 +513,35 @@ namespace ServerApp.Data
             var col101 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Тип идентификатора",
                 TableId = tbl10.Id
             };
             var col102 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Идентификатор",
                 TableId = tbl10.Id
             };
             var col103 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Количество публикаций в БАЗЕ",
                 TableId = tbl10.Id
             };
             var col104 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Количество цитирований",
                 TableId = tbl10.Id
             };
             var col105 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Индекс Хирша (за все время)",
                 TableId = tbl10.Id
             };
@@ -496,6 +551,7 @@ namespace ServerApp.Data
             var tbl11 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 11,
                 Name =
                     "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет",
                 EditBlockId = editBlk5.Id
@@ -506,30 +562,35 @@ namespace ServerApp.Data
             var col111 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Название НИР/НИОКР",
                 TableId = tbl11.Id
             };
             var col112 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Сумма финансирования (тыс. руб.)",
                 TableId = tbl11.Id
             };
             var col113 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Период выполнения",
                 TableId = tbl11.Id
             };
             var col114 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Статус (руководитель/исполнитель)",
                 TableId = tbl11.Id
             };
             var col115 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)",
                 TableId = tbl11.Id
             };
@@ -539,6 +600,7 @@ namespace ServerApp.Data
             var tbl12 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 12,
                 Name =
                     "Список объектов интеллектуальной собственности, " +
                     "созданных участником конкурса за весь период научно-педагогической деятельности " +
@@ -552,24 +614,28 @@ namespace ServerApp.Data
             var col121 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Вид",
                 TableId = tbl12.Id
             };
             var col122 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Название",
                 TableId = tbl12.Id
             };
             var col123 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "ФИО соавторов",
                 TableId = tbl12.Id
             };
             var col124 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Номер РИД",
                 TableId = tbl12.Id
             };
@@ -579,6 +645,7 @@ namespace ServerApp.Data
             var tbl13 = new Table()
             {
                 Id = Guid.NewGuid(),
+                Number = 13,
                 Name = "Перечень разработок, " +
                        "внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)",
                 EditBlockId = editBlk5.Id
@@ -589,18 +656,21 @@ namespace ServerApp.Data
             var col131 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Вид",
                 TableId = tbl13.Id
             };
             var col132 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "Название разработки",
                 TableId = tbl13.Id
             };
             var col133 = new Column()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Название организации в которую внедрена разработка",
                 TableId = tbl13.Id
             };
@@ -614,150 +684,175 @@ namespace ServerApp.Data
             var fld1 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 1,
                 Name = "Трек конкурса",
                 EditBlockId = editBlk1.Id
             };
             var fld2 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 2,
                 Name = "ФИО",
                 EditBlockId = editBlk1.Id
             };
             var fld3 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 3,
                 Name = "Дата рождения",
                 EditBlockId = editBlk1.Id
             };
             var fld4 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 4,
                 Name = "Домашний адрес",
                 EditBlockId = editBlk1.Id
             };
             var fld5 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 5,
                 Name = "Контактный телефон",
                 EditBlockId = editBlk1.Id
             };
             var fld6 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 6,
                 Name = "Электронная почта",
                 EditBlockId = editBlk1.Id
             };
             var fld7 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 7,
                 Name = "Место работы/учебы",
                 EditBlockId = editBlk1.Id
             };
             var fld8 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 8,
                 Name = "Адрес работы/учебы",
                 EditBlockId = editBlk1.Id
             };
             var fld9 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 9,
                 Name = "Институт, факультет, кафедра, лаборатория",
                 EditBlockId = editBlk1.Id
             };
             var fld10 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 10,
                 Name = "Должность",
                 EditBlockId = editBlk1.Id
             };
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 11,
                 Name = "Стаж научно-педагогической деятельности по трудовой книжке",
                 EditBlockId = editBlk1.Id
             };
             var fld12 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 12,
                 Name = "Дополнительная информация",
                 EditBlockId = editBlk1.Id
             };
             var fld13 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 13,
                 Name = "Направление конкурса",
                 EditBlockId = editBlk2.Id
             };
             var fld14 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 14,
                 Name = "Категория участника конкурса",
                 EditBlockId = editBlk2.Id
             };
             var fld15 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 15,
                 Name = "Название конкрусной работы",
                 EditBlockId = editBlk2.Id
             };
             var fld16 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 16,
                 Name = "Ученое звание",
                 EditBlockId = editBlk2.Id
             };
             var fld17 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 17,
                 Name = "Ученая степень",
                 EditBlockId = editBlk2.Id
             };
             var fld18 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 18,
                 Name = "Научная специальность (по классификации ВАК)",
                 EditBlockId = editBlk2.Id
             };
             var fld19 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 19,
                 Name = "Защитившиеся кадидаты наук",
                 EditBlockId = editBlk4.Id
             };
             var fld20 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 20,
                 Name = "Защитившиеся доктора наук",
                 EditBlockId = editBlk4.Id
             };
             var fld21 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 21,
                 Name = "Защитившиеся бакалавры",
                 EditBlockId = editBlk4.Id
             };
             var fld22 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 22,
                 Name = "Защитившиеся специалисты",
                 EditBlockId = editBlk4.Id
             };
             var fld23 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 23,
                 Name = "Защитившиеся магистры",
                 EditBlockId = editBlk4.Id
             };
             var fld24 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 24,
                 Name = "Защитившиеся кандидаты наук",
                 EditBlockId = editBlk5.Id
             };
             var fld25 = new Field()
             {
                 Id = Guid.NewGuid(),
+                Number = 25,
                 Name = "Защитившиеся доктора наук",
                 EditBlockId = editBlk5.Id
             };
