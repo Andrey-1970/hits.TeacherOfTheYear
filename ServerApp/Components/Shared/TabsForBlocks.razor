@@ -1,0 +1,71 @@
+﻿<div>
+    <ul class="nav nav-tabs">
+        @foreach (var block in Model!.EditBlocks)
+        {
+            <li class="nav-item">
+                <button class="nav-link @(block.Id == Model.SelectedEditBlockId ? "active" : "")" @onclick="() => SelectBlock(block.Id)">
+                    @block.Name
+                </button>
+            </li>
+        }
+    </ul>
+    @if (Model.SelectedEditBlockId != null)
+    {
+        <div class="tab-content">
+            <EditForm Model="Model.Inputs" OnValidSubmit="SubmitForm">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                @foreach (var fld in Model.Inputs)
+                {
+                    <label>@fld.Name</label>
+                    <InputText @bind-Value="fld.Value"></InputText>
+                }
+                <Button Type="ButtonType.Submit">Сохранить</Button>
+            </EditForm>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public DemoEditModel? Model { get; set; } = default!;
+
+    protected override void OnParametersSet()
+    {
+        SelectBlock(Model!.SelectedEditBlockId);
+    }
+
+    private void SelectBlock(int? blockId)
+    {
+        if (Model == null) return;
+
+        Model.SelectedEditBlockId = blockId;
+
+        if (Model.SelectedEditBlockId == 1)
+        {
+            Model.Inputs = [new() { Id = 1, Name = "Input 1" }, new() { Id = 2, Name = "Input 2" },];
+        }
+        else if (Model.SelectedEditBlockId == 2)
+        {
+            Model.Inputs = [new() { Id = 3, Name = "Input 3" }, new() { Id = 4, Name = "Input 4" },];
+        }
+        else if (Model.SelectedEditBlockId == 3)
+        {
+            Model.Inputs = [new() { Id = 5, Name = "Input 5" }, new() { Id = 6, Name = "Input 6" },];
+        }
+        else if (Model.SelectedEditBlockId == 4)
+        {
+            Model.Inputs = [new() { Id = 7, Name = "Input 7" }, new() { Id = 8, Name = "Input 8" },];
+        }
+        else
+        {
+            Model.Inputs = [];
+        }
+    }
+
+    void SubmitForm()
+    {
+
+    }
+}
