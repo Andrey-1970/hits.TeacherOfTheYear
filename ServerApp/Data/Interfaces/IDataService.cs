@@ -1,13 +1,14 @@
 ﻿using ServerApp.Data.Entities;
+using ServerApp.Data.ViewModels;
 
 namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
-        Task<ApplicationForm?> GetCurrentUserApplicationAsync();
+        Task<ApplicationModel?> GetCurrentUserApplicationAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
-        Task<IEnumerable<Track>> GetTracksAsync();
-        Task<Track?> GetTrackByIdAsync(Guid trackId);
-        Task SaveApplicationFormAsync(ApplicationForm application);
+        Task<IEnumerable<TrackModel>> GetTracksAsync();
+        Task<TrackModel?> GetTrackByIdAsync(Guid trackId);
+        Task SaveApplicationFormAsync(ApplicationModel application);
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/application-form"
+@using ServerApp.Data.ViewModels
 
 @inject IDataService data
 
@@ -27,23 +28,23 @@
                             <div>@table.Name</div>
                             <table class="table-stand">
                                 <thead>
-                                    <tr>
-                                        @foreach (var column in table.Columns)
-                                        {
-                                            <th>@column.Name</th>
-                                        }
-                                    </tr>
+                                <tr>
+                                    @foreach (var column in table.Columns)
+                                    {
+                                        <th>@column.Name</th>
+                                    }
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var row in table.Rows)
-                                    {
-                                        <tr>
-                                            @foreach (var cell in row.CellVals.OrderBy(x => x.Column))
-                                            {
-                                                <input type="text" />
-                                            }
-                                        </tr>
-                                    }
+                                @foreach (var row in table.Rows)
+                                {
+                                    <tr>
+                                        @foreach (var cell in row.CellVals.OrderBy(x => x.ColumnId))
+                                        {
+                                            <input type="text" value="@cell.Value"/>
+                                        }
+                                    </tr>
+                                }
                                 </tbody>
                             </table>
                         }
@@ -56,8 +57,8 @@
 
 @code {
     private Tabs tabs = default!;
-    private ApplicationForm? application;
-    private IEnumerable<Track>? tracks;
+    private ApplicationModel? application;
+    private IEnumerable<TrackModel>? tracks;
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,4 +73,5 @@
         await data.SaveApplicationFormAsync(application); //todo: заменить на метод, сохраняющий трек и удаляющий данные, которые не относятся к выбранному треку
         await tabs.ShowFirstTabAsync();
     }
+
 }
