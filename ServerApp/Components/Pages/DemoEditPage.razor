@@ -1,9 +1,11 @@
 ﻿@page "/demo"
 @rendermode InteractiveServer
 
+@inject IDataService data
+
 @if (Model != null)
 {
-    <InputSelect Value="Model.SelectedTrackId" TValue="int?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(value) => OnTrackIdChanged(value)">
+    <InputSelect Value="Model.SelectedTrackId" TValue="Guid?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(value) => OnTrackIdChanged(value)">
         <option value="">Выберите трек</option>
         @foreach (var track in Model.Tracks)
         {
@@ -24,29 +26,15 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Model = new DemoEditModel()
-        {
-            Tracks = [new() { Id = 1, Name = "Track 1" }, new() { Id = 2, Name = "Track 2" },],
-        };
+        Model = await data.GetCurrentUserEditModelAsync();
     }
 
-    void OnTrackIdChanged(int? value)
+    protected async Task OnTrackIdChanged(Guid? value)
     {
         if (Model == null) return;
 
         Model.SelectedTrackId = value;
-        if (Model.SelectedTrackId == 1)
-        {
-            Model.EditBlocks = [new() { Id = 1, Name = "Block 1" }, new() { Id = 2, Name = "Block 2" }];
-        }
-        else if (Model.SelectedTrackId == 2)
-        {
-            Model.EditBlocks = [new() { Id = 3, Name = "Block 3" }, new() { Id = 4, Name = "Block 4" },];
-        }
-        else
-        {
-            Model.EditBlocks = [];
-        }
+        Model.EditBlocks = await data.GetEditBlocksModelByTrackId(value);
         Model.SelectedEditBlockId = Model.EditBlocks.First().Id;
     }
 

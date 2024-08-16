@@ -1,4 +1,6 @@
-﻿<div>
+﻿@inject IDataService data
+
+<div>
     <ul class="nav nav-tabs">
         @foreach (var block in Model!.EditBlocks)
         {
@@ -36,32 +38,13 @@
         SelectBlock(Model!.SelectedEditBlockId);
     }
 
-    private void SelectBlock(int? blockId)
+    private async Task SelectBlock(Guid? blockId)
     {
         if (Model == null) return;
 
         Model.SelectedEditBlockId = blockId;
 
-        if (Model.SelectedEditBlockId == 1)
-        {
-            Model.Inputs = [new() { Id = 1, Name = "Input 1" }, new() { Id = 2, Name = "Input 2" },];
-        }
-        else if (Model.SelectedEditBlockId == 2)
-        {
-            Model.Inputs = [new() { Id = 3, Name = "Input 3" }, new() { Id = 4, Name = "Input 4" },];
-        }
-        else if (Model.SelectedEditBlockId == 3)
-        {
-            Model.Inputs = [new() { Id = 5, Name = "Input 5" }, new() { Id = 6, Name = "Input 6" },];
-        }
-        else if (Model.SelectedEditBlockId == 4)
-        {
-            Model.Inputs = [new() { Id = 7, Name = "Input 7" }, new() { Id = 8, Name = "Input 8" },];
-        }
-        else
-        {
-            Model.Inputs = [];
-        }
+        Model.Inputs = await data.GetInputsModelByEditBlockId(blockId);
     }
 
     void SubmitForm()
