@@ -1,0 +1,96 @@
+﻿@page "/demo"
+@rendermode InteractiveServer
+
+@if (Model != null)
+{
+    <InputSelect Value="Model.SelectedTrackId" TValue="int?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(value) => OnTrackIdChanged(value)">
+        <option value="">Выберите трек</option>
+        @foreach (var track in Model.Tracks)
+        {
+            <option value="@track.Id">@track.Name</option>
+        }
+    </InputSelect>
+    <p>@Model.SelectedTrackId</p>
+
+    <InputSelect Value="Model.SelectedEditBlockId" TValue="int?" ValueExpression="() => Model.SelectedEditBlockId" ValueChanged="(value) => OnEditBlockIdChanged(value)">
+        @foreach (var block in Model.EditBlocks)
+        {
+            <option value="@block.Id">@block.Name</option>
+        }
+    </InputSelect>
+    <p>@Model.SelectedEditBlockId</p>
+
+    <EditForm Model="Model.Inputs" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        @foreach(var fld in Model.Inputs)
+        {
+            <label>@fld.Name</label>
+            <InputText @bind-Value="fld.Value"></InputText>
+        }
+        <Button Type="ButtonType.Submit">Сохранить</Button>
+    </EditForm>
+}
+
+@code {
+    DemoEditModel? Model;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Model = new DemoEditModel()
+            {
+                Tracks = [new() { Id = 1, Name = "Track 1" }, new() { Id = 2, Name = "Track 2" },],
+            };
+    }
+    void OnTrackIdChanged(int? value)
+    {
+        if (Model == null) return;
+
+        Model.SelectedTrackId = value;
+        if (Model.SelectedTrackId == 1)
+        {
+            Model.EditBlocks = [new() { Id = 1, Name = "Block 1" }, new() { Id = 2, Name = "Block 2" }];
+        }
+        else if (Model.SelectedTrackId == 2)
+        {
+            Model.EditBlocks = [new() { Id = 3, Name = "Block 3" }, new() { Id = 4, Name = "Block 4" },];
+        }
+        else
+        {
+            Model.EditBlocks = [];
+        }
+        Model.SelectedEditBlockId = Model.EditBlocks.First().Id;
+    }
+
+    void OnEditBlockIdChanged(int? value)
+    {
+        if (Model == null) return;
+
+        Model.SelectedEditBlockId = value;
+
+        if (Model.SelectedEditBlockId == 1)
+        {
+            Model.Inputs = [new() { Id = 1, Name = "Input 1" }, new() { Id = 2, Name = "Input 2" },];
+        }
+        else if (Model.SelectedEditBlockId == 2)
+        {
+            Model.Inputs = [new() { Id = 3, Name = "Input 3" }, new() { Id = 4, Name = "Input 4" },];
+        }
+        else if (Model.SelectedEditBlockId == 3)
+        {
+            Model.Inputs = [new() { Id = 5, Name = "Input 5" }, new() { Id = 6, Name = "Input 6" },];
+        }
+        else if (Model.SelectedEditBlockId == 4)
+        {
+            Model.Inputs = [new() { Id = 7, Name = "Input 7" }, new() { Id = 8, Name = "Input 8" },];
+        }
+        else
+        {
+            Model.Inputs = [];
+        }
+    }
+    void SubmitForm()
+    {
+        
+    }
+}
