@@ -1,4 +1,5 @@
 ﻿using ServerApp.Data;
+using ServerApp.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace ServerApp.Tests
     {
         public static void Init(ApplicationDbContext context)
         {
-
             context.SaveChanges();
         }
     }

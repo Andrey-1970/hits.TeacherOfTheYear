@@ -33,13 +33,10 @@ namespace ServerApp.Tests
                 SeedData.Init(context);
             }
 
+            var userInfo = context.UserInfos.First(x => x.Username == "user@mail.ru");
             var mockOfAuthenticationStateProvider = new Mock<IAuthorization>();
             mockOfAuthenticationStateProvider.Setup(p => p.GetUserAsync())
-                .Returns(Task.FromResult<UserInfo?>(new UserInfo
-                {
-                    Username = "user@mail.ru",
-                    Name = "User 2"
-                }));
+                .Returns(Task.FromResult<UserInfo?>(userInfo));
 
             service = new SqlDbDataService(context, mockOfAuthenticationStateProvider.Object);
         }
@@ -58,6 +55,28 @@ namespace ServerApp.Tests
             Assert.AreEqual(2, tracks.Count());
             Assert.IsNotNull(tracks.FirstOrDefault(x => x.Number == 1));
             Assert.IsNotNull(tracks.FirstOrDefault(x => x.Number == 2));
+        }
+
+        [TestMethod]
+        public async Task GetFieldValValid()
+        {
+            var userinfo = await service.GetCurrentUserInfoAsync();
+            var tracks = await service.GetTracksAsync();
+            var track = tracks.First();
+            var editBlock = track.EditBlocks.First();
+            ApplicationForm application = new() { UserInfo = userinfo, Track = track };
+            await service.SaveApplicationFormAsync(application);
+
+            var app = await service.GetCurrentUserApplicationAsync();
+            Field fld = editBlock.Fields.First();
+            FieldVal value = new() { Application = app, Field = fld, Value = "1" };
+            fld.FieldVals.Add(value);
+            await service.SaveApplicationFormAsync(application);
+
+            var field = editBlock.Fields.First();
+            var val = field.FieldVals.First();
+            Assert.IsNotNull(val);
+            Assert.AreEqual(1, app.FieldVals.Count);
         }
     }
 }

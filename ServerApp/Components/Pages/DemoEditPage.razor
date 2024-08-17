@@ -17,7 +17,7 @@
         @if (Model.Inputs != null && Model.Inputs.Any())
         {
             <div class="tab-content">
-                <EditForm Model="Model.Inputs" OnValidSubmit="SubmitForm">
+                <EditForm EditContext="editContext" OnValidSubmit="SubmitForm">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     @foreach (var fld in Model.Inputs)
@@ -35,11 +35,22 @@
 }
 
 @code {
+    EditContext? editContext;
+    private ValidationMessageStore? messageStore;
+
     private DemoEditModel? Model = new();
 
     protected override async Task OnInitializedAsync()
     {
         Model = await data.GetCurrentUserEditModelAsync();
+        editContext = new(Model);
+        editContext.OnValidationRequested += HandleValidationRequested;
+    }
+
+    private void HandleValidationRequested(object? sender,
+    ValidationRequestedEventArgs args)
+    {
+        messageStore?.Clear();
     }
 
     private async Task OnTrackIdChanged(Guid? trackId)

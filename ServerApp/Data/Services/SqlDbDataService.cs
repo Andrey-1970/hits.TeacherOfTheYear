@@ -50,10 +50,10 @@ namespace ServerApp.Data.Services
             return track?.EditBlocks.OrderBy(x => x.Number).Select(e => e.ToModel()) ?? [];
         }
 
-        public async Task<IEnumerable<InputModel>> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
+        public async Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
         {
             var editBlock = await context.EditBlocks.FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock.Fields.OrderBy(x => x.Number).Select(e => e.ToModel(appId));
+            return editBlock.Fields.OrderBy(x => x.Number).Select(e => e.ToModel(appId)).ToArray();
         }
     }
 }

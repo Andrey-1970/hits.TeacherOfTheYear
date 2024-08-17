@@ -7,6 +7,6 @@
         public Guid? SelectedEditBlockId { get; set; }
         public IEnumerable<TrackModel> Tracks { get; set; } = [];
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];
-        public IEnumerable<InputModel> Inputs { get; set; } = [];
+        public InputModel[] Inputs { get; set; } = [];
     }
 }
