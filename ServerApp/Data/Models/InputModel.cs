@@ -5,8 +5,8 @@ namespace ServerApp.Data.Models
     public class InputModel
     {
         public Guid Id { get; set; }
+        public int? Number { get; set; }
         public string? Name { get; set; }
-        [Required]
         public string? Value { get; set; }
     }
 }

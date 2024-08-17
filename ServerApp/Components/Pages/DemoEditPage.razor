@@ -1,44 +1,66 @@
 ﻿@page "/demo"
-@rendermode InteractiveServer
 
 @inject IDataService data
 
 @if (Model != null)
 {
-    <InputSelect Value="Model.SelectedTrackId" TValue="Guid?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(value) => OnTrackIdChanged(value)">
-        <option value="">Выберите трек</option>
+    <InputSelect Value="Model.SelectedTrackId" TValue="Guid?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
+        <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
         @foreach (var track in Model.Tracks)
         {
             <option value="@track.Id">@track.Name</option>
         }
     </InputSelect>
-    if (Model.SelectedTrackId != null)
+    if (Model.SelectedTrackId != Guid.Empty)
     {
-        <TabsForBlocks Model="Model"></TabsForBlocks>
+        <TabsForBlocks EditBlocks="Model.EditBlocks" SelectedEditBlockId="Model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+        @if (Model.Inputs != null && Model.Inputs.Any())
+        {
+            <div class="tab-content">
+                <EditForm Model="Model.Inputs" OnValidSubmit="SubmitForm">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    @foreach (var fld in Model.Inputs)
+                    {
+                        <div>@fld.Name</div>
+                        <div>
+                            <InputText @bind-Value="fld.Value"></InputText>
+                        </div>
+                    }
+                    <Button Type="ButtonType.Submit" Color="ButtonColor.Success">Сохранить</Button>
+                </EditForm>
+            </div>
+        }
     }
-
-    
 }
 
 @code {
-    DemoEditModel? Model;
+    private DemoEditModel? Model = new();
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         Model = await data.GetCurrentUserEditModelAsync();
     }
 
-    protected async Task OnTrackIdChanged(Guid? value)
+    private async Task OnTrackIdChanged(Guid? trackId)
     {
         if (Model == null) return;
 
-        Model.SelectedTrackId = value;
-        Model.EditBlocks = await data.GetEditBlocksModelByTrackId(value);
+        Model.SelectedTrackId = trackId;
+        Model.EditBlocks = await data.GetEditBlocksModelByTrackId(trackId);
         Model.SelectedEditBlockId = Model.EditBlocks.First().Id;
+        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId, Model.ApplicationId);
     }
 
-    void SubmitForm()
+    private async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (Model == null) return;
+
+        Model.SelectedEditBlockId = blockId;
+        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId, Model.ApplicationId);
+    }
+
+    private void SubmitForm()
     {
 
     }

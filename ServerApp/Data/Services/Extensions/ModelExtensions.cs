@@ -22,6 +22,7 @@ public static class ModelExtensions
         return new TrackModel()
         {
             Id = entity.Id,
+            Number = entity.Number,
             Name = entity.Name
         };
     }
@@ -31,6 +32,7 @@ public static class ModelExtensions
         return new EditBlockModel()
         {
             Id = entity.Id,
+            Number = entity.Number,
             Name = entity.Name
         };
     }
@@ -41,6 +43,7 @@ public static class ModelExtensions
         return new InputModel()
         {
             Id = entity.Id,
+            Number = entity.Number,
             Name = entity.Name,
             Value = entity.FieldVals.FirstOrDefault(e => e.ApplicationId == appId)?.Value
         };

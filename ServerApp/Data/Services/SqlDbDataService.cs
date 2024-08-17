@@ -46,14 +46,14 @@ namespace ServerApp.Data.Services
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlocksModelByTrackId(Guid? trackId)
         {
-            var track = await context.Tracks.Include(track => track.EditBlocks).FirstOrDefaultAsync(x => x.Id == trackId);
-            return track?.EditBlocks.Select(e => e.ToModel()) ?? [];
+            var track = await context.Tracks.FirstOrDefaultAsync(x => x.Id == trackId);
+            return track?.EditBlocks.OrderBy(x => x.Number).Select(e => e.ToModel()) ?? [];
         }
 
         public async Task<IEnumerable<InputModel>> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
         {
             var editBlock = await context.EditBlocks.FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock.Fields.Select(e => e.ToModel(appId));
+            return editBlock.Fields.OrderBy(x => x.Number).Select(e => e.ToModel(appId));
         }
     }
 }

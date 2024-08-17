@@ -2,53 +2,31 @@
 
 <div>
     <ul class="nav nav-tabs">
-        @foreach (var block in Model!.EditBlocks)
+        @foreach (var block in EditBlocks)
         {
             <li class="nav-item">
-                <button class="nav-link @(block.Id == Model.SelectedEditBlockId ? "active" : "")" @onclick="() => SelectBlock(block.Id)">
+                <button class="nav-link @(block.Id == SelectedEditBlockId ? "active" : "")" @onclick="async () => await BlockChange(block.Id)">
                     @block.Name
                 </button>
             </li>
         }
     </ul>
-    @if (Model.SelectedEditBlockId != null)
-    {
-        <div class="tab-content">
-            <EditForm Model="Model.Inputs" OnValidSubmit="SubmitForm">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                @foreach (var fld in Model.Inputs)
-                {
-                    <label>@fld.Name</label>
-                    <InputText @bind-Value="fld.Value"></InputText>
-                }
-                <Button Type="ButtonType.Submit">Сохранить</Button>
-            </EditForm>
-        </div>
-    }
 </div>
 
 @code {
     [Parameter]
+    public Guid? SelectedEditBlockId { get; set; }
+
+    [Parameter]
     [EditorRequired]
-    public DemoEditModel? Model { get; set; } = default!;
+    public IEnumerable<EditBlockModel> EditBlocks { get; set; } = default!;
 
-    protected override void OnParametersSet()
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<Guid?> OnBlockChanged { get; set; }
+
+    private async Task BlockChange(Guid? blockId)
     {
-        SelectBlock(Model!.SelectedEditBlockId);
-    }
-
-    private async Task SelectBlock(Guid? blockId)
-    {
-        if (Model == null) return;
-
-        Model.SelectedEditBlockId = blockId ?? Model.EditBlocks.FirstOrDefault()!.Id;
-
-        Model.Inputs = await data.GetInputsModelByEditBlockId(blockId, Model.ApplicationId);
-    }
-
-    void SubmitForm()
-    {
-
+        await OnBlockChanged.InvokeAsync(blockId);
     }
 }
