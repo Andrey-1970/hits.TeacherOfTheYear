@@ -2,6 +2,7 @@
 {
     public class DemoEditModel
     {
+        public Guid ApplicationId { get; set; }
         public Guid? SelectedTrackId { get; set; }
         public Guid? SelectedEditBlockId { get; set; }
         public IEnumerable<TrackModel> Tracks { get; set; } = [];

@@ -10,6 +10,7 @@ public static class ModelExtensions
         var tracks = context.Tracks.ToList();
         return new DemoEditModel()
         {
+            ApplicationId = entity.Id,
             SelectedTrackId = entity.TrackId,
             Tracks = tracks.Select(e => e.ToModel()),
             EditBlocks = entity.Track?.EditBlocks.Select(e => e.ToModel()) ?? []

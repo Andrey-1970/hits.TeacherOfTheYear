@@ -50,11 +50,10 @@ namespace ServerApp.Data.Services
             return track?.EditBlocks.Select(e => e.ToModel()) ?? [];
         }
 
-        public async Task<IEnumerable<InputModel>> GetInputsModelByEditBlockId(Guid? editBlockId)
+        public async Task<IEnumerable<InputModel>> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
         {
-            var user = await auth.GetUserAsync();
             var editBlock = await context.EditBlocks.FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock.Fields.Select(e => e.ToModel(user.Applications.FirstOrDefault().Id));
+            return editBlock.Fields.Select(e => e.ToModel(appId));
         }
     }
 }

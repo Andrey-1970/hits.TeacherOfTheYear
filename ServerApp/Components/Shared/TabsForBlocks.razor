@@ -42,9 +42,9 @@
     {
         if (Model == null) return;
 
-        Model.SelectedEditBlockId = blockId;
+        Model.SelectedEditBlockId = blockId ?? Model.EditBlocks.FirstOrDefault()!.Id;
 
-        Model.Inputs = await data.GetInputsModelByEditBlockId(blockId);
+        Model.Inputs = await data.GetInputsModelByEditBlockId(blockId, Model.ApplicationId);
     }
 
     void SubmitForm()
