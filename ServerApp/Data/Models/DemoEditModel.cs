@@ -34,5 +34,6 @@ namespace ServerApp.Data.Models
         public IEnumerable<TrackModel> Tracks { get; set; } = [];
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];
         public InputModel[] Inputs { get; set; } = [];
+        public TableModel[] Tables { get; set; } = [];
     }
 }
