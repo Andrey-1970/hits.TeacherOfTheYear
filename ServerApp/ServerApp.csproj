@@ -26,4 +26,8 @@
     <Folder Include="Data\SQLite\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Data\SQLite\data.db" />
+  </ItemGroup>
+
 </Project>

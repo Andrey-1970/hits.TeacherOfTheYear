@@ -33,20 +33,8 @@
                                 <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
                                 <div class="form-input w-100 mb-3">
                                     <div class="text-danger"></div>
-                                    @switch (fld.ValueType)
-                                    {
-                                        case "string":
-                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
-                                            break;
-                                        case "int":
-                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
-                                            break;
-                                        case "DateTime":
-                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
-                                            break;
-
-                                    }
-                                    
+                                    <ValidationMessage @ref="ValidationMessage" For="() => fld.Name"></ValidationMessage>
+                                    <InputText class="form-control" @bind-Value="fld.Value"  Placeholder="@fld.Placeholder" />
                                 </div>
                             }
                             <ValidationSummary />
@@ -63,6 +51,7 @@
     private CustomValidation? customValidation;
 
     private DemoEditModel? Model = new();
+    private ValidationMessage<string> ValidationMessage ;
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,6 +88,14 @@
             if (string.IsNullOrEmpty(input.Value))
             {
                 errors.Add(input.Name!, new() {$"Поле '{input.Name}' необходимо заполнить." });
+            }
+
+            else if (input.ValueType == "int")
+            {
+                if (!Int32.TryParse(input.Value, out int outResult))
+                {
+                    errors.Add(nameof(input.Name), new() {$"Поле '{input.Name}' не число." });
+                }
             }
         }
 
