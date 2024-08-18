@@ -1,23 +1,34 @@
 ﻿using ServerApp.Data.Entities;
 
-namespace ServerApp.Data.Models
+namespace ServerApp.Data.Models;
+
+public class TrackModel
 {
-    public class TrackModel
+    public TrackModel()
     {
-        public TrackModel()
-        {
-
-        }
-        public TrackModel(Track track)
-        {
-
-        }
-        public Track ToEntity(TrackModel model)
-        {
-            return new();
-        }
-        public Guid Id { get; set; }
-        public int? Number { get; set; }
-        public string? Name { get; set; }
+        
     }
+    public TrackModel(Track track)
+    {
+        if (track == null) throw new ArgumentNullException(nameof(track));
+        Id = track.Id;
+        Number = track.Number;
+        Name = track.Name;
+    }
+
+    public Track ToEntity()
+    {
+        if (Number == null) throw new InvalidOperationException("Number cannot be null.");
+        
+        return new Track
+        {
+            Id = this.Id,
+            Number = (int)this.Number,
+            Name = this.Name
+        };
+    }
+
+    public Guid Id { get; set; }
+    public int? Number { get; set; }
+    public string? Name { get; set; }
 }

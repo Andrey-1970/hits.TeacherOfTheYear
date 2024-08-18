@@ -15,7 +15,7 @@ namespace ServerApp.Data.Services
             {
                 throw new SecurityException("User is not authorizred to this action.");
             }
-            return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == userState!.User!.Identity!.Name!);
+            return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == userState.User.Identity!.Name!);
         }
     }
 }

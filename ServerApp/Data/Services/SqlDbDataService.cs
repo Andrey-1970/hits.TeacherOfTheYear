@@ -2,7 +2,6 @@
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models;
-using ServerApp.Data.Services.Extensions;
 
 namespace ServerApp.Data.Services
 {
@@ -41,19 +40,19 @@ namespace ServerApp.Data.Services
         {
             var user = await auth.GetUserAsync();
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
-            return await Task.FromResult(application.ToModel(context: context));
+            return await Task.FromResult(new DemoEditModel(application, context));
         }
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlocksModelByTrackId(Guid? trackId)
         {
-            var track = await context.Tracks.FirstOrDefaultAsync(x => x.Id == trackId);
-            return track?.EditBlocks.OrderBy(x => x.Number).Select(e => e.ToModel()) ?? [];
+            var track = await context.Tracks.Include(track => track.EditBlocks).FirstOrDefaultAsync(x => x.Id == trackId);
+            return track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)) ?? [];
         }
 
         public async Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
         {
-            var editBlock = await context.EditBlocks.FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock.Fields.OrderBy(x => x.Number).Select(e => e.ToModel(appId)).ToArray();
+            var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Fields).FirstOrDefaultAsync(e => e.Id == editBlockId);
+            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new InputModel(e)).ToArray();
         }
     }
 }
