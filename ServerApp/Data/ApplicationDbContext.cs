@@ -125,7 +125,7 @@ namespace ServerApp.Data
             var valType3 = new ValuesType()
             {
                 Id = Guid.NewGuid(),
-                Name = "Bool",
+                Name = "bool",
             };
             var valType4 = new ValuesType()
             {
@@ -766,6 +766,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "ФИО",
+                Placeholder = "Иванов Иван Иванович",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -774,6 +775,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Дата рождения",
+                Placeholder = "01.01.2000",
                 ValueTypeId = valType4.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -782,6 +784,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Домашний адрес",
+                Placeholder = "Регион, город, улица, дом, квартира",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -790,6 +793,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Контактный телефон",
+                Placeholder = "+8 (900)-000-00-00",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -798,6 +802,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Электронная почта",
+                Placeholder = "user@example.com",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -806,6 +811,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 6,
                 Name = "Место работы/учебы",
+                Placeholder = "Название организации",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -814,6 +820,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 7,
                 Name = "Адрес работы/учебы",
+                Placeholder = "Регион, город, улица, дом",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -822,6 +829,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 8,
                 Name = "Институт, факультет, кафедра, лаборатория",
+                Placeholder = "Введите институт, факультет, кафедру, лабораторию",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -830,6 +838,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 9,
                 Name = "Должность",
+                Placeholder = "Введите свою должность в организации",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -838,6 +847,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 10,
                 Name = "Стаж научно-педагогической деятельности по трудовой книжке",
+                Placeholder = "Введите свой стаж",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -846,6 +856,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 11,
                 Name = "Дополнительная информация",
+                Placeholder = "Пример",//todo: расписать пример
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
@@ -854,6 +865,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 12,
                 Name = "Направление конкурса",
+                Placeholder = "Выберите направление конкурса",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -862,6 +874,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Категория участника конкурса",
+                Placeholder = "Выберите категорию участника конкруса",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -870,6 +883,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 14,
                 Name = "Название конкрусной работы",
+                Placeholder = "Введите название своей конкурсной работы",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -878,6 +892,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 15,
                 Name = "Ученое звание",
+                Placeholder = "Выберите ученое звание",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -886,6 +901,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 16,
                 Name = "Ученая степень",
+                Placeholder = "Выберите ученая степень",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -894,6 +910,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 17,
                 Name = "Научная специальность (по классификации ВАК)",
+                Placeholder = "Введите научную специальность (по классификации ВАК)",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -902,6 +919,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 18,
                 Name = "Защитившиеся кадидаты наук",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -910,6 +928,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Защитившиеся доктора наук",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -918,6 +937,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Защитившиеся бакалавры",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -926,6 +946,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 21,
                 Name = "Защитившиеся специалисты",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -934,6 +955,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 22,
                 Name = "Защитившиеся магистры",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -942,6 +964,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 23,
                 Name = "Защитившиеся кандидаты наук",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk5.Id
             };
@@ -950,6 +973,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 24,
                 Name = "Защитившиеся доктора наук",
+                Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk5.Id
             };

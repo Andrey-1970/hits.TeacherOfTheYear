@@ -8,6 +8,8 @@ namespace ServerApp.Data.Entities
         public int Number { get; set; }
         [MaxLength(400)] 
         public string? Name { get; set; }
+        [MaxLength(255)]
+        public string? Placeholder { get; set; }
         public virtual Guid ValueTypeId { get; set; }
         public virtual ValuesType? ValueType { get; set; }
         public virtual Guid EditBlockId { get; set; }

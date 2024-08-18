@@ -1,4 +1,5 @@
-﻿using ServerApp.Data.Entities;
+﻿using BlazorBootstrap;
+using ServerApp.Data.Entities;
 
 namespace ServerApp.Data.Models
 {
@@ -14,6 +15,7 @@ namespace ServerApp.Data.Models
             Id = field.Id;
             Number = field.Number;
             Name = field.Name;
+            Placeholder = field.Placeholder;
             ValueType = field.ValueType!.Name;
             Value = field.FieldVals.FirstOrDefault()?.Value;
         }
@@ -34,6 +36,7 @@ namespace ServerApp.Data.Models
         public Guid Id { get; set; }
         public int? Number { get; set; }
         public string? Name { get; set; }
+        public string? Placeholder { get; set; }
         public string? ValueType { get; set; }
         public string? Value { get; set; }
     }
