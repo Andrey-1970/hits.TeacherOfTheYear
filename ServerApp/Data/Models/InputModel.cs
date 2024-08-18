@@ -14,6 +14,7 @@ namespace ServerApp.Data.Models
             Id = field.Id;
             Number = field.Number;
             Name = field.Name;
+            ValueType = field.ValueType!.Name;
             Value = field.FieldVals.FirstOrDefault()?.Value;
         }
 
@@ -33,6 +34,7 @@ namespace ServerApp.Data.Models
         public Guid Id { get; set; }
         public int? Number { get; set; }
         public string? Name { get; set; }
+        public string? ValueType { get; set; }
         public string? Value { get; set; }
     }
 }

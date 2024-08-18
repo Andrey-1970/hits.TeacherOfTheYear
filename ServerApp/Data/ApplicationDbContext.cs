@@ -12,6 +12,7 @@ namespace ServerApp.Data
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
+        public DbSet<ValuesType> DataTypes { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
         public DbSet<Field> Fields { get; set; }
         public DbSet<FieldVal> FieldVals { get; set; }
@@ -43,6 +44,7 @@ namespace ServerApp.Data
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Number }).IsUnique();
+            builder.Entity<ValuesType>().HasIndex(vt => vt.Name).IsUnique();
             builder.Entity<EditBlock>().HasIndex(eb => eb.Number).IsUnique();
 
             // К сожалению из-за связи многие ко многим уникальность отследить невозможно
@@ -108,6 +110,31 @@ namespace ServerApp.Data
 
             #endregion
 
+            #region ValuesType
+
+            var valType1 = new ValuesType()
+            {
+                Id = Guid.NewGuid(),
+                Name = "int",
+            };
+            var valType2 = new ValuesType()
+            {
+                Id = Guid.NewGuid(),
+                Name = "string",
+            };
+            var valType3 = new ValuesType()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Bool",
+            };
+            var valType4 = new ValuesType()
+            {
+                Id = Guid.NewGuid(),
+                Name = "DateTime",
+            };
+
+            #endregion
+
             #region Tables
 
             var tbl1 = new Table()
@@ -128,6 +155,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Год",
+                ValueTypeId = valType1.Id,
                 TableId = tbl1.Id
             };
             var col12 = new Column()
@@ -135,6 +163,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Название конкурса",
+                ValueTypeId = valType2.Id,
                 TableId = tbl1.Id
             };
             var col13 = new Column()
@@ -142,6 +171,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Статус конкурса",
+                ValueTypeId = valType2.Id,
                 TableId = tbl1.Id
             };
             var col14 = new Column()
@@ -149,6 +179,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Награда",
+                ValueTypeId = valType2.Id,
                 TableId = tbl1.Id
             };
             var col15 = new Column()
@@ -156,6 +187,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Ссылка",
+                ValueTypeId = valType2.Id,
                 TableId = tbl1.Id
             };
 
@@ -177,6 +209,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название документа, реквизиты",
+                ValueTypeId = valType2.Id,
                 TableId = tbl2.Id
             };
             var col22 = new Column()
@@ -184,6 +217,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Год получения документа",
+                ValueTypeId = valType1.Id,
                 TableId = tbl2.Id
             };
 
@@ -204,6 +238,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Наименование курса",
+                ValueTypeId = valType2.Id,
                 TableId = tbl3.Id
             };
             var col32 = new Column()
@@ -211,6 +246,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Язык преподавания (русск./англ./др.)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl3.Id
             };
             var col33 = new Column()
@@ -218,6 +254,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Лекции (час.)",
+                ValueTypeId = valType1.Id,
                 TableId = tbl3.Id
             };
             var col34 = new Column()
@@ -225,6 +262,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Практические занятия (час.)",
+                ValueTypeId = valType1.Id,
                 TableId = tbl3.Id
             };
             var col35 = new Column()
@@ -232,6 +270,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Итого (час.)",
+                ValueTypeId = valType1.Id,
                 TableId = tbl3.Id
             };
 
@@ -255,6 +294,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "ФИО",
+                ValueTypeId = valType2.Id,
                 TableId = tbl4.Id
             };
             var col42 = new Column()
@@ -262,6 +302,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Название конкурса/премии",
+                ValueTypeId = valType2.Id,
                 TableId = tbl4.Id
             };
             var col43 = new Column()
@@ -269,6 +310,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Год",
+                ValueTypeId = valType1.Id,
                 TableId = tbl4.Id
             };
             var col44 = new Column()
@@ -276,6 +318,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl4.Id
             };
             var col45 = new Column()
@@ -283,6 +326,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Награда/премия (медаль, диплом с указанием степени)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl4.Id
             };
 
@@ -307,6 +351,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название организации/должность/ставка",
+                ValueTypeId = valType2.Id,
                 TableId = tbl5.Id
             };
             var col52 = new Column()
@@ -314,6 +359,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Место нахождения (субъект РФ, зарубежье)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl5.Id
             };
             var col53 = new Column()
@@ -321,6 +367,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Вид деятельности (преподавательская)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl5.Id
             };
             var col54 = new Column()
@@ -328,6 +375,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Количество часов",
+                ValueTypeId = valType1.Id,
                 TableId = tbl5.Id
             };
 
@@ -357,6 +405,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Название",
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
             var col63 = new Column()
@@ -364,6 +413,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Соавторы",
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
             var col64 = new Column()
@@ -371,6 +421,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Количество печатных листов",
+                ValueTypeId = valType1.Id,
                 TableId = tbl6.Id
             };
             var col65 = new Column()
@@ -378,6 +429,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Наличие грифа",
+                ValueTypeId = valType3.Id,
                 TableId = tbl6.Id
             };
             var col66 = new Column()
@@ -385,6 +437,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 6,
                 Name = "Издательство, год",
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
 
@@ -406,6 +459,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название дисциплины",
+                ValueTypeId = valType2.Id,
                 TableId = tbl7.Id
             };
             var col72 = new Column()
@@ -413,6 +467,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Вид (лекции, лабораторные)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl7.Id
             };
 
@@ -433,13 +488,15 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название курса",
+                ValueTypeId = valType2.Id,
                 TableId = tbl8.Id
             };
             var col82 = new Column()
             {
                 Id = Guid.NewGuid(),
-                Name = "Соавторы",
                 Number = 2,
+                Name = "Соавторы",
+                ValueTypeId = valType2.Id,
                 TableId = tbl8.Id
             };
             var col83 = new Column()
@@ -447,6 +504,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Ссылка на платформу",
+                ValueTypeId = valType2.Id,
                 TableId = tbl8.Id
             };
             var col84 = new Column()
@@ -454,6 +512,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Год",
+                ValueTypeId = valType1.Id,
                 TableId = tbl8.Id
             };
 
@@ -474,6 +533,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название статьи",
+                ValueTypeId = valType2.Id,
                 TableId = tbl9.Id
             };
             var col92 = new Column()
@@ -481,6 +541,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Соавторы",
+                ValueTypeId = valType2.Id,
                 TableId = tbl9.Id
             };
             var col93 = new Column()
@@ -488,6 +549,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Тип публикации (категория ВАК/квартиль МБД)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl9.Id
             };
             var col94 = new Column()
@@ -495,6 +557,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Издание, год",
+                ValueTypeId = valType2.Id,
                 TableId = tbl9.Id
             };
 
@@ -515,6 +578,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Тип идентификатора",
+                ValueTypeId = valType2.Id,
                 TableId = tbl10.Id
             };
             var col102 = new Column()
@@ -522,6 +586,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Идентификатор",
+                ValueTypeId = valType2.Id,
                 TableId = tbl10.Id
             };
             var col103 = new Column()
@@ -529,6 +594,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Количество публикаций в БАЗЕ",
+                ValueTypeId = valType1.Id,
                 TableId = tbl10.Id
             };
             var col104 = new Column()
@@ -536,6 +602,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Количество цитирований",
+                ValueTypeId = valType1.Id,
                 TableId = tbl10.Id
             };
             var col105 = new Column()
@@ -543,6 +610,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Индекс Хирша (за все время)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl10.Id
             };
 
@@ -564,6 +632,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Название НИР/НИОКР",
+                ValueTypeId = valType2.Id,
                 TableId = tbl11.Id
             };
             var col112 = new Column()
@@ -571,6 +640,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Сумма финансирования (тыс. руб.)",
+                ValueTypeId = valType1.Id,
                 TableId = tbl11.Id
             };
             var col113 = new Column()
@@ -578,6 +648,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Период выполнения",
+                ValueTypeId = valType2.Id,
                 TableId = tbl11.Id
             };
             var col114 = new Column()
@@ -585,6 +656,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Статус (руководитель/исполнитель)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl11.Id
             };
             var col115 = new Column()
@@ -592,6 +664,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)",
+                ValueTypeId = valType2.Id,
                 TableId = tbl11.Id
             };
 
@@ -616,6 +689,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Вид",
+                ValueTypeId = valType2.Id,
                 TableId = tbl12.Id
             };
             var col122 = new Column()
@@ -623,6 +697,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Название",
+                ValueTypeId = valType2.Id,
                 TableId = tbl12.Id
             };
             var col123 = new Column()
@@ -630,6 +705,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "ФИО соавторов",
+                ValueTypeId = valType2.Id,
                 TableId = tbl12.Id
             };
             var col124 = new Column()
@@ -637,6 +713,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Номер РИД",
+                ValueTypeId = valType2.Id,
                 TableId = tbl12.Id
             };
 
@@ -658,6 +735,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Вид",
+                ValueTypeId = valType2.Id,
                 TableId = tbl13.Id
             };
             var col132 = new Column()
@@ -665,6 +743,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Название разработки",
+                ValueTypeId = valType2.Id,
                 TableId = tbl13.Id
             };
             var col133 = new Column()
@@ -672,6 +751,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Название организации в которую внедрена разработка",
+                ValueTypeId = valType2.Id,
                 TableId = tbl13.Id
             };
 
@@ -680,180 +760,197 @@ namespace ServerApp.Data
             #endregion
 
             #region Fields
-
+            
             var fld1 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 1,
-                Name = "Трек конкурса",
+                Name = "ФИО",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld2 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 2,
-                Name = "ФИО",
+                Name = "Дата рождения",
+                ValueTypeId = valType4.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld3 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 3,
-                Name = "Дата рождения",
+                Name = "Домашний адрес",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld4 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 4,
-                Name = "Домашний адрес",
+                Name = "Контактный телефон",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld5 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 5,
-                Name = "Контактный телефон",
+                Name = "Электронная почта",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld6 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 6,
-                Name = "Электронная почта",
+                Name = "Место работы/учебы",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld7 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 7,
-                Name = "Место работы/учебы",
+                Name = "Адрес работы/учебы",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld8 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 8,
-                Name = "Адрес работы/учебы",
+                Name = "Институт, факультет, кафедра, лаборатория",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld9 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 9,
-                Name = "Институт, факультет, кафедра, лаборатория",
+                Name = "Должность",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld10 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 10,
-                Name = "Должность",
+                Name = "Стаж научно-педагогической деятельности по трудовой книжке",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 11,
-                Name = "Стаж научно-педагогической деятельности по трудовой книжке",
+                Name = "Дополнительная информация",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk1.Id
             };
             var fld12 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 12,
-                Name = "Дополнительная информация",
-                EditBlockId = editBlk1.Id
+                Name = "Направление конкурса",
+                ValueTypeId = valType2.Id,
+                EditBlockId = editBlk2.Id
             };
             var fld13 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 13,
-                Name = "Направление конкурса",
+                Name = "Категория участника конкурса",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
             var fld14 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 14,
-                Name = "Категория участника конкурса",
+                Name = "Название конкрусной работы",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
             var fld15 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 15,
-                Name = "Название конкрусной работы",
+                Name = "Ученое звание",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
             var fld16 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 16,
-                Name = "Ученое звание",
+                Name = "Ученая степень",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
             var fld17 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 17,
-                Name = "Ученая степень",
+                Name = "Научная специальность (по классификации ВАК)",
+                ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
             var fld18 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 18,
-                Name = "Научная специальность (по классификации ВАК)",
-                EditBlockId = editBlk2.Id
+                Name = "Защитившиеся кадидаты наук",
+                ValueTypeId = valType1.Id,
+                EditBlockId = editBlk4.Id
             };
             var fld19 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
-                Name = "Защитившиеся кадидаты наук",
+                Name = "Защитившиеся доктора наук",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
             var fld20 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
-                Name = "Защитившиеся доктора наук",
+                Name = "Защитившиеся бакалавры",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
             var fld21 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
-                Name = "Защитившиеся бакалавры",
+                Name = "Защитившиеся специалисты",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
             var fld22 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 22,
-                Name = "Защитившиеся специалисты",
+                Name = "Защитившиеся магистры",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
             var fld23 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 23,
-                Name = "Защитившиеся магистры",
-                EditBlockId = editBlk4.Id
+                Name = "Защитившиеся кандидаты наук",
+                ValueTypeId = valType1.Id,
+                EditBlockId = editBlk5.Id
             };
             var fld24 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 24,
-                Name = "Защитившиеся кандидаты наук",
-                EditBlockId = editBlk5.Id
-            };
-            var fld25 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 25,
                 Name = "Защитившиеся доктора наук",
+                ValueTypeId = valType1.Id,
                 EditBlockId = editBlk5.Id
             };
 
@@ -882,21 +979,21 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
-                FieldId = fld23.Id
+                FieldId = fld22.Id
             };
             var mark4 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld19.Id
+                FieldId = fld18.Id
             };
             var mark5 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld20.Id
+                FieldId = fld19.Id
             };
             var mark6 = new Mark()
             {
@@ -953,7 +1050,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Баллы за ученое звание:",
-                FieldId = fld16.Id
+                FieldId = fld15.Id
             };
             var mark14 = new Mark()
             {
@@ -995,14 +1092,14 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld24.Id
+                FieldId = fld23.Id
             };
             var mark20 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld25.Id
+                FieldId = fld24.Id
             };
             var mark21 = new Mark()
             {
@@ -1071,7 +1168,7 @@ namespace ServerApp.Data
                 col131, col132, col133
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
-                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24, fld25]);
+                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14, mark15, mark16, mark17,
                 mark18, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
@@ -1141,16 +1238,15 @@ namespace ServerApp.Data
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld15.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld17.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld18.Id},
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld18.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld19.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld20.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld21.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld22.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld23.Id},
-                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld16.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld16.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld25.Id}
+                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld15.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld15.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld23.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id}
                 ]));
             builder.Entity<MarkBlock>().HasMany(e => e.Marks).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
