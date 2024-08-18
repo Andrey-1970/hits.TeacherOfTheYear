@@ -33,7 +33,20 @@
                                 <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
                                 <div class="form-input w-100 mb-3">
                                     <div class="text-danger"></div>
-                                    <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Name" />
+                                    @switch (fld.ValueType)
+                                    {
+                                        case "string":
+                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                            break;
+                                        case "int":
+                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                            break;
+                                        case "DateTime":
+                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                            break;
+
+                                    }
+                                    
                                 </div>
                             }
                             <ValidationSummary />

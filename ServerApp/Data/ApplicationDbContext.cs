@@ -901,7 +901,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 16,
                 Name = "Ученая степень",
-                Placeholder = "Выберите ученая степень",
+                Placeholder = "Выберите ученую степень",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1171,7 +1171,8 @@ namespace ServerApp.Data
             };
 
             #endregion
-
+            
+            builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
             builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7, markBlk8]);
