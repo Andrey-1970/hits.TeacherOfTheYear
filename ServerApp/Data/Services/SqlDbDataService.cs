@@ -41,7 +41,40 @@ namespace ServerApp.Data.Services
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
+            var user = await auth.GetUserAsync();
             
+            if (user == null)
+            {
+               throw new UnauthorizedAccessException("User unauthorized");
+            }
+            
+            List<FieldVal> fieldVals = model.Fields.Select(f => f.ToEntity()).ToList();
+            foreach (var fld in fieldVals)
+            {
+                fld.ApplicationId = user.Applications.First().Id;
+                fld.FieldId = fld.FieldId;
+                context.Attach(fld);
+            }
+
+            List<Table> tables = model.Tables.Select(t => t.ToEntity()).ToList();
+            foreach (var tbl in tables)
+            {
+                List<Row> rows = tbl.Rows;
+                foreach (var row in rows)
+                {
+                    row.TableId = tbl.Id;
+                    context.Attach(row);
+                    List<CellVal> cells = row.CellVals;
+                    foreach (var cell in cells)
+                    {
+                        cell.ApplicationId = user.Applications.First().Id;
+                        cell.RowId = row.Id;
+                        context.Attach(cell);
+                    }
+                }
+            }
+            
+            await context.SaveChangesAsync();
         }
     }
 }

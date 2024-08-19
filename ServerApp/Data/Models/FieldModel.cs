@@ -28,6 +28,7 @@ namespace ServerApp.Data.Models
             return new FieldVal()
             {
                 Id = this.ValId,
+                FieldId = this.Id,
                 Value = this.Value
             };
         }
