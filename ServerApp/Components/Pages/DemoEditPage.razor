@@ -30,10 +30,27 @@
                         {
                             @foreach (var fld in model.Inputs)
                             {
+                                @if (!string.IsNullOrEmpty(fld.EditGroup))
+                                {
+                                    <div class="block-subtitle-text">@fld.EditGroup</div>
+                                }
                                 <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
                                 <div class="form-input w-100 mb-3">
                                     <ValidationMessage For="() => fld.Value" />
-                                    <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                    @if (fld.SelectValues is not null && fld.SelectValues.Any())
+                                    {
+                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="fld.Value">
+                                            <option value="@string.Empty" disabled selected hidden>@fld.Placeholder</option>
+                                            @foreach (var value in fld.SelectValues)
+                                            {
+                                                <option value="@value">@value</option>
+                                            }
+                                        </InputSelect>
+                                    }
+                                    else
+                                    {
+                                        <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                    }
                                 </div>
                             }
                         }
