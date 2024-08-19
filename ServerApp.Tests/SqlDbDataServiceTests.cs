@@ -108,16 +108,19 @@ namespace ServerApp.Tests
         [TestMethod]
         public async Task GetEditBlocksModelByTrackIdValid()
         {
-            var trackId = Guid.Parse("5ED26E0B-9B84-4983-AEDB-F8DF05270D18"); // Используйте действительный ID
-            var editBlocks = await service.GetEditBlocksModelByTrackId(trackId);
+            var tracks = await service.GetTracksAsync();
+            var track = tracks.First();
+            var editBlocks = await service.GetEditBlocksModelByTrackId(track.Id);
             Assert.IsNotNull(editBlocks);
         }
 
         [TestMethod]
         public async Task GetInputsModelByEditBlockIdValid()
         {
-            var editBlockId = Guid.Parse("BB2A2D6C-8C89-484E-81C2-C8C079C06DC8"); // Используйте действительный ID
-            var inputs = await service.GetInputsModelByEditBlockId(editBlockId);
+            var tracks = await service.GetTracksAsync();
+            var track = tracks.First();
+            var editBlock = track.EditBlocks.First(e => e.Name == "Деятельность");
+            var inputs = await service.GetInputsModelByEditBlockId(editBlock.Id);
             Assert.IsNotNull(inputs);
         }
 
