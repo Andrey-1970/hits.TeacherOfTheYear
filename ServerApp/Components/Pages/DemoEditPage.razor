@@ -2,7 +2,7 @@
 
 @inject IDataService data
 
-@if (Model != null)
+@if (model != null)
 {
     <div class="block">
         <div class="block-title">
@@ -11,33 +11,32 @@
             </div>
         </div>
         <div class="block-content-text">
-            <InputSelect class="form-control" Value="Model.SelectedTrackId" TValue="Guid?" ValueExpression="() => Model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
+            <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
                 <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
-                @foreach (var track in Model.Tracks)
+                @foreach (var track in model.Tracks)
                 {
                     <option value="@track!.Id">@track.Name</option>
                 }
             </InputSelect>
         </div>
         <div class="block-content-text">
-            @if (Model.SelectedTrackId != Guid.Empty)
+            @if (model.SelectedTrackId != Guid.Empty)
             {
-                <TabsForBlocks EditBlocks="Model.EditBlocks" SelectedEditBlockId="Model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
-                @if (Model.Inputs != null && Model.Inputs.Any())
+                <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+                @if (model.Inputs != null && model.Inputs.Any())
                 {
                     <div class="tab-content">
-                        <EditForm Model="Model" OnValidSubmit="Submit">
-                            <CustomValidation @ref="customValidation" />
-                            @foreach (var fld in Model.Inputs)
+                        <EditForm EditContext="editContext" OnValidSubmit="Submit">
+                            @foreach (var fld in model.Inputs)
                             {
                                 <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
                                 <div class="form-input w-100 mb-3">
                                     <div class="text-danger"></div>
-                                    <ValidationMessage @ref="ValidationMessage" For="() => fld.Name"></ValidationMessage>
-                                    <InputText class="form-control" @bind-Value="fld.Value"  Placeholder="@fld.Placeholder" />
+                                    <ValidationMessage For="() => fld.Value" />
+                                    <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
                                 </div>
                             }
-                            <ValidationSummary />
+                            <ValidationSummary/>
                             <Button Type="ButtonType.Submit" Color="ButtonColor.Success">Сохранить</Button>
                         </EditForm>
                     </div>
@@ -48,64 +47,72 @@
 }
 
 @code {
-    private CustomValidation? customValidation;
-
-    private DemoEditModel? Model = new();
-    private ValidationMessage<string> ValidationMessage ;
+    DemoEditModel? model;
+    EditContext? editContext;
+    ValidationMessageStore? messageStore;
 
     protected override async Task OnInitializedAsync()
     {
-        Model = await data.GetCurrentUserEditModelAsync();
+        model = await data.GetCurrentUserEditModelAsync();
     }
 
-    private async Task OnTrackIdChanged(Guid? trackId)
+    async Task OnTrackIdChanged(Guid? trackId)
     {
-        if (Model == null) return;
+        if (model == null) return;
 
-        Model.SelectedTrackId = trackId;
-        Model.EditBlocks = await data.GetEditBlocksModelByTrackId(trackId);
-        Model.SelectedEditBlockId = Model.EditBlocks.First().Id;
-        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId);
+        model.SelectedTrackId = trackId;
+        model.EditBlocks = await data.GetEditBlocksModelByTrackId(trackId);
+
+        await OnBlockIdChanged(model.EditBlocks.First().Id);
     }
 
-    private async Task OnBlockIdChanged(Guid? blockId)
+    async Task OnBlockIdChanged(Guid? blockId)
     {
-        if (Model == null) return;
+        if (model == null) return;
 
-        customValidation?.ClearErrors();
+        model.SelectedEditBlockId = blockId;
+        model.Inputs = await data.GetInputsModelByEditBlockId(model.SelectedEditBlockId);
 
-        Model.SelectedEditBlockId = blockId;
-        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId);
+        editContext = new(model);
+        editContext.OnFieldChanged += HandleFieldChanged;
+        editContext.OnValidationRequested += HandleValidationRequested;
+        messageStore = new(editContext);
+
     }
 
-    private void Submit()
+    void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
     {
-        customValidation?.ClearErrors();
+        var fld = ((InputModel)e.FieldIdentifier.Model);
+        messageStore!.Clear(() => fld.Value!);
+        CheckField(fld);
+        editContext!.NotifyValidationStateChanged();
+    }
 
-        var errors = new Dictionary<string, List<string>>();
-        foreach (var input in Model!.Inputs)
+    void HandleValidationRequested(object? sender, ValidationRequestedEventArgs e)
+    {
+        messageStore!.Clear();
+        foreach (var fld in model!.Inputs)
         {
-            if (string.IsNullOrEmpty(input.Value))
-            {
-                errors.Add(input.Name!, new() {$"Поле '{input.Name}' необходимо заполнить." });
-            }
+            CheckField(fld);
+        }
+        editContext!.NotifyValidationStateChanged();
+    }
 
-            else if (input.ValueType == "int")
-            {
-                if (!Int32.TryParse(input.Value, out int outResult))
-                {
-                    errors.Add(nameof(input.Name), new() {$"Поле '{input.Name}' не число." });
-                }
-            }
+    void CheckField(InputModel fld)
+    {
+        if (string.IsNullOrEmpty(fld.Value))
+        {
+            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
         }
+        else if (fld.ValueType == "int" && !int.TryParse(fld.Value, out _))
+        {
+            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' должно содержать число.");
+        }
+    }
 
-        if (errors.Any())
-        {
-            customValidation?.DisplayErrors(errors);
-        }
-        else
-        {
-            Console.WriteLine("Submit called: Processing the form");
-        }
+    async Task Submit()
+    {
+        await Task.Delay(100);
+        Console.WriteLine("Submitting");
     }
 }
