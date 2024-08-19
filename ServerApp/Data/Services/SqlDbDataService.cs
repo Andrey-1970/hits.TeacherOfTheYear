@@ -62,5 +62,10 @@ namespace ServerApp.Data.Services
                 .FirstOrDefaultAsync(e => e.Id == editBlockId);
             return editBlock!.Tables.OrderBy(x => x.Number).Select(t => new TableModel(t)).ToArray();
         }
+
+        public async Task SaveApplicationFormFromEditModelAsync(DemoEditModel model)
+        {
+            
+        }
     }
 }

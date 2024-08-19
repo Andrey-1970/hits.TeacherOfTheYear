@@ -16,6 +16,7 @@ public class ColumnModel
         Id = column.Id;
         Name = column.Name;
         ValueType = column.ValueType!.Name;
+        SelectValues = column.SelectValues.Select(s => s.Value).ToArray();
     }
 
     public Column ToEntity()
@@ -29,4 +30,5 @@ public class ColumnModel
     public Guid Id { get; set; }
     public string? Name { get; set; }
     public string? ValueType { get; set; }
+    public string?[] SelectValues { get; set; } = [];
 }
