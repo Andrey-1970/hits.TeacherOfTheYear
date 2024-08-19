@@ -920,6 +920,7 @@ namespace ServerApp.Data
                 Number = 18,
                 Name = "Защитившиеся кадидаты наук",
                 Placeholder = "Введите количество",
+                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -938,6 +939,7 @@ namespace ServerApp.Data
                 Number = 20,
                 Name = "Защитившиеся бакалавры",
                 Placeholder = "Введите количество",
+                EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -965,6 +967,7 @@ namespace ServerApp.Data
                 Number = 23,
                 Name = "Защитившиеся кандидаты наук",
                 Placeholder = "Введите количество",
+                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk5.Id
             };
