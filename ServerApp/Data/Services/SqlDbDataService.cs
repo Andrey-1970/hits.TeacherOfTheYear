@@ -49,10 +49,18 @@ namespace ServerApp.Data.Services
             return track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)) ?? [];
         }
 
-        public async Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId)
+        public async Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId)
         {
-            var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Fields).FirstOrDefaultAsync(e => e.Id == editBlockId);
+            var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Fields)
+                .FirstOrDefaultAsync(e => e.Id == editBlockId);
             return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new InputModel(e)).ToArray();
+        }
+
+        public async Task<TableModel[]> GetTablesModelByEditBlockIdAsync(Guid? editBlockId)
+        {
+            var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Tables)
+                .FirstOrDefaultAsync(e => e.Id == editBlockId);
+            return editBlock!.Tables.OrderBy(x => x.Number).Select(t => new TableModel(t)).ToArray();
         }
     }
 }

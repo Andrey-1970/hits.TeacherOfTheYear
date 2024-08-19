@@ -65,7 +65,7 @@
         Model.SelectedTrackId = trackId;
         Model.EditBlocks = await data.GetEditBlocksModelByTrackId(trackId);
         Model.SelectedEditBlockId = Model.EditBlocks.First().Id;
-        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId, Model.ApplicationId);
+        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId);
     }
 
     private async Task OnBlockIdChanged(Guid? blockId)
@@ -75,7 +75,7 @@
         customValidation?.ClearErrors();
 
         Model.SelectedEditBlockId = blockId;
-        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId, Model.ApplicationId);
+        Model.Inputs = await data.GetInputsModelByEditBlockId(Model.SelectedEditBlockId);
     }
 
     private void Submit()

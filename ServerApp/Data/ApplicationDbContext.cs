@@ -398,6 +398,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Вид публикации",
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
             var col62 = new Column()

@@ -12,6 +12,7 @@ namespace ServerApp.Data.Interfaces
         Task SaveApplicationFormAsync(ApplicationForm application);
         Task<DemoEditModel> GetCurrentUserEditModelAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlocksModelByTrackId(Guid? trackId);
-        Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId, Guid appId);
+        Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId);
+        Task<TableModel[]> GetTablesModelByEditBlockIdAsync(Guid? editBlockId);
     }
 }
