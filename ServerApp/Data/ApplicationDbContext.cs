@@ -12,7 +12,6 @@ namespace ServerApp.Data
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
-        public DbSet<ValuesType> DataTypes { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
         public DbSet<Field> Fields { get; set; }
         public DbSet<FieldVal> FieldVals { get; set; }
@@ -20,9 +19,11 @@ namespace ServerApp.Data
         public DbSet<MarkBlock> MarkBlocks { get; set; }
         public DbSet<MarkVal> MarkVals { get; set; }
         public DbSet<Row> Rows { get; set; }
+        public DbSet<SelectValue> SelectValues { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Track> Tracks { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
+        public DbSet<ValuesType> ValueTypes { get; set; }
 
         #endregion
 
@@ -983,6 +984,173 @@ namespace ServerApp.Data
 
             #endregion
 
+            #region SelectValues
+
+            var slctVall1 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "АРХИТЕКТУРА",
+                FieldId = fld12.Id,
+            };
+            var slctVall2 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "ТЕХНИКА И ТЕХНОЛОГИИ СТРОИТЕЛЬСТВА",
+                FieldId = fld12.Id
+            };
+            var slctVall3 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "СТРОИТЕЛЬСТВО И АРХИТЕКТУРА",
+                FieldId = fld12.Id
+            };
+            var slctVall4 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "ЭЛЕКТРО- И ТЕПЛОЭНЕРГЕТИКА",
+                FieldId = fld12.Id
+            };
+            var slctVall5 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "ПРИКЛАДНАЯ ГЕОЛОГИЯ, ГОРНОЕ ДЕЛО, НЕФТЕГАЗОВОЕ ДЕЛО И ГЕОДЕЗИЯ",
+                FieldId = fld12.Id
+            };
+            var slctVall6 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "НЕДРОПОЛЬЗОВАНИЕ И ГОРНЫЕ НАУКИ",
+                FieldId = fld12.Id
+            };
+            var slctVall7 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "аспиранты, адъюнкты, ординаторы, ассистенты-стажеры и работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность, не имеющие ученой степени",
+                FieldId = fld13.Id
+            };
+            var slctVall8 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "докторанты и работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность, имеющие ученую степень кандидата наук ",
+                FieldId = fld13.Id
+            };
+            var slctVall9 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "докторанты и работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность, имеющие ученую степень кандидата наук ",
+                FieldId = fld13.Id
+            };
+            var slctVall10 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Доцент",
+                FieldId = fld15.Id
+            };
+            var slctVall11 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Профессор",
+                FieldId = fld15.Id
+            };
+            var slctVall12 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Региональный",
+                ColumnId = col13.Id
+            };
+            var slctVall13 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Всероссийский",
+                ColumnId = col13.Id
+            };
+            var slctVall14 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Международный",
+                ColumnId = col13.Id
+            };
+            var slctVall15 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Учебное и/или учебно-методическое пособие",
+                ColumnId = col61.Id
+            };
+            var slctVall16 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Учебник",
+                ColumnId = col61.Id
+            };
+            var slctVall17 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Монография",
+                ColumnId = col61.Id
+            };
+            var slctVall18 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Лекции",
+                ColumnId = col72.Id
+            };
+            var slctVall19 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Лабораторные",
+                ColumnId = col72.Id
+            };
+            var slctVall20 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Руководитель",
+                ColumnId = col114.Id
+            };
+            var slctVall21 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Исполнитель",
+                ColumnId = col114.Id
+            };
+            var slctVall22 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Изобретение",
+                ColumnId = col121.Id
+            };
+            var slctVall23 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Полезная модель",
+                ColumnId = col121.Id
+            };
+            var slctVall24 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "База данных",
+                ColumnId = col121.Id
+            };
+            var slctVall25 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Изобретение",
+                ColumnId = col131.Id
+            };
+            var slctVall26 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Полезная модель",
+                ColumnId = col131.Id
+            };
+            var slctVall27 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "База данных",
+                ColumnId = col131.Id
+            };
+
+            #endregion
+
             #region Marks
 
             var mark1 = new Mark()
@@ -1194,6 +1362,12 @@ namespace ServerApp.Data
                 col111, col112, col113, col114, col115,
                 col121, col122, col123, col124,
                 col131, col132, col133
+            ]);
+            builder.Entity<SelectValue>().HasData([
+                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7, slctVall8, slctVall9,
+                slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, slctVall16, slctVall17,
+                slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24, slctVall25,
+                slctVall26, slctVall27
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
                 fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24]);

@@ -18,6 +18,7 @@ namespace ServerApp.Data.Models
             EditGroup = field.EditGroup;
             Placeholder = field.Placeholder;
             ValueType = field.ValueType!.Name;
+            SelectValues = field.SelectValues.Select(s => s.Value).ToArray();
             Value = field.FieldVals.FirstOrDefault()?.Value;
         }
 
@@ -40,6 +41,7 @@ namespace ServerApp.Data.Models
         public string? EditGroup { get; set; }
         public string? Placeholder { get; set; }
         public string? ValueType { get; set; }
+        public string?[] SelectValues { get; set; } = [];
         public string? Value { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace ServerApp.Data.Entities
         public string? EditGroup { get; set; }
         public virtual Guid ValueTypeId { get; set; }
         public virtual ValuesType? ValueType { get; set; }
+        public virtual List<SelectValue> SelectValues { get; set; } = [];
         public virtual Guid EditBlockId { get; set; }
         public virtual EditBlock? EditBlock { get; set; }
         public virtual List<MarkBlock> MarkBlocks { get; set; } = [];
