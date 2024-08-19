@@ -2,13 +2,13 @@
 
 namespace ServerApp.Data.Models
 {
-    public class DemoEditModel
+    public class EditModel
     {
-        public DemoEditModel()
+        public EditModel()
         {
             
         }
-        public DemoEditModel(ApplicationForm applicationForm, ApplicationDbContext context)
+        public EditModel(ApplicationForm applicationForm, ApplicationDbContext context)
         {
             if (applicationForm == null) throw new ArgumentNullException(nameof(applicationForm));
             ApplicationId = applicationForm.Id;
@@ -33,7 +33,7 @@ namespace ServerApp.Data.Models
         public Guid? SelectedEditBlockId { get; set; }
         public IEnumerable<TrackModel> Tracks { get; set; } = [];
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];
-        public InputModel[] Inputs { get; set; } = [];
+        public FieldModel[] Fields { get; set; } = [];
         public TableModel[] Tables { get; set; } = [];
     }
 }

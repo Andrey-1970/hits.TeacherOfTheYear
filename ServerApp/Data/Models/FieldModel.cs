@@ -3,13 +3,13 @@ using ServerApp.Data.Entities;
 
 namespace ServerApp.Data.Models
 {
-    public class InputModel
+    public class FieldModel
     {
-        public InputModel()
+        public FieldModel()
         {
             
         }
-        public InputModel(Field field)
+        public FieldModel(Field field)
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
             Id = field.Id;

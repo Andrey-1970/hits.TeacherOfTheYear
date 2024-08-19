@@ -110,7 +110,7 @@ namespace ServerApp.Tests
         {
             var tracks = await service.GetTracksAsync();
             var track = tracks.First();
-            var editBlocks = await service.GetEditBlocksModelByTrackId(track.Id);
+            var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
             Assert.IsNotNull(editBlocks);
         }
 
@@ -120,7 +120,7 @@ namespace ServerApp.Tests
             var tracks = await service.GetTracksAsync();
             var track = tracks.First();
             var editBlock = track.EditBlocks.First(e => e.Name == "Деятельность");
-            var inputs = await service.GetInputsModelByEditBlockId(editBlock.Id);
+            var inputs = await service.GetFieldModelsAsync(editBlock.Id);
             Assert.IsNotNull(inputs);
         }
 
@@ -130,7 +130,7 @@ namespace ServerApp.Tests
             var tracks = await service.GetTracksAsync();
             var track = tracks.First();
             var editBlock = track.EditBlocks.First(e => e.Name == "Деятельность");
-            var tables = await service.GetTablesModelByEditBlockIdAsync(editBlock.Id);
+            var tables = await service.GetTableModelsAsync(editBlock.Id);
             Assert.IsNotNull(tables);
         }
     }
