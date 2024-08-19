@@ -2,74 +2,178 @@
 
 @inject IDataService data
 
-@if (application != null)
+@if (model is not null)
 {
-    <InputSelect Value="application.TrackId" TValue="Guid" ValueExpression="() => application.TrackId" ValueChanged="async (value) => await OnTrackIdChanged(value)">
-        @foreach (var track in tracks!)
-        {
-            <option value="@track.Id">@track.Name</option>
-        }
-    </InputSelect>
-    @if (application.Track != null)
-    {
-        <Tabs @ref="tabs">
-            @foreach (var editBlock in application.Track.EditBlocks.OrderBy(x => x.Number))
+    <div class="block">
+        <div class="block-title">
+            <div class="block-title-text">
+                Заполните заявку для участия
+            </div>
+        </div>
+        <div class="block-content">
+            <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
+                <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
+                @foreach (var track in model.Tracks)
+                {
+                    <option value="@track!.Id">@track.Name</option>
+                }
+            </InputSelect>
+            @if (model.SelectedTrackId != Guid.Empty)
             {
-                <Tab Title="@editBlock.Name">
-                    <Content>
-                        @foreach (var field in editBlock.Fields)
+                <div class="block-content-text">
+                    <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+                </div>
+                @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
+                {
+                    <EditForm EditContext="editContext" OnValidSubmit="Submit" class="block-content-text">
+                        @if (model.Fields is not null && model.Fields.Any())
                         {
-                            <div>@field.Name</div>
-                            <input type="text" />
-                        }
-                        @foreach (var table in editBlock.Tables)
-                        {
-                            <div>@table.Name</div>
-                            <table class="table-stand">
-                                <thead>
-                                    <tr>
-                                        @foreach (var column in table.Columns)
-                                        {
-                                            <th>@column.Name</th>
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var row in table.Rows)
+                            @foreach (var fld in model.Fields)
+                            {
+                                @if (!string.IsNullOrEmpty(fld.EditGroup))
+                                {
+                                    <div class="block-subtitle-text">@fld.EditGroup</div>
+                                }
+                                <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
+                                <div class="form-input w-100 mb-3">
+                                    <ValidationMessage For="() => fld.Value" />
+                                    @if (fld.SelectValues is not null && fld.SelectValues.Any())
                                     {
-                                        <tr>
-                                            @foreach (var cell in row.CellVals.OrderBy(x => x.Column))
+                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="fld.Value">
+                                            <option value="@string.Empty" disabled selected hidden>@fld.Placeholder</option>
+                                            @foreach (var value in fld.SelectValues)
                                             {
-                                                <input type="text" />
+                                                <option value="@value">@value</option>
                                             }
-                                        </tr>
+                                        </InputSelect>
                                     }
-                                </tbody>
-                            </table>
+                                    else
+                                    {
+                                        <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                    }
+                                </div>
+                            }
                         }
-                    </Content>
-                </Tab>
+                        @if (model.Tables is not null && model.Tables.Any())
+                        {
+                            @foreach (var table in model.Tables)
+                            {
+                                <div class="block-subtitle-text">@table.Name</div>
+                                @if (table.Rows is not null && table.Rows.Any())
+                                {
+                                    <table class="table-stand">
+                                        <thead>
+                                            <tr>
+                                                @foreach (var column in table.Columns)
+                                                {
+                                                    <th>@column.Name</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var row in table.Rows)
+                                            {
+                                                <tr>
+                                                    @foreach (var cell in row.Cells)
+                                                    {
+                                                        <div class="form-input w-100 mb-3">
+                                                            <ValidationMessage For="() => cell.Value" />
+                                                            <InputText class="form-control" @bind-Value="cell.Value" />
+                                                        </div>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            }
+                        }
+                        <ValidationSummary/>
+                        <div class="d-flex justify-content-center">
+                            <Button Type="ButtonType.Submit"
+                                    Color="ButtonColor.Primary">
+                                Сохранить
+                            </Button>
+                        </div>
+                    </EditForm>
+                }
             }
-        </Tabs>
-    }
+        </div>
+    </div>
 }
 
 @code {
-    private Tabs tabs = default!;
-    private ApplicationForm? application;
-    private IEnumerable<Track>? tracks;
+    EditModel? model;
+    EditContext? editContext;
+    ValidationMessageStore? messageStore;
 
     protected override async Task OnInitializedAsync()
     {
-        application = await data.GetCurrentUserApplicationAsync();
-        tracks = await data.GetTracksAsync();
+        model = await data.GetCurrentUserEditModelAsync();
     }
 
-    private async Task OnTrackIdChanged(Guid trackId)
+    async Task OnTrackIdChanged(Guid? trackId)
     {
-        application!.TrackId = trackId;
-        application.Track = await data.GetTrackByIdAsync(trackId);
-        await data.SaveApplicationFormAsync(application); //todo: заменить на метод, сохраняющий трек и удаляющий данные, которые не относятся к выбранному треку
-        await tabs.ShowFirstTabAsync();
+        if (model == null) return;
+
+        model.SelectedTrackId = trackId;
+        model.EditBlocks = await data.GetEditBlockModelsAsync(trackId);
+
+        await OnBlockIdChanged(model.EditBlocks.First().Id);
+    }
+
+    async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (model == null) return;
+
+        model.SelectedEditBlockId = blockId;
+        model.Fields = await data.GetFieldModelsAsync(blockId);
+        model.Tables = await data.GetTableModelsAsync(blockId);
+
+        InitializeEditContext(model);
+    }
+
+    void InitializeEditContext(EditModel model)
+    {
+        editContext = new(model);
+        editContext.OnFieldChanged += HandleFieldChanged;
+        editContext.OnValidationRequested += HandleValidationRequested;
+        messageStore = new(editContext);
+    }
+
+    void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        var fld = ((FieldModel)e.FieldIdentifier.Model);
+        messageStore!.Clear(() => fld.Value!);
+        CheckField(fld);
+        editContext!.NotifyValidationStateChanged();
+    }
+
+    void HandleValidationRequested(object? sender, ValidationRequestedEventArgs e)
+    {
+        messageStore!.Clear();
+        foreach (var fld in model!.Fields)
+        {
+            CheckField(fld);
+        }
+        editContext!.NotifyValidationStateChanged();
+    }
+
+    void CheckField(FieldModel fld)
+    {
+        if (string.IsNullOrEmpty(fld.Value))
+        {
+            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
+        }
+        else if (fld.ValueType == "int" && !Int32.TryParse(fld.Value, out _))
+        {
+            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' должно содержать число.");
+        }
+    }
+
+    async Task Submit()
+    {
+        await Task.Delay(100);
+        Console.WriteLine("Submitting");
     }
 }

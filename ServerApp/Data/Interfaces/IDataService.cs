@@ -5,14 +5,10 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
-        Task<ApplicationForm?> GetCurrentUserApplicationAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
-        Task<IEnumerable<Track>> GetTracksAsync();
-        Task<Track?> GetTrackByIdAsync(Guid trackId);
-        Task SaveApplicationFormAsync(ApplicationForm application);
-        Task<DemoEditModel> GetCurrentUserEditModelAsync();
-        Task<IEnumerable<EditBlockModel>> GetEditBlocksModelByTrackId(Guid? trackId);
-        Task<InputModel[]> GetInputsModelByEditBlockId(Guid? editBlockId);
-        Task<TableModel[]> GetTablesModelByEditBlockIdAsync(Guid? editBlockId);
+        Task<EditModel> GetCurrentUserEditModelAsync();
+        Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
+        Task<FieldModel[]> GetFieldModelsAsync(Guid? editBlockId);
+        Task<TableModel[]> GetTableModelsAsync(Guid? editBlockId);
     }
 }
