@@ -13,6 +13,7 @@ namespace ServerApp.Data.Models
         {
             if (field == null) throw new ArgumentNullException(nameof(field));
             Id = field.Id;
+            ValId = (field.FieldVals.FirstOrDefault() ?? new FieldVal()).Id;
             Number = field.Number;
             Name = field.Name;
             EditGroup = field.EditGroup;
@@ -22,20 +23,17 @@ namespace ServerApp.Data.Models
             Value = field.FieldVals.FirstOrDefault()?.Value;
         }
 
-        public Field ToEntity()
+        public FieldVal ToEntity()
         {
-            if (Number == null) throw new InvalidOperationException("Number cannot be null.");
-            
-            return new Field
+            return new FieldVal()
             {
-                Id = this.Id,
-                Number = (int)this.Number,
-                Name = this.Name
+                Id = this.ValId,
+                Value = this.Value
             };
-            //todo: что делать с Value?
         }
 
         public Guid Id { get; set; }
+        public Guid ValId { get; set; }
         public int? Number { get; set; }
         public string? Name { get; set; }
         public string? EditGroup { get; set; }
