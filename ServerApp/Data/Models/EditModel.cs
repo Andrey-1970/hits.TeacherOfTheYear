@@ -1,4 +1,5 @@
 ﻿using ServerApp.Data.Entities;
+using ServerApp.Data.Interfaces;
 
 namespace ServerApp.Data.Models
 {
@@ -8,13 +9,11 @@ namespace ServerApp.Data.Models
         {
             
         }
-        public EditModel(ApplicationForm applicationForm, ApplicationDbContext context)
+        public EditModel(ApplicationForm applicationForm)
         {
-            if (applicationForm == null) throw new ArgumentNullException(nameof(applicationForm));
+            ArgumentNullException.ThrowIfNull(applicationForm);
             ApplicationId = applicationForm.Id;
             SelectedTrackId = applicationForm.TrackId;
-            Tracks = context.Tracks.Select(e => new TrackModel(e));
-            EditBlocks = applicationForm.Track?.EditBlocks.Select(e => new EditBlockModel(e)) ?? [];
         }
 
         public ApplicationForm ToEntity()

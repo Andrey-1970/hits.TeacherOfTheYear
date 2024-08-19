@@ -10,7 +10,7 @@ namespace ServerApp.Tests
     [TestClass]
     public class SqlDbDataServiceTests
     {
-        private IDataService service;
+        private IDataService service = default!;
 
         [TestInitialize]
         public async Task Initialize()
@@ -60,7 +60,7 @@ namespace ServerApp.Tests
             Assert.IsNotNull(tracks);
         }
 
-            [TestMethod]
+        [TestMethod]
         public async Task GetEditBlockModelsValid()
         {
             var tracks = await service.GetTrackModelsAsync();

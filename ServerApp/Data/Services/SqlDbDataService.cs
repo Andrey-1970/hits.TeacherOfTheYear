@@ -16,7 +16,7 @@ namespace ServerApp.Data.Services
         {
             var user = await auth.GetUserAsync();
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
-            return await Task.FromResult(new EditModel(application, context));
+            return await Task.FromResult(new EditModel(application));
         }
         
         public async Task<IEnumerable<TrackModel>> GetTrackModelsAsync()
@@ -46,7 +46,7 @@ namespace ServerApp.Data.Services
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
-            
+            await Task.Delay(100);
         }
     }
 }

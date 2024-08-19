@@ -11,7 +11,7 @@ namespace ServerApp.Data.Models
         }
         public FieldModel(Field field)
         {
-            if (field == null) throw new ArgumentNullException(nameof(field));
+            ArgumentNullException.ThrowIfNull(field);
             Id = field.Id;
             Number = field.Number;
             Name = field.Name;

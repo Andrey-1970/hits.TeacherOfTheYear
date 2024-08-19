@@ -110,6 +110,7 @@
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
+        model.Tracks = await data.GetTrackModelsAsync();
     }
 
     async Task OnTrackIdChanged(Guid? trackId)
