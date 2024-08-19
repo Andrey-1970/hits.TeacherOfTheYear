@@ -1,17 +1,21 @@
 ﻿@inject IDataService data
 
-<div>
-    <ul class="nav nav-tabs">
-        @foreach (var block in EditBlocks)
-        {
-            <li class="nav-item">
-                <button class="nav-link @(block.Id == SelectedEditBlockId ? "active" : "")" @onclick="async () => await BlockChange(block.Id)">
-                    @block.Name
-                </button>
-            </li>
-        }
-    </ul>
-</div>
+@if (EditBlocks is not null && EditBlocks.Any())
+{
+    <div>
+        <ul class="nav nav-tabs">
+
+            @foreach (var block in EditBlocks)
+            {
+                <li class="nav-item">
+                    <button class="nav-link @(block.Id == SelectedEditBlockId ? "active" : "")" @onclick="async () => await BlockChange(block.Id)">
+                        @block.Name
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -19,7 +23,7 @@
 
     [Parameter]
     [EditorRequired]
-    public IEnumerable<EditBlockModel> EditBlocks { get; set; } = default!;
+    public IEnumerable<EditBlockModel>? EditBlocks { get; set; }
 
     [Parameter]
     [EditorRequired]

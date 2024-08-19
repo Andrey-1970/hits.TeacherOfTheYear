@@ -80,8 +80,7 @@ namespace ServerApp.Data
             #region Tracks
 
             var track1 = new Track() { Id = Guid.NewGuid(), Number = 1, Name = "Научно-педагогическая деятельность" };
-            var track2 = new Track()
-            { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
+            var track2 = new Track() { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
 
             #endregion
 
