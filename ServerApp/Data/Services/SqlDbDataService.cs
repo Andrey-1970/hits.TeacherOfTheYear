@@ -16,7 +16,12 @@ namespace ServerApp.Data.Services
         {
             var user = await auth.GetUserAsync();
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
-            return await Task.FromResult(new EditModel(application, context));
+            return await Task.FromResult(new EditModel(application));
+        }
+        
+        public async Task<IEnumerable<TrackModel>> GetTrackModelsAsync()
+        {
+            return await Task.FromResult(context.Tracks.Select(e => new TrackModel(e)));
         }
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId)

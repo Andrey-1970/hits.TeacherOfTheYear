@@ -10,7 +10,7 @@ public class TrackModel
     }
     public TrackModel(Track track)
     {
-        if (track == null) throw new ArgumentNullException(nameof(track));
+        ArgumentNullException.ThrowIfNull(track);
         Id = track.Id;
         Number = track.Number;
         Name = track.Name;

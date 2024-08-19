@@ -7,6 +7,7 @@ namespace ServerApp.Data.Interfaces
     {
         Task<UserInfo?> GetCurrentUserInfoAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();
+        Task<IEnumerable<TrackModel>> GetTrackModelsAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
         Task<FieldModel[]> GetFieldModelsAsync(Guid? editBlockId);
         Task<TableModel[]> GetTableModelsAsync(Guid? editBlockId);
