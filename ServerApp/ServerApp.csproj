@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\SQLite\" />
+    <None Remove="Data\SQLite\data.db" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Data\SQLite\data.db" />
+    <Folder Include="Data\SQLite\" />
   </ItemGroup>
 
 </Project>
