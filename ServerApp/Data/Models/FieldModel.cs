@@ -1,6 +1,7 @@
 ﻿using BlazorBootstrap;
 using ServerApp.Data.Entities;
 
+
 namespace ServerApp.Data.Models
 {
     public class FieldModel
@@ -9,18 +10,18 @@ namespace ServerApp.Data.Models
         {
             
         }
-        public FieldModel(Field field)
+        public FieldModel(Field field, UserInfo user)
         {
             ArgumentNullException.ThrowIfNull(field);
             Id = field.Id;
-            ValId = (field.FieldVals.FirstOrDefault() ?? new FieldVal()).Id;
+            ValId = (field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id) ?? new FieldVal()).Id;
             Number = field.Number;
             Name = field.Name;
             EditGroup = field.EditGroup;
             Placeholder = field.Placeholder;
             ValueType = field.ValueType!.Name;
             SelectValues = field.SelectValues.Select(s => s.Value).ToArray();
-            Value = field.FieldVals.FirstOrDefault()?.Value;
+            Value = field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id)?.Value;
         }
 
         public FieldVal ToEntity()

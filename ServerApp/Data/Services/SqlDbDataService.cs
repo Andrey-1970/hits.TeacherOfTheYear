@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ServerApp.Components;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models;
@@ -33,9 +34,19 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldModel[]> GetFieldModelsAsync(Guid? editBlockId)
         {
-            var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Fields)
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
+
+            var editBlock = await context.EditBlocks
+                .Include(editBlock => editBlock.Fields).ThenInclude(field => field.FieldVals)
+                .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
+                .Include(e => e.Fields).ThenInclude(e => e.ValueType)
+                .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e)).ToArray();
+            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
 
         public async Task<TableModel[]> GetTableModelsAsync(Guid? editBlockId)
@@ -48,21 +59,35 @@ namespace ServerApp.Data.Services
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
             var user = await auth.GetUserAsync();
-
             if (user == null)
             {
-                throw new UnauthorizedAccessException("User unauthorized");
+                throw new UnauthorizedAccessException("User unauthorized.");
             }
 
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.UserInfo == user);
+            if (model.SelectedTrackId == null)
+            {
+                throw new ArgumentException("SelectedTrackId is required.");
+            }
+
+            var trackExists = await context.Tracks.AnyAsync(t => t.Id == model.SelectedTrackId);
+            if (!trackExists)
+            {
+                throw new InvalidOperationException($"Track with ID '{model.SelectedTrackId}' does not exist.");
+            }
+
+            var app = await context.ApplicationForms
+                .Include(a => a.UserInfo)
+                .FirstOrDefaultAsync(a => a.UserInfo!.Id == user.Id);
+
             if (app == null)
             {
                 app = new ApplicationForm
                 {
                     Id = Guid.NewGuid(),
-                    UserInfo = user,
+                    UserInfoId = user.Id,
                     TrackId = model.SelectedTrackId.Value
                 };
+
                 user.Applications.Add(app);
                 await context.ApplicationForms.AddAsync(app);
             }
@@ -81,6 +106,7 @@ namespace ServerApp.Data.Services
 
                 var existingFieldVal = await context.FieldVals
                     .FirstOrDefaultAsync(f => f.ApplicationId == fld.ApplicationId && f.FieldId == fld.FieldId);
+
                 if (existingFieldVal == null)
                 {
                     await context.FieldVals.AddAsync(fld);
@@ -102,7 +128,7 @@ namespace ServerApp.Data.Services
                     var existingRow = await context.Rows.FindAsync(row.Id);
                     if (existingRow == null)
                     {
-                        await context.Rows.AddAsync(row);
+                        context.Rows.Add(row);
                     }
                     else
                     {
@@ -118,7 +144,7 @@ namespace ServerApp.Data.Services
                         var existingCellVal = await context.CellVals.FindAsync(cell.Id);
                         if (existingCellVal == null)
                         {
-                            await context.CellVals.AddAsync(cell);
+                            context.CellVals.Add(cell);
                         }
                         else
                         {
