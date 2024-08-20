@@ -1,15 +1,16 @@
 ﻿@page "/application-form"
 
 @inject IDataService data
+@inject ToastService toastService
 
-@if (model is not null)
-{
-    <div class="block">
-        <div class="block-title">
-            <div class="block-title-text">
-                Заполните заявку для участия
-            </div>
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Заполните заявку для участия
         </div>
+    </div>
+    @if (model is not null)
+    {
         <div class="block-content">
             <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
                 <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
@@ -88,7 +89,7 @@
                                 }
                             }
                         }
-                        <ValidationSummary/>
+                        <ValidationSummary />
                         <div class="d-flex justify-content-center">
                             <Button Type="ButtonType.Submit"
                                     Color="ButtonColor.Primary">
@@ -99,23 +100,31 @@
                 }
             }
         </div>
-    </div>
-}
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
+</div>
 
 @code {
     EditModel? model;
     EditContext? editContext;
     ValidationMessageStore? messageStore;
+    ToastMessage? message;
 
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
         model.Tracks = await data.GetTrackModelsAsync();
+        await OnTrackIdChanged(model.SelectedTrackId);
     }
 
     async Task OnTrackIdChanged(Guid? trackId)
     {
-        if (model == null) return;
+        if (model == null || trackId == Guid.Empty) return;
 
         model.SelectedTrackId = trackId;
         model.EditBlocks = await data.GetEditBlockModelsAsync(trackId);
@@ -125,7 +134,7 @@
 
     async Task OnBlockIdChanged(Guid? blockId)
     {
-        if (model == null) return;
+        if (model == null || blockId == Guid.Empty) return;
 
         model.SelectedEditBlockId = blockId;
         model.Fields = await data.GetFieldModelsAsync(blockId);
@@ -174,7 +183,7 @@
 
     async Task Submit()
     {
-        await data.SaveApplicationFormFromEditModelAsync(model);
-        Console.WriteLine("Submitting");
+        await data.SaveApplicationFormFromEditModelAsync(model!);
+        toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
     }
 }
