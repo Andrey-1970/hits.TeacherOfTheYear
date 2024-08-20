@@ -18,7 +18,7 @@ namespace ServerApp.Data.Services
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
             return await Task.FromResult(new EditModel(application));
         }
-        
+
         public async Task<IEnumerable<TrackModel>> GetTrackModelsAsync()
         {
             return await Task.FromResult(context.Tracks.Select(e => new TrackModel(e)));
@@ -26,7 +26,8 @@ namespace ServerApp.Data.Services
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId)
         {
-            var track = await context.Tracks.Include(track => track.EditBlocks).FirstOrDefaultAsync(x => x.Id == trackId);
+            var track = await context.Tracks.Include(track => track.EditBlocks)
+                .FirstOrDefaultAsync(x => x.Id == trackId);
             return track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)) ?? [];
         }
 
@@ -47,38 +48,89 @@ namespace ServerApp.Data.Services
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
             var user = await auth.GetUserAsync();
-            
+
             if (user == null)
             {
-               throw new UnauthorizedAccessException("User unauthorized");
+                throw new UnauthorizedAccessException("User unauthorized");
             }
-            
+
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.UserInfo == user);
+            if (app == null)
+            {
+                app = new ApplicationForm
+                {
+                    Id = Guid.NewGuid(),
+                    UserInfo = user,
+                    TrackId = model.SelectedTrackId.Value
+                };
+                user.Applications.Add(app);
+                await context.ApplicationForms.AddAsync(app);
+            }
+            else
+            {
+                app.TrackId = model.SelectedTrackId.Value;
+                context.ApplicationForms.Update(app);
+            }
+
+            await context.SaveChangesAsync();
+
             List<FieldVal> fieldVals = model.Fields.Select(f => f.ToEntity()).ToList();
             foreach (var fld in fieldVals)
             {
-                fld.ApplicationId = user.Applications.First().Id;
-                fld.FieldId = fld.FieldId;
-                context.Attach(fld);
+                fld.ApplicationId = app.Id;
+
+                var existingFieldVal = await context.FieldVals
+                    .FirstOrDefaultAsync(f => f.ApplicationId == fld.ApplicationId && f.FieldId == fld.FieldId);
+                if (existingFieldVal == null)
+                {
+                    await context.FieldVals.AddAsync(fld);
+                }
+                else
+                {
+                    // Обновляем поля существующей записи, кроме ключей
+                    existingFieldVal.Value = fld.Value;
+                    context.FieldVals.Update(existingFieldVal);
+                }
             }
 
             List<Table> tables = model.Tables.Select(t => t.ToEntity()).ToList();
             foreach (var tbl in tables)
             {
-                List<Row> rows = tbl.Rows;
-                foreach (var row in rows)
+                foreach (var row in tbl.Rows)
                 {
                     row.TableId = tbl.Id;
-                    context.Attach(row);
-                    List<CellVal> cells = row.CellVals;
-                    foreach (var cell in cells)
+
+                    var existingRow = await context.Rows.FindAsync(row.Id);
+                    if (existingRow == null)
                     {
-                        cell.ApplicationId = user.Applications.First().Id;
+                        await context.Rows.AddAsync(row);
+                    }
+                    else
+                    {
+                        context.Entry(existingRow).CurrentValues.SetValues(row);
+                        context.Rows.Update(existingRow);
+                    }
+
+                    foreach (var cell in row.CellVals)
+                    {
+                        cell.ApplicationId = app.Id;
                         cell.RowId = row.Id;
-                        context.Attach(cell);
+
+                        var existingCellVal = await context.CellVals.FindAsync(cell.Id);
+                        if (existingCellVal == null)
+                        {
+                            await context.CellVals.AddAsync(cell);
+                        }
+                        else
+                        {
+                            // Обновляем поля существующей записи, кроме ключей
+                            existingCellVal.Value = cell.Value;
+                            context.CellVals.Update(existingCellVal);
+                        }
                     }
                 }
             }
-            
+
             await context.SaveChangesAsync();
         }
     }

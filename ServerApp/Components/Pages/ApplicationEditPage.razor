@@ -174,7 +174,7 @@
 
     async Task Submit()
     {
-        await Task.Delay(100);
+        await data.SaveApplicationFormFromEditModelAsync(model);
         Console.WriteLine("Submitting");
     }
 }

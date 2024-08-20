@@ -3,6 +3,7 @@ using Moq;
 using ServerApp.Data;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
+using ServerApp.Data.Models;
 using ServerApp.Data.Services;
 
 namespace ServerApp.Tests
@@ -11,6 +12,9 @@ namespace ServerApp.Tests
     public class SqlDbDataServiceTests
     {
         private IDataService service = default!;
+        private Mock<ApplicationDbContext> mockContext = default!;
+        private Mock<IAuthorization> mockOfAuthorization = default!;
+
 
         [TestInitialize]
         public async Task Initialize()
@@ -20,6 +24,7 @@ namespace ServerApp.Tests
                 .Options;
 
             var context = new ApplicationDbContext(options);
+            mockContext = new Mock<ApplicationDbContext>(options);
 
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
@@ -31,7 +36,7 @@ namespace ServerApp.Tests
 
             var userInfo = context.UserInfos.First(x => x.Username == "user@mail.ru");
 
-            var mockOfAuthorization = new Mock<IAuthorization>();
+            mockOfAuthorization = new Mock<IAuthorization>();
             mockOfAuthorization.Setup(p => p.GetUserAsync())
                 .Returns(Task.FromResult<UserInfo?>(userInfo));
 
@@ -89,6 +94,45 @@ namespace ServerApp.Tests
             var editBlock = editBlocks.First();
             var tables = await service.GetTableModelsAsync(editBlock.Id);
             Assert.IsNotNull(tables);
+        }
+        
+        [TestMethod]
+        public async Task SaveApplicationFormFromEditModelAsync_UserAuthorized_SavesData()
+        {
+            // Arrange
+            var userInfo = new UserInfo
+                { Applications = new List<ApplicationForm> { new ApplicationForm() { Id = Guid.NewGuid() } } };
+            mockOfAuthorization.Setup(p => p.GetUserAsync()).Returns(Task.FromResult<UserInfo?>(userInfo));
+
+            var service = new SqlDbDataService(mockContext.Object, mockOfAuthorization.Object);
+
+            var model = new EditModel
+            {
+                Fields = new FieldModel[] { new FieldModel { Name = "Field1" } },
+                Tables = new TableModel[]
+                {
+                    new TableModel
+                    {
+                        Name = "Table1",
+                        Rows = new RowModel[]
+                        {
+                            new RowModel
+                            {
+                                Cells = new CellModel[] { new CellModel { Value = "CellValue1" } }
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Act
+            await service.SaveApplicationFormFromEditModelAsync(model);
+
+            // Assert
+            mockContext.Verify(x => x.Attach(It.IsAny<FieldVal>()), Times.AtLeastOnce);
+            mockContext.Verify(x => x.Attach(It.IsAny<Row>()), Times.AtLeastOnce);
+            mockContext.Verify(x => x.Attach(It.IsAny<CellVal>()), Times.AtLeastOnce);
+            mockContext.Verify(x => x.SaveChangesAsync(default), Times.Once);
         }
     }
 }
