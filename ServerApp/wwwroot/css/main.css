@@ -49,10 +49,11 @@
 .block-subtitle-text {
     color: #000000;
     text-align: left;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 600;
     position: relative;
     align-self: stretch;
+    margin-top: 10px;
     margin-bottom: 15px;
 }
 

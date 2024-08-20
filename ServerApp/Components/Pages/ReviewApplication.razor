@@ -1,5 +1,113 @@
 ﻿@page "/review/application/{Id}"
 
+@inject IDataService data
+@inject ToastService toastService
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Проверка заявки
+        </div>
+    </div>
+    @if (model is not null)
+    {
+        <div class="form-text"><strong>Выбранный трек:</strong> <span style="opacity: 0.7;">@model.SelectedTrackId</span></div>
+        <div class="block-content-text">
+            <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+        </div>
+        <div class="block-content">
+            @if (model.Fields is not null && model.Fields.Any())
+            {
+                @foreach (var fld in model.Fields)
+                {
+                    @if (!string.IsNullOrEmpty(fld.EditGroup))
+                    {
+                        <div class="block-subtitle-text">@fld.EditGroup</div>
+                    }
+                    <div class="form-text"><strong>@fld.Name:</strong> <span style="opacity: 0.7;">@fld.Value</span></div>
+                }
+            }
+        </div>
+        @if (model.Tables is not null && model.Tables.Any())
+        {
+            @foreach (var table in model.Tables)
+            {
+                <div class="block-content">
+                    <div class="block-subtitle-text">@table.Name</div>
+                    @if (table.Rows is not null && table.Rows.Any())
+                    {
+                        <div class="table-container">
+                            <table class="table-stand">
+                                <thead>
+                                    <tr>
+                                        @foreach (var column in table.Columns)
+                                        {
+                                            <th>@column.Name</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var row in table.Rows)
+                                    {
+                                        <tr>
+                                            @foreach (var cell in row.Cells)
+                                            {
+                                                <td>@cell.Value</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-danger">Информация отсутствует</div>
+                    }
+                </div>
+            }
+        }
+        @* <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                Блок проверен?
+                <Switch Style="scale: 1.2; margin-right: 7px;" Value="@BlockStatus" ValueExpression="() => BlockStatus" ValueChanged="(value) => OnValueChanged(value, Comment)" Reverse="true" />
+            </div>
+
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                Комментарий к блоку:
+                <div class="form-input w-75">
+                    <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="(value) => OnValueChanged(BlockStatus, value)" Placeholder="Укажите поля, заполненные некорректно, если таковые имеются." />
+                </div>
+            </div>
+        </div> *@
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
+</div>
+
 @code {
-    
+    [Parameter]
+    public string? Id { get; set; }
+
+    EditModel? model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await data.GetCurrentUserEditModelAsync();
+        model.EditBlocks = await data.GetEditBlockModelsAsync(model.SelectedTrackId);
+        await OnBlockIdChanged(model.EditBlocks.First().Id);
+    }
+
+    async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (model == null || blockId == Guid.Empty) return;
+
+        model.SelectedEditBlockId = blockId;
+        model.Fields = await data.GetFieldModelsAsync(blockId);
+        model.Tables = await data.GetTableModelsAsync(blockId);
+    }
 }
