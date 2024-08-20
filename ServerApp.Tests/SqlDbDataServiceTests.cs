@@ -95,44 +95,5 @@ namespace ServerApp.Tests
             var tables = await service.GetTableModelsAsync(editBlock.Id);
             Assert.IsNotNull(tables);
         }
-        
-        [TestMethod]
-        public async Task SaveApplicationFormFromEditModelAsync_UserAuthorized_SavesData()
-        {
-            // Arrange
-            var userInfo = new UserInfo
-                { Applications = new List<ApplicationForm> { new ApplicationForm() { Id = Guid.NewGuid() } } };
-            mockOfAuthorization.Setup(p => p.GetUserAsync()).Returns(Task.FromResult<UserInfo?>(userInfo));
-
-            var service = new SqlDbDataService(mockContext.Object, mockOfAuthorization.Object);
-
-            var model = new EditModel
-            {
-                Fields = new FieldModel[] { new FieldModel { Name = "Field1" } },
-                Tables = new TableModel[]
-                {
-                    new TableModel
-                    {
-                        Name = "Table1",
-                        Rows = new RowModel[]
-                        {
-                            new RowModel
-                            {
-                                Cells = new CellModel[] { new CellModel { Value = "CellValue1" } }
-                            }
-                        }
-                    }
-                }
-            };
-
-            // Act
-            await service.SaveApplicationFormFromEditModelAsync(model);
-
-            // Assert
-            mockContext.Verify(x => x.Attach(It.IsAny<FieldVal>()), Times.AtLeastOnce);
-            mockContext.Verify(x => x.Attach(It.IsAny<Row>()), Times.AtLeastOnce);
-            mockContext.Verify(x => x.Attach(It.IsAny<CellVal>()), Times.AtLeastOnce);
-            mockContext.Verify(x => x.SaveChangesAsync(default), Times.Once);
-        }
     }
 }

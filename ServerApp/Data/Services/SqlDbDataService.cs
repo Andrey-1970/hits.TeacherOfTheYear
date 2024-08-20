@@ -87,7 +87,6 @@ namespace ServerApp.Data.Services
                 }
                 else
                 {
-                    // Обновляем поля существующей записи, кроме ключей
                     existingFieldVal.Value = fld.Value;
                     context.FieldVals.Update(existingFieldVal);
                 }
@@ -123,7 +122,6 @@ namespace ServerApp.Data.Services
                         }
                         else
                         {
-                            // Обновляем поля существующей записи, кроме ключей
                             existingCellVal.Value = cell.Value;
                             context.CellVals.Update(existingCellVal);
                         }
