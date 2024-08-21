@@ -4,7 +4,7 @@
 @using ServerApp.Data
 
 @rendermode InteractiveServer
-@attribute [Authorize(Roles="ADMIN, PARTICIPANT")]
+@* @attribute [Authorize(Roles="ADMIN, PARTICIPANT")] *@
 
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
@@ -72,16 +72,10 @@
 
     string newRole = String.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        roles = roleManager.Roles;
-        users = userManager.Users;
-    }
-
     async Task CreateRole()
     {
         await roleManager.CreateAsync(new(newRole));
+        await roleGrid.RefreshDataAsync();
     }
 
     async Task AddRole()
@@ -102,6 +96,7 @@
 
     async Task<GridDataProviderResult<ApplicationUser>> ApplicationUserDataProvider(GridDataProviderRequest<ApplicationUser> request)
     {
+        users = userManager.Users;
         return await Task.FromResult(request.ApplyTo(users));
     }
 
@@ -109,17 +104,18 @@
     {
         selectedUser = users != null ? users.First() : new();
         selectedUserRoles = await userManager.GetRolesAsync(selectedUser);
-        return;
+        await Task.CompletedTask;
     }
 
     async Task<GridDataProviderResult<IdentityRole>> RoleDataProvider(GridDataProviderRequest<IdentityRole> request)
     {
+        roles = roleManager.Roles;
         return await Task.FromResult(request.ApplyTo(roles));
     }
 
-    Task OnSelectedRoleChanged(HashSet<IdentityRole> roles)
+    async Task OnSelectedRoleChanged(HashSet<IdentityRole> roles)
     {
-        selectedRole = roles != null ? roles.First() : new();
-        return Task.CompletedTask;
+        // selectedRole = roles != null ? roles.First() : new();
+        await Task.CompletedTask;
     }
 }

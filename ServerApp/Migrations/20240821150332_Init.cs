@@ -548,11 +548,11 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Number" },
                 values: new object[,]
                 {
-                    { new Guid("26e08253-d156-4a0c-b4e5-dca9de906494"), "Профессиональное развитие", 3 },
-                    { new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Деятельность", 5 },
-                    { new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Категория участников", 2 },
-                    { new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Деятельность", 4 },
-                    { new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Общая информация", 1 }
+                    { new Guid("31169eaa-7cde-4f69-9de7-9d34fa854605"), "Профессиональное развитие", 3 },
+                    { new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Деятельность", 5 },
+                    { new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Общая информация", 1 },
+                    { new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Деятельность", 4 },
+                    { new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Категория участников", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -560,14 +560,14 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Number" },
                 values: new object[,]
                 {
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), "Образовательная деятельность", 2 },
-                    { new Guid("388e85bd-736c-498c-94b8-9b3d6e11a7de"), "Конкурсная работа", 7 },
-                    { new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac"), "Основной", 1 },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), "Профессиональные показатели", 4 },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), "Научно-исследовательская деятельность", 5 },
-                    { new Guid("b7584824-418e-40c0-88e0-4ed980b399f9"), "Итог", 8 },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), "Методическая деятельность", 3 },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), "Инновационная и иная деятельность", 6 }
+                    { new Guid("18a81a99-7af4-4aa0-b826-538d84345d24"), "Конкурсная работа", 7 },
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), "Профессиональные показатели", 4 },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), "Методическая деятельность", 3 },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), "Образовательная деятельность", 2 },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), "Инновационная и иная деятельность", 6 },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), "Научно-исследовательская деятельность", 5 },
+                    { new Guid("c25f5aa9-21a8-49cd-966a-d98165c732ef"), "Итог", 8 },
+                    { new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b"), "Основной", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -575,8 +575,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "FieldId", "Name", "Number", "TableId" },
                 values: new object[,]
                 {
-                    { new Guid("0fa3b22a-2843-4f4f-9a40-f12baa75cdb1"), null, "Оценка уровня предоставленной работы:", 25, null },
-                    { new Guid("b25a66eb-1107-47df-93b3-b1400e408604"), null, "Использование в представленной работе инновационных методов (проблемного и проективного обучения, тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):", 26, null }
+                    { new Guid("a003da79-fe55-417a-9225-658dbe25b9f7"), null, "Использование в представленной работе инновационных методов (проблемного и проективного обучения, тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):", 26, null },
+                    { new Guid("ea2e3730-6b28-4c17-9630-0a10c0f15565"), null, "Оценка уровня предоставленной работы:", 25, null }
                 });
 
             migrationBuilder.InsertData(
@@ -584,8 +584,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Number" },
                 values: new object[,]
                 {
-                    { new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00"), "Научно-исследовательская деятельность", 2 },
-                    { new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28"), "Научно-педагогическая деятельность", 1 }
+                    { new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5"), "Научно-исследовательская деятельность", 2 },
+                    { new Guid("b908de0e-a6e1-4699-bfc4-54853f552739"), "Научно-педагогическая деятельность", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -593,8 +593,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("66367b1e-a036-4732-bce9-1257c293c7da"), "User 1", "admin@mail.ru" },
-                    { new Guid("cf72d6c9-ab84-48b5-9407-ff9f22eb55ff"), "User 2", "user@mail.ru" }
+                    { new Guid("233c9bd6-ed40-4ae0-93dc-03ed5cb27aa3"), "User 1", "admin@mail.ru" },
+                    { new Guid("fe11f5ea-1d27-4b78-8deb-59014c32d267"), "User 2", "user@mail.ru" }
                 });
 
             migrationBuilder.InsertData(
@@ -602,14 +602,14 @@ namespace ServerApp.Migrations
                 columns: new[] { "EditBlocksId", "TracksId" },
                 values: new object[,]
                 {
-                    { new Guid("26e08253-d156-4a0c-b4e5-dca9de906494"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("26e08253-d156-4a0c-b4e5-dca9de906494"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") }
+                    { new Guid("31169eaa-7cde-4f69-9de7-9d34fa854605"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("31169eaa-7cde-4f69-9de7-9d34fa854605"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("c6859102-0639-43df-ae20-df18d690245f"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") }
                 });
 
             migrationBuilder.InsertData(
@@ -617,31 +617,31 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "EditBlockId", "Name", "Number" },
                 values: new object[,]
                 {
-                    { new Guid("04568b26-f758-497c-b895-f0c8dd2e0a7d"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Защитившиеся доктора наук", 25 },
-                    { new Guid("1a314c1b-e926-45b3-a695-12df1d237c13"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Стаж научно-педагогической деятельности по трудовой книжке", 11 },
-                    { new Guid("1db89be5-fc68-4a04-973d-62676f453550"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Ученое звание", 16 },
-                    { new Guid("1f4c398f-28a4-47a1-99cc-7b8386496566"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Трек конкурса", 1 },
-                    { new Guid("29b4a310-1c37-49a0-aae8-bcca502b500f"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Домашний адрес", 4 },
-                    { new Guid("58d6543a-ec3e-4687-8012-a1dee0156099"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Ученая степень", 17 },
-                    { new Guid("5c16da5c-b9f1-4f40-ad5b-9d0548c793ae"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Защитившиеся магистры", 23 },
-                    { new Guid("60fcb60f-5c1f-4a16-a20e-fd71ee25ae54"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Защитившиеся кадидаты наук", 19 },
-                    { new Guid("65bad0b0-2995-4791-a324-42e237cac770"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Место работы/учебы", 7 },
-                    { new Guid("77bcb6a4-1369-462a-8d4c-95940ea3bd3c"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "ФИО", 2 },
-                    { new Guid("7d2e8571-2577-4700-9414-35259b71ebe3"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Дата рождения", 3 },
-                    { new Guid("7fe544e0-a5a0-427c-8cd4-c4fdc84fad98"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Научная специальность (по классификации ВАК)", 18 },
-                    { new Guid("91950ec9-87d6-4703-a946-f455d72f3b01"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Контактный телефон", 5 },
-                    { new Guid("a1bfc8a0-654c-4299-b49c-432c5a3b3dbb"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Защитившиеся бакалавры", 21 },
-                    { new Guid("a3ef526f-1673-4b63-ac72-1df74c31814d"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Институт, факультет, кафедра, лаборатория", 9 },
-                    { new Guid("a59fd96f-1665-44f7-b2f5-c5f6561ceb79"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Защитившиеся доктора наук", 20 },
-                    { new Guid("ae9e053b-4cc0-48be-9a24-553c1496a5de"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Должность", 10 },
-                    { new Guid("b5167228-45a8-451b-9cc2-1c30b022bcfd"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Адрес работы/учебы", 8 },
-                    { new Guid("c1d31301-3bab-4a61-95c9-891ed5a64a3d"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Дополнительная информация", 12 },
-                    { new Guid("c3a9285d-e143-4843-9a96-23a4621f24d5"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Защитившиеся специалисты", 22 },
-                    { new Guid("e0bff50a-5bff-4269-9f45-a717534ac494"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Направление конкурса", 13 },
-                    { new Guid("e3fba1a3-b4ae-4fd2-87ec-7dfd67221a6e"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Название конкрусной работы", 15 },
-                    { new Guid("eeba3031-853c-4b79-9fdf-dcee4d7a1e42"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Защитившиеся кандидаты наук", 24 },
-                    { new Guid("f0ba2f58-c0a5-4c87-8564-5fc268aebb79"), new Guid("a3e3ede1-5e43-4d61-91fe-c408f808cfef"), "Электронная почта", 6 },
-                    { new Guid("ff104d50-51bd-4444-a669-7fc71ba38d56"), new Guid("8020be28-ff2d-47ac-9ea1-e2dbf0609f3a"), "Категория участника конкурса", 14 }
+                    { new Guid("17580ff7-a1b0-4e99-afad-ff315cc30978"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Защитившиеся доктора наук", 20 },
+                    { new Guid("362ab3e8-227b-4a2a-81ea-b9cff26d7fa5"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Ученая степень", 17 },
+                    { new Guid("42d804c8-1774-46a3-a6c9-393594e55e08"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "ФИО", 2 },
+                    { new Guid("49dfa1e1-4a3a-4f43-b799-b6c80662c8a1"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Электронная почта", 6 },
+                    { new Guid("4dee9c1a-7243-4643-8ae8-96f4c7d736a3"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Ученое звание", 16 },
+                    { new Guid("572a11a5-a7d2-45cc-8f48-ca7f912fd4fe"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Дополнительная информация", 12 },
+                    { new Guid("65ce6d39-a0a8-431a-9540-e7b52a907d7f"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Защитившиеся бакалавры", 21 },
+                    { new Guid("683a7c80-d26b-45ec-a5cf-d94b16139caa"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Адрес работы/учебы", 8 },
+                    { new Guid("871a7b30-c027-4c0c-a51e-96a3d878b980"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Защитившиеся специалисты", 22 },
+                    { new Guid("8c9cdba6-c1c5-4840-97f5-8042cc14cf2c"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Стаж научно-педагогической деятельности по трудовой книжке", 11 },
+                    { new Guid("94bd25d8-d12a-4f6e-910b-5336833d8c76"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Категория участника конкурса", 14 },
+                    { new Guid("97adae5c-dff2-43b7-8ec5-b91fb33e2e82"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Защитившиеся доктора наук", 25 },
+                    { new Guid("a63cf466-751d-4da5-bd07-e953996b6ce3"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Защитившиеся кандидаты наук", 24 },
+                    { new Guid("adb5a93a-ad25-4c22-9e70-efa86dd2bdd5"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Должность", 10 },
+                    { new Guid("c5a6a54b-1cb7-42fe-9d24-fe2f8dacc8c9"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Защитившиеся кадидаты наук", 19 },
+                    { new Guid("c7f7a655-e90f-4810-a0b0-4c73aa94dad0"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Научная специальность (по классификации ВАК)", 18 },
+                    { new Guid("c8b88934-23cc-46d6-be3c-3f0a53a6bf1a"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Направление конкурса", 13 },
+                    { new Guid("ca889531-fa07-490e-8cc2-2bd6d4cd97f8"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Трек конкурса", 1 },
+                    { new Guid("ce1deef0-7563-43ab-a3df-7ab742832fdb"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Институт, факультет, кафедра, лаборатория", 9 },
+                    { new Guid("d43f7d97-9b43-4902-801f-2c8e11d5b738"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Домашний адрес", 4 },
+                    { new Guid("dc7684ff-bd9d-4360-b7ff-f42ab359fce7"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Место работы/учебы", 7 },
+                    { new Guid("ee57c7df-ec3e-4847-83fa-8827688efbe7"), new Guid("e9ac9588-27e7-47ec-ae3d-d6f889386f17"), "Название конкрусной работы", 15 },
+                    { new Guid("efe6b69f-d675-49ba-9eed-d5483076e887"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Дата рождения", 3 },
+                    { new Guid("f4621a47-6444-4f96-9bff-b7247a64a901"), new Guid("a9caecec-3b3e-4a97-908f-f00f0331de4d"), "Контактный телефон", 5 },
+                    { new Guid("fd725233-ad5c-4e1f-ae67-dcc0da16173a"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Защитившиеся магистры", 23 }
                 });
 
             migrationBuilder.InsertData(
@@ -649,17 +649,17 @@ namespace ServerApp.Migrations
                 columns: new[] { "MarkBlocksId", "TracksId" },
                 values: new object[,]
                 {
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("388e85bd-736c-498c-94b8-9b3d6e11a7de"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("388e85bd-736c-498c-94b8-9b3d6e11a7de"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("b7584824-418e-40c0-88e0-4ed980b399f9"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") },
-                    { new Guid("b7584824-418e-40c0-88e0-4ed980b399f9"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("e5f2de80-eaca-489e-ac8b-10a18d092c28") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("93d111b2-3f2c-414e-851e-1c1cb329ad00") }
+                    { new Guid("18a81a99-7af4-4aa0-b826-538d84345d24"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("18a81a99-7af4-4aa0-b826-538d84345d24"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("c25f5aa9-21a8-49cd-966a-d98165c732ef"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("c25f5aa9-21a8-49cd-966a-d98165c732ef"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") },
+                    { new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b"), new Guid("7e8aeabf-ba29-49f4-b097-0c93db346ea5") },
+                    { new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b"), new Guid("b908de0e-a6e1-4699-bfc4-54853f552739") }
                 });
 
             migrationBuilder.InsertData(
@@ -667,8 +667,8 @@ namespace ServerApp.Migrations
                 columns: new[] { "MarkBlocksId", "MarksId" },
                 values: new object[,]
                 {
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("0fa3b22a-2843-4f4f-9a40-f12baa75cdb1") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("b25a66eb-1107-47df-93b3-b1400e408604") }
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("a003da79-fe55-417a-9225-658dbe25b9f7") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("ea2e3730-6b28-4c17-9630-0a10c0f15565") }
                 });
 
             migrationBuilder.InsertData(
@@ -676,19 +676,19 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "EditBlockId", "Name", "Number" },
                 values: new object[,]
                 {
-                    { new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Список научных публикаций за последние 5 лет", 9 },
-                    { new Guid("0df3f623-601b-462e-95cc-e3a97331980f"), new Guid("26e08253-d156-4a0c-b4e5-dca9de906494"), "Сведения о профессиональном развитии участника конкурса за последние 5 лет (курсы повышения квалификации/ стажировки)", 2 },
-                    { new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Список объектов интеллектуальной собственности, созданных участником конкурса за весь период научно-педагогической деятельности (созданных самостоятельно / в соавторстве), официально зарегистрированных в установленном порядке (в России / за рубежом)", 12 },
-                    { new Guid("16684938-c87e-43d0-82df-50156168324f"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Учебная нагрузка за предыдущий учебный год (за исключением методической)", 3 },
-                    { new Guid("1c4ee49f-2575-4f6e-8528-f0c080ea3ee5"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Список лабораторных практикумов и курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет", 7 },
-                    { new Guid("21e14f60-95ac-44c5-9c29-337812234c8d"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет", 8 },
-                    { new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Сведения о работе, выполняемой участником конкурса в области научно-педагогической деятельности по совместительству (не по основному месту работы) в высшем учебном заведении, академическом институте, отраслевом научно-исследовательском институте, профессиональной образовательной организации, общеобразовательной организации за предыдущий учебный год", 5 },
-                    { new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Список подготовленных под руководством участника конкурса студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание", 4 },
-                    { new Guid("72479481-80b7-4458-9c72-c402755a8ebc"), new Guid("8ef17813-4109-4d57-8e5d-305e5e6c4451"), "Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, Министерств РФ или государственных академий наук, изданные типографским способом за последние 5 лет", 6 },
-                    { new Guid("aad09686-5488-43eb-942a-0efc3dbea728"), new Guid("26e08253-d156-4a0c-b4e5-dca9de906494"), "Награждение премиями, наградами в области научно-педагогической деятельности городского, всероссийского или международного уровня (в том числе зарубежными), победы в профессиональных конкурсах за весь период научно-педагогической деятельности", 1 },
-                    { new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Перечень разработок, внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)", 13 },
-                    { new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет", 11 },
-                    { new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918"), new Guid("63d36cd4-d950-459f-8ccd-d322e96802fc"), "Персональные идентификаторы и показатели", 10 }
+                    { new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Список подготовленных под руководством участника конкурса студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание", 4 },
+                    { new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет", 8 },
+                    { new Guid("3448642b-93b4-4925-bff3-927ccec9508f"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет", 11 },
+                    { new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Список научных публикаций за последние 5 лет", 9 },
+                    { new Guid("51c81764-8043-4471-8720-ac28f0123f82"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Список лабораторных практикумов и курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет", 7 },
+                    { new Guid("5609f554-a020-47af-8d31-538bdf931432"), new Guid("31169eaa-7cde-4f69-9de7-9d34fa854605"), "Сведения о профессиональном развитии участника конкурса за последние 5 лет (курсы повышения квалификации/ стажировки)", 2 },
+                    { new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Сведения о работе, выполняемой участником конкурса в области научно-педагогической деятельности по совместительству (не по основному месту работы) в высшем учебном заведении, академическом институте, отраслевом научно-исследовательском институте, профессиональной образовательной организации, общеобразовательной организации за предыдущий учебный год", 5 },
+                    { new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Список объектов интеллектуальной собственности, созданных участником конкурса за весь период научно-педагогической деятельности (созданных самостоятельно / в соавторстве), официально зарегистрированных в установленном порядке (в России / за рубежом)", 12 },
+                    { new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Перечень разработок, внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)", 13 },
+                    { new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Учебная нагрузка за предыдущий учебный год (за исключением методической)", 3 },
+                    { new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b"), new Guid("c6859102-0639-43df-ae20-df18d690245f"), "Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, Министерств РФ или государственных академий наук, изданные типографским способом за последние 5 лет", 6 },
+                    { new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f"), new Guid("31169eaa-7cde-4f69-9de7-9d34fa854605"), "Награждение премиями, наградами в области научно-педагогической деятельности городского, всероссийского или международного уровня (в том числе зарубежными), победы в профессиональных конкурсах за весь период научно-педагогической деятельности", 1 },
+                    { new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc"), new Guid("513ccb1c-1875-480d-8f9f-ec880ec95e72"), "Персональные идентификаторы и показатели", 10 }
                 });
 
             migrationBuilder.InsertData(
@@ -696,60 +696,60 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "Name", "Number", "TableId" },
                 values: new object[,]
                 {
-                    { new Guid("054f88ca-bfdf-487c-a3eb-4074a2f729c2"), "Название организации в которую внедрена разработка", 3, new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06") },
-                    { new Guid("0989382c-6c72-4336-b84d-601087a4b8eb"), "Итого (час.)", 5, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("0d9d1b18-4bee-4ac4-b780-6e6656a62a49"), "Наличие грифа", 5, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("0dcd6a56-c71a-40e9-ba72-1a692f1eea31"), "Соавторы", 2, new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("0e1d6643-b26c-442a-8faf-74b9c9dac015"), "Лекции (час.)", 3, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("10844b2f-52dd-4f90-a8eb-f4289297c7f1"), "Номер РИД", 4, new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("13e3d5cc-e8a6-4eca-ba56-c475324526ec"), "Вид деятельности (преподавательская)", 3, new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53") },
-                    { new Guid("1491c1ba-d713-4496-a3c1-33ac81e1a5f7"), "Сумма финансирования (тыс. руб.)", 2, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("1767b7a7-ad27-4b5f-827b-59267d878098"), "Название организации/должность/ставка", 1, new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53") },
-                    { new Guid("29eb8b6f-f5a2-48db-92fb-4ce8313fd2e5"), "Ссылка", 5, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("2a71ae63-fd8f-4eb3-a40c-e049a3bb6b87"), "Количество часов", 4, new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53") },
-                    { new Guid("31b2b5d8-664b-4cff-b658-02fef41e54ae"), "Издание, год", 4, new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("34cfc20c-ba18-478a-bb81-1fddf5d42ca3"), "Тип идентификатора", 1, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("353ac2df-efad-4e9c-87b4-cab920c8c15b"), "Название курса", 1, new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("3932ef7e-f8fa-4a0d-913a-6efc17d3b2ab"), "Статус конкурса", 3, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("3d1faed3-3514-40df-86e2-8e59fc1d48fd"), "Количество публикаций в БАЗЕ", 3, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("47dbe4d7-bda8-414f-9a45-605b1b5502e4"), "Год", 4, new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("489585d7-006e-433f-b642-76fd114b5413"), "ФИО соавторов", 3, new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("4c737a51-855a-44ab-9aee-303dc3e8cf8f"), "Название", 2, new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("4ebd5c20-bc78-40fd-ba28-db5d174e623a"), "Практические занятия (час.)", 4, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("5b4f839f-3946-4f19-9d95-e8c0b362ed9f"), "Награда/премия (медаль, диплом с указанием степени)", 5, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("5cc93d19-a99e-4350-ac89-b7b258ebabb3"), "Место нахождения (субъект РФ, зарубежье)", 2, new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53") },
-                    { new Guid("635d6106-2673-488a-ab4c-a16b52a88049"), "ФИО", 1, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("6398ec69-b42f-4bdb-b743-4193d6fdd826"), "Название разработки", 2, new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06") },
-                    { new Guid("68a4b69f-18de-4cb1-a62d-078e4da05da2"), "Год", 3, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("6aec5847-a436-43bd-9095-f1171dda83cb"), "Язык преподавания (русск./англ./др.)", 2, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("73e7b72e-f5fb-4afa-a7fe-1bd595f5cbec"), "Вид", 1, new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("7ed38b13-8eca-4c6c-93e5-dcef7e5e6dbd"), "Название конкурса", 2, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("8045022e-b21e-466e-bb10-f8af1a6610fb"), "Вид", 1, new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06") },
-                    { new Guid("82b30a0b-dc8e-412a-a80e-26c9c64f36b0"), "Название документа, реквизиты", 1, new Guid("0df3f623-601b-462e-95cc-e3a97331980f") },
-                    { new Guid("86a1d5b6-afdf-4f17-b3a7-02225e22afcc"), "Индекс Хирша (за все время)", 5, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("8a25a044-0f11-4f1b-ad4b-db63da70aa63"), "Период выполнения", 3, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("8ce6e5b3-72ad-4104-a7f1-4fc4a1588b55"), "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)", 4, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("923cc5e0-5209-4db7-937e-b313b2663828"), "Статус (руководитель/исполнитель)", 4, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("b063b4eb-1c3b-45bf-a3ea-a631676a7d56"), "Награда", 4, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("b198f0d8-3124-456e-8495-a3d393f7bfb9"), "Соавторы", 3, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("b252c831-7818-4e8b-89a1-1cf8c27bc061"), "Название", 2, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("b260b800-89b9-4c5b-a9a8-bddb9da7de77"), "Ссылка на платформу", 3, new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("bbc0ec5a-348d-4f34-b92a-7f46b89a26b2"), "Тип публикации (категория ВАК/квартиль МБД)", 3, new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("bbf9e407-f8ea-4efc-9adf-f0f54862ee90"), "Название статьи", 1, new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("bc85ada5-7774-4d62-9918-ae06c94d1d11"), "Количество цитирований", 4, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("be21ad6a-d994-4307-9fec-9ba7651f402f"), "Издательство, год", 6, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("c6b90966-e1e9-450a-9747-608f9d191e21"), "Идентификатор", 2, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("ca350c21-b0c3-4567-b160-25274cd9d3cb"), "Соавторы", 2, new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("cc35f93d-d936-4fbb-a965-3683714e9bd7"), "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)", 5, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("cdd06ce4-b090-4735-894a-f69805c4c869"), "Год", 1, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("cf2b6266-0514-40df-aea5-97306f466a66"), "Год получения документа", 2, new Guid("0df3f623-601b-462e-95cc-e3a97331980f") },
-                    { new Guid("d2902769-c82a-4d09-a091-3c3777dcc3a7"), "Название дисциплины", 1, new Guid("1c4ee49f-2575-4f6e-8528-f0c080ea3ee5") },
-                    { new Guid("d33ce737-8f32-419e-b51f-47dc36676d3f"), "Наименование курса", 1, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("d69bbe14-7714-4fc4-8019-06282590c1ff"), "Вид (лекции, лабораторные)", 2, new Guid("1c4ee49f-2575-4f6e-8528-f0c080ea3ee5") },
-                    { new Guid("e22ac476-b5dc-4145-96ed-e3afa961e3bb"), "Название НИР/НИОКР", 1, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("e4869870-81cb-46ae-97c5-c36c5f75a063"), "Название конкурса/премии", 2, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("ebbb99f4-e9a7-4458-84fd-d22d64722681"), "Количество печатных листов", 4, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("f5ce9be2-40a7-4b72-89b6-27dfad1adad9"), "Вид публикации", 1, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") }
+                    { new Guid("00a3350a-a8fb-4292-995d-a7e7b236b994"), "Ссылка на платформу", 3, new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("074c9174-c839-473f-80c2-82b49c74dd61"), "Соавторы", 2, new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("09d61457-53c5-4f8b-9bb0-11b9d0652886"), "ФИО соавторов", 3, new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("0f2ab8e7-4306-49ea-af0b-bdbcc709b3a6"), "Вид деятельности (преподавательская)", 3, new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843") },
+                    { new Guid("167c920e-6f58-49ab-bdb5-cf4465a4a68e"), "Количество печатных листов", 4, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("1fa6d57c-94df-4fb0-9972-792cf4644c8e"), "Соавторы", 2, new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("203ef34d-a7d4-4519-b45b-492a83dbbc91"), "Количество цитирований", 4, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("2316f31f-0aaa-4dd5-88d7-65368924a0f6"), "Период выполнения", 3, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("26086dde-84c8-45cd-bfad-03191a19ff58"), "Лекции (час.)", 3, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("2a9e6655-5efa-48bb-bdde-461f5217bf14"), "Сумма финансирования (тыс. руб.)", 2, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("363c09ab-d799-4a4c-8678-82489b3053c0"), "Индекс Хирша (за все время)", 5, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("381c0c59-1056-4bed-9026-78401c963e29"), "Вид", 1, new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d") },
+                    { new Guid("5364f91f-963f-4638-8c4e-c5007a3a5805"), "Практические занятия (час.)", 4, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("57f259cc-a63c-432b-bea3-b9bd567ce5c2"), "Название статьи", 1, new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("58d7b85b-b431-443e-9a8b-93c94eefaa9f"), "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)", 5, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("5c202379-0086-42c1-ae04-776a6bfbeb72"), "ФИО", 1, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("5d767f73-55ac-40b6-993e-b0482c05d265"), "Издание, год", 4, new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("600f5a79-3162-4aec-a755-1aba5af786ba"), "Количество публикаций в БАЗЕ", 3, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("609b83b0-b4ee-49aa-adc9-a6051b5d89d2"), "Название НИР/НИОКР", 1, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("61d24ca6-ddf8-49f3-8534-e4715b8a0718"), "Название", 2, new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("6debb536-dd7f-4bd5-9034-6ec6201afca3"), "Название дисциплины", 1, new Guid("51c81764-8043-4471-8720-ac28f0123f82") },
+                    { new Guid("6f4052ef-47a6-4abe-b882-6a1e4b0760bf"), "Название", 2, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("7480cd93-ee40-4095-8d5b-9c73ed9746a1"), "Статус конкурса", 3, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("751323ce-ad1f-4fd2-8ea4-45e482dfd0e6"), "Награда", 4, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("771d0210-dd5d-465a-bcab-7c52ea66c348"), "Номер РИД", 4, new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("7acbb316-c9a2-4a1d-9523-fd12d17eee15"), "Идентификатор", 2, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("7fe1c467-54e5-481b-ae0f-88985cc56932"), "Название организации/должность/ставка", 1, new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843") },
+                    { new Guid("8213e160-1164-4afb-acdb-3116ad2811ba"), "Статус (руководитель/исполнитель)", 4, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("84c674bb-6432-44c2-ac77-3bdaafa7c056"), "Год", 3, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("8855ff90-1908-42f7-b87c-53d78c949096"), "Соавторы", 3, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("8cb056a6-35e0-4b9e-b21a-64805d5f7e7c"), "Наличие грифа", 5, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("8e010354-fe1f-43ce-959d-15021d046a1e"), "Вид публикации", 1, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("925fbcf5-5350-4252-8be2-99edb221004b"), "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)", 4, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("93f24f5f-93c8-4899-b514-dbd83aea1196"), "Итого (час.)", 5, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("98f17ba2-e86c-41e3-847e-e3df251a9c58"), "Количество часов", 4, new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843") },
+                    { new Guid("99820d46-f494-4cd6-a110-55498cc3e930"), "Название разработки", 2, new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d") },
+                    { new Guid("99bce237-7d3d-499c-8095-0771a539b051"), "Год получения документа", 2, new Guid("5609f554-a020-47af-8d31-538bdf931432") },
+                    { new Guid("9d639eb9-f91b-486a-a974-52cfced3d54c"), "Вид", 1, new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("a0711f49-cbfc-4310-ac13-9e0842fb1592"), "Название конкурса", 2, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("a6c039b2-1199-4928-a73c-d70568dff3a1"), "Год", 1, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("a7d118fa-72cc-4bbd-8d92-d4ccdcc542ee"), "Название конкурса/премии", 2, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("b99f382c-224d-4eb1-ab75-1f808a0bfe41"), "Награда/премия (медаль, диплом с указанием степени)", 5, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("be79b397-7b1b-48b6-a606-e451b76a97f4"), "Язык преподавания (русск./англ./др.)", 2, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("beeaf71a-bb17-4013-a81b-eb62710df058"), "Ссылка", 5, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("c23d6ff4-7343-434a-9880-172f43df9369"), "Вид (лекции, лабораторные)", 2, new Guid("51c81764-8043-4471-8720-ac28f0123f82") },
+                    { new Guid("c8772a8b-6a24-462a-a5dc-d064e008b8f3"), "Наименование курса", 1, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("cbb790a8-b856-4d4e-b66d-3bfdb960c17e"), "Название документа, реквизиты", 1, new Guid("5609f554-a020-47af-8d31-538bdf931432") },
+                    { new Guid("ce315791-0123-49b9-b638-f983eaa9a67a"), "Год", 4, new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("d81a4f20-72db-4506-bbac-76bbc5592cef"), "Место нахождения (субъект РФ, зарубежье)", 2, new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843") },
+                    { new Guid("df3a0e23-1ce5-438c-a247-3f084bc3449f"), "Название организации в которую внедрена разработка", 3, new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d") },
+                    { new Guid("dfcab5db-7640-4a1a-827e-340b2d1aa17f"), "Название курса", 1, new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("edddf8be-abcf-4edd-b173-7cb087265e66"), "Тип публикации (категория ВАК/квартиль МБД)", 3, new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("fdbd9ec1-f20a-4ea9-ba15-3b3b446b26c3"), "Тип идентификатора", 1, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("fe738f30-4009-4579-9b41-6d7cc7415bc7"), "Издательство, год", 6, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") }
                 });
 
             migrationBuilder.InsertData(
@@ -757,33 +757,33 @@ namespace ServerApp.Migrations
                 columns: new[] { "FieldsId", "MarkBlocksId" },
                 values: new object[,]
                 {
-                    { new Guid("04568b26-f758-497c-b895-f0c8dd2e0a7d"), new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1") },
-                    { new Guid("1a314c1b-e926-45b3-a695-12df1d237c13"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("1db89be5-fc68-4a04-973d-62676f453550"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("1db89be5-fc68-4a04-973d-62676f453550"), new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc") },
-                    { new Guid("1db89be5-fc68-4a04-973d-62676f453550"), new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1") },
-                    { new Guid("1f4c398f-28a4-47a1-99cc-7b8386496566"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("29b4a310-1c37-49a0-aae8-bcca502b500f"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("58d6543a-ec3e-4687-8012-a1dee0156099"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("5c16da5c-b9f1-4f40-ad5b-9d0548c793ae"), new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e") },
-                    { new Guid("60fcb60f-5c1f-4a16-a20e-fd71ee25ae54"), new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e") },
-                    { new Guid("65bad0b0-2995-4791-a324-42e237cac770"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("77bcb6a4-1369-462a-8d4c-95940ea3bd3c"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("7d2e8571-2577-4700-9414-35259b71ebe3"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("7fe544e0-a5a0-427c-8cd4-c4fdc84fad98"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("91950ec9-87d6-4703-a946-f455d72f3b01"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("a1bfc8a0-654c-4299-b49c-432c5a3b3dbb"), new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e") },
-                    { new Guid("a3ef526f-1673-4b63-ac72-1df74c31814d"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("a59fd96f-1665-44f7-b2f5-c5f6561ceb79"), new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e") },
-                    { new Guid("ae9e053b-4cc0-48be-9a24-553c1496a5de"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("b5167228-45a8-451b-9cc2-1c30b022bcfd"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("c1d31301-3bab-4a61-95c9-891ed5a64a3d"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("c3a9285d-e143-4843-9a96-23a4621f24d5"), new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e") },
-                    { new Guid("e0bff50a-5bff-4269-9f45-a717534ac494"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("e3fba1a3-b4ae-4fd2-87ec-7dfd67221a6e"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("eeba3031-853c-4b79-9fdf-dcee4d7a1e42"), new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1") },
-                    { new Guid("f0ba2f58-c0a5-4c87-8564-5fc268aebb79"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") },
-                    { new Guid("ff104d50-51bd-4444-a669-7fc71ba38d56"), new Guid("4028e6c6-278c-4b5b-9dde-8a78901ce4ac") }
+                    { new Guid("17580ff7-a1b0-4e99-afad-ff315cc30978"), new Guid("583822d3-4a09-4f64-8601-1b6f67a35773") },
+                    { new Guid("362ab3e8-227b-4a2a-81ea-b9cff26d7fa5"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("42d804c8-1774-46a3-a6c9-393594e55e08"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("49dfa1e1-4a3a-4f43-b799-b6c80662c8a1"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("4dee9c1a-7243-4643-8ae8-96f4c7d736a3"), new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d") },
+                    { new Guid("4dee9c1a-7243-4643-8ae8-96f4c7d736a3"), new Guid("93adc53b-979f-45c0-bd00-539787bf3f24") },
+                    { new Guid("4dee9c1a-7243-4643-8ae8-96f4c7d736a3"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("572a11a5-a7d2-45cc-8f48-ca7f912fd4fe"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("65ce6d39-a0a8-431a-9540-e7b52a907d7f"), new Guid("583822d3-4a09-4f64-8601-1b6f67a35773") },
+                    { new Guid("683a7c80-d26b-45ec-a5cf-d94b16139caa"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("871a7b30-c027-4c0c-a51e-96a3d878b980"), new Guid("583822d3-4a09-4f64-8601-1b6f67a35773") },
+                    { new Guid("8c9cdba6-c1c5-4840-97f5-8042cc14cf2c"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("94bd25d8-d12a-4f6e-910b-5336833d8c76"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("97adae5c-dff2-43b7-8ec5-b91fb33e2e82"), new Guid("93adc53b-979f-45c0-bd00-539787bf3f24") },
+                    { new Guid("a63cf466-751d-4da5-bd07-e953996b6ce3"), new Guid("93adc53b-979f-45c0-bd00-539787bf3f24") },
+                    { new Guid("adb5a93a-ad25-4c22-9e70-efa86dd2bdd5"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("c5a6a54b-1cb7-42fe-9d24-fe2f8dacc8c9"), new Guid("583822d3-4a09-4f64-8601-1b6f67a35773") },
+                    { new Guid("c7f7a655-e90f-4810-a0b0-4c73aa94dad0"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("c8b88934-23cc-46d6-be3c-3f0a53a6bf1a"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("ca889531-fa07-490e-8cc2-2bd6d4cd97f8"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("ce1deef0-7563-43ab-a3df-7ab742832fdb"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("d43f7d97-9b43-4902-801f-2c8e11d5b738"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("dc7684ff-bd9d-4360-b7ff-f42ab359fce7"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("ee57c7df-ec3e-4847-83fa-8827688efbe7"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("efe6b69f-d675-49ba-9eed-d5483076e887"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("f4621a47-6444-4f96-9bff-b7247a64a901"), new Guid("c9bdd2cd-0ff7-4b01-b095-e5b405f96d6b") },
+                    { new Guid("fd725233-ad5c-4e1f-ae67-dcc0da16173a"), new Guid("583822d3-4a09-4f64-8601-1b6f67a35773") }
                 });
 
             migrationBuilder.InsertData(
@@ -791,21 +791,21 @@ namespace ServerApp.Migrations
                 columns: new[] { "MarkBlocksId", "TablesId" },
                 values: new object[,]
                 {
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("3fb2076b-4d42-4c13-b2f5-97032273da53") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("0df3f623-601b-462e-95cc-e3a97331980f") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("1c4ee49f-2575-4f6e-8528-f0c080ea3ee5") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("0df3f623-601b-462e-95cc-e3a97331980f") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06") }
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("5609f554-a020-47af-8d31-538bdf931432") },
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("51c81764-8043-4471-8720-ac28f0123f82") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("5704b5a8-c77d-41a3-bf9f-de4509cf4843") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("5609f554-a020-47af-8d31-538bdf931432") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") }
                 });
 
             migrationBuilder.InsertData(
@@ -813,30 +813,30 @@ namespace ServerApp.Migrations
                 columns: new[] { "Id", "FieldId", "Name", "Number", "TableId" },
                 values: new object[,]
                 {
-                    { new Guid("072fd708-17a2-4267-9b0c-2e79881183db"), new Guid("1db89be5-fc68-4a04-973d-62676f453550"), "Баллы за ученое звание:", 13, null },
-                    { new Guid("0d35de47-af7b-4d2d-ba80-d4fb9e76ac5d"), null, "Баллы по базе РИНЦ:", 18, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("1c7255a6-9e14-48e3-976a-1fd048d5e73d"), null, "Баллы за труды с грифом и без соавторства:", 8, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("2b89e38f-a6db-4eb5-bc68-d3f6375006ba"), new Guid("a59fd96f-1665-44f7-b2f5-c5f6561ceb79"), "Баллы за количество защитившихся докторов наук:", 5, null },
-                    { new Guid("3667af7f-87f2-493e-818a-3ee0103984e0"), null, "Баллы за количество онлайн курсов на открытых площадках:", 7, new Guid("21e14f60-95ac-44c5-9c29-337812234c8d") },
-                    { new Guid("3cffba1c-8a5c-49c1-8611-2f6f86677c28"), null, "Баллы за количество практикумов и курсов лекций:", 12, new Guid("1c4ee49f-2575-4f6e-8528-f0c080ea3ee5") },
-                    { new Guid("478d4edb-5631-4296-af48-955ee92749ed"), null, "Баллы за объем учебной нагрузки:", 1, new Guid("16684938-c87e-43d0-82df-50156168324f") },
-                    { new Guid("4ac61d6d-1de4-435e-82c8-1a657bb758ce"), null, "Баллы за труды без грифа в соавторстве:", 11, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("4db083e9-2f21-4fc3-8ca6-bf681ad19f24"), null, "Баллы по базе Scopus:", 17, new Guid("fddf60e5-3be0-46c4-8827-4f6a810fd918") },
-                    { new Guid("65e73d56-85dc-47cd-bfbf-ae24d2391a3d"), null, "Баллы за научные публикации:", 16, new Guid("0cf36fef-af1e-4424-8eca-5c7d3166f01d") },
-                    { new Guid("6c623e6e-d8d9-45bd-b95d-a04e2fbdac4a"), new Guid("5c16da5c-b9f1-4f40-ad5b-9d0548c793ae"), "Баллы за количество квалификационных работ, выполненных под руководством претендента:", 3, null },
-                    { new Guid("7b842512-e5c7-4c79-88e1-8c3025663096"), null, "Баллы за труды с грифом в соавторстве:", 9, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("8441675f-951a-4e89-99ee-52904e717c9a"), null, "Баллы за количество разработок:", 24, new Guid("ce1b3d8e-9988-4079-91be-b448b86cfd06") },
-                    { new Guid("84899ed4-d549-47db-ae70-00830e77b8c2"), null, "Баллы за награды:", 14, new Guid("aad09686-5488-43eb-942a-0efc3dbea728") },
-                    { new Guid("86388cb9-b085-4af8-b0e1-39f61598b069"), null, "Баллы за выполненные НИР/НИОКР в качестве руководителя:", 21, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("95be84b8-f5ea-4119-bb37-932bdd0d1ffb"), null, "Баллы за профессиональное развитие:", 15, new Guid("0df3f623-601b-462e-95cc-e3a97331980f") },
-                    { new Guid("9c16c3a0-d558-427b-922b-d1ccb9939d86"), null, "Баллы за труды без грифа и без соавторства:", 10, new Guid("72479481-80b7-4458-9c72-c402755a8ebc") },
-                    { new Guid("a284a176-3d0b-40be-8dc1-c0d718811574"), null, "Баллы за количество подготовленных студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:", 6, new Guid("449f9dee-be7a-4831-90ac-c3070827fe9b") },
-                    { new Guid("a6b495c6-2356-40ac-8698-7535cb0ed159"), null, "Баллы за количество объектов интеллектуальной собственности:", 23, new Guid("13111c2b-e7ae-439f-8fde-e5462d3616cd") },
-                    { new Guid("b937d80d-d771-48bd-944a-c8cb93d09164"), new Guid("04568b26-f758-497c-b895-f0c8dd2e0a7d"), "Баллы за количество защитившихся докторов наук:", 20, null },
-                    { new Guid("cfee6e78-e588-48d5-bcc9-e708c50a1534"), new Guid("60fcb60f-5c1f-4a16-a20e-fd71ee25ae54"), "Баллы за количество защитившихся кандидатов наук:", 4, null },
-                    { new Guid("d5976d72-53d9-4b61-8ffd-f1beeafed95d"), null, "Баллы за выполненные НИР/НИОКР в качестве исполнителя:", 22, new Guid("e6da3db2-cfbf-487e-8185-a738b9b0c600") },
-                    { new Guid("d5ab3d0d-fd2d-4334-b79d-72ed7652bf2d"), new Guid("eeba3031-853c-4b79-9fdf-dcee4d7a1e42"), "Баллы за количество защитившихся кандидатов наук:", 19, null },
-                    { new Guid("def93b42-eb98-4596-9bf9-10c70aac7b21"), null, "Баллы за количество дисциплин на иностранном языке, которые вел претендент, в предыдущем учебном году:", 2, new Guid("16684938-c87e-43d0-82df-50156168324f") }
+                    { new Guid("0f7ca2d5-bd72-4664-8e30-9d65f56c6b04"), null, "Баллы за объем учебной нагрузки:", 1, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("0fa6a535-377b-46c6-ba04-eeecb036fae1"), null, "Баллы за труды с грифом и без соавторства:", 8, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("4931815f-e698-4bb6-8cc5-60b4706368b3"), null, "Баллы за количество подготовленных студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:", 6, new Guid("170884c4-b6ef-430e-8abf-7647295dfcd9") },
+                    { new Guid("4ef66e0f-9435-4928-9898-08382587843b"), new Guid("c5a6a54b-1cb7-42fe-9d24-fe2f8dacc8c9"), "Баллы за количество защитившихся кандидатов наук:", 4, null },
+                    { new Guid("50495d2a-7621-487e-a42f-a558c615d587"), null, "Баллы за награды:", 14, new Guid("f19f9973-189e-4d22-aba8-d37afd86f58f") },
+                    { new Guid("55a770c1-ffbd-49be-abe2-036f89685c6f"), new Guid("a63cf466-751d-4da5-bd07-e953996b6ce3"), "Баллы за количество защитившихся кандидатов наук:", 19, null },
+                    { new Guid("5991cc39-91c9-43a4-8fab-e70557796bf4"), null, "Баллы по базе РИНЦ:", 18, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("5dbad1b8-0e89-4987-9680-c60db1e08f59"), null, "Баллы за выполненные НИР/НИОКР в качестве руководителя:", 21, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("60822c86-306e-4e24-954a-ad488a393635"), null, "Баллы за количество онлайн курсов на открытых площадках:", 7, new Guid("178b1558-72dd-46bd-a6d1-3d224d3374ba") },
+                    { new Guid("71b9f20d-eccc-4944-bc52-b22e7c5961e3"), new Guid("97adae5c-dff2-43b7-8ec5-b91fb33e2e82"), "Баллы за количество защитившихся докторов наук:", 20, null },
+                    { new Guid("738ccea7-95e7-432d-8c62-cb3d06247eec"), new Guid("4dee9c1a-7243-4643-8ae8-96f4c7d736a3"), "Баллы за ученое звание:", 13, null },
+                    { new Guid("83ebdfca-6a0b-4c95-8cf1-3e62482219aa"), null, "Баллы за труды без грифа в соавторстве:", 11, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("8d3ccb83-6de5-4f37-91bd-919b04f31961"), null, "Баллы за количество дисциплин на иностранном языке, которые вел претендент, в предыдущем учебном году:", 2, new Guid("cbd6bbe5-1408-4a60-b65b-362fc9a38b9e") },
+                    { new Guid("b74d1cf4-3ff4-4b7e-980a-d8ebd5d91726"), null, "Баллы за научные публикации:", 16, new Guid("3a05bb8e-ef11-4372-9cff-f449058e3f1e") },
+                    { new Guid("b98cda92-80c4-489f-a48f-9394cf8c87a0"), null, "Баллы за профессиональное развитие:", 15, new Guid("5609f554-a020-47af-8d31-538bdf931432") },
+                    { new Guid("bd189f97-b73e-444a-8587-a715bdc15f00"), null, "Баллы за количество разработок:", 24, new Guid("c5a43f11-dfcc-4eb0-af99-bce732ef9f8d") },
+                    { new Guid("bd23ea12-6465-4f27-bb70-744a1f2e8424"), new Guid("fd725233-ad5c-4e1f-ae67-dcc0da16173a"), "Баллы за количество квалификационных работ, выполненных под руководством претендента:", 3, null },
+                    { new Guid("bdd6da5a-b061-4e3e-9456-e9bcf148f27c"), null, "Баллы за выполненные НИР/НИОКР в качестве исполнителя:", 22, new Guid("3448642b-93b4-4925-bff3-927ccec9508f") },
+                    { new Guid("c639e574-21cd-4f29-9062-f67a572c6b9c"), null, "Баллы за труды с грифом в соавторстве:", 9, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("d8bf5466-6302-4e6e-916a-93c395baefd7"), null, "Баллы за количество практикумов и курсов лекций:", 12, new Guid("51c81764-8043-4471-8720-ac28f0123f82") },
+                    { new Guid("e55a2495-3a0d-462f-a4fd-521ea0d33cd7"), null, "Баллы по базе Scopus:", 17, new Guid("f3a864cd-4912-47c1-8f11-d836924ac1fc") },
+                    { new Guid("e691de53-2d1b-4397-b4b4-9b73b9a05806"), null, "Баллы за количество объектов интеллектуальной собственности:", 23, new Guid("b45f7783-db8c-4474-8eeb-6d786c98ec82") },
+                    { new Guid("eea59e0e-b341-4657-8125-b2e54ce26961"), null, "Баллы за труды без грифа и без соавторства:", 10, new Guid("ec20dcca-cd30-4025-9975-9075ad7dc69b") },
+                    { new Guid("f489ef30-cd59-422f-b82d-d6dbe30c063e"), new Guid("17580ff7-a1b0-4e99-afad-ff315cc30978"), "Баллы за количество защитившихся докторов наук:", 5, null }
                 });
 
             migrationBuilder.InsertData(
@@ -844,33 +844,33 @@ namespace ServerApp.Migrations
                 columns: new[] { "MarkBlocksId", "MarksId" },
                 values: new object[,]
                 {
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("2b89e38f-a6db-4eb5-bc68-d3f6375006ba") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("3667af7f-87f2-493e-818a-3ee0103984e0") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("478d4edb-5631-4296-af48-955ee92749ed") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("6c623e6e-d8d9-45bd-b95d-a04e2fbdac4a") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("a284a176-3d0b-40be-8dc1-c0d718811574") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("cfee6e78-e588-48d5-bcc9-e708c50a1534") },
-                    { new Guid("106cc9d0-2d64-4777-b184-86b0b2c1983e"), new Guid("def93b42-eb98-4596-9bf9-10c70aac7b21") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("072fd708-17a2-4267-9b0c-2e79881183db") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("84899ed4-d549-47db-ae70-00830e77b8c2") },
-                    { new Guid("7502619e-4f9c-4055-8318-41d9c97ea2cc"), new Guid("95be84b8-f5ea-4119-bb37-932bdd0d1ffb") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("072fd708-17a2-4267-9b0c-2e79881183db") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("0d35de47-af7b-4d2d-ba80-d4fb9e76ac5d") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("4db083e9-2f21-4fc3-8ca6-bf681ad19f24") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("65e73d56-85dc-47cd-bfbf-ae24d2391a3d") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("84899ed4-d549-47db-ae70-00830e77b8c2") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("86388cb9-b085-4af8-b0e1-39f61598b069") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("b937d80d-d771-48bd-944a-c8cb93d09164") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("d5976d72-53d9-4b61-8ffd-f1beeafed95d") },
-                    { new Guid("9e5fa490-ebd8-475e-9463-455cb4b441a1"), new Guid("d5ab3d0d-fd2d-4334-b79d-72ed7652bf2d") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("1c7255a6-9e14-48e3-976a-1fd048d5e73d") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("3cffba1c-8a5c-49c1-8611-2f6f86677c28") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("4ac61d6d-1de4-435e-82c8-1a657bb758ce") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("7b842512-e5c7-4c79-88e1-8c3025663096") },
-                    { new Guid("e943d4fe-7108-4a02-bd2b-d8f740d82dd6"), new Guid("9c16c3a0-d558-427b-922b-d1ccb9939d86") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("8441675f-951a-4e89-99ee-52904e717c9a") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("95be84b8-f5ea-4119-bb37-932bdd0d1ffb") },
-                    { new Guid("fdcdcc79-c97c-4353-8957-7875798f3559"), new Guid("a6b495c6-2356-40ac-8698-7535cb0ed159") }
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("50495d2a-7621-487e-a42f-a558c615d587") },
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("738ccea7-95e7-432d-8c62-cb3d06247eec") },
+                    { new Guid("35705dc7-cb36-4a8e-9d44-ebccd8bc7b8d"), new Guid("b98cda92-80c4-489f-a48f-9394cf8c87a0") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("0fa6a535-377b-46c6-ba04-eeecb036fae1") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("83ebdfca-6a0b-4c95-8cf1-3e62482219aa") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("c639e574-21cd-4f29-9062-f67a572c6b9c") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("d8bf5466-6302-4e6e-916a-93c395baefd7") },
+                    { new Guid("55cbefe1-dc80-4860-af74-8a9048e7135f"), new Guid("eea59e0e-b341-4657-8125-b2e54ce26961") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("0f7ca2d5-bd72-4664-8e30-9d65f56c6b04") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("4931815f-e698-4bb6-8cc5-60b4706368b3") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("4ef66e0f-9435-4928-9898-08382587843b") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("60822c86-306e-4e24-954a-ad488a393635") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("8d3ccb83-6de5-4f37-91bd-919b04f31961") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("bd23ea12-6465-4f27-bb70-744a1f2e8424") },
+                    { new Guid("583822d3-4a09-4f64-8601-1b6f67a35773"), new Guid("f489ef30-cd59-422f-b82d-d6dbe30c063e") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("b98cda92-80c4-489f-a48f-9394cf8c87a0") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("bd189f97-b73e-444a-8587-a715bdc15f00") },
+                    { new Guid("690509e0-a77c-4c54-a7f5-16782c06623e"), new Guid("e691de53-2d1b-4397-b4b4-9b73b9a05806") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("50495d2a-7621-487e-a42f-a558c615d587") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("55a770c1-ffbd-49be-abe2-036f89685c6f") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("5991cc39-91c9-43a4-8fab-e70557796bf4") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("5dbad1b8-0e89-4987-9680-c60db1e08f59") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("71b9f20d-eccc-4944-bc52-b22e7c5961e3") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("738ccea7-95e7-432d-8c62-cb3d06247eec") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("b74d1cf4-3ff4-4b7e-980a-d8ebd5d91726") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("bdd6da5a-b061-4e3e-9456-e9bcf148f27c") },
+                    { new Guid("93adc53b-979f-45c0-bd00-539787bf3f24"), new Guid("e55a2495-3a0d-462f-a4fd-521ea0d33cd7") }
                 });
 
             migrationBuilder.CreateIndex(
