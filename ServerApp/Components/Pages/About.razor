@@ -1,5 +1,195 @@
 @page "/about"
 
+@using System.Timers;
+
+<PageTitle>О конкурсе</PageTitle>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ПЕРВЫЙ -->
+<div class="block-title">
+    <div class="block-title-text">
+        О конкурсе
+    </div>
+</div>
+
+<div class="d-flex p-3">
+    @* Почему-то отсутствует класс mr, ml в bootstrap *@
+    <div class="w-50" style="margin-right: 1.5vw;">
+        <div class="block-content-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Tempor nec feugiat nisl pretium fusce id velit ut.
+            Turpis massa tincidunt dui ut. Cras adipiscing enim eu turpis egestas pretium aenean.
+            Sagittis orci a scelerisque purus semper. Faucibus interdum posuere lorem ipsum dolor
+            sit amet consectetur adipiscing. Vitae auctor eu augue ut lectus.
+            Sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus.
+            Amet facilisis magna etiam tempor. In aliquam sem fringilla ut morbi tincidunt.
+            Tincidunt praesent semper feugiat nibh sed pulvinar proin gravida.
+            Urna porttitor rhoncus dolor purus non enim praesent elementum.
+            Vitae auctor eu augue ut lectus arcu.
+        </div>
+    </div>
+    <div class="w-50" style="background-color: #D0D0D0;"></div>
+</div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ЭТАПОВ -->
+
+<div class="stages-competition">
+    <div class="content-column">
+        <div class="d-flex justify-content-center pb-4">
+            <div class="circle-stage">
+                <div class="circle-stage-number">1</div>
+            </div>
+        </div>
+
+        <div class="circle-stage-title pb-2">Первый этап</div>
+
+        <div class="block-content-text text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus quis, optio iure at ab obcaecati?</div>
+    </div>
+    
+    <div class="content-column">
+        <div class="d-flex justify-content-center pb-4">
+            <div class="circle-stage">
+                <div class="circle-stage-number">2</div>
+            </div>
+        </div>
+
+        <div class="circle-stage-title pb-2">Второй этап</div>
+
+        <div class="block-content-text text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus quis, optio iure at ab obcaecati?</div>
+    </div>
+
+    <div class="content-column">
+        <div class="d-flex justify-content-center pb-4">
+            <div class="circle-stage">
+                <div class="circle-stage-number">3</div>
+            </div>
+        </div>
+
+        <div class="circle-stage-title pb-2">Третий этап</div>
+
+        <div class="block-content-text text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus quis, optio iure at ab obcaecati?</div>
+    </div>
+</div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ПРИЗОВ -->
+<div class="block-title">
+    <div class="block-title-text">
+        Призы
+    </div>
+</div>
+<div class="gallery-prizes">
+    <div class="w-25" style="height:188px; background-color: #D0D0D0;"></div>
+    <div class="w-25" style="height:188px; background-color: #7A78FC;"></div>
+    <div class="w-25" style="height:188px; background-color: #713b6c;"></div>
+    <div class="w-25" style="height:188px; background-color: #D0D0D0;"></div>
+    <div class="w-25" style="height:188px; background-color: #512e84;"></div>
+    <div class="w-25" style="height:188px; background-color: #D0D0D0;"></div>
+    <div class="w-25" style="height:188px; background-color: #7A78FC;"></div>
+    <div class="w-25" style="height:188px; background-color: #713b6c;"></div>
+    <div class="w-25" style="height:188px; background-color: #D0D0D0;"></div>
+</div>
+
+<div>
+    <div class="block-title-text text-center m-4">До конца приема заявок осталось:</div>
+    <div class="countdown mb-4">
+        <div class="countdown-item">
+            <span id="days">@days</span>
+            <span class="label">Дней</span>
+        </div>
+        <div class="countdown-item">
+            <span id="hours">@hours</span>
+            <span class="label">Часов</span>
+        </div>
+        <div class="countdown-item">
+            <span id="minutes">@minutes</span>
+            <span class="label">Минут</span>
+        </div>
+    </div>
+</div>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ЗАДАЧ -->
+<div class="block-title">
+    <div class="block-title-text">
+        Задачи конкурса
+    </div>
+</div>
+<div class="d-flex p-3">
+    <div class="block-content-text w-50" style="margin-right: 1.5vw;">
+        <ul>
+            <li>Lorem ipsum dolor sit amet,</li>
+            <li>consectetur adipiscing elit,</li>
+            <li>sed do eiusmod tempor incididunt</li>
+            <li>ut labore et dolore magna aliqua.</li>
+            <li>Tempor nec feugiat nisl pretium</li>
+            <li>fusce id velit ut. Turpis massa</li>
+            <li>tincidunt dui ut. Cras adipiscing. </li>
+            <li>Lorem ipsum dolor sit amet,</li>
+            <li>consectetur adipiscing elit,</li>
+            <li>sed do eiusmod tempor incididunt</li>
+            <li>ut labore et dolore magna aliqua.</li>
+            <li>Tempor nec feugiat nisl pretium</li>
+            <li>fusce id velit ut. Turpis massa</li>
+            <li>tincidunt dui ut. Cras adipiscing. </li>
+        </ul>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <Button
+                Type="ButtonType.Link"
+                Color="ButtonColor.Primary"
+                To="/voting#">
+                    Проголосовать
+            </Button>
+            <Button 
+                Type="ButtonType.Link"
+                Color="ButtonColor.Primary"
+                To="/application-form#">
+                    Подать заявку на участие
+            </Button>
+        </div>
+    </div>
+    <div class="w-50" style="background-color: #D0D0D0;"></div>
+</div>
+
 @code {
 
+    private DateTime targetDate = new DateTime(2024, 11, 11); // Целевая дата
+
+    private string? days;
+    private string? hours;
+    private string? minutes;
+
+    private Timer? timer;
+
+    protected override void OnInitialized()
+    {
+
+        // Timer с интервалом 1 секунда
+        timer = new Timer(1000);
+
+        // событие Elapsed
+        timer.Elapsed += UpdateCountdown!;
+
+        // Запуск таймера
+        timer.Start();
+    }
+
+    private void UpdateCountdown(object sender, ElapsedEventArgs e)
+    {
+        TimeSpan remainingTime = targetDate - DateTime.Now;
+
+        // Проверка завершения отсчета
+        if (remainingTime.TotalSeconds >= 0)
+        {
+            days = remainingTime.Days.ToString("D2");
+            hours = remainingTime.Hours.ToString("D2");
+            minutes = remainingTime.Minutes.ToString("D2");
+
+            // Обновление UI
+            InvokeAsync(StateHasChanged); 
+        }
+        else
+        {
+            // Остановка таймера, если отсчет завершен
+            timer!.Stop();
+        }
+    }
 }

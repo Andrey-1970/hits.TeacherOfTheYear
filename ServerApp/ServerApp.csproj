@@ -31,4 +31,10 @@
     <Folder Include="Data\SQLite\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Components\Shared\HomeBlocks\ContestInfo.razor" />
+    <None Include="Components\Shared\HomeBlocks\ParticipantInfo.razor" />
+    <None Include="Components\Shared\HomeBlocks\VotingInfo.razor" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,60 @@
+﻿.intro {
+    height: 750px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-background {
+    width: 100vw;
+    position: relative;
+    background-image: url("/img/IntroBackground.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.intro-title {
+    color: #ffffff;
+    text-align: center;
+    font-family: "Montserrat-ExtraBold", sans-serif;
+    font-size: 96px;
+    font-weight: 800;
+    position: relative;
+    align-self: stretch;
+}
+
+.intro-text {
+    color: #ffffff;
+    text-align: center;
+    font-family: "Montserrat-Medium", sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    position: relative;
+    align-self: stretch;
+}
+
+@media (max-width: 1200px) {
+    .intro-title {
+        font-size: 80px;
+    }
+
+    .intro-text {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .intro-title {
+        font-size: 65px;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro-title {
+        font-size: 44px;
+    }
+}

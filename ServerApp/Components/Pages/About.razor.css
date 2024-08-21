@@ -1,0 +1,38 @@
+.gallery-prizes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+  padding: 1rem;
+}
+ 
+.countdown-item {
+  margin: 0 20px;
+  text-align: center;
+}
+ 
+.countdown-item span {
+  display: block;
+  font-size: 2em;
+}
+ 
+.label {
+  font-size: 0.8em;
+  color: #999;
+}
+
+.statistics-now {
+    font-family: "Inter-ExtraBold", sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    margin: 2rem;
+}

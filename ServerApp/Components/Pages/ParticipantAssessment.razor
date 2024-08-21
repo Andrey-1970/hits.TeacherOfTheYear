@@ -13,7 +13,7 @@
     @if (model is not null)
     {
         <div class="block-content-text">
-            <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+            <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
         </div>
         <div class="block-content">
             @if (model.Fields is not null && model.Fields.Any())

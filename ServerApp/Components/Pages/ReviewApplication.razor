@@ -14,7 +14,7 @@
     {
         <div class="form-text"><strong>Выбранный трек:</strong> <span style="opacity: 0.7;">@model.SelectedTrackId</span></div>
         <div class="block-content-text">
-            <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+            <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
         </div>
         <div class="block-content">
             @if (model.Fields is not null && model.Fields.Any())

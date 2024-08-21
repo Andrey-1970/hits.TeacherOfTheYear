@@ -23,7 +23,7 @@
             @if (model.SelectedTrackId != Guid.Empty)
             {
                 <div class="block-content-text">
-                    <TabsForBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForBlocks>
+                    <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
                 </div>
                 @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
                 {
@@ -60,35 +60,41 @@
                         {
                             @foreach (var table in model.Tables)
                             {
-                                <div class="block-subtitle-text">@table.Name</div>
-                                @if (table.Rows is not null && table.Rows.Any())
-                                {
-                                    <table class="table-stand">
-                                        <thead>
-                                            <tr>
-                                                @foreach (var column in table.Columns)
-                                                {
-                                                    <th>@column.Name</th>
-                                                }
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var row in table.Rows)
-                                            {
-                                                <tr>
-                                                    @foreach (var cell in row.Cells)
+                                <div class="block-content">
+                                    <div class="table-container">
+                                        <div class="block-subtitle-text">@table.Name</div>
+                                        @if (table.Rows is not null && table.Rows.Any())
+                                        {
+                                            <table class="table-stand">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (var column in table.Columns)
+                                                        {
+                                                            <th>@column.Name</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in table.Rows)
                                                     {
-                                                        <div class="form-input w-100 mb-3">
-                                                            <ValidationMessage For="() => cell.Value" />
-                                                            <InputText class="form-control" @bind-Value="cell.Value" />
-                                                        </div>
+                                                        <tr>
+                                                            @foreach (var cell in row.Cells)
+                                                            {
+                                                                <div class="form-input w-100 mb-3">
+                                                                    <ValidationMessage For="() => cell.Value" />
+                                                                    <InputText class="form-control" @bind-Value="cell.Value" />
+                                                                </div>
+                                                            }
+                                                        </tr>
                                                     }
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                    <Icon Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="() => AddRow(table)" type="button" />
+                                </div>
                             }
+
                         }
                         <ValidationSummary />
                         <div class="d-flex justify-content-center">
@@ -185,5 +191,10 @@
     {
         await data.SaveApplicationFormFromEditModelAsync(model!);
         toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
+    }
+
+    void AddRow(TableModel table)
+    {
+        
     }
 }
