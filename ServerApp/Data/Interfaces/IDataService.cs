@@ -1,5 +1,5 @@
 ﻿using ServerApp.Data.Entities;
-using ServerApp.Data.Models;
+using ServerApp.Data.Models.EditModel;
 
 namespace ServerApp.Data.Interfaces
 {

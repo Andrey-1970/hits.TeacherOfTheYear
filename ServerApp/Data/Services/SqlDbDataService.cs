@@ -2,7 +2,7 @@
 using ServerApp.Components;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
-using ServerApp.Data.Models;
+using ServerApp.Data.Models.EditModel;
 
 namespace ServerApp.Data.Services
 {

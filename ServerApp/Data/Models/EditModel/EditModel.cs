@@ -1,7 +1,6 @@
 ﻿using ServerApp.Data.Entities;
-using ServerApp.Data.Interfaces;
 
-namespace ServerApp.Data.Models
+namespace ServerApp.Data.Models.EditModel
 {
     public class EditModel
     {

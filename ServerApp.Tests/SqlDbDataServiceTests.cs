@@ -3,7 +3,6 @@ using Moq;
 using ServerApp.Data;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
-using ServerApp.Data.Models;
 using ServerApp.Data.Services;
 
 namespace ServerApp.Tests
