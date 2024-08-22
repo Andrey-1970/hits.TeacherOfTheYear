@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
@@ -28,9 +29,33 @@ namespace ServerApp.Data.Services
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId)
         {
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
             var track = await context.Tracks.Include(track => track.EditBlocks)
                 .FirstOrDefaultAsync(x => x.Id == trackId);
-            return track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)) ?? [];
+            var editBlocks = track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)).ToArray() ?? [];
+            foreach (var editBlock in editBlocks)
+            {
+                editBlock.Status = user.Applications.FirstOrDefault()?.EditBlockStatusList
+                    .FirstOrDefault(e => e.EditBlockId == editBlock.Id)?.Status ?? false; 
+            }
+
+            return editBlocks;
+        }
+
+        public async Task<EditBlockStatusModel[]> GetEditBlockStatusModelsAsync()
+        {
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
+
+            return (user.Applications.FirstOrDefault()?.EditBlockStatusList.Select(e => new EditBlockStatusModel(e)) ??
+                    []).ToArray();
         }
 
         public async Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId)
@@ -154,6 +179,19 @@ namespace ServerApp.Data.Services
                         }
                     }
                 }
+            }
+            
+            
+            await context.SaveChangesAsync();
+            var editBlockStatus = context.EditBlockStatuses.FirstOrDefault(e =>
+                e.EditBlockId == model.SelectedEditBlockId!.Value && e.ApplicationId == model.ApplicationId);
+            if (editBlockStatus == null)
+            {
+                context.EditBlockStatuses.Add(new EditBlockStatus()
+                {
+                    Id = Guid.NewGuid(), EditBlockId = model.SelectedEditBlockId!.Value,
+                    ApplicationId = model.ApplicationId, Status = true
+                });
             }
 
             await context.SaveChangesAsync();

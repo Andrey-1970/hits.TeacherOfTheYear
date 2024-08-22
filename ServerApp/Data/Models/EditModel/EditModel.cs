@@ -33,5 +33,6 @@ namespace ServerApp.Data.Models.EditModel
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];
         public FieldModel[] Fields { get; set; } = [];
         public TableModel[] Tables { get; set; } = [];
+        public EditBlockStatusModel[] EditBlockStatusModels { get; set; } = [];
     }
 }

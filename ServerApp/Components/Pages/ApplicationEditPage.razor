@@ -134,6 +134,7 @@
 
         model.SelectedTrackId = trackId;
         model.EditBlocks = await data.GetEditBlockModelsAsync(trackId);
+        model.EditBlockStatusModels = await data.GetEditBlockStatusModelsAsync();
 
         await OnBlockIdChanged(model.EditBlocks.First().Id);
     }

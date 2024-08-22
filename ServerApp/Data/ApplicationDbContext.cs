@@ -13,6 +13,7 @@ namespace ServerApp.Data
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
+        public DbSet<EditBlockStatus> EditBlockStatuses { get; set; }
         public DbSet<Field> Fields { get; set; }
         public DbSet<FieldVal> FieldVals { get; set; }
         public DbSet<Mark> Marks { get; set; }
