@@ -10,6 +10,7 @@ namespace ServerApp.Data
         #region Init DBSets
 
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
+        public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
@@ -43,6 +44,7 @@ namespace ServerApp.Data
 
         private static void OnConfiguringConstraction(ModelBuilder builder)
         {
+            builder.Entity<ApplicationStatus>().HasIndex(e => e.Status).IsUnique();
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Number }).IsUnique();
@@ -77,6 +79,19 @@ namespace ServerApp.Data
                 new() { Id = Guid.NewGuid(), Name="User 1", Username="admin@mail.ru"},
                 new() { Id = Guid.NewGuid(), Name="User 2", Username="user@mail.ru"},
             ]);
+            #endregion
+
+            #region ApplicationStatuses
+
+            var appStatus1 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 1, Status = "В ожидании заполнения" };
+            var appStatus2 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 2, Status = "В ожидании оценки" };
+            var appStatus3 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 3, Status = "Одобрена" };
+            var appStatus4 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 4, Status = "Отклонена" };
+
             #endregion
 
             #region Tracks
@@ -1359,6 +1374,7 @@ namespace ServerApp.Data
 
             #endregion
             
+            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4]);
             builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);

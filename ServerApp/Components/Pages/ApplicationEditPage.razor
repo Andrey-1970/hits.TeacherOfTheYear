@@ -269,8 +269,8 @@
         toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
     }
 
-    void ChangeStatus()
+    async Task ChangeStatus()
     {
-        
+        await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
     }
 }

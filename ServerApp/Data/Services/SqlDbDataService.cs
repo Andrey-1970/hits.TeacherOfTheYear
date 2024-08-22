@@ -120,7 +120,8 @@ namespace ServerApp.Data.Services
                 {
                     Id = Guid.NewGuid(),
                     UserInfoId = user.Id,
-                    TrackId = model.SelectedTrackId.Value
+                    TrackId = model.SelectedTrackId.Value,
+                    ApplicationStatusId = context.ApplicationStatuses.FirstOrDefault(e => e.Number == 1)!.Id
                 };
 
                 user.Applications.Add(app);
@@ -155,7 +156,6 @@ namespace ServerApp.Data.Services
 
             await context.SaveChangesAsync();
 
-            // Сохранение данных таблиц
             List<Table> tables = model.Tables.Select(t => t.ToEntity()).ToList();
 
             foreach (var tbl in tables)
@@ -223,10 +223,62 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task SetCurrentUserApplicationStatusWaitingForReviewedAsync()
+        {
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
+
+            var app = user.Applications.FirstOrDefault();
+            if (app == null)
+            {
+                throw new InvalidOperationException("No application found for the current user.");
+            }
+
+            var track = app.Track;
+            if (track == null)
+            {
+                throw new InvalidOperationException("No track found for the application.");
+            }
+
+            var editBlocks = track.EditBlocks;
+
+            foreach (var editBlock in editBlocks)
+            {
+                var editBlockStatus = await context.EditBlockStatuses
+                    .FirstOrDefaultAsync(e => e.ApplicationId == app.Id && e.EditBlockId == editBlock.Id);
+
+                if (editBlockStatus == null || !editBlockStatus.Status)
+                {
+                    throw new InvalidOperationException($"EditBlock with ID '{editBlock.Id}' does not have a valid status for this application.");
+                }
+            }
+
+            var newStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 2);
+            if (newStatus == null)
+            {
+                throw new InvalidOperationException("Application status with number 2 not found.");
+            }
+
+            app.ApplicationStatusId = newStatus.Id;
+            context.Update(app);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
         {
-            return await context.UserInfos.Select(e => new UserInfoModel(e)).ToArrayAsync();
-        }
+            var userInfos = await context.UserInfos
+                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 2))
+                .ToListAsync();
+
+            var userInfoModels = userInfos
+                .Where(e => e.Applications.First().ApplicationStatus.Number == 2)
+                .Select(e => new UserInfoModel(e))
+                .ToArray();
+
+            return userInfoModels;        }
         
         public async Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId)
         {
