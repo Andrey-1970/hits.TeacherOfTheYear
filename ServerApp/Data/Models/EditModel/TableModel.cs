@@ -15,8 +15,8 @@ public class TableModel
             throw new ArgumentNullException(nameof(table));
         Id = table.Id;
         Name = table.Name;
-        Columns = table.Columns.Select(c => new ColumnModel(c)).ToArray();
-        Rows = table.Rows.Select(r => new RowModel(r)).ToArray();
+        Columns = table.Columns.Select(c => new ColumnModel(c)).ToList();
+        Rows = table.Rows.Select(r => new RowModel(r)).ToList();
     }
 
     public Table ToEntity()
@@ -31,6 +31,6 @@ public class TableModel
     }
     public Guid Id { get; set; }
     public string? Name { get; set; }
-    public ColumnModel[] Columns { get; set; } = [];
-    public RowModel[] Rows { get; set; } = [];
+    public List<ColumnModel> Columns { get; set; } = [];
+    public List<RowModel> Rows { get; set; } = [];
 }

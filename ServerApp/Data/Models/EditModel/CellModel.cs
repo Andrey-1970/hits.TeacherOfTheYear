@@ -26,5 +26,7 @@ public class CellModel
         };
     }
     public Guid Id { get; set; }
+    public string? ValueType { get; set; }
+    public string?[] SelectValues { get; set; } = [];
     public string? Value { get; set; }
 }

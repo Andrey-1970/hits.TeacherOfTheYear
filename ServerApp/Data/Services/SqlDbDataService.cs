@@ -69,6 +69,20 @@ namespace ServerApp.Data.Services
             return editBlock!.Tables.OrderBy(x => x.Number).Select(t => new TableModel(t)).ToArray();
         }
 
+        public async Task<RowModel> GetRowModelAsync(Guid? tableId)
+        {
+            var table = await context.Tables.FirstOrDefaultAsync(e => e.Id == tableId);
+            return new RowModel()
+            {
+                Id = Guid.NewGuid(),
+                Cells = table.Columns.Select(e => new CellModel()
+                {
+                    Id = Guid.NewGuid(), ValueType = e.ValueType.Name,
+                    SelectValues = e.SelectValues.Select(e => e.Value).ToArray()
+                }).ToArray()
+            };
+        }
+
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
             var user = await auth.GetUserAsync();
