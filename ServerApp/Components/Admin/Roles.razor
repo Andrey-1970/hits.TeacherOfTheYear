@@ -9,68 +9,125 @@
 @inject RoleManager<IdentityRole> roleManager
 @inject UserManager<ApplicationUser> userManager
 
-<Card>
+<Card class="mb-3">
     <CardHeader>Пользователи</CardHeader>
     <CardBody>
-        <Grid @ref="userGrid"
-              TItem="ApplicationUser"
-              Class="table table-hover table-bordered table-striped"
-              DataProvider="ApplicationUserDataProvider"
-              SelectedItemsChanged="OnSelectedUserChanged"
-              AllowSelection="true"
-              AllowFiltering="true"
-              Responsive="true">
-
-            <GridColumn TItem="ApplicationUser" HeaderText="Email" PropertyName="Email">
-                @context.Email
-            </GridColumn>
-        </Grid>
+        <div class="table-container">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in userManager.Users)
+                    {
+                        <tr>
+                            <td class="d-flex justify-content-between p-3">
+                                @user.Email
+                                <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => ShowEditUserModal(user)" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </CardBody>
 </Card>
 
-<Card>
+<Card class="mb-3">
     <CardHeader>Роли</CardHeader>
     <CardBody>
-        <Grid @ref="roleGrid"
-              TItem="IdentityRole"
-              Class="table table-hover table-bordered table-striped"
-              DataProvider="RoleDataProvider"
-              SelectedItemsChanged="OnSelectedRoleChanged"
-              AllowSelection="true"
-              AllowFiltering="true"
-              Responsive="true">
-
-            <GridColumn TItem="IdentityRole" HeaderText="Name" PropertyName="Name">
-                @context.Name
-            </GridColumn>
-        </Grid>
+        <div class="table-container">
+            <table class="table table-hover table-bordered table-striped">
+                <tbody>
+                    @foreach (var role in roleManager.Roles)
+                    {
+                        <tr>
+                            <td class="d-flex justify-content-between p-3">
+                                @role.Name
+                                <Icon Color="IconColor.Secondary" Name="IconName.GearFill" type="button" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </CardBody>
 </Card>
 
-@foreach (var role in selectedUserRoles)
-{
-    <p>@role</p>
-}
-<div class="d-block gap-2">
-    <InputText @bind-Value="newRole" />
+<Modal @ref="modal" IsVerticallyCentered="true">
+    <HeaderTemplate>
+        <h5>Настройка ролей для @selectedUser?.Email</h5>
+    </HeaderTemplate>
+    <BodyTemplate>
+        <div class="d-flex flex-column gap-2">
+            <h6>Роли пользователя:</h6>
+            @if (selectedUserRoles.Any())
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered">
+                        <tbody>
+                            @foreach (var role in selectedUserRoles)
+                            {
+                                <tr>
+                                    <td class="d-flex justify-content-between p-2">
+                                        <span>@role</span>
+                                        <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveRoleFromUser(role)" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="d-flex justify-content-center">У пользователя нет ролей.</p>
+            }
+
+            <h6>Добавить новую роль:</h6>
+            @if (availableRoles != null && availableRoles.Any())
+            {
+                <select class="form-select" @bind="selectedRoleToAdd">
+                    <option value="" disabled selected hidden>Выберите роль</option>
+                    @foreach (var role in availableRoles)
+                    {
+                        <option value="@role.Name">@role.Name</option>
+                    }
+                </select>
+
+                <Button Color="ButtonColor.Primary" @onclick="AddRoleToUser">Добавить роль</Button>
+            }
+            else
+            {
+                <p class="d-flex justify-content-center">Нет доступных ролей.</p>
+            }
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Success" @onclick="SaveUserRoles">Сохранить</Button>
+    </FooterTemplate>
+</Modal>
+
+<div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+    <InputText class="form-control w-25" @bind-Value="newRole" placeholder="Введите имя роли" />
     <Button Color="ButtonColor.Primary" @onclick="CreateRole">Создать роль</Button>
 </div>
-<div class="d-block gap-2">
-    <Button Color="ButtonColor.Primary" @onclick="AddRole">Добавить пользователю роль</Button>
-    <Button Color="ButtonColor.Primary" @onclick="RemoveRole">Убрать у пользователя роль</Button>
-</div>
+
 @code {
-    Grid<ApplicationUser> userGrid = default!;
-    Grid<IdentityRole> roleGrid = default!;
     IEnumerable<IdentityRole> roles = [];
+    IEnumerable<IdentityRole> availableRoles = [];
     IEnumerable<ApplicationUser> users = [];
 
     ApplicationUser selectedUser = new();
     IEnumerable<string> selectedUserRoles = [];
+    string? selectedRoleToAdd;
 
     IdentityRole selectedRole = new();
 
-    string newRole = String.Empty;
+    private string newRole = String.Empty;
+    private Modal? modal;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,42 +141,50 @@
         await roleManager.CreateAsync(new(newRole));
     }
 
-    async Task AddRole()
+    private async Task ShowEditUserModal(ApplicationUser user)
     {
-        if (selectedRole.Name != null)
+        selectedUser = user;
+        selectedUserRoles = await userManager.GetRolesAsync(user);
+
+        availableRoles = roles.Where(role => !selectedUserRoles.Contains(role.Name));
+        selectedRoleToAdd = null;
+
+        if (modal != null)
         {
-            await userManager.AddToRoleAsync(selectedUser, selectedRole.Name);
+            await modal.ShowAsync();
         }
     }
 
-    async Task RemoveRole()
+    private async Task AddRoleToUser()
     {
-        if (selectedRole.Name != null)
+        if (!string.IsNullOrEmpty(selectedRoleToAdd) && !selectedUserRoles.Contains(selectedRoleToAdd))
         {
-            await userManager.RemoveFromRoleAsync(selectedUser, selectedRole.Name);
+            await Task.Run(() => { selectedUserRoles = selectedUserRoles.Append(selectedRoleToAdd); });
         }
     }
 
-    async Task<GridDataProviderResult<ApplicationUser>> ApplicationUserDataProvider(GridDataProviderRequest<ApplicationUser> request)
+    private async Task RemoveRoleFromUser(string role)
     {
-        return await Task.FromResult(request.ApplyTo(users));
+        await Task.Run(() => { selectedUserRoles = selectedUserRoles.Where(r => r != role); });
     }
 
-    async Task OnSelectedUserChanged(HashSet<ApplicationUser> users)
+    private async Task SaveUserRoles()
     {
-        selectedUser = users != null ? users.First() : new();
-        selectedUserRoles = await userManager.GetRolesAsync(selectedUser);
-        return;
-    }
+        var currentRoles = await userManager.GetRolesAsync(selectedUser);
+        var rolesToRemove = currentRoles.Except(selectedUserRoles).ToList();
+        var rolesToAdd = selectedUserRoles.Except(currentRoles).ToList();
 
-    async Task<GridDataProviderResult<IdentityRole>> RoleDataProvider(GridDataProviderRequest<IdentityRole> request)
-    {
-        return await Task.FromResult(request.ApplyTo(roles));
-    }
+        if (rolesToRemove.Any())
+        {
+            await userManager.RemoveFromRolesAsync(selectedUser, rolesToRemove);
+        }
+        if (rolesToAdd.Any())
+        {
+            await userManager.AddToRolesAsync(selectedUser, rolesToAdd);
+        }
 
-    Task OnSelectedRoleChanged(HashSet<IdentityRole> roles)
-    {
-        selectedRole = roles != null ? roles.First() : new();
-        return Task.CompletedTask;
+        await modal!.HideAsync();
+
+        selectedRoleToAdd = null;
     }
 }
