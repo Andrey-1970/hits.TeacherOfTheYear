@@ -10,11 +10,15 @@
         <div class="block-title-text">
             Заполните заявку для участия
         </div>
-        <Button Type="ButtonType.Button"
-                Color="ButtonColor.Success"
-                @onclick="ChangeStatus">
-            Отправить заявку
-        </Button>
+        @if (model is not null)
+        {
+            <Button Type="ButtonType.Button"
+                    Color="ButtonColor.Success"
+                    Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty"
+                    @onclick="ChangeStatus">
+                Отправить заявку
+            </Button>
+        }
         @* <Button Disabled="!IsAllFormsComplete">
             Отправить заявку
         </Button> *@
@@ -302,6 +306,6 @@
 
     async Task ChangeStatus()
     {
-await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
+        await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
     }
 }
