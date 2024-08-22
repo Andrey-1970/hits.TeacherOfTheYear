@@ -10,7 +10,6 @@ namespace ServerApp.Data.Interfaces
         Task<EditModel> GetCurrentUserEditModelAsync();
         Task<IEnumerable<TrackModel>> GetTrackModelsAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
-        Task<EditBlockStatusModel[]> GetEditBlockStatusModelsAsync();
         Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId);
         Task<TableModel[]> GetTableModelsForEditBlockAsync(Guid? editBlockId);
         Task SaveApplicationFormFromEditModelAsync(EditModel model);

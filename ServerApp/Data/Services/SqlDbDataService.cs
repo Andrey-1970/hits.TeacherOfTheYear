@@ -45,19 +45,6 @@ namespace ServerApp.Data.Services
 
             return editBlocks;
         }
-
-        public async Task<EditBlockStatusModel[]> GetEditBlockStatusModelsAsync()
-        {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
-
-            return (user.Applications.FirstOrDefault()?.EditBlockStatusList.Select(e => new EditBlockStatusModel(e)) ??
-                    []).ToArray();
-        }
-
         public async Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId)
         {
             var user = await auth.GetUserAsync();
@@ -190,7 +177,7 @@ namespace ServerApp.Data.Services
                 context.EditBlockStatuses.Add(new EditBlockStatus()
                 {
                     Id = Guid.NewGuid(), EditBlockId = model.SelectedEditBlockId!.Value,
-                    ApplicationId = model.ApplicationId, Status = true
+                    ApplicationId = app.Id, Status = true
                 });
             }
 
