@@ -81,6 +81,10 @@
                                                     {
                                                         <th>@column.Name</th>
                                                     }
+                                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                                    {
+                                                        <th></th>
+                                                    }
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -90,10 +94,15 @@
                                                         @foreach (var cell in row.Cells)
                                                         {
                                                             <td>
-                                                                <div class="form-input w-100 mb-3">
-                                                                    <ValidationMessage For="() => cell.Value" />
+                                                                <div class="form-input w-100">
                                                                     <InputText class="form-control" @bind-Value="cell.Value" />
                                                                 </div>
+                                                            </td>
+                                                        }
+                                                        @if (table.Name != "Персональные идентификаторы и показатели")
+                                                        {
+                                                            <td style="width: 50px;">
+                                                                <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="scale: 1.5;" @onclick="() => DeleteRow(table, row)" type="button" />
                                                             </td>
                                                         }
                                                     </tr>
@@ -102,7 +111,10 @@
                                             </table>
                                         }
                                     </div>
-                                    <Icon Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
+                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                    {
+                                        <Icon Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
+                                    }
                                 </div>
                             }
 
@@ -160,6 +172,27 @@
         InitializeEditContext(model);
     }
 
+    async Task AddRow(TableModel table)
+    {
+        var row = await data.GetRowModelAsync(table.Id);
+        var targetTable = model!.Tables.FirstOrDefault(e => e == table);
+        if (targetTable != null)
+        {
+            targetTable.Rows.Add(row);
+        }
+        InitializeEditContext(model);
+    }
+
+    void DeleteRow(TableModel table, RowModel row)
+    {
+        var targetTable = model!.Tables.FirstOrDefault(e => e == table);
+        if (targetTable != null)
+        {
+            targetTable.Rows.Remove(row);
+        }
+        InitializeEditContext(model);
+    }
+
     void InitializeEditContext(EditModel model)
     {
         editContext = new(model);
@@ -170,10 +203,17 @@
 
     void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
     {
-        var fld = ((FieldModel)e.FieldIdentifier.Model);
-        messageStore!.Clear(() => fld.Value!);
-        CheckField(fld);
-        editContext!.NotifyValidationStateChanged();
+        if (e.FieldIdentifier.Model is FieldModel fld)
+        {
+            messageStore?.Clear(() => fld.Value!);
+            CheckField(fld);
+        }
+        if (e.FieldIdentifier.Model is CellModel cell)
+        {
+            messageStore?.Clear(() => cell.Value!);
+            CheckCell(cell);
+        }
+        editContext?.NotifyValidationStateChanged();
     }
 
     void HandleValidationRequested(object? sender, ValidationRequestedEventArgs e)
@@ -182,6 +222,16 @@
         foreach (var fld in model!.Fields)
         {
             CheckField(fld);
+        }
+        foreach (var table in model!.Tables)
+        {
+            foreach (var row in table.Rows)
+            {
+                foreach (var cell in row.Cells)
+                {
+                    CheckCell(cell);
+                }
+            }
         }
         editContext!.NotifyValidationStateChanged();
     }
@@ -198,31 +248,24 @@
         }
     }
 
+    void CheckCell(CellModel cell)
+    {
+        if (string.IsNullOrEmpty(cell.Value))
+        {
+            messageStore!.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
+        }
+        else if (cell.ValueType == "int" && !Int32.TryParse(cell.Value, out _))
+        {
+            messageStore!.Add(() => cell.Value!, $"Поле таблицы должно содержать число.");
+        }
+    }
+
     async Task Submit()
     {
-        await data.SaveApplicationFormFromEditModelAsync(model!);
-        model.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId)!.Status = true; //todo: костыль
+        //await data.SaveApplicationFormFromEditModelAsync(model!);
+        model!.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId)!.Status = true; //todo: костыль
         await js.InvokeVoidAsync("scrollToTop");
         toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
-    }
-
-    async Task AddRow(TableModel table)
-    {
-        var row = await data.GetRowModelAsync(table.Id);
-        var targetTable = model.Tables.FirstOrDefault(e => e == table);
-        if (targetTable != null)
-        {
-            targetTable.Rows.Add(row);
-        }
-    }
-
-    async Task DeleteRow(TableModel table, RowModel row)
-    {
-        var targetTable = model.Tables.FirstOrDefault(e => e == table);
-        if (targetTable != null)
-        {
-            targetTable.Rows.Remove(row);
-        }
     }
 
     void ChangeStatus()
