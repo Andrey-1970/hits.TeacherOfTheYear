@@ -8,5 +8,6 @@ namespace ServerApp.Data.Entities
         [MaxLength(255)] public string? Name { get; set; }
         [MaxLength(255)] public string? Username { get; set; }
         public virtual List<ApplicationForm> Applications { get; set; } = [];
+        public virtual List<BlockReviewStatus> ReviewedBlocks { get; set; } = [];
     }
 }

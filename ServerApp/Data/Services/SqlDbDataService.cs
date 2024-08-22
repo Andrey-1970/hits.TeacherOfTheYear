@@ -3,6 +3,7 @@ using ServerApp.Components;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.ReviewModel;
 
 namespace ServerApp.Data.Services
 {
@@ -32,7 +33,7 @@ namespace ServerApp.Data.Services
             return track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)) ?? [];
         }
 
-        public async Task<FieldModel[]> GetFieldModelsAsync(Guid? editBlockId)
+        public async Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId)
         {
             var user = await auth.GetUserAsync();
             if (user == null)
@@ -49,7 +50,7 @@ namespace ServerApp.Data.Services
             return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
 
-        public async Task<TableModel[]> GetTableModelsAsync(Guid? editBlockId)
+        public async Task<TableModel[]> GetTableModelsForEditBlockAsync(Guid? editBlockId)
         {
             var editBlock = await context.EditBlocks.Include(editBlock => editBlock.Tables)
                 .FirstOrDefaultAsync(e => e.Id == editBlockId);
@@ -156,6 +157,60 @@ namespace ServerApp.Data.Services
             }
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
+        {
+            return await context.UserInfos.Select(e => new UserInfoModel(e)).ToArrayAsync();
+        }
+        
+        public async Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId)
+        {
+            var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfoId == userInfoId) ?? new();
+            return await Task.FromResult(new MarkModel(application));
+        }
+        
+        public async Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId)
+        {
+            var track = await context.Tracks.Include(track => track.MarkBlocks)
+                .FirstOrDefaultAsync(x => x.Id == trackId);
+            return track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ?? [];
+        }
+        
+        public async Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId)
+        {
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
+
+            var editBlock = await context.MarkBlocks
+                .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
+                .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
+                .Include(e => e.Fields).ThenInclude(e => e.ValueType)
+                .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
+                .FirstOrDefaultAsync(e => e.Id == markBlockId);
+            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
+        }
+        
+        public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId)
+        {
+            var markBlock = await context.MarkBlocks.Include(markBlock => markBlock.Tables)
+                .FirstOrDefaultAsync(e => e.Id == markBlockId);
+            return markBlock!.Tables.OrderBy(x => x.Number).Select(t => new TableModel(t)).ToArray();
+        }
+
+        public async Task<ReviewBlockModel> GetReviewBlockModelAsync(Guid markBlockId)
+        {
+            var user = await auth.GetUserAsync();
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User unauthorized.");
+            }
+            
+            return new ReviewBlockModel(user.Applications.First().BlockReviewStatusList
+                .FirstOrDefault(e => e.MarkBlockId == markBlockId));
         }
     }
 }

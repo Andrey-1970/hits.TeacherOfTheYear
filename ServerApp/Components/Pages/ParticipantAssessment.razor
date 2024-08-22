@@ -94,7 +94,7 @@
         if (model == null || blockId == Guid.Empty) return;
 
         model.SelectedEditBlockId = blockId;
-        model.Fields = await data.GetFieldModelsAsync(blockId);
-        model.Tables = await data.GetTableModelsAsync(blockId);
+        model.Fields = await data.GetFieldModelsForEditBlockAsync(blockId);
+        model.Tables = await data.GetTableModelsForEditBlockAsync(blockId);
     }
 }

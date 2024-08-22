@@ -1,8 +1,7 @@
 ﻿@page "/review/application/{Id}"
-@using ServerApp.Data.Models.EditModel
+@using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
-@inject ToastService toastService
 
 <div class="block">
     <div class="block-title">
@@ -14,7 +13,7 @@
     {
         <div class="form-text"><strong>Выбранный трек:</strong> <span style="opacity: 0.7;">@model.SelectedTrackId</span></div>
         <div class="block-content-text">
-            <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
+            <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
         </div>
         <div class="block-content">
             @if (model.Fields is not null && model.Fields.Any())
@@ -68,19 +67,19 @@
                 </div>
             }
         }
-        @* <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
+        <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                 Блок проверен?
-                <Switch Style="scale: 1.2; margin-right: 7px;" Value="@BlockStatus" ValueExpression="() => BlockStatus" ValueChanged="(value) => OnValueChanged(value, Comment)" Reverse="true" />
+                <Switch Style="scale: 1.2; margin-right: 7px;" Value="@BlockStatus" ValueExpression="() => BlockStatus" ValueChanged="(value) => null" Reverse="true" />
             </div>
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                 Комментарий к блоку:
                 <div class="form-input w-75">
-                    <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="(value) => OnValueChanged(BlockStatus, value)" Placeholder="Укажите поля, заполненные некорректно, если таковые имеются." />
+                    <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="(value) => null" Placeholder="Укажите поля, заполненные некорректно, если таковые имеются." />
                 </div>
             </div>
-        </div> *@
+        </div>
     }
     else
     {
@@ -94,21 +93,35 @@
     [Parameter]
     public string? Id { get; set; }
 
-    EditModel? model;
+    MarkModel? model;
+    bool BlockStatus;
+    string? Comment;
 
     protected override async Task OnInitializedAsync()
     {
-        model = await data.GetCurrentUserEditModelAsync();
-        model.EditBlocks = await data.GetEditBlockModelsAsync(model.SelectedTrackId);
-        await OnBlockIdChanged(model.EditBlocks.First().Id);
+        if (Id == null || !Guid.TryParse(Id, out Guid userId))
+        {
+            return;
+        }
+        model = await data.GetUserMarkModelAsync(userId);
+        if (model?.SelectedTrackId != null)
+        {
+            model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+            await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
+            BlockStatus = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.ReviewStatus ?? false;
+            Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.Commentary ?? string.Empty;
+        }
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
     {
-        if (model == null || blockId == Guid.Empty) return;
+        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
-        model.SelectedEditBlockId = blockId;
-        model.Fields = await data.GetFieldModelsAsync(blockId);
-        model.Tables = await data.GetTableModelsAsync(blockId);
+        model.SelectedMarkBlockId = blockId.Value;
+        BlockStatus = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.ReviewStatus ?? false;
+        Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.Commentary ?? string.Empty;
+        
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId.Value);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId.Value);
     }
 }
