@@ -13,6 +13,7 @@ namespace ServerApp.Data.Interfaces
         Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId);
         Task<TableModel[]> GetTableModelsForEditBlockAsync(Guid? editBlockId);
         Task<RowModel> GetRowModelAsync(Guid? tableId);
+        Task DeleteRowAsync(Guid rowId);
         Task SaveApplicationFormFromEditModelAsync(EditModel model);
         Task<UserInfoModel[]> GetUserInfosModelsAsync();
         Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId);

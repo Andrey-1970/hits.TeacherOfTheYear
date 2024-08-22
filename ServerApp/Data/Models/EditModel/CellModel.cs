@@ -15,6 +15,7 @@ public class CellModel
             throw new ArgumentNullException(nameof(cell));
         Id = cell.Id;
         Value = cell.Value;
+        ColumnId = cell.ColumnId;
     }
 
     public CellVal ToEntity()
@@ -22,11 +23,13 @@ public class CellModel
         return new CellVal()
         {
             Id = this.Id,
-            Value = this.Value
+            Value = this.Value,
+            ColumnId = this.ColumnId
         };
     }
     public Guid Id { get; set; }
     public string? ValueType { get; set; }
     public string?[] SelectValues { get; set; } = [];
     public string? Value { get; set; }
+    public Guid ColumnId { get; set; }
 }

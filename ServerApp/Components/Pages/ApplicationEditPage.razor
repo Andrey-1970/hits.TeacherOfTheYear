@@ -183,11 +183,12 @@
         InitializeEditContext(model);
     }
 
-    void DeleteRow(TableModel table, RowModel row)
+    async Task DeleteRow(TableModel table, RowModel row)
     {
         var targetTable = model!.Tables.FirstOrDefault(e => e == table);
         if (targetTable != null)
         {
+            await data.DeleteRowAsync(row.Id);
             targetTable.Rows.Remove(row);
         }
         InitializeEditContext(model);
@@ -262,7 +263,7 @@
 
     async Task Submit()
     {
-        //await data.SaveApplicationFormFromEditModelAsync(model!);
+        await data.SaveApplicationFormFromEditModelAsync(model!);
         model!.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId)!.Status = true; //todo: костыль
         await js.InvokeVoidAsync("scrollToTop");
         toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));

@@ -78,9 +78,17 @@ namespace ServerApp.Data.Services
                 Cells = table.Columns.Select(e => new CellModel()
                 {
                     Id = Guid.NewGuid(), ValueType = e.ValueType.Name,
-                    SelectValues = e.SelectValues.Select(e => e.Value).ToArray()
+                    SelectValues = e.SelectValues.Select(e => e.Value).ToArray(),
+                    ColumnId = e.Id
                 }).ToArray()
             };
+        }
+
+        public async Task DeleteRowAsync(Guid rowId)
+        {
+            var row = await context.Rows.FirstOrDefaultAsync(e => e.Id == rowId);
+            context.Rows.Remove(row);
+            await context.SaveChangesAsync();
         }
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
@@ -145,15 +153,21 @@ namespace ServerApp.Data.Services
                 }
             }
 
+            await context.SaveChangesAsync();
+
+            // Сохранение данных таблиц
             List<Table> tables = model.Tables.Select(t => t.ToEntity()).ToList();
+
             foreach (var tbl in tables)
             {
                 foreach (var row in tbl.Rows)
                 {
                     row.TableId = tbl.Id;
 
-                    var existingRow = await context.Rows.FindAsync(row.Id);
-                    if (existingRow == null)
+                    var existingRow = await context.Rows
+                        .FirstOrDefaultAsync(r => r.Id == row.Id && r.TableId == row.TableId);
+
+                    if(existingRow == null)
                     {
                         context.Rows.Add(row);
                     }
@@ -165,24 +179,35 @@ namespace ServerApp.Data.Services
 
                     foreach (var cell in row.CellVals)
                     {
+                        if(app == null)
+                        {
+                            throw new InvalidOperationException("ApplicationForm is null.");
+                        }
+
+                        if(cell == null)
+                        {
+                            throw new InvalidOperationException("CellVal instance is null.");
+                        }
+
                         cell.ApplicationId = app.Id;
                         cell.RowId = row.Id;
 
-                        var existingCellVal = await context.CellVals.FindAsync(cell.Id);
-                        if (existingCellVal == null)
+                        var existingCellVal = await context.CellVals
+                            .FirstOrDefaultAsync(c => c.Id == cell.Id && c.RowId == cell.RowId && c.ApplicationId == cell.ApplicationId);
+
+                        if(existingCellVal == null)
                         {
                             context.CellVals.Add(cell);
                         }
                         else
                         {
+                            existingCellVal.ColumnId = cell.ColumnId;
                             existingCellVal.Value = cell.Value;
                             context.CellVals.Update(existingCellVal);
                         }
                     }
                 }
             }
-            
-            
             await context.SaveChangesAsync();
             var editBlockStatus = context.EditBlockStatuses.FirstOrDefault(e =>
                 e.EditBlockId == model.SelectedEditBlockId!.Value && e.ApplicationId == model.ApplicationId);
