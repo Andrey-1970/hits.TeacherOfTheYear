@@ -883,7 +883,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 14,
-                Name = "Название конкрусной работы",
+                Name = "Название конкурсной работы",
                 Placeholder = "Введите название своей конкурсной работы",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
@@ -892,8 +892,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 15,
-                Name = "Ученое звание",
-                Placeholder = "Выберите ученое звание",
+                Name = "Ссылка на конкурсную работу",
+                Placeholder = "Введите ссылку своей конкурсной работы",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -901,8 +901,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 16,
-                Name = "Ученая степень",
-                Placeholder = "Выберите ученую степень",
+                Name = "Ученое звание",
+                Placeholder = "Выберите ученое звание",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -910,8 +910,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 17,
-                Name = "Научная специальность (по классификации ВАК)",
-                Placeholder = "Введите научную специальность (по классификации ВАК)",
+                Name = "Ученая степень",
+                Placeholder = "Выберите ученую степень",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -919,18 +919,18 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 18,
-                Name = "Защитившиеся кадидаты наук",
-                Placeholder = "Введите количество",
-                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
-                ValueTypeId = valType1.Id,
-                EditBlockId = editBlk4.Id
+                Name = "Научная специальность (по классификации ВАК)",
+                Placeholder = "Введите научную специальность (по классификации ВАК)",
+                ValueTypeId = valType2.Id,
+                EditBlockId = editBlk2.Id
             };
             var fld19 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
-                Name = "Защитившиеся доктора наук",
+                Name = "Защитившиеся кадидаты наук",
                 Placeholder = "Введите количество",
+                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -938,9 +938,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
-                Name = "Защитившиеся бакалавры",
+                Name = "Защитившиеся доктора наук",
                 Placeholder = "Введите количество",
-                EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -948,8 +947,9 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
-                Name = "Защитившиеся специалисты",
+                Name = "Защитившиеся бакалавры",
                 Placeholder = "Введите количество",
+                EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -957,7 +957,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 22,
-                Name = "Защитившиеся магистры",
+                Name = "Защитившиеся специалисты",
                 Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
@@ -966,16 +966,25 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 23,
+                Name = "Защитившиеся магистры",
+                Placeholder = "Введите количество",
+                ValueTypeId = valType1.Id,
+                EditBlockId = editBlk4.Id
+            };
+            var fld24 = new Field()
+            {
+                Id = Guid.NewGuid(),
+                Number = 24,
                 Name = "Защитившиеся кандидаты наук",
                 Placeholder = "Введите количество",
                 EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk5.Id
             };
-            var fld24 = new Field()
+            var fld25 = new Field()
             {
                 Id = Guid.NewGuid(),
-                Number = 24,
+                Number = 25,
                 Name = "Защитившиеся доктора наук",
                 Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
@@ -1044,19 +1053,19 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Value = "Нет",
-                FieldId = fld15.Id
+                FieldId = fld16.Id
             };
             var slctVall10 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Доцент",
-                FieldId = fld15.Id
+                FieldId = fld16.Id
             };
             var slctVall11 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Профессор",
-                FieldId = fld15.Id
+                FieldId = fld16.Id
             };
             var slctVall12 = new SelectValue()
             {
@@ -1180,21 +1189,21 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
-                FieldId = fld22.Id
+                FieldId = fld23.Id
             };
             var mark4 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld18.Id
+                FieldId = fld19.Id
             };
             var mark5 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld19.Id
+                FieldId = fld20.Id
             };
             var mark6 = new Mark()
             {
@@ -1251,7 +1260,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Баллы за ученое звание:",
-                FieldId = fld15.Id
+                FieldId = fld16.Id
             };
             var mark14 = new Mark()
             {
@@ -1293,14 +1302,14 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld23.Id
+                FieldId = fld24.Id
             };
             var mark20 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld24.Id
+                FieldId = fld25.Id
             };
             var mark21 = new Mark()
             {
@@ -1376,10 +1385,10 @@ namespace ServerApp.Data
                 slctVall26, slctVall27, slctVall28
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
-                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24]);
+                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24, fld25]);
             builder.Entity<Mark>().HasData([
-                mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14, mark15, mark16, mark17,
-                mark18, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
+                mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
+                mark15, mark16, mark17, mark18, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
             ]);
 
             builder.Entity<Track>().HasMany(e => e.EditBlocks).WithMany(e => e.Tracks)
@@ -1442,19 +1451,20 @@ namespace ServerApp.Data
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld11.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld12.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld13.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld14.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld15.Id},
+                    new {MarkBlocksId = markBlk7.Id, FieldsId = fld14.Id},
+                    new {MarkBlocksId = markBlk7.Id, FieldsId = fld15.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id},
                     new {MarkBlocksId = markBlk1.Id, FieldsId = fld17.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld18.Id},
+                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld18.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld19.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld20.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld21.Id},
                     new {MarkBlocksId = markBlk2.Id, FieldsId = fld22.Id},
-                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld15.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld15.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld23.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id}
+                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld23.Id},
+                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld16.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld16.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id},
+                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld25.Id}
                 ]));
             builder.Entity<MarkBlock>().HasMany(e => e.Marks).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
