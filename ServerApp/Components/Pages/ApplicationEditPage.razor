@@ -158,8 +158,11 @@
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
-        model.Tracks = await data.GetTrackModelsAsync();
-        await OnTrackIdChanged(model.SelectedTrackId);
+        if (model != null)
+        {
+            model.Tracks = await data.GetTrackModelsAsync();
+            await OnTrackIdChanged(model.SelectedTrackId);
+        }
     }
 
     async Task OnTrackIdChanged(Guid? trackId)
@@ -169,7 +172,10 @@
         model.SelectedTrackId = trackId;
         model.EditBlocks = await data.GetEditBlockModelsAsync(trackId);
 
-        await OnBlockIdChanged(model.EditBlocks.First().Id);
+        if (model.EditBlocks.Any())
+        {
+            await OnBlockIdChanged(model.EditBlocks.First().Id);
+        }
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
@@ -185,24 +191,28 @@
 
     async Task AddRow(TableModel table)
     {
+        if (model == null || table == null) return;
+
         var row = await data.GetRowModelAsync(table.Id);
-        var targetTable = model!.Tables.FirstOrDefault(e => e == table);
+        var targetTable = model.Tables.FirstOrDefault(e => e == table);
         if (targetTable != null)
         {
             targetTable.Rows.Add(row);
+            InitializeEditContext(model);
         }
-        InitializeEditContext(model);
     }
 
     async Task DeleteRow(TableModel table, RowModel row)
     {
-        var targetTable = model!.Tables.FirstOrDefault(e => e == table);
+        if (model == null || table == null || row == null) return;
+
+        var targetTable = model.Tables.FirstOrDefault(e => e == table);
         if (targetTable != null)
         {
             await data.DeleteRowAsync(row.Id);
             targetTable.Rows.Remove(row);
+            InitializeEditContext(model);
         }
-        InitializeEditContext(model);
     }
 
     void InitializeEditContext(EditModel model)
@@ -220,7 +230,7 @@
             messageStore?.Clear(() => fld.Value!);
             CheckField(fld);
         }
-        if (e.FieldIdentifier.Model is CellModel cell)
+        else if (e.FieldIdentifier.Model is CellModel cell)
         {
             messageStore?.Clear(() => cell.Value!);
             CheckCell(cell);
@@ -230,33 +240,36 @@
 
     void HandleValidationRequested(object? sender, ValidationRequestedEventArgs e)
     {
-        messageStore!.Clear();
-        foreach (var fld in model!.Fields)
+        messageStore?.Clear();
+        if (model != null)
         {
-            CheckField(fld);
-        }
-        foreach (var table in model!.Tables)
-        {
-            foreach (var row in table.Rows)
+            foreach (var fld in model.Fields)
             {
-                foreach (var cell in row.Cells)
+                CheckField(fld);
+            }
+            foreach (var table in model.Tables)
+            {
+                foreach (var row in table.Rows)
                 {
-                    CheckCell(cell);
+                    foreach (var cell in row.Cells)
+                    {
+                        CheckCell(cell);
+                    }
                 }
             }
         }
-        editContext!.NotifyValidationStateChanged();
+        editContext?.NotifyValidationStateChanged();
     }
 
     void CheckField(FieldModel fld)
     {
         if (string.IsNullOrEmpty(fld.Value))
         {
-            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
+            messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
         }
         else if (fld.ValueType == "int" && !Int32.TryParse(fld.Value, out _))
         {
-            messageStore!.Add(() => fld.Value!, $"Поле '{fld.Name}' должно содержать число.");
+            messageStore?.Add(() => fld.Value, $"Поле '{fld.Name}' должно содержать число.");
         }
     }
 
@@ -264,20 +277,27 @@
     {
         if (string.IsNullOrEmpty(cell.Value))
         {
-            messageStore!.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
+            messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
         }
         else if (cell.ValueType == "int" && !Int32.TryParse(cell.Value, out _))
         {
-            messageStore!.Add(() => cell.Value!, $"Поле таблицы должно содержать число.");
+            messageStore?.Add(() => cell.Value, $"Поле таблицы должно содержать число.");
         }
     }
 
     async Task Submit()
     {
-        await data.SaveApplicationFormFromEditModelAsync(model!);
-        model!.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId)!.Status = true; //todo: костыль
-        await js.InvokeVoidAsync("scrollToTop");
-        toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
+        if (model != null)
+        {
+            await data.SaveApplicationFormFromEditModelAsync(model);
+            var selectedBlock = model.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId);
+            if (selectedBlock != null)
+            {
+                selectedBlock.Status = true; //todo: костыль
+            }
+            await js.InvokeVoidAsync("scrollToTop");
+            toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
+        }
     }
 
     void ChangeStatus()
