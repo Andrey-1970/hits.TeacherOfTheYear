@@ -70,13 +70,13 @@
         <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                 Блок проверен?
-                <Switch Style="scale: 1.2; margin-right: 7px;" Value="@BlockStatus" ValueExpression="() => BlockStatus" ValueChanged="(value) => null" Reverse="true" />
+                <Switch Style="scale: 1.2; margin-right: 7px;" @bind-Value="@BlockStatus" />
             </div>
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                 Комментарий к блоку:
                 <div class="form-input w-75">
-                    <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="(value) => null" Placeholder="Укажите поля, заполненные некорректно, если таковые имеются." />
+                    <InputTextArea class="form-control" @bind-Value="@Comment" />
                 </div>
             </div>
         </div>
@@ -108,8 +108,6 @@
         {
             model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
-            BlockStatus = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.ReviewStatus ?? false;
-            Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.Commentary ?? string.Empty;
         }
     }
 
@@ -117,11 +115,26 @@
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
+        var reviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
+        if (reviewedBlock != null)
+        {
+            reviewedBlock.ReviewStatus = BlockStatus;
+            reviewedBlock.Commentary = Comment;
+        }
+
+        BlockStatus = false;
+        Comment = string.Empty;
+
         model.SelectedMarkBlockId = blockId.Value;
-        BlockStatus = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.ReviewStatus ?? false;
-        Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.Commentary ?? string.Empty;
-        
-        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId.Value);
-        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId.Value);
+
+        var newReviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
+        if (newReviewedBlock != null)
+        {
+            BlockStatus = newReviewedBlock.ReviewStatus;
+            Comment = newReviewedBlock.Commentary;
+        }
+
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
     }
 }

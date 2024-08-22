@@ -1,5 +1,5 @@
 ﻿@page "/assessment/application/{Id}"
-@using ServerApp.Data.Models.EditModel
+@using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
 @inject ToastService toastService
@@ -13,7 +13,7 @@
     @if (model is not null)
     {
         <div class="block-content-text">
-            <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
+            <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
         </div>
         <div class="block-content">
             @if (model.Fields is not null && model.Fields.Any())
@@ -80,20 +80,31 @@
     [Parameter]
     public string? Id { get; set; }
 
-    EditModel? model;
+    MarkModel? model;
+    bool BlockStatus;
+    string? Comment;
 
     protected override async Task OnInitializedAsync()
     {
-        model = await data.GetCurrentUserEditModelAsync();
-        model.EditBlocks = await data.GetEditBlockModelsAsync(model.SelectedTrackId);
-        await OnBlockIdChanged(model.EditBlocks.First().Id);
+        if (Id == null || !Guid.TryParse(Id, out Guid userId))
+        {
+            return;
+        }
+        model = await data.GetUserMarkModelAsync(userId);
+        if (model?.SelectedTrackId != null)
+        {
+            model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+            await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
+            BlockStatus = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.ReviewStatus ?? false;
+            Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)?.Commentary ?? string.Empty;
+        }
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
     {
-        if (model == null || blockId == Guid.Empty) return;
+        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
-        model.SelectedEditBlockId = blockId;
+        model.SelectedMarkBlockId = blockId.Value;
         model.Fields = await data.GetFieldModelsForEditBlockAsync(blockId);
         model.Tables = await data.GetTableModelsForEditBlockAsync(blockId);
     }
