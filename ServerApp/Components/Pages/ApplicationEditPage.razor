@@ -76,37 +76,48 @@
                                         {
                                             <table class="table-stand">
                                                 <thead>
-                                                <tr>
-                                                    @foreach (var column in table.Columns)
-                                                    {
-                                                        <th>@column.Name</th>
-                                                    }
-                                                    @if (table.Name != "Персональные идентификаторы и показатели")
-                                                    {
-                                                        <th></th>
-                                                    }
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach (var row in table.Rows)
-                                                {
                                                     <tr>
-                                                        @foreach (var cell in row.Cells)
+                                                        @foreach (var column in table.Columns)
                                                         {
-                                                            <td>
-                                                                <div class="form-input w-100">
-                                                                    <InputText class="form-control" @bind-Value="cell.Value" />
-                                                                </div>
-                                                            </td>
+                                                            <th>@column.Name</th>
                                                         }
                                                         @if (table.Name != "Персональные идентификаторы и показатели")
                                                         {
-                                                            <td style="width: 50px;">
-                                                                <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="scale: 1.5;" @onclick="() => DeleteRow(table, row)" type="button" />
-                                                            </td>
+                                                            <th></th>
                                                         }
                                                     </tr>
-                                                }
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in table.Rows)
+                                                    {
+                                                        <tr>
+                                                            @foreach (var cell in row.Cells)
+                                                            {
+                                                                <td>
+                                                                    @if (cell.SelectValues is not null && cell.SelectValues.Any())
+                                                                    {
+                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                            <option value="@string.Empty" disabled selected hidden></option>
+                                                                            @foreach (var value in cell.SelectValues)
+                                                                            {
+                                                                                <option value="@value">@value</option>
+                                                                            }
+                                                                        </InputSelect>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <InputText class="form-control" @bind-Value="cell.Value" />
+                                                                    }
+                                                                </td>
+                                                            }
+                                                            @if (table.Name != "Персональные идентификаторы и показатели")
+                                                            {
+                                                                <td style="width: 50px;">
+                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="scale: 1.5;" @onclick="() => DeleteRow(table, row)" type="button" />
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
                                                 </tbody>
                                             </table>
                                         }
@@ -271,6 +282,6 @@
 
     void ChangeStatus()
     {
-        
+
     }
 }
