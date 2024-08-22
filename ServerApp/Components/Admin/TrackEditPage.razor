@@ -1,7 +1,6 @@
 ﻿@page "/admin/tracks/{Id:guid}"
 @page "/admin/tracks/new"
 
-@rendermode InteractiveServer
 @inject IAdminService data
 @inject NavigationManager navigation
 
@@ -24,7 +23,7 @@
                 <InputText class="form-control mb-3" placeholder="Введите название трека" @bind-Value="track.Name" />
             </div>
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-                <Button Color="ButtonColor.Primary" Type="ButtonType.Submit">Сохранить</Button>
+                <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
                 <a type="button" class="btn btn-secondary" href="/admin/tracks">Назад</a>
             </div>
         </EditForm>

@@ -6,6 +6,8 @@ namespace ServerApp.Data.Services
 {
     public class SqlDbAdminService(ApplicationDbContext context) : IAdminService
     {
+        #region Tracks
+
         public async Task<Track> GetTrackByIdAsync(Guid id)
         {
             return await Task.FromResult(context.Tracks.First(x => x.Id == id));
@@ -28,6 +30,10 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
+        #endregion
+
+        #region EditBlocks
+
         public async Task<EditBlock> GetEditBlockByIdAsync(Guid id)
         {
             return await Task.FromResult(context.EditBlocks.First(x => x.Id == id));
@@ -38,16 +44,44 @@ namespace ServerApp.Data.Services
             return await context.EditBlocks.ToArrayAsync();
         }
 
-        public async Task RemoveEditBlockAsync(EditBlock EditBlock)
+        public async Task RemoveEditBlockAsync(EditBlock editBlock)
         {
-            context.EditBlocks.Remove(EditBlock);
+            context.EditBlocks.Remove(editBlock);
             await context.SaveChangesAsync();
         }
 
-        public async Task SaveEditBlockAsync(EditBlock EditBlock)
+        public async Task SaveEditBlockAsync(EditBlock editBlock)
         {
-            context.EditBlocks.Attach(EditBlock);
+            context.EditBlocks.Attach(editBlock);
             await context.SaveChangesAsync();
         }
+
+        #endregion
+
+        #region MarkBlocks
+
+        public async Task<MarkBlock> GetMarkBlockByIdAsync(Guid id)
+        {
+            return await Task.FromResult(context.MarkBlocks.First(x => x.Id == id));
+        }
+
+        public async Task<IEnumerable<MarkBlock>> GetMarkBlocksAsync()
+        {
+            return await context.MarkBlocks.ToArrayAsync();
+        }
+
+        public async Task RemoveMarkBlockAsync(MarkBlock markBlock)
+        {
+            context.MarkBlocks.Remove(markBlock);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SaveMarkBlockAsync(MarkBlock markBlock)
+        {
+            context.MarkBlocks.Attach(markBlock);
+            await context.SaveChangesAsync();
+        }
+
+        #endregion
     }
 }

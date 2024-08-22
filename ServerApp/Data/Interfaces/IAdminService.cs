@@ -11,7 +11,12 @@ namespace ServerApp.Data.Interfaces
 
         Task<IEnumerable<EditBlock>> GetEditBlocksAsync();
         Task<EditBlock> GetEditBlockByIdAsync(Guid id);
-        Task SaveEditBlockAsync(EditBlock EditBlock);
-        Task RemoveEditBlockAsync(EditBlock EditBlock);
+        Task SaveEditBlockAsync(EditBlock editBlock);
+        Task RemoveEditBlockAsync(EditBlock editBlock);
+
+        Task<IEnumerable<MarkBlock>> GetMarkBlocksAsync();
+        Task<MarkBlock> GetMarkBlockByIdAsync(Guid id);
+        Task SaveMarkBlockAsync(MarkBlock markBlock);
+        Task RemoveMarkBlockAsync(MarkBlock markBlock);
     }
 }
