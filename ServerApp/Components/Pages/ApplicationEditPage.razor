@@ -113,7 +113,7 @@
                                                             @if (table.Name != "Персональные идентификаторы и показатели")
                                                             {
                                                                 <td style="width: 50px;">
-                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="() => DeleteRow(table, row)" type="button" />
+                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="async () => await DeleteRow(table, row)" type="button" />
                                                                 </td>
                                                             }
                                                         </tr>
