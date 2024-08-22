@@ -1,0 +1,128 @@
+﻿@page "/admin/users"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using ServerApp.Data
+
+@* @attribute [Authorize(Roles = "ADMIN, PARTICIPANT")] *@
+
+@inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+
+<PageTitle>Настройка пользователей</PageTitle>
+
+<div class="block">
+    <div class="block-content">
+        <Card class="w-100">
+            <CardHeader>Пользователи</CardHeader>
+            <CardBody>
+                <div class="table-container">
+                    <table class="table table-hover table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th class="p-2">Email</th>
+                                <th class="p-2">Роли</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in users)
+                            {
+                                <tr>
+                                    <td class="p-2">
+                                        @user.Email
+                                    </td>
+                                    <td class="d-flex justify-content-between p-2">
+                                        Роли пользователя
+                                        <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => ShowEditUserModal(user)" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </CardBody>
+        </Card>
+        <div class="d-flex justify-content-center">
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+    </div>
+</div>
+
+<Modal @ref="modal" IsVerticallyCentered="true">
+    <HeaderTemplate>
+        <h5>Настройка ролей для @selectedUser?.Email</h5>
+    </HeaderTemplate>
+    <BodyTemplate>
+        <div class="d-flex flex-column gap-2">
+            <h6>Выбрать роли:</h6>
+            @if (roles != null && roles.Any())
+            {
+                <div class="d-flex flex-column">
+                    @foreach (var role in roles)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="@role.Name" @bind="roleSelections[role.Name!]" />
+                            <label class="form-check-label" for="@role.Name">
+                                @role.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="d-flex justify-content-center">Нет доступных ролей.</p>
+            }
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Success" @onclick="SaveUserRoles">Сохранить</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    IEnumerable<IdentityRole> roles = [];
+    IEnumerable<ApplicationUser> users = [];
+
+    ApplicationUser selectedUser = new();
+    Dictionary<string, bool> roleSelections = new();
+
+    private Modal modal = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        roles = roleManager.Roles;
+        users = userManager.Users;
+    }
+
+    private async Task ShowEditUserModal(ApplicationUser user)
+    {
+        selectedUser = user;
+        var userRoles = await userManager.GetRolesAsync(user);
+        roleSelections = roles.ToDictionary(
+            role => role.Name!,
+            role => userRoles.Contains(role.Name!)
+        );
+
+        await modal.ShowAsync();
+    }
+
+    private async Task SaveUserRoles()
+    {
+        var currentRoles = await userManager.GetRolesAsync(selectedUser);
+        var rolesToRemove = currentRoles.Where(role => !roleSelections.TryGetValue(role, out var isSelected) || !isSelected).ToList();
+        var rolesToAdd = roleSelections.Where(kvp => kvp.Value && !currentRoles.Contains(kvp.Key)).Select(kvp => kvp.Key).ToList();
+
+        if (rolesToRemove.Any())
+        {
+            await userManager.RemoveFromRolesAsync(selectedUser, rolesToRemove);
+        }
+        if (rolesToAdd.Any())
+        {
+            await userManager.AddToRolesAsync(selectedUser, rolesToAdd);
+        }
+
+        await modal.HideAsync();
+    }
+}

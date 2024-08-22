@@ -1,190 +1,64 @@
-﻿@page "/admin/users"
+﻿@page "/admin/roles"
+
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using ServerApp.Data
 
-@rendermode InteractiveServer
-@attribute [Authorize(Roles="ADMIN, PARTICIPANT")]
-
 @inject RoleManager<IdentityRole> roleManager
-@inject UserManager<ApplicationUser> userManager
 
-<Card class="mb-3">
-    <CardHeader>Пользователи</CardHeader>
-    <CardBody>
-        <div class="table-container">
-            <table class="table table-hover table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in userManager.Users)
-                    {
-                        <tr>
-                            <td class="d-flex justify-content-between p-3">
-                                @user.Email
-                                <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => ShowEditUserModal(user)" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </CardBody>
-</Card>
+<PageTitle>Настройка ролей</PageTitle>
 
-<Card class="mb-3">
-    <CardHeader>Роли</CardHeader>
-    <CardBody>
-        <div class="table-container">
-            <table class="table table-hover table-bordered table-striped">
-                <tbody>
-                    @foreach (var role in roleManager.Roles)
-                    {
-                        <tr>
-                            <td class="d-flex justify-content-between p-3">
-                                @role.Name
-                                <Icon Color="IconColor.Secondary" Name="IconName.GearFill" type="button" />
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </CardBody>
-</Card>
-
-<Modal @ref="modal" IsVerticallyCentered="true">
-    <HeaderTemplate>
-        <h5>Настройка ролей для @selectedUser?.Email</h5>
-    </HeaderTemplate>
-    <BodyTemplate>
-        <div class="d-flex flex-column gap-2">
-            <h6>Роли пользователя:</h6>
-            @if (selectedUserRoles.Any())
-            {
+<div class="block">
+    <div class="block-content">
+        <Card class="w-100">
+            <CardHeader>Роли</CardHeader>
+            <CardBody>
                 <div class="table-container">
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered table-striped">
                         <tbody>
-                            @foreach (var role in selectedUserRoles)
+                            @foreach (var role in roleManager.Roles)
                             {
                                 <tr>
                                     <td class="d-flex justify-content-between p-2">
-                                        <span>@role</span>
-                                        <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveRoleFromUser(role)" />
+                                        @role.Name
+                                        <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveRole(role)" />
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-            }
-            else
-            {
-                <p class="d-flex justify-content-center">У пользователя нет ролей.</p>
-            }
-
-            <h6>Добавить новую роль:</h6>
-            @if (availableRoles != null && availableRoles.Any())
-            {
-                <select class="form-select" @bind="selectedRoleToAdd">
-                    <option value="" disabled selected hidden>Выберите роль</option>
-                    @foreach (var role in availableRoles)
-                    {
-                        <option value="@role.Name">@role.Name</option>
-                    }
-                </select>
-
-                <Button Color="ButtonColor.Primary" @onclick="AddRoleToUser">Добавить роль</Button>
-            }
-            else
-            {
-                <p class="d-flex justify-content-center">Нет доступных ролей.</p>
-            }
+            </CardBody>
+        </Card>
+        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+            <InputText class="form-control w-25" @bind-Value="newRole" placeholder="Введите имя роли" />
+            <Button Color="ButtonColor.Primary" @onclick="CreateRole">Создать роль</Button>
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
         </div>
-    </BodyTemplate>
-    <FooterTemplate>
-        <Button Color="ButtonColor.Success" @onclick="SaveUserRoles">Сохранить</Button>
-    </FooterTemplate>
-</Modal>
-
-<div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
-    <InputText class="form-control w-25" @bind-Value="newRole" placeholder="Введите имя роли" />
-    <Button Color="ButtonColor.Primary" @onclick="CreateRole">Создать роль</Button>
+    </div>
 </div>
 
 @code {
     IEnumerable<IdentityRole> roles = [];
-    IEnumerable<IdentityRole> availableRoles = [];
-    IEnumerable<ApplicationUser> users = [];
-
-    ApplicationUser selectedUser = new();
-    IEnumerable<string> selectedUserRoles = [];
-    string? selectedRoleToAdd;
-
-    IdentityRole selectedRole = new();
-
     private string newRole = String.Empty;
-    private Modal? modal;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         roles = roleManager.Roles;
-        users = userManager.Users;
     }
 
     async Task CreateRole()
     {
-        await roleManager.CreateAsync(new(newRole));
-    }
-
-    private async Task ShowEditUserModal(ApplicationUser user)
-    {
-        selectedUser = user;
-        selectedUserRoles = await userManager.GetRolesAsync(user);
-
-        availableRoles = roles.Where(role => !selectedUserRoles.Contains(role.Name));
-        selectedRoleToAdd = null;
-
-        if (modal != null)
+        if (newRole != String.Empty)
         {
-            await modal.ShowAsync();
+            await roleManager.CreateAsync(new(newRole));
+            newRole = String.Empty;
         }
     }
-
-    private async Task AddRoleToUser()
+    
+    async Task RemoveRole(IdentityRole role)
     {
-        if (!string.IsNullOrEmpty(selectedRoleToAdd) && !selectedUserRoles.Contains(selectedRoleToAdd))
-        {
-            await Task.Run(() => { selectedUserRoles = selectedUserRoles.Append(selectedRoleToAdd); });
-        }
-    }
-
-    private async Task RemoveRoleFromUser(string role)
-    {
-        await Task.Run(() => { selectedUserRoles = selectedUserRoles.Where(r => r != role); });
-    }
-
-    private async Task SaveUserRoles()
-    {
-        var currentRoles = await userManager.GetRolesAsync(selectedUser);
-        var rolesToRemove = currentRoles.Except(selectedUserRoles).ToList();
-        var rolesToAdd = selectedUserRoles.Except(currentRoles).ToList();
-
-        if (rolesToRemove.Any())
-        {
-            await userManager.RemoveFromRolesAsync(selectedUser, rolesToRemove);
-        }
-        if (rolesToAdd.Any())
-        {
-            await userManager.AddToRolesAsync(selectedUser, rolesToAdd);
-        }
-
-        await modal!.HideAsync();
-
-        selectedRoleToAdd = null;
+        await roleManager.DeleteAsync(role);
     }
 }

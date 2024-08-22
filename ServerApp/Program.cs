@@ -47,6 +47,7 @@ namespace ServerApp
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
+            builder.Services.AddScoped<IAdminService, SqlDbAdminService>();
             builder.Services.AddScoped<IAuthorization, AppAuthorization>();
 
             var app = builder.Build();
