@@ -1,0 +1,33 @@
+﻿@page "/admin/tracks"
+@rendermode InteractiveServer
+
+@inject IAdminService data
+
+<h3>Track Page</h3>
+@if (tracks != null)
+{
+    @foreach (var track in tracks)
+    {
+        <div>
+            <p>@track.Name</p>
+            <a href="/admin/tracks/@track.Id">Изменить</a>
+            <Button @onclick="async () => await RemoveTrack(track)">Удалить</Button>
+        </div>
+    }
+    <a href="/admin/tracks/new">Добавить</a>
+}
+
+@code {
+    IEnumerable<Track> tracks = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        tracks = await data.GetTracksAsync();
+    }
+    async Task RemoveTrack(Track track)
+    {
+        await data.RemoveTrackAsync(track);
+        StateHasChanged();
+    }
+}

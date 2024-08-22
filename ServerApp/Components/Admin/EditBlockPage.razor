@@ -1,0 +1,33 @@
+﻿@page "/admin/editblocks"
+@rendermode InteractiveServer
+
+@inject IAdminService data
+
+<h3>Edit block Page</h3>
+@if (blocks != null)
+{
+    @foreach (var block in blocks)
+    {
+        <div>
+            <p>@block.Name</p>
+            <a href="/admin/editblocks/@block.Id">Изменить</a>
+            <Button @onclick="async () => await RemoveBlock(block)">Удалить</Button>
+        </div>
+    }
+    <a href="/admin/editblocks/new">Добавить</a>
+}
+
+@code {
+    IEnumerable<EditBlock> blocks = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        blocks = await data.GetEditBlocksAsync();
+    }
+    async Task RemoveBlock(EditBlock block)
+    {
+        await data.RemoveEditBlockAsync(block);
+        StateHasChanged();
+    }
+}

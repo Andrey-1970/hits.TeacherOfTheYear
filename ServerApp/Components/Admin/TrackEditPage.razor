@@ -1,0 +1,39 @@
+﻿@page "/admin/tracks/{Id:guid}"
+@page "/admin/tracks/new"
+
+@rendermode InteractiveServer
+@inject IAdminService data
+@inject NavigationManager navigation
+
+<h3>TrackEditPage</h3>
+<EditForm Model="track" OnValidSubmit="OnValidSumbit">
+    <InputNumber @bind-Value="track.Number" />
+    <InputText @bind-Value="track.Name" />
+    <Button Color="ButtonColor.Primary" Type="ButtonType.Submit">Сохранить</Button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public Guid Id { set; get; }
+    Track track = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Id != Guid.Empty)
+        {
+            track = await data.GetTrackByIdAsync(Id);
+        }
+        else
+        {
+            track = new();
+        }
+    }
+
+    async Task OnValidSumbit()
+    {
+        await data.SaveTrackAsync(track);
+        navigation.NavigateTo("/admin/tracks");
+    }
+}

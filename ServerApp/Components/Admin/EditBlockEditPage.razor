@@ -1,0 +1,39 @@
+﻿@page "/admin/editblocks/{Id:guid}"
+@page "/admin/editblocks/new"
+
+@rendermode InteractiveServer
+@inject IAdminService data
+@inject NavigationManager navigation
+
+<h3>TrackEditPage</h3>
+<EditForm Model="block" OnValidSubmit="OnValidSumbit">
+    <InputNumber @bind-Value="block.Number" />
+    <InputText @bind-Value="block.Name" />
+    <Button Color="ButtonColor.Primary" Type="ButtonType.Submit">Сохранить</Button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public Guid Id { set; get; }
+    EditBlock block = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Id != Guid.Empty)
+        {
+            block = await data.GetEditBlockByIdAsync(Id);
+        }
+        else
+        {
+            block = new();
+        }
+    }
+
+    async Task OnValidSumbit()
+    {
+        await data.SaveEditBlockAsync(block);
+        navigation.NavigateTo("/admin/editblocks");
+    }
+}
