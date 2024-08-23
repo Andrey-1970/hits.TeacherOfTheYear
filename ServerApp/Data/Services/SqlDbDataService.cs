@@ -87,8 +87,11 @@ namespace ServerApp.Data.Services
         public async Task DeleteRowAsync(Guid rowId)
         {
             var row = await context.Rows.FirstOrDefaultAsync(e => e.Id == rowId);
-            context.Rows.Remove(row);
-            await context.SaveChangesAsync();
+            if (row != null)
+            {
+                context.Rows.Remove(row);
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
