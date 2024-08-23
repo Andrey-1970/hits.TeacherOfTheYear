@@ -19,7 +19,7 @@ namespace ServerApp.Data.Interfaces
         Task<UserInfoModel[]> GetUserInfosModelsAsync();
         Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId);
         Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId);
-        Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId);
-        Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId);
+        Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
+        Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
     }
 }

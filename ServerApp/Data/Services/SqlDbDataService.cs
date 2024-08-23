@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
 using ServerApp.Data.Entities;
@@ -296,12 +297,13 @@ namespace ServerApp.Data.Services
             return track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ?? [];
         }
         
-        public async Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId)
+        public async Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
-            var user = await auth.GetUserAsync();
+            var user = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
+                .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo;
             if (user == null)
             {
-                throw new UnauthorizedAccessException("User unauthorized.");
+                throw new InvalidOperationException("User does not exist.");
             }
 
             var editBlock = await context.MarkBlocks
@@ -313,11 +315,44 @@ namespace ServerApp.Data.Services
             return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
         
-        public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId)
+        public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
-            var markBlock = await context.MarkBlocks.Include(markBlock => markBlock.Tables)
-                .FirstOrDefaultAsync(e => e.Id == markBlockId);
-            return markBlock!.Tables.OrderBy(x => x.Number).Select(t => new TableModel(t)).ToArray();
+            var markBlock = await context.MarkBlocks
+                .Include(mb => mb.Tables)
+                .ThenInclude(t => t.Rows)
+                .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
+                .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
+                .FirstOrDefaultAsync(mb => mb.Id == markBlockId);
+
+            if (markBlock == null)
+            {
+                throw new InvalidOperationException("MarkBlock not found");
+            }
+
+            var tables = markBlock.Tables
+                .OrderBy(t => t.Number)
+                .Select(t => new TableModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Columns = t.Columns.Select(e => new ColumnModel(e)).ToList(),
+                    Rows = t.Rows
+                        .Where(r => r.CellVals.Any(cv => cv.ApplicationId == appId))
+                        .Select(r => new RowModel
+                        {
+                            Id = r.Id,
+                            Cells = r.CellVals
+                                .Where(cv => cv.ApplicationId == appId)
+                                .Select(cv => new CellModel
+                                {
+                                    Id = cv.Id,
+                                    Value = cv.Value,
+                                    ColumnId = cv.ColumnId
+                                }).ToArray()
+                        }).ToList()
+                }).ToArray();
+
+            return tables;
         }
 
         public async Task<ReviewBlockModel> GetReviewBlockModelAsync(Guid markBlockId)
