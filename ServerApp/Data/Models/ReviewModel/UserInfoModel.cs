@@ -15,14 +15,14 @@ public class UserInfoModel
         FullName = userInfo.Name;
         var phoneField = userInfo.Applications
             .SelectMany(app => app.FieldVals)
-            .FirstOrDefault(f => f.Field.Name == "Контактный телефон");
+            .FirstOrDefault(f => f.Field!.Name == "Контактный телефон");
         if (phoneField != null)
         {
             PhoneNumber = phoneField.Value;
         }
         var emailField = userInfo.Applications
             .SelectMany(app => app.FieldVals)
-            .FirstOrDefault(f => f.Field.Name == "Электронная почта");
+            .FirstOrDefault(f => f.Field!.Name == "Электронная почта");
         if (emailField != null)
         {
             Email = emailField.Value;

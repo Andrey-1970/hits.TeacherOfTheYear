@@ -11,74 +11,87 @@
     </div>
     @if (model is not null)
     {
-        <div class="form-text"><strong>Выбранный трек:</strong> <span style="opacity: 0.7;">@model.SelectedTrackId</span></div>
-        <div class="block-content-text">
-            <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
-        </div>
         <div class="block-content">
-            @if (model.Fields is not null && model.Fields.Any())
+            @if (model.SelectedTrackId != Guid.Empty)
             {
-                @foreach (var fld in model.Fields)
+                <div class="form-text">Выбранный трек: @model.SelectedTrackId</div>
+                <div class="block-content-text">
+                    <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
+                </div>
+                @if (model.MarkBlocks.First(e => e.Id == model.SelectedMarkBlockId).Name != "Итог")
                 {
-                    @if (!string.IsNullOrEmpty(fld.EditGroup))
+                    @if (model.Fields is not null && model.Fields.Any())
                     {
-                        <div class="block-subtitle-text">@fld.EditGroup</div>
+                        @foreach (var fld in model.Fields)
+                        {
+                            @if (!string.IsNullOrEmpty(fld.EditGroup))
+                            {
+                                <div class="block-subtitle-text">@fld.EditGroup</div>
+                            }
+                            <div class="row block-content-text border border-primary rounded m-0 mb-2">
+                                <div class="col border-end border-primary p-2">@fld.Name</div>
+                                <div class="col p-2">@fld.Value</div>
+                            </div>
+                        }
                     }
-                    <div class="form-text"><strong>@fld.Name:</strong> <span style="opacity: 0.7;">@fld.Value</span></div>
+                    @if (model.Tables is not null && model.Tables.Any())
+                    {
+                        @foreach (var table in model.Tables)
+                        {
+                            <div class="table-container mb-2">
+                                <div class="block-subtitle-text">@table.Name</div>
+                                @if (table.Rows is not null && table.Rows.Any())
+                                {
+                                    <table class="table-stand">
+                                        <thead>
+                                            <tr>
+                                                @foreach (var column in table.Columns)
+                                                {
+                                                    <th>@column.Name</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var row in table.Rows)
+                                            {
+                                                <tr>
+                                                    @foreach (var cell in row.Cells)
+                                                    {
+                                                        <td>@cell.Value</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-center w-100">
+                                        <div class="text-danger">Информация отсутствует</div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
+                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                            Блок проверен?
+                            <Switch Style="scale: 1.2; margin-right: 7px;" @bind-Value="@BlockStatus" />
+                        </div>
+
+                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                            Комментарий для участника:
+                            <div class="form-input w-75">
+                                <InputTextArea class="form-control" @bind-Value="@Comment" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div>Итоги проверки</div>
                 }
             }
-        </div>
-        @if (model.Tables is not null && model.Tables.Any())
-        {
-            @foreach (var table in model.Tables)
-            {
-                <div class="block-content">
-                    <div class="block-subtitle-text">@table.Name</div>
-                    @if (table.Rows is not null && table.Rows.Any())
-                    {
-                        <div class="table-container">
-                            <table class="table-stand">
-                                <thead>
-                                    <tr>
-                                        @foreach (var column in table.Columns)
-                                        {
-                                            <th>@column.Name</th>
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var row in table.Rows)
-                                    {
-                                        <tr>
-                                            @foreach (var cell in row.Cells)
-                                            {
-                                                <td>@cell.Value</td>
-                                            }
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-danger">Информация отсутствует</div>
-                    }
-                </div>
-            }
-        }
-        <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
-            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
-                Блок проверен?
-                <Switch Style="scale: 1.2; margin-right: 7px;" @bind-Value="@BlockStatus" />
-            </div>
-
-            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
-                Комментарий к блоку:
-                <div class="form-input w-75">
-                    <InputTextArea class="form-control" @bind-Value="@Comment" />
-                </div>
-            </div>
         </div>
     }
     else
@@ -97,7 +110,7 @@
     bool BlockStatus;
     string? Comment;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if (Id == null || !Guid.TryParse(Id, out Guid userId))
         {
@@ -107,6 +120,9 @@
         if (model?.SelectedTrackId != null)
         {
             model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+            // var newMarkBlocks = model.MarkBlocks.ToList();
+            // newMarkBlocks.Add(new MarkBlockModel { Id = Guid.NewGuid(), Name = "Проба" });
+            // model.MarkBlocks = newMarkBlocks.ToArray();
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
     }
