@@ -2,7 +2,8 @@
 @using ServerApp.Data.Models.EditModel
 
 @inject IDataService data
-@inject IJSRuntime js
+@inject IJSRuntime jsRuntime
+@inject NavigationManager nav
 @inject ToastService toastService
 
 <div class="block">
@@ -47,7 +48,7 @@
                                     <div class="block-subtitle-text">@fld.EditGroup</div>
                                 }
                                 <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
-                                <div class="form-input w-100 mb-3">
+                                <div class="form-input w-100 mb-2">
                                     <ValidationMessage For="() => fld.Value" />
                                     @if (fld.SelectValues is not null && fld.SelectValues.Any())
                                     {
@@ -70,66 +71,63 @@
                         {
                             @foreach (var table in model.Tables)
                             {
-                                <div class="block-content">
-                                    <div class="table-container">
-                                        <div class="block-subtitle-text">@table.Name</div>
-                                        @if (table.Rows is not null && table.Rows.Any())
-                                        {
-                                            <table class="table-stand">
-                                                <thead>
+                                <div class="table-container mb-2">
+                                    <div class="block-subtitle-text">@table.Name</div>
+                                    @if (table.Rows is not null && table.Rows.Any())
+                                    {
+                                        <table class="table-stand">
+                                            <thead>
+                                                <tr>
+                                                    @foreach (var column in table.Columns)
+                                                    {
+                                                        <th>@column.Name</th>
+                                                    }
+                                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                                    {
+                                                        <th></th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var row in table.Rows)
+                                                {
                                                     <tr>
-                                                        @foreach (var column in table.Columns)
+                                                        @foreach (var cell in row.Cells)
                                                         {
-                                                            <th>@column.Name</th>
+                                                            <td>
+                                                                @if (cell.SelectValues is not null && cell.SelectValues.Any())
+                                                                {
+                                                                    <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                        <option value="@string.Empty" disabled selected hidden></option>
+                                                                        @foreach (var value in cell.SelectValues)
+                                                                        {
+                                                                            <option value="@value">@value</option>
+                                                                        }
+                                                                    </InputSelect>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <InputText class="form-control" @bind-Value="cell.Value" />
+                                                                }
+                                                            </td>
                                                         }
                                                         @if (table.Name != "Персональные идентификаторы и показатели")
                                                         {
-                                                            <th></th>
+                                                            <td style="width: 50px;">
+                                                                <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="async () => await DeleteRow(table, row)" type="button" />
+                                                            </td>
                                                         }
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var row in table.Rows)
-                                                    {
-                                                        <tr>
-                                                            @foreach (var cell in row.Cells)
-                                                            {
-                                                                <td>
-                                                                    @if (cell.SelectValues is not null && cell.SelectValues.Any())
-                                                                    {
-                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
-                                                                            <option value="@string.Empty" disabled selected hidden></option>
-                                                                            @foreach (var value in cell.SelectValues)
-                                                                            {
-                                                                                <option value="@value">@value</option>
-                                                                            }
-                                                                        </InputSelect>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <InputText class="form-control" @bind-Value="cell.Value" />
-                                                                    }
-                                                                </td>
-                                                            }
-                                                            @if (table.Name != "Персональные идентификаторы и показатели")
-                                                            {
-                                                                <td style="width: 50px;">
-                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="async () => await DeleteRow(table, row)" type="button" />
-                                                                </td>
-                                                            }
-                                                        </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        }
-                                    </div>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
                                     @if (table.Name != "Персональные идентификаторы и показатели")
                                     {
-                                        <Icon Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
+                                        <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
                                     }
                                 </div>
                             }
-
                         }
                         <ValidationSummary />
                         <div class="d-flex justify-content-center">
@@ -296,7 +294,7 @@
             {
                 selectedBlock.Status = true; //todo: костыль
             }
-            await js.InvokeVoidAsync("scrollToTop");
+            await jsRuntime.InvokeVoidAsync("scrollToTop");
             toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
         }
     }
@@ -304,5 +302,6 @@
     async Task ChangeStatus()
     {
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
+        nav.NavigateTo("/account/manage/participation-status");
     }
 }

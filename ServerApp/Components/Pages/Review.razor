@@ -1,4 +1,5 @@
 ﻿@page "/review"
+
 @using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
@@ -6,7 +7,7 @@
 
 <PageTitle>Список заявок</PageTitle>
 
-<div class="block-group">
+<div class="block">
     <div class="block-title">
         <div class="block-title-text">
             Список заявок на участие
@@ -36,48 +37,15 @@
             <GridColumn TItem="UserInfoModel" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
                 @context.Email
             </GridColumn>
-            <GridColumn TItem="UserInfoModel" HeaderText="Оценено" PropertyName="ReviewStatus" SortKeySelector="item => item.ReviewStatus"
-                        IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
-                @if (context.ReviewStatus)
-                {
-                    <div class="text-success">Да</div>
-                }
-                else
-                {
-                    <div class="text-danger">Нет</div>
-                }
-            </GridColumn>
         </Grid>
     </div>
 </div>
 
 @code {
-    // private List<Participant> participants = new();
     UserInfoModel[] participants = default!;
     protected override async void OnInitialized()
     {
         participants = await data.GetUserInfosModelsAsync();
-        // participants.Add(new Participant
-        //     {
-        //         Id = Guid.NewGuid(),
-        //         FullName = "Иванов Иван Иванович",
-        //         PhoneNumber = "+7 (800)-555-35-35",
-        //         Email = "ivanov@mail.ru",
-        //     });
-        // participants.Add(new Participant
-        //     {
-        //         Id = Guid.NewGuid(),
-        //         FullName = "Петров Петр Петрович",
-        //         PhoneNumber = "+7 (800)-555-35-35",
-        //         Email = "petrov@mail.ru",
-        //     });
-        // participants.Add(new Participant
-        //     {
-        //         Id = Guid.NewGuid(),
-        //         FullName = "Федоров Федор Федорович",
-        //         PhoneNumber = "+7 (800)-555-35-35",
-        //         Email = "fedorov@mail.ru",
-        //     });
     }
 
     private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)
@@ -112,13 +80,4 @@
     {
         await Task.Run(() => NavigationManager.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
     }
-
-    // private class Participant
-    // {
-    //     public Guid Id { get; set; }
-    //     public string? FullName { get; set; }
-    //     public string? PhoneNumber { get; set; }
-    //     public string? Email { get; set; }
-    //     public bool ReviewStatus { get; set; } = false;
-    // }
 }

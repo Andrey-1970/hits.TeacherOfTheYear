@@ -1,15 +1,15 @@
-﻿@page "/review/application/{Id}"
+﻿@page "/assessment/application/{Id}"
 @using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
 @inject NavigationManager nav
 
-<PageTitle>Проверка заявки</PageTitle>
+<PageTitle>Оценка заявки</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Проверка заявки
+            Оценка заявки
         </div>
     </div>
     @if (model is not null)
@@ -76,30 +76,16 @@
                             </div>
                         }
                     }
-                    <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
-                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
-                            Блок проверен?
-                            <Switch Style="scale: 1.2; margin-right: 7px;" @bind-Value="@BlockStatus" />
-                        </div>
-
-                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
-                            Комментарий для участника:
-                            <div class="form-input w-75">
-                                <InputTextArea class="form-control" @bind-Value="@Comment" />
-                            </div>
-                        </div>
-                    </div>
                 }
                 else
                 {
                     <div class="table-container mb-2">
-                        <div class="block-subtitle-text">Итоги проверки</div>
+                        <div class="block-subtitle-text">Итоги оценки</div>
                         <table class="table-stand">
                             <thead>
                                 <tr>
                                     <th>Блок</th>
-                                    <th>Статус</th>
-                                    <th>Комментарий</th>
+                                    <th>Сумма баллов</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -109,8 +95,7 @@
                                     {
                                         <tr>
                                             <td>@block.Name</td>
-                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.ReviewStatus</td>
-                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Commentary</td>
+                                            <td></td>
                                         </tr>
                                     }
                                 }
@@ -120,12 +105,8 @@
                     <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
                         <Button Type="ButtonType.Button"
                                 Color="ButtonColor.Success"
-                                @onclick="async () =>  await ApproveApplication()">
-                            Одобрить
-                        </Button>
-                        <Button Color="ButtonColor.Danger"
-                                @onclick="async () => await RejectApplication()">
-                            Отклонить
+                                @onclick="async () =>  await Assessment()">
+                            Оценить
                         </Button>
                     </div>
                 }
@@ -145,8 +126,6 @@
     public string? Id { get; set; }
 
     MarkModel? model;
-    bool BlockStatus;
-    string? Comment;
 
     protected override async Task OnInitializedAsync()
     {
@@ -169,38 +148,15 @@
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
-        // var reviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        // if (reviewedBlock != null)
-        // {
-        //     reviewedBlock.ReviewStatus = BlockStatus;
-        //     reviewedBlock.Commentary = Comment;
-        // }
-
-        // BlockStatus = false;
-        // Comment = string.Empty;
-
         model.SelectedMarkBlockId = blockId.Value;
 
-        // var newReviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        // if (newReviewedBlock != null)
-        // {
-        //     BlockStatus = newReviewedBlock.ReviewStatus;
-        //     Comment = newReviewedBlock.Commentary;
-        // }
-
-        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
-        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
     }
 
-    async Task ApproveApplication()
+    async Task Assessment()
     {
         await Task.Delay(500);
-        nav.NavigateTo("/review#");
-    }
-
-    async Task RejectApplication()
-    {
-        await Task.Delay(500);
-        nav.NavigateTo("/review#");
+        nav.NavigateTo("/assessment#");
     }
 }

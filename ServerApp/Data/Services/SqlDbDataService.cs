@@ -30,11 +30,7 @@ namespace ServerApp.Data.Services
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId)
         {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var track = await context.Tracks.Include(track => track.EditBlocks)
                 .FirstOrDefaultAsync(x => x.Id == trackId);
             var editBlocks = track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)).ToArray() ?? [];
@@ -48,12 +44,7 @@ namespace ServerApp.Data.Services
         }
         public async Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId)
         {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
-
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var editBlock = await context.EditBlocks
                 .Include(editBlock => editBlock.Fields).ThenInclude(field => field.FieldVals)
                 .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
@@ -76,9 +67,9 @@ namespace ServerApp.Data.Services
             return new RowModel()
             {
                 Id = Guid.NewGuid(),
-                Cells = table.Columns.Select(e => new CellModel()
+                Cells = table!.Columns.Select(e => new CellModel()
                 {
-                    Id = Guid.NewGuid(), ValueType = e.ValueType.Name,
+                    Id = Guid.NewGuid(), ValueType = e.ValueType!.Name,
                     SelectValues = e.SelectValues.Select(e => e.Value).ToArray(),
                     ColumnId = e.Id
                 }).ToArray()
@@ -97,12 +88,7 @@ namespace ServerApp.Data.Services
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
-
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             if (model.SelectedTrackId == null)
             {
                 throw new ArgumentException("SelectedTrackId is required.");
@@ -229,24 +215,9 @@ namespace ServerApp.Data.Services
 
         public async Task SetCurrentUserApplicationStatusWaitingForReviewedAsync()
         {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
-
-            var app = user.Applications.FirstOrDefault();
-            if (app == null)
-            {
-                throw new InvalidOperationException("No application found for the current user.");
-            }
-
-            var track = app.Track;
-            if (track == null)
-            {
-                throw new InvalidOperationException("No track found for the application.");
-            }
-
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = user.Applications.FirstOrDefault() ?? throw new InvalidOperationException("No application found for the current user.");
+            var track = app.Track ?? throw new InvalidOperationException("No track found for the application.");
             var editBlocks = track.EditBlocks;
 
             foreach (var editBlock in editBlocks)
@@ -260,12 +231,7 @@ namespace ServerApp.Data.Services
                 }
             }
 
-            var newStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 2);
-            if (newStatus == null)
-            {
-                throw new InvalidOperationException("Application status with number 2 not found.");
-            }
-
+            var newStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 2) ?? throw new InvalidOperationException("Application status with number 2 not found.");
             app.ApplicationStatusId = newStatus.Id;
             context.Update(app);
             await context.SaveChangesAsync();
@@ -306,13 +272,13 @@ namespace ServerApp.Data.Services
                 throw new InvalidOperationException("User does not exist.");
             }
 
-            var editBlock = await context.MarkBlocks
+            var markBlock = await context.MarkBlocks
                 .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
                 .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
                 .Include(e => e.Fields).ThenInclude(e => e.ValueType)
                 .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == markBlockId);
-            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
+            return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray() ?? [];
         }
         
         public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
@@ -350,21 +316,16 @@ namespace ServerApp.Data.Services
                                     ColumnId = cv.ColumnId
                                 }).ToArray()
                         }).ToList()
-                }).ToArray();
+                }).ToArray() ?? [];
 
             return tables;
         }
 
         public async Task<ReviewBlockModel> GetReviewBlockModelAsync(Guid markBlockId)
         {
-            var user = await auth.GetUserAsync();
-            if (user == null)
-            {
-                throw new UnauthorizedAccessException("User unauthorized.");
-            }
-            
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             return new ReviewBlockModel(user.Applications.First().BlockReviewStatusList
-                .FirstOrDefault(e => e.MarkBlockId == markBlockId));
+                .First(e => e.MarkBlockId == markBlockId));
         }
     }
 }
