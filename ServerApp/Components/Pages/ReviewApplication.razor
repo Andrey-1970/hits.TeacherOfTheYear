@@ -15,13 +15,13 @@
     @if (model is not null)
     {
         <div class="block-content">
-            @if (model.SelectedTrackId != Guid.Empty)
+            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
                 <div class="form-text">Выбранный трек: @model.SelectedTrackId</div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
-                @if (model.MarkBlocks.First(e => e.Id == model.SelectedMarkBlockId).Name != "Итог")
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != "Итог")
                 {
                     @if (model.Fields is not null && model.Fields.Any())
                     {
@@ -169,24 +169,24 @@
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
-        var reviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        if (reviewedBlock != null)
-        {
-            reviewedBlock.ReviewStatus = BlockStatus;
-            reviewedBlock.Commentary = Comment;
-        }
+        // var reviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
+        // if (reviewedBlock != null)
+        // {
+        //     reviewedBlock.ReviewStatus = BlockStatus;
+        //     reviewedBlock.Commentary = Comment;
+        // }
 
-        BlockStatus = false;
-        Comment = string.Empty;
+        // BlockStatus = false;
+        // Comment = string.Empty;
 
         model.SelectedMarkBlockId = blockId.Value;
 
-        var newReviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        if (newReviewedBlock != null)
-        {
-            BlockStatus = newReviewedBlock.ReviewStatus;
-            Comment = newReviewedBlock.Commentary;
-        }
+        // var newReviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
+        // if (newReviewedBlock != null)
+        // {
+        //     BlockStatus = newReviewedBlock.ReviewStatus;
+        //     Comment = newReviewedBlock.Commentary;
+        // }
 
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);

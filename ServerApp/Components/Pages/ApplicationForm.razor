@@ -122,11 +122,11 @@
                                             </tbody>
                                         </table>
                                     }
+                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                    {
+                                        <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
+                                    }
                                 </div>
-                                @if (table.Name != "Персональные идентификаторы и показатели")
-                                {
-                                    <Icon Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
-                                }
                             }
                         }
                         <ValidationSummary />

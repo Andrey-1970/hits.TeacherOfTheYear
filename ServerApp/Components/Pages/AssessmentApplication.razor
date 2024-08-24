@@ -15,13 +15,13 @@
     @if (model is not null)
     {
         <div class="block-content">
-            @if (model.SelectedTrackId != Guid.Empty)
+            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
                 <div class="form-text">Выбранный трек: @model.SelectedTrackId</div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
-                @if (model.MarkBlocks.First(e => e.Id == model.SelectedMarkBlockId).Name != "Итог")
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != "Итог")
                 {
                     @if (model.Fields is not null && model.Fields.Any())
                     {
@@ -147,6 +147,8 @@
     async Task OnBlockIdChanged(Guid? blockId)
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
+
+        model.SelectedMarkBlockId = blockId.Value;
 
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
