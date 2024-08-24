@@ -2,6 +2,7 @@
 @using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
+@inject NavigationManager nav
 
 <PageTitle>Оценка заявки</PageTitle>
 
@@ -104,7 +105,7 @@
                     <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
                         <Button Type="ButtonType.Button"
                                 Color="ButtonColor.Success"
-                                @onclick="async () =>  await AssessmentApplication()">
+                                @onclick="async () =>  await Assessment()">
                             Оценить
                         </Button>
                     </div>
@@ -151,8 +152,9 @@
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
     }
 
-    async Task AssessmentApplication()
+    async Task Assessment()
     {
         await Task.Delay(500);
+        nav.NavigateTo("/assessment#");
     }
 }

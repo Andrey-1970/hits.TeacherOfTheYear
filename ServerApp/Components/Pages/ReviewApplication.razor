@@ -2,6 +2,7 @@
 @using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data
+@inject NavigationManager nav
 
 <PageTitle>Проверка заявки</PageTitle>
 
@@ -194,10 +195,12 @@
     async Task ApproveApplication()
     {
         await Task.Delay(500);
+        nav.NavigateTo("/review#");
     }
 
     async Task RejectApplication()
     {
         await Task.Delay(500);
+        nav.NavigateTo("/review#");
     }
 }

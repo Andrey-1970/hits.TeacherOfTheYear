@@ -37,17 +37,6 @@
             <GridColumn TItem="UserInfoModel" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
                 @context.Email
             </GridColumn>
-            <GridColumn TItem="UserInfoModel" HeaderText="Оценено" PropertyName="ReviewStatus" SortKeySelector="item => item.ReviewStatus"
-                        IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
-                @if (context.ReviewStatus)
-                {
-                    <div class="text-success">Да</div>
-                }
-                else
-                {
-                    <div class="text-danger">Нет</div>
-                }
-            </GridColumn>
         </Grid>
     </div>
 </div>
