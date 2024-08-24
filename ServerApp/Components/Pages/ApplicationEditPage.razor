@@ -2,7 +2,8 @@
 @using ServerApp.Data.Models.EditModel
 
 @inject IDataService data
-@inject IJSRuntime js
+@inject IJSRuntime jsRuntime
+@inject NavigationManager nav
 @inject ToastService toastService
 
 <div class="block">
@@ -296,7 +297,7 @@
             {
                 selectedBlock.Status = true; //todo: костыль
             }
-            await js.InvokeVoidAsync("scrollToTop");
+            await jsRuntime.InvokeVoidAsync("scrollToTop");
             toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
         }
     }
@@ -304,5 +305,6 @@
     async Task ChangeStatus()
     {
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
+        nav.NavigateTo("/account/manage/participation-status");
     }
 }

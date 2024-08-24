@@ -89,7 +89,42 @@
                 }
                 else
                 {
-                    <div>Итоги проверки</div>
+                    <div class="table-container mb-2">
+                        <div class="block-subtitle-text">Итоги проверки</div>
+                        <table class="table-stand">
+                            <thead>
+                                <tr>
+                                    <th>Блок</th>
+                                    <th>Статус</th>
+                                    <th>Комментарий</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var block in model.MarkBlocks)
+                                {
+                                    if (block.Name != "Итог")
+                                    {
+                                        <tr>
+                                            <td>@block.Name</td>
+                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.ReviewStatus</td>
+                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Commentary</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+                        <Button Type="ButtonType.Button"
+                                Color="ButtonColor.Success"
+                                @onclick="async () =>  await ApproveApplication()">
+                            Одобрить
+                        </Button>
+                        <Button Color="ButtonColor.Danger"
+                                @onclick="async () => await RejectApplication()">
+                            Отклонить
+                        </Button>
+                    </div>
                 }
             }
         </div>
@@ -152,5 +187,15 @@
 
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
+    }
+
+    async Task ApproveApplication()
+    {
+        await Task.Delay(500);
+    }
+
+    async Task RejectApplication()
+    {
+        await Task.Delay(500);
     }
 }
