@@ -83,5 +83,57 @@ namespace ServerApp.Data.Services
         }
 
         #endregion
+
+        #region Marks
+
+        public async Task<Mark> GetMarkByIdAsync(Guid id)
+        {
+            return await Task.FromResult(context.Marks.First(x => x.Id == id));
+        }
+
+        public async Task<IEnumerable<Mark>> GetMarksAsync()
+        {
+            return await context.Marks.ToArrayAsync();
+        }
+
+        public async Task RemoveMarkAsync(Mark mark)
+        {
+            context.Marks.Remove(mark);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SaveMarkAsync(Mark mark)
+        {
+            context.Marks.Attach(mark);
+            await context.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Fields
+
+        public async Task<Field> GetFieldByIdAsync(Guid id)
+        {
+            return await Task.FromResult(context.Fields.First(x => x.Id == id));
+        }
+
+        public async Task<IEnumerable<Field>> GetFieldsAsync()
+        {
+            return await context.Fields.ToArrayAsync();
+        }
+
+        public async Task RemoveFieldAsync(Field field)
+        {
+            context.Fields.Remove(field);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SaveFieldAsync(Field field)
+        {
+            context.Fields.Attach(field);
+            await context.SaveChangesAsync();
+        }
+
+        #endregion
     }
 }

@@ -18,5 +18,15 @@ namespace ServerApp.Data.Interfaces
         Task<MarkBlock> GetMarkBlockByIdAsync(Guid id);
         Task SaveMarkBlockAsync(MarkBlock markBlock);
         Task RemoveMarkBlockAsync(MarkBlock markBlock);
+
+        Task<IEnumerable<Mark>> GetMarksAsync();
+        Task<Mark> GetMarkByIdAsync(Guid id);
+        Task SaveMarkAsync(Mark mark);
+        Task RemoveMarkAsync(Mark mark);
+
+        Task<IEnumerable<Field>> GetFieldsAsync();
+        Task<Field> GetFieldByIdAsync(Guid id);
+        Task SaveFieldAsync(Field field);
+        Task RemoveFieldAsync(Field field);
     }
 }
