@@ -150,8 +150,8 @@
 
         model.SelectedMarkBlockId = blockId.Value;
 
-        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId);
-        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId);
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
     }
 
     async Task Assessment()

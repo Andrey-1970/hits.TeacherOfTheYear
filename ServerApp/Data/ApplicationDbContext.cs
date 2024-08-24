@@ -88,9 +88,11 @@ namespace ServerApp.Data
             var appStatus2 = new ApplicationStatus()
                 { Id = Guid.NewGuid(), Number = 2, Status = "В ожидании оценки" };
             var appStatus3 = new ApplicationStatus()
-                { Id = Guid.NewGuid(), Number = 3, Status = "Одобрена" };
+                { Id = Guid.NewGuid(), Number = 3, Status = "В процессе оценки" };
             var appStatus4 = new ApplicationStatus()
-                { Id = Guid.NewGuid(), Number = 4, Status = "Отклонена" };
+                { Id = Guid.NewGuid(), Number = 4, Status = "Одобрена" };
+            var appStatus5 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 5, Status = "Отклонена" };
 
             #endregion
 

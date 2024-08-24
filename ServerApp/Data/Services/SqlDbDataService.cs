@@ -67,7 +67,7 @@ namespace ServerApp.Data.Services
             return new RowModel()
             {
                 Id = Guid.NewGuid(),
-                Cells = table!.Columns.Select(e => new CellModel()
+                Cells = table!.Columns.OrderBy(t => t.Number).Select(e => new CellModel()
                 {
                     Id = Guid.NewGuid(), ValueType = e.ValueType!.Name,
                     SelectValues = e.SelectValues.Select(e => e.Value).ToArray(),
@@ -287,6 +287,7 @@ namespace ServerApp.Data.Services
                 .Include(mb => mb.Tables)
                 .ThenInclude(t => t.Rows)
                 .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
+                .ThenInclude(cellVal => cellVal.Column!)
                 .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId);
 
@@ -301,13 +302,14 @@ namespace ServerApp.Data.Services
                 {
                     Id = t.Id,
                     Name = t.Name,
-                    Columns = t.Columns.Select(e => new ColumnModel(e)).ToList(),
+                    Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                     Rows = t.Rows
-                        .Where(r => r.CellVals.Any(cv => cv.ApplicationId == appId))
+                        .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
                         .Select(r => new RowModel
                         {
                             Id = r.Id,
                             Cells = r.CellVals
+                                .OrderBy(c => c.Column!.Number)
                                 .Where(cv => cv.ApplicationId == appId)
                                 .Select(cv => new CellModel
                                 {
