@@ -1,6 +1,6 @@
 ﻿@page "/admin/marks"
 
-@inject IAdminService data
+@inject IAdmin data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка оценок</PageTitle>
@@ -72,7 +72,7 @@
     {
         await base.OnInitializedAsync();
 
-        marks = await data.GetMarksAsync();
+        marks = await data.Mark.GetAllAsync();
         filteredMarks = marks;
     }
 
@@ -96,8 +96,8 @@
 
     async Task RemoveMark(Mark mark)
     {
-        await data.RemoveMarkAsync(mark);
-        marks = await data.GetMarksAsync();
+        await data.Mark.RemoveAsync(mark);
+        marks = await data.Mark.GetAllAsync();
 
         StateHasChanged();
     }

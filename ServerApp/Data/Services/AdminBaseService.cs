@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ServerApp.Data.Entities;
+﻿using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 
 namespace ServerApp.Data.Services
 {
-    public class TestService<T>(ApplicationDbContext context) : ITest<T> where T : BaseEntity
+    public class AdminBaseService<T>(ApplicationDbContext context) : IAdminBase<T> where T : BaseEntity
     {
         public async Task<IEnumerable<T>> GetAllAsync()
         {

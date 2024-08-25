@@ -1,7 +1,7 @@
 ﻿@page "/admin/fields/{Id:guid}"
 @page "/admin/fields/new"
 
-@inject IAdminService data
+@inject IAdmin data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка поля</PageTitle>
@@ -44,7 +44,7 @@
         await base.OnInitializedAsync();
         if (Id != Guid.Empty)
         {
-            field = await data.GetFieldByIdAsync(Id);
+            field = await data.Field.GetByIdAsync(Id);
         }
         else
         {
@@ -54,7 +54,7 @@
 
     async Task OnValidSumbit()
     {
-        await data.SaveFieldAsync(field);
+        await data.Field.SaveAsync(field);
 
         navigation.NavigateTo("/admin/fields");
     }

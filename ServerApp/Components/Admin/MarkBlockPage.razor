@@ -1,6 +1,6 @@
 ﻿@page "/admin/markblocks"
 
-@inject IAdminService data
+@inject IAdmin data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка MarkBlocks</PageTitle>
@@ -56,11 +56,11 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        blocks = await data.GetMarkBlocksAsync();
+        blocks = await data.MarkBlock.GetAllAsync();
     }
     async Task RemoveBlock(MarkBlock block)
     {
-        await data.RemoveMarkBlockAsync(block);
+        await data.MarkBlock.RemoveAsync(block);
         StateHasChanged();
     }
 

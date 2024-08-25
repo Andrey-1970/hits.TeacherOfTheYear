@@ -1,7 +1,7 @@
 ﻿@page "/admin/marks/{Id:guid}"
 @page "/admin/marks/new"
 
-@inject IAdminService data
+@inject IAdmin data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка оценки</PageTitle>
@@ -22,6 +22,35 @@
             <div class="form-input w-100 mb-3">
                 <InputText class="form-control mb-3" placeholder="Введите название оценки" @bind-Value="mark.Name" />
             </div>
+
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">MarkBlocks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var block in blocks)
+                        {
+                            <tr>
+                                <td class="p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-check-label" for="@block.Name-@mark.Id">
+                                            @block.Name
+                                        </label>
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" id="@block.Name-@mark.Id"
+                                                   @bind="blockSelections[mark.Id][block.Name!]" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
                 <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
                 <a type="button" class="btn btn-secondary" href="/admin/marks">Назад</a>
@@ -33,24 +62,39 @@
 @code {
     [Parameter]
     public Guid Id { set; get; }
-    Mark mark = default!;
+    Mark mark = new();
+
+    IEnumerable<MarkBlock> blocks = Enumerable.Empty<MarkBlock>();
+    Dictionary<Guid, Dictionary<string, bool>> blockSelections = new();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         if (Id != Guid.Empty)
         {
-            mark = await data.GetMarkByIdAsync(Id);
+            mark = await data.Mark.GetByIdAsync(Id);
         }
-        else
+
+        blocks = await data.MarkBlock.GetAllAsync();
+        if (!blockSelections.ContainsKey(mark.Id))
         {
-            mark = new();
+            blockSelections[mark.Id] = blocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
         }
     }
 
     async Task OnValidSumbit()
     {
-        await data.SaveMarkAsync(mark);
+        if (blockSelections.TryGetValue(mark.Id, out var blockSelection))
+        {
+            mark.MarkBlocks = blocks.Where(b => blockSelection.TryGetValue(b.Name!, out bool selected) && selected).ToList();
+        }
+
+        await data.Mark.SaveAsync(mark);
+        if (!blockSelections.ContainsKey(mark.Id))
+        {
+            blockSelections[mark.Id] = blocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
+        }
+
         navigation.NavigateTo("/admin/marks");
     }
 }

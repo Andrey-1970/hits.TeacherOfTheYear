@@ -2,7 +2,7 @@
 
 namespace ServerApp.Data.Interfaces
 {
-    public interface ITest<T> where T : BaseEntity
+    public interface IAdminBase<T> where T : BaseEntity
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(Guid id);

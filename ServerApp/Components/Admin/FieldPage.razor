@@ -1,6 +1,6 @@
 ﻿@page "/admin/fields"
 
-@inject IAdminService data
+@inject IAdmin data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка полей</PageTitle>
@@ -72,7 +72,7 @@
     {
         await base.OnInitializedAsync();
 
-        fields = await data.GetFieldsAsync();
+        fields = await data.Field.GetAllAsync();
         filteredFields = fields;
     }
 
@@ -96,8 +96,8 @@
 
     async Task RemoveField(Field field)
     {
-        await data.RemoveFieldAsync(field);
-        fields = await data.GetFieldsAsync();
+        await data.Field.RemoveAsync(field);
+        fields = await data.Field.GetAllAsync();
 
         StateHasChanged();
     }
