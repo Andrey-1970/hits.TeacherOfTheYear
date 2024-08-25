@@ -90,6 +90,7 @@
         }
 
         await data.MarkBlock.SaveAsync(block);
+
         if (!trackSelections.ContainsKey(block.Id))
         {
             trackSelections[block.Id] = tracks.ToDictionary(track => track.Name!, track => block.Tracks!.Any(t => t.Name == track.Name));

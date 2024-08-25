@@ -31,17 +31,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var block in blocks)
+                        @foreach (var markBlock in markBlocks)
                         {
                             <tr>
                                 <td class="p-2">
                                     <div class="d-flex justify-content-between">
-                                        <label class="form-check-label" for="@block.Name-@mark.Id">
-                                            @block.Name
+                                        <label class="form-check-label" for="@markBlock.Name-@mark.Id">
+                                            @markBlock.Name
                                         </label>
                                         <div>
-                                            <input class="form-check-input" type="checkbox" id="@block.Name-@mark.Id"
-                                                   @bind="blockSelections[mark.Id][block.Name!]" />
+                                            <input class="form-check-input" type="checkbox" id="@markBlock.Name-@mark.Id"
+                                                   @bind="markBlockSelections[mark.Id][markBlock.Name!]" />
                                         </div>
                                     </div>
                                 </td>
@@ -64,8 +64,8 @@
     public Guid Id { set; get; }
     Mark mark = new();
 
-    IEnumerable<MarkBlock> blocks = Enumerable.Empty<MarkBlock>();
-    Dictionary<Guid, Dictionary<string, bool>> blockSelections = new();
+    IEnumerable<MarkBlock> markBlocks = Enumerable.Empty<MarkBlock>();
+    Dictionary<Guid, Dictionary<string, bool>> markBlockSelections = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,24 +75,24 @@
             mark = await data.Mark.GetByIdAsync(Id);
         }
 
-        blocks = await data.MarkBlock.GetAllAsync();
-        if (!blockSelections.ContainsKey(mark.Id))
+        markBlocks = await data.MarkBlock.GetAllAsync();
+        if (!markBlockSelections.ContainsKey(mark.Id))
         {
-            blockSelections[mark.Id] = blocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
+            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
         }
     }
 
     async Task OnValidSumbit()
     {
-        if (blockSelections.TryGetValue(mark.Id, out var blockSelection))
+        if (markBlockSelections.TryGetValue(mark.Id, out var blockSelection))
         {
-            mark.MarkBlocks = blocks.Where(b => blockSelection.TryGetValue(b.Name!, out bool selected) && selected).ToList();
+            mark.MarkBlocks = markBlocks.Where(b => blockSelection.TryGetValue(b.Name!, out bool selected) && selected).ToList();
         }
 
         await data.Mark.SaveAsync(mark);
-        if (!blockSelections.ContainsKey(mark.Id))
+        if (!markBlockSelections.ContainsKey(mark.Id))
         {
-            blockSelections[mark.Id] = blocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
+            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
         }
 
         navigation.NavigateTo("/admin/marks");

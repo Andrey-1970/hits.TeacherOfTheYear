@@ -33,7 +33,7 @@
 @code {
     [Parameter]
     public Guid Id { set; get; }
-    Track track = default!;
+    Track track = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,10 +41,6 @@
         if (Id != Guid.Empty)
         {
             track = await data.Track.GetByIdAsync(Id);
-        }
-        else
-        {
-            track = new();
         }
     }
 

@@ -14,5 +14,7 @@ namespace ServerApp.Data.Services
         public IAdminBase<Mark> Mark => new AdminBaseService<Mark>(context);
 
         public IAdminBase<Field> Field => new AdminBaseService<Field>(context);
+
+        public IAdminBase<Table> Table => new AdminBaseService<Table>(context);
     }
 }

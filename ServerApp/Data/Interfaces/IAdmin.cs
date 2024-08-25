@@ -9,5 +9,6 @@ namespace ServerApp.Data.Interfaces
         IAdminBase<MarkBlock> MarkBlock { get; }
         IAdminBase<Mark> Mark { get; }
         IAdminBase<Field> Field { get; }
+        IAdminBase<Table> Table { get; }
     }
 }
