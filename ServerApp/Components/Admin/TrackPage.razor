@@ -28,7 +28,7 @@
                                                 @track.Name
                                                 <div>
                                                     <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(track.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await RemoveTrack(track)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveTrack(track)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -58,6 +58,8 @@
     async Task RemoveTrack(Track track)
     {
         await data.RemoveTrackAsync(track);
+        tracks = await data.GetTracksAsync();
+
         StateHasChanged();
     }
 
