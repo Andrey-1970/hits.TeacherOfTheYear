@@ -1,6 +1,6 @@
 ﻿@page "/admin/editblocks"
 
-@inject IAdminService data
+@inject ICommon data
 @inject NavigationManager navigation
 
 <PageTitle>Настройка EditBlocks</PageTitle>
@@ -54,18 +54,17 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        blocks = await data.GetEditBlocksAsync();
+        blocks = await data.EditBlocks.GetAllAsync();
     }
     async Task RemoveBlock(EditBlock block)
     {
-        await data.RemoveEditBlockAsync(block);
-        blocks = await data.GetEditBlocksAsync();
+        await data.EditBlocks.RemoveAsync(block);
+        blocks = await data.EditBlocks.GetAllAsync();
 
         StateHasChanged();
     }
 
     void GoTo(Guid id)
-
     {
         navigation.NavigateTo($"/admin/editblocks/{id}");
     }

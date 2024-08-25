@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using ServerApp.Components;
 using ServerApp.Components.Account;
 using ServerApp.Data;
+using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Services;
+
 
 namespace ServerApp
 {
@@ -49,6 +51,7 @@ namespace ServerApp
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAdminService, SqlDbAdminService>();
             builder.Services.AddScoped<IAuthorization, AppAuthorization>();
+            builder.Services.AddScoped<ICommon, CommonService>();
 
             var app = builder.Build();
 
