@@ -27,8 +27,6 @@ public class UserInfoModel
         {
             Email = emailField.Value;
         }
-
-        ReviewStatus = userInfo.Applications.FirstOrDefault()?.BlockReviewStatusList.FirstOrDefault()?.ReviewStatus ?? false;
     }
     
     public Guid Id { get; set; }

@@ -17,11 +17,11 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @model.SelectedTrackId</div>
+                <div class="form-text">Выбранный трек: @model.SelectedTrackId</div> //todo: track
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
-                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != "Итог")
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != ResultBlock.Name)
                 {
                     @if (model.Fields is not null && model.Fields.Any())
                     {
@@ -79,13 +79,13 @@
                     <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
                         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                             Блок проверен?
-                            <Switch Style="scale: 1.2; margin-right: 7px;" @bind-Value="@BlockStatus" />
+                            <Switch Style="scale: 1.2; margin-right: 7px;" Value="model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status" ValueExpression="() => model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status" @onclick="async () => await ChangeBlockStatus()" />
                         </div>
 
                         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
                             Комментарий для участника:
                             <div class="form-input w-75">
-                                <InputTextArea class="form-control" @bind-Value="@Comment" />
+                                <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="async (value) => await ChangeBlockComment(value)" />
                             </div>
                         </div>
                     </div>
@@ -105,11 +105,15 @@
                             <tbody>
                                 @foreach (var block in model.MarkBlocks)
                                 {
-                                    if (block.Name != "Итог")
+                                    if (block.Name != ResultBlock.Name)
                                     {
                                         <tr>
                                             <td>@block.Name</td>
-                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.ReviewStatus</td>
+                                            <td>@if ((bool)model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Status)
+                                                { <div>Проверен</div> }
+                                                else 
+                                                { <div>Не проверен</div> } 
+                                            </td>
                                             <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Commentary</td>
                                         </tr>
                                     }
@@ -118,14 +122,17 @@
                         </table>
                     </div>
                     <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+                        <Button Type="ButtonType.Button" 
+                                Color="ButtonColor.Danger"
+                                @onclick="async () => await RejectApplication()"
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
+                            Отклонить
+                        </Button>
                         <Button Type="ButtonType.Button"
                                 Color="ButtonColor.Success"
-                                @onclick="async () =>  await ApproveApplication()">
+                                @onclick="async () =>  await ApproveApplication()"
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
                             Одобрить
-                        </Button>
-                        <Button Color="ButtonColor.Danger"
-                                @onclick="async () => await RejectApplication()">
-                            Отклонить
                         </Button>
                     </div>
                 }
@@ -145,8 +152,8 @@
     public string? Id { get; set; }
 
     MarkModel? model;
-    bool BlockStatus;
     string? Comment;
+    MarkBlockModel ResultBlock = new MarkBlockModel() {Id = Guid.NewGuid(), Name = "Итог"};
 
     protected override async Task OnInitializedAsync()
     {
@@ -158,9 +165,9 @@
         if (model?.SelectedTrackId != null)
         {
             model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
-            // var newMarkBlocks = model.MarkBlocks.ToList();
-            // newMarkBlocks.Add(new MarkBlockModel { Id = Guid.NewGuid(), Name = "Проба" });
-            // model.MarkBlocks = newMarkBlocks.ToArray();
+            var newMarkBlocks = model.MarkBlocks.ToList();
+            newMarkBlocks.Add(ResultBlock);
+            model.MarkBlocks = newMarkBlocks.ToArray();
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
     }
@@ -168,39 +175,37 @@
     async Task OnBlockIdChanged(Guid? blockId)
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
-
-        // var reviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        // if (reviewedBlock != null)
-        // {
-        //     reviewedBlock.ReviewStatus = BlockStatus;
-        //     reviewedBlock.Commentary = Comment;
-        // }
-
-        // BlockStatus = false;
-        // Comment = string.Empty;
-
+        
         model.SelectedMarkBlockId = blockId.Value;
-
-        // var newReviewedBlock = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId);
-        // if (newReviewedBlock != null)
-        // {
-        //     BlockStatus = newReviewedBlock.ReviewStatus;
-        //     Comment = newReviewedBlock.Commentary;
-        // }
-
+        
+        if (blockId == ResultBlock.Id) return;
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Commentary;
     }
 
     async Task ApproveApplication()
     {
-        await Task.Delay(500);
+        await data.ApproveApplicationFormAsync(model!.ApplicationId);
         nav.NavigateTo("/review#");
     }
 
     async Task RejectApplication()
     {
-        await Task.Delay(500);
+        await data.RejectApplicationFormAsync(model!.ApplicationId);
         nav.NavigateTo("/review#");
+    }
+
+    async Task ChangeBlockStatus()
+    {
+        await data.ChangeBlockReviewStatus(model!.SelectedMarkBlockId, model.ApplicationId);
+        model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status = !model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status;
+    }
+
+    async Task ChangeBlockComment(string? comment)
+    {
+        Comment = comment;
+        model!.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Commentary = comment;
+        await data.SaveCommentReviewBlockAsync(model!.SelectedMarkBlockId, model.ApplicationId, comment);
     }
 }

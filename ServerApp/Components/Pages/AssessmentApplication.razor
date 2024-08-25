@@ -21,7 +21,7 @@
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
-                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != "Итог")
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Id != ResultBlock.Id)
                 {
                     @if (model.Fields is not null && model.Fields.Any())
                     {
@@ -55,7 +55,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var row in table.Rows)
+
+                                        @foreach (var row in table.Rows)
                                             {
                                                 <tr>
                                                     @foreach (var cell in row.Cells)
@@ -91,7 +92,7 @@
                             <tbody>
                                 @foreach (var block in model.MarkBlocks)
                                 {
-                                    if (block.Name != "Итог")
+                                    if (block.Id != ResultBlock.Id)
                                     {
                                         <tr>
                                             <td>@block.Name</td>
@@ -126,6 +127,7 @@
     public string? Id { get; set; }
 
     MarkModel? model;
+    MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -137,9 +139,9 @@
         if (model?.SelectedTrackId != null)
         {
             model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
-            // var newMarkBlocks = model.MarkBlocks.ToList();
-            // newMarkBlocks.Add(new MarkBlockModel { Id = Guid.NewGuid(), Name = "Проба" });
-            // model.MarkBlocks = newMarkBlocks.ToArray();
+            var newMarkBlocks = model.MarkBlocks.ToList();
+            newMarkBlocks.Add(ResultBlock);
+            model.MarkBlocks = newMarkBlocks.ToArray();
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
     }
@@ -149,7 +151,8 @@
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
 
         model.SelectedMarkBlockId = blockId.Value;
-
+        
+        if (blockId == ResultBlock.Id) return;
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
     }

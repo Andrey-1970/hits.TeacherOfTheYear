@@ -78,6 +78,7 @@
 
     private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
     {
+        await data.SetApplicationStatusReviewProcessAsync(row.Item.Id);
         await Task.Run(() => NavigationManager.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
     }
 }

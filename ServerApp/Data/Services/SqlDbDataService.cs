@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
@@ -237,23 +238,76 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
+        public async Task SetApplicationStatusReviewProcessAsync(Guid userId)
+        {
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+
+            var participant = context.UserInfos
+                                  .Include(userInfo => userInfo.Applications)
+                                  .ThenInclude(applicationForm => applicationForm.Track)
+                                  .ThenInclude(track => track.MarkBlocks).Include(userInfo => userInfo.Applications)
+                                  .ThenInclude(applicationForm => applicationForm.ApplicationStatus)
+                                  .FirstOrDefault(e => e.Id == userId) ??
+                              throw new NullReferenceException("Current user not found.");
+
+            var app = participant.Applications.FirstOrDefault() ??
+                      throw new NullReferenceException("Current application not found.");
+
+            var newStatus = await context.ApplicationStatuses
+                                .FirstOrDefaultAsync(e => e.Number == 3) ??
+                            throw new InvalidOperationException("Application status with number 3 not found.");
+            if (app.ApplicationStatus != newStatus)
+            {
+                app.ApplicationStatus = newStatus;
+                app.ReviewerId = user.Id;
+                context.Update(app);
+                await context.SaveChangesAsync();
+
+                foreach (var markBlock in app.Track.MarkBlocks)
+                {
+                    var blockReview = new BlockReview()
+                    {
+                        Id = Guid.NewGuid(),
+                        MarkBlockId = markBlock.Id,
+                        ApplicationId = app.Id
+                    };
+                    context.Add(blockReview);
+                }
+
+                await context.SaveChangesAsync();
+            }
+        }
+
         public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
         {
+            var user = await auth.GetUserAsync();
             var userInfos = await context.UserInfos
-                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 2))
+                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 2 || a.ApplicationStatus.Number == 3 && a.ReviewerId == user!.Id))
+                .Include(userInfo => userInfo.Applications)
+                .ThenInclude(applicationForm => applicationForm.ApplicationStatus)
                 .ToListAsync();
 
-            var userInfoModels = userInfos
-                .Where(e => e.Applications.First().ApplicationStatus.Number == 2)
+            var userInfoModels = userInfos 
                 .Select(e => new UserInfoModel(e))
                 .ToArray();
 
-            return userInfoModels;        }
+            return userInfoModels;        
+        }
         
         public async Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId)
         {
-            var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfoId == userInfoId) ?? new();
-            return await Task.FromResult(new MarkModel(application));
+            var application = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
+                .ThenInclude(track => track.MarkBlocks).Include(applicationForm => applicationForm.BlockReviews).FirstOrDefaultAsync(x => x.UserInfoId == userInfoId) ?? new();
+            var markModel = new MarkModel(application);
+            var blockReviewModels = markModel.ReviewedBlocks.ToList();
+            foreach (var markBlock in application.Track.MarkBlocks)
+            {
+                blockReviewModels.Add(new (application.BlockReviews.FirstOrDefault(e =>
+                    e.ApplicationId == application.Id && e.MarkBlockId == markBlock.Id)!));
+            }
+
+            markModel.ReviewedBlocks = blockReviewModels.ToArray();
+            return await Task.FromResult(markModel);
         }
         
         public async Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId)
@@ -323,11 +377,63 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
-        public async Task<ReviewBlockModel> GetReviewBlockModelAsync(Guid markBlockId)
+        // public async Task<BlockReviewModel> GetReviewBlockModelAsync(Guid markBlockId)
+        // {
+        //     var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+        //     return new BlockReviewModel(user.Applications.First().ApplicationReviews
+        //         .First(e => e. == markBlockId));
+        // }
+
+        public async Task ChangeBlockReviewStatus(Guid? markBlockId, Guid? appId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
-            return new ReviewBlockModel(user.Applications.First().BlockReviewStatusList
-                .First(e => e.MarkBlockId == markBlockId));
+            var blockReview = context.BlockReviews.FirstOrDefault(e => e.MarkBlockId == markBlockId && e.ApplicationId == appId) ??
+                              throw new NullReferenceException("Current block review not find.");
+            blockReview.Status = !blockReview.Status;
+            context.Update(blockReview);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task SaveCommentReviewBlockAsync(Guid? markBlockId, Guid? appId, string? comment)
+        {
+            var blockReview = context.BlockReviews.FirstOrDefault(e => e.MarkBlockId == markBlockId && e.ApplicationId == appId) ??
+                              throw new NullReferenceException("Current block review not find.");
+            blockReview.Commentary = comment;
+            context.Update(blockReview);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task ApproveApplicationFormAsync(Guid? applicationId)
+        {
+            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
+                          .ThenInclude(track => track.MarkBlocks)
+                          .Include(applicationForm => applicationForm.BlockReviews).FirstOrDefaultAsync(e => e.Id == applicationId) ??
+                      throw new NullReferenceException("Current application not found.");
+            foreach (var markBlock in app.Track.MarkBlocks)
+            {
+                if (app.BlockReviews.FirstOrDefault(e => e.ApplicationId == app.Id && e.MarkBlockId == markBlock.Id)!.Status == false) 
+                    throw new InvalidOperationException($"Does not have a valid status for this application.");
+            }
+            app.ApplicationStatusId = context.ApplicationStatuses.FirstOrDefault(e => e.Number == 4)!.Id;
+            context.Update(app);
+            await context.SaveChangesAsync();
+            
+            //todo: Добавление пользователю роли "Participant"
+        }
+
+        public async Task RejectApplicationFormAsync(Guid? applicationId)
+        {
+            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
+                          .ThenInclude(track => track.MarkBlocks)
+                          .Include(applicationForm => applicationForm.BlockReviews).FirstOrDefaultAsync(e => e.Id == applicationId) ??
+                      throw new NullReferenceException("Current application not found.");
+            foreach (var markBlock in app.Track.MarkBlocks)
+            {
+                if (app.BlockReviews.FirstOrDefault(e => e.ApplicationId == app.Id && e.MarkBlockId == markBlock.Id)!.Status == false) 
+                    throw new InvalidOperationException($"Does not have a valid status for this application.");
+            }
+            app.ApplicationStatusId = context.ApplicationStatuses.FirstOrDefault(e => e.Number == 5)!.Id;
+            context.Update(app);
+            await context.SaveChangesAsync();
         }
     }
 }

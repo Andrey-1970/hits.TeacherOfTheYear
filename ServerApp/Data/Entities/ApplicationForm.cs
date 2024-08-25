@@ -1,20 +1,30 @@
-﻿namespace ServerApp.Data.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System;
+
+namespace ServerApp.Data.Entities
 {
     public class ApplicationForm
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Guid Id { get; set; }
-        public virtual Guid ApplicationStatusId { get; set; }
+        
+        public Guid ApplicationStatusId { get; set; }
         public virtual ApplicationStatus ApplicationStatus { get; set; } = default!;
-        public virtual Guid UserInfoId { get; set; }
+        
+        public Guid UserInfoId { get; set; }
         public virtual UserInfo UserInfo { get; set; }
-        public virtual Guid TrackId { get; set; }
+
+        public Guid TrackId { get; set; }
         public virtual Track Track { get; set; }
-        public virtual List<MarkVal> MarkVals { get; set; } = [];
-        public virtual List<FieldVal> FieldVals { get; set; } = [];
-        public virtual List<CellVal> CellVals { get; set; } = [];
-        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = [];
-        public virtual List<BlockReviewStatus> BlockReviewStatusList { get; set; } = [];
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+        public Guid? ReviewerId { get; set; }
+        [ForeignKey(nameof(ReviewerId))]
+        public virtual UserInfo? Reviewer { get; set; }
+
+        public virtual List<BlockReview> BlockReviews { get; set; } = new List<BlockReview>();
+        public virtual List<MarkVal> MarkVals { get; set; } = new List<MarkVal>();
+        public virtual List<FieldVal> FieldVals { get; set; } = new List<FieldVal>();
+        public virtual List<CellVal> CellVals { get; set; } = new List<CellVal>();
+        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new List<EditBlockStatus>();
     }
 }

@@ -22,5 +22,5 @@ public class MarkModel
     public MarkBlockModel[] MarkBlocks { get; set; } = [];
     public FieldModel[] Fields { get; set; } = [];
     public TableModel[] Tables { get; set; } = [];
-    public ReviewBlockModel[] ReviewedBlocks { get; set; } = [];
+    public BlockReviewModel[] ReviewedBlocks { get; set; } = [];
 }

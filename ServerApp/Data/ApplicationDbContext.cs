@@ -11,6 +11,7 @@ namespace ServerApp.Data
 
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
         public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
+        public DbSet<BlockReview> BlockReviews { get; set; }
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
@@ -124,7 +125,6 @@ namespace ServerApp.Data
             var markBlk6 = new MarkBlock()
             { Id = Guid.NewGuid(), Number = 6, Name = "Инновационная и иная деятельность" };
             var markBlk7 = new MarkBlock() { Id = Guid.NewGuid(), Number = 7, Name = "Конкурсная работа" };
-            var markBlk8 = new MarkBlock() { Id = Guid.NewGuid(), Number = 8, Name = "Итог" };
 
             #endregion
 
@@ -1376,11 +1376,11 @@ namespace ServerApp.Data
 
             #endregion
             
-            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4]);
+            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5]);
             builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
-            builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7, markBlk8]);
+            builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7]);
             builder.Entity<Table>().HasData([tbl1, tbl2, tbl3, tbl4, tbl5, tbl6, tbl7, tbl8, tbl9, tbl10, tbl11, tbl12, tbl13]);
             builder.Entity<Column>().HasData([
                 col11, col12, col13, col14, col15,
@@ -1429,12 +1429,10 @@ namespace ServerApp.Data
                         new { TracksId = track1.Id, MarkBlocksId = markBlk3.Id },
                         new { TracksId = track1.Id, MarkBlocksId = markBlk4.Id },
                         new { TracksId = track1.Id, MarkBlocksId = markBlk7.Id },
-                        new { TracksId = track1.Id, MarkBlocksId = markBlk8.Id },
                         new { TracksId = track2.Id, MarkBlocksId = markBlk1.Id },
                         new { TracksId = track2.Id, MarkBlocksId = markBlk5.Id },
                         new { TracksId = track2.Id, MarkBlocksId = markBlk6.Id },
-                        new { TracksId = track2.Id, MarkBlocksId = markBlk7.Id },
-                        new { TracksId = track2.Id, MarkBlocksId = markBlk8.Id }
+                        new { TracksId = track2.Id, MarkBlocksId = markBlk7.Id }
                     ])
                 );
             builder.Entity<MarkBlock>().HasMany(e => e.Tables).WithMany(e => e.MarkBlocks)
