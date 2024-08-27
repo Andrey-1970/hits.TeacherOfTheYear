@@ -10,5 +10,6 @@ namespace ServerApp.Data.Interfaces
         IAdminBase<Mark> Mark { get; }
         IAdminBase<Field> Field { get; }
         IAdminBase<Table> Table { get; }
+        IAdminBase<Column> Column { get; }
     }
 }

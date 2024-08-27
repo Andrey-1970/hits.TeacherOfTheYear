@@ -36,12 +36,12 @@
                             <tr>
                                 <td class="p-2">
                                     <div class="d-flex justify-content-between">
-                                        <label class="form-check-label" for="@markBlock.Name-@mark.Id">
+                                        <label class="form-check-label" for="@markBlock.Id-@mark.Id">
                                             @markBlock.Name
                                         </label>
                                         <div>
-                                            <input class="form-check-input" type="checkbox" id="@markBlock.Name-@mark.Id"
-                                                   @bind="markBlockSelections[mark.Id][markBlock.Name!]" />
+                                            <input class="form-check-input" type="checkbox" id="@markBlock.Id-@mark.Id"
+                                                   @bind="markBlockSelections[mark.Id][markBlock.Id!]" />
                                         </div>
                                     </div>
                                 </td>
@@ -65,7 +65,7 @@
     Mark mark = new();
 
     IEnumerable<MarkBlock> markBlocks = Enumerable.Empty<MarkBlock>();
-    Dictionary<Guid, Dictionary<string, bool>> markBlockSelections = new();
+    Dictionary<Guid, Dictionary<Guid, bool>> markBlockSelections = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,7 +78,7 @@
         markBlocks = await data.MarkBlock.GetAllAsync();
         if (!markBlockSelections.ContainsKey(mark.Id))
         {
-            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
+            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Id!, block => mark.MarkBlocks!.Any(b => b.Id == block.Id));
         }
     }
 
@@ -86,13 +86,13 @@
     {
         if (markBlockSelections.TryGetValue(mark.Id, out var blockSelection))
         {
-            mark.MarkBlocks = markBlocks.Where(b => blockSelection.TryGetValue(b.Name!, out bool selected) && selected).ToList();
+            mark.MarkBlocks = markBlocks.Where(b => blockSelection.TryGetValue(b.Id!, out bool selected) && selected).ToList();
         }
 
         await data.Mark.SaveAsync(mark);
         if (!markBlockSelections.ContainsKey(mark.Id))
         {
-            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Name!, block => mark.MarkBlocks!.Any(b => b.Name == block.Name));
+            markBlockSelections[mark.Id] = markBlocks.ToDictionary(block => block.Id!, block => mark.MarkBlocks!.Any(b => b.Id == block.Id));
         }
 
         navigation.NavigateTo("/admin/marks");
