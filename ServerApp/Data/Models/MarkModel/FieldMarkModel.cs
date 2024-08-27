@@ -23,6 +23,7 @@ public class FieldMarkModel
     public Guid ValId { get; set; }
     public int? Number { get; set; }
     public string? Name { get; set; }
+    public string? EditGroup { get; set; }
     public string? Value { get; set; }
     public MarkModel[] Marks { get; set; } = [];
 }
