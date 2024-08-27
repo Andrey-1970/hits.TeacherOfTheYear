@@ -17,6 +17,7 @@ public class FieldMarkModel
         Number = field.Number;
         Name = field.Name;
         Value = field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id)?.Value;
+        EditGroup = field.EditGroup;
     }
     
     public Guid Id { get; set; }
