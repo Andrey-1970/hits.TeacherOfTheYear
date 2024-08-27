@@ -1,0 +1,109 @@
+﻿@page "/admin/tables"
+
+@inject IAdmin data
+@inject NavigationManager navigation
+
+<PageTitle>Настройка таблиц</PageTitle>
+
+<div class="block">
+    <div class="block-content">
+        @if (tables != null)
+        {
+            <Card class="w-100">
+                <CardHeader>Таблицы</CardHeader>
+                <CardBody>
+                    <div class="d-flex flex-column gap-3">
+                        <input type="text" class="form-control" placeholder="Поиск по названию" @bind="searchQuery" @oninput="OnSearchInput" />
+
+                        <div class="table-container">
+                            <table class="table table-hover table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="p-2">Название таблицы</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (filteredTables.Any())
+                                    {
+                                        @foreach (var table in filteredTables)
+                                        {
+                                            <tr>
+                                                <td class="p-2">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div style="width: 94%;">
+                                                            @table.Name
+                                                        </div>
+                                                        <div>
+                                                            <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(table.Id)" />
+                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveTable(table)" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="2" class="text-center">Не найдено</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </CardBody>
+            </Card>
+        }
+        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+            <a type="button" class="btn btn-primary" href="/admin/tables/new">Добавить</a>
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<Table> tables = default!;
+    IEnumerable<Table> filteredTables = new List<Table>();
+
+    string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        tables = await data.Table.GetAllAsync();
+        filteredTables = tables;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterTables();
+    }
+
+    private void FilterTables()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredTables = tables;
+        }
+        else
+        {
+            filteredTables = tables.Where(t => t.Name != null && t.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+
+    async Task RemoveTable(Table mark)
+    {
+        await data.Table.RemoveAsync(mark);
+        tables = await data.Table.GetAllAsync();
+
+        StateHasChanged();
+    }
+
+    void GoTo(Guid id)
+    {
+        navigation.NavigateTo($"/admin/tables/{id}");
+    }
+}
