@@ -14,7 +14,7 @@ public class RowModel
         if (row == null)
             throw new ArgumentNullException(nameof(row));
         Id = row.Id;
-        Cells = row.CellVals.Select(c => new CellModel(c)).ToArray();
+        Cells = row.CellVals.OrderBy(e => e.Column!.Number).Select(c => new CellModel(c)).ToList();
     }
 
     public Row ToEntity()
@@ -27,5 +27,5 @@ public class RowModel
     }
         
     public Guid Id { get; set; }
-    public CellModel[] Cells { get; set; } = [];
+    public List<CellModel> Cells { get; set; } = [];
 }

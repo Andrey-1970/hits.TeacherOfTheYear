@@ -14,6 +14,8 @@ public class CellModel
         if (cell == null)
             throw new ArgumentNullException(nameof(cell));
         Id = cell.Id;
+        IsPrefilled = cell.IsPrefilled;
+        Disable = cell.Disable;
         Value = cell.Value;
         ColumnId = cell.ColumnId;
     }
@@ -28,6 +30,8 @@ public class CellModel
         };
     }
     public Guid Id { get; set; }
+    public bool IsPrefilled { get; set; }
+    public bool Disable { get; set; }
     public string? ValueType { get; set; }
     public string?[] SelectValues { get; set; } = [];
     public string? Value { get; set; }

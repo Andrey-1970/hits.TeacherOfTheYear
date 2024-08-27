@@ -15,7 +15,8 @@ public class TableModel
             throw new ArgumentNullException(nameof(table));
         Id = table.Id;
         Name = table.Name;
-        Columns = table.Columns.Select(c => new ColumnModel(c)).ToList();
+        IsPrefilled = table.IsPrefilled;
+        Columns = table.Columns.OrderBy(c => c.Number).Select(c => new ColumnModel(c)).ToList();
         Rows = table.Rows.Select(r => new RowModel(r)).ToList();
     }
 
@@ -31,6 +32,7 @@ public class TableModel
     }
     public Guid Id { get; set; }
     public string? Name { get; set; }
+    public bool IsPrefilled { get; set; }
     public List<ColumnModel> Columns { get; set; } = [];
     public List<RowModel> Rows { get; set; } = [];
 }

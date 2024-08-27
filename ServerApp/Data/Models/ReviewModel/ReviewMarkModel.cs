@@ -3,14 +3,14 @@ using ServerApp.Data.Models.EditModel;
 
 namespace ServerApp.Data.Models.ReviewModel;
 
-public class MarkModel
+public class ReviewMarkModel
 {
-    public MarkModel()
+    public ReviewMarkModel()
     {
         
     }
 
-    public MarkModel(ApplicationForm applicationForm)
+    public ReviewMarkModel(ApplicationForm applicationForm)
     {
         ApplicationId = applicationForm.Id;
         SelectedTrackId = applicationForm.TrackId;

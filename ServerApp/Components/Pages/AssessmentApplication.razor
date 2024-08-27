@@ -126,7 +126,7 @@
     [Parameter]
     public string? Id { get; set; }
 
-    MarkModel? model;
+    ReviewMarkModel? model;
     MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
 
     protected override async Task OnInitializedAsync()

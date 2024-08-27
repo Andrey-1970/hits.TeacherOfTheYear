@@ -587,7 +587,8 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 10,
                 Name = "Персональные идентификаторы и показатели",
-                EditBlockId = editBlk5.Id
+                EditBlockId = editBlk5.Id,
+                IsPrefilled = true
             };
 
             #region Columns4Table10
@@ -632,6 +633,382 @@ namespace ServerApp.Data
                 ValueTypeId = valType2.Id,
                 TableId = tbl10.Id
             };
+
+            #endregion
+
+            #region Rows4Table10
+
+            var row101 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row101
+
+            var cell1011 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row101.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "ScopusID"
+            };
+            var cell1012 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row101.Id,
+                ColumnId = col102.Id,
+                Disable = false
+            };
+            var cell1013 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row101.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1014 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row101.Id,
+                ColumnId = col104.Id,
+                Disable = false
+            };
+            var cell1015 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row101.Id,
+                ColumnId = col105.Id,
+                Disable = false
+            };
+
+            #endregion
+
+            var row102 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row102
+
+            var cell1021 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row102.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "ORCiD"
+            };
+            var cell1022 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row102.Id,
+                ColumnId = col102.Id,
+                Disable = false
+            };
+            var cell1023 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row102.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1024 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row102.Id,
+                ColumnId = col104.Id,
+                Disable = true
+            };
+            var cell1025 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row102.Id,
+                ColumnId = col105.Id,
+                Disable = true
+            };
+
+            #endregion
+
+            var row103 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row103
+
+            var cell1031 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row103.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "ResearcherID"
+            };
+            var cell1032 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row103.Id,
+                ColumnId = col102.Id,
+                Disable = false
+            };
+            var cell1033 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row103.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1034 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row103.Id,
+                ColumnId = col104.Id,
+                Disable = false
+            };
+            var cell1035 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row103.Id,
+                ColumnId = col105.Id,
+                Disable = false
+            };
+
+            #endregion
+
+            var row104 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row104
+
+            var cell1041 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row104.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "РИНЦ AuthorID"
+            };
+            var cell1042 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row104.Id,
+                ColumnId = col102.Id,
+                Disable = false
+            };
+            var cell1043 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row104.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1044 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row104.Id,
+                ColumnId = col104.Id,
+                Disable = false
+            };
+            var cell1045 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row104.Id,
+                ColumnId = col105.Id,
+                Disable = false
+            };
+
+            #endregion
+
+            var row105 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row105
+
+            var cell1051 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row105.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "Google Scholar ID"
+            };
+            var cell1052 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row105.Id,
+                ColumnId = col102.Id,
+                Disable = false
+            };
+            var cell1053 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row105.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1054 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row105.Id,
+                ColumnId = col104.Id,
+                Disable = false
+            };
+            var cell1055 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row105.Id,
+                ColumnId = col105.Id,
+                Disable = false
+            };
+
+            #endregion
+
+            var row106 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row106
+
+            var cell1061 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row106.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "Количество монографий/глав в монографии"
+            };
+            var cell1062 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row106.Id,
+                ColumnId = col102.Id,
+                Disable = true
+            };
+            var cell1063 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row106.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1064 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row106.Id,
+                ColumnId = col104.Id,
+                Disable = false
+            };
+            var cell1065 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row106.Id,
+                ColumnId = col105.Id,
+                Disable = true
+            };
+
+            #endregion
+
+            var row107 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl10.Id
+            };
+
+            #region Cells4Row107
+
+            var cell1071 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row107.Id,
+                ColumnId = col101.Id,
+                Disable = true,
+                Value = "Количество патентов"
+            };
+            var cell1072 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row107.Id,
+                ColumnId = col102.Id,
+                Disable = true
+            };
+            var cell1073 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row107.Id,
+                ColumnId = col103.Id,
+                Disable = false
+            };
+            var cell1074 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row107.Id,
+                ColumnId = col104.Id,
+                Disable = true
+            };
+            var cell1075 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                RowId = row107.Id,
+                ColumnId = col105.Id,
+                Disable = true
+            };
+
+
+            #endregion
 
             #endregion
 
@@ -1362,6 +1739,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 25,
                 Name = "Оценка уровня предоставленной работы:",
+                IsAuto = false
                 //todo: добавить Field конкурсной работы
             };
             var mark26 = new Mark()
@@ -1371,6 +1749,7 @@ namespace ServerApp.Data
                 Name = "Использование в представленной работе" +
                        " инновационных методов (проблемного и проективного обучения, " +
                        "тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
+                IsAuto = false
                 //todo: добавить Field конкурсной работы
             };
 
@@ -1396,6 +1775,16 @@ namespace ServerApp.Data
                 col111, col112, col113, col114, col115,
                 col121, col122, col123, col124,
                 col131, col132, col133
+            ]);
+            builder.Entity<Row>().HasData([row101, row102, row103, row104, row105, row106, row107]);
+            builder.Entity<CellVal>().HasData([
+                cell1011, cell1012, cell1013, cell1014, cell1015,
+                cell1021, cell1022, cell1023, cell1024, cell1025,
+                cell1031, cell1032, cell1033, cell1034, cell1035,
+                cell1041, cell1042, cell1043, cell1044, cell1045,
+                cell1051, cell1052, cell1053, cell1054, cell1055,
+                cell1061, cell1062, cell1063, cell1064, cell1065,
+                cell1071, cell1072, cell1073, cell1074, cell1075 
             ]);
             builder.Entity<SelectValue>().HasData([
                 slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7, slctVall8, slctVall9,

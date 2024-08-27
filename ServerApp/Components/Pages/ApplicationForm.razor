@@ -67,13 +67,13 @@
                                 </div>
                             }
                         }
-                        @if (model.Tables is not null && model.Tables.Any())
+                        @if (model.Tables.Any())
                         {
                             @foreach (var table in model.Tables)
                             {
                                 <div class="table-container mb-2">
                                     <div class="block-subtitle-text">@table.Name</div>
-                                    @if (table.Rows is not null && table.Rows.Any())
+                                    @if (table.Rows.Any())
                                     {
                                         <table class="table-stand">
                                             <thead>
@@ -82,7 +82,7 @@
                                                     {
                                                         <th>@column.Name</th>
                                                     }
-                                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                                    @if (!table.IsPrefilled)
                                                     {
                                                         <th></th>
                                                     }
@@ -92,26 +92,88 @@
                                                 @foreach (var row in table.Rows)
                                                 {
                                                     <tr>
-                                                        @foreach (var cell in row.Cells)
+                                                        @for (int i = 0; i < row.Cells.Count; i++)
                                                         {
-                                                            <td>
-                                                                @if (cell.SelectValues is not null && cell.SelectValues.Any())
+                                                            var cell = row.Cells[i];
+
+                                                            if (i < row.Cells.Count - 1)
+                                                            {
+                                                                var nextCell = row.Cells[i + 1];
+
+                                                                if (cell is { Disable: true, Value: not null } && nextCell is { Disable: true, Value: null })
                                                                 {
-                                                                    <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
-                                                                        <option value="@string.Empty" disabled selected hidden></option>
-                                                                        @foreach (var value in cell.SelectValues)
+                                                                    <td colspan="2">
+                                                                        @if (cell is { Disable: true, Value: not null })
                                                                         {
-                                                                            <option value="@value">@value</option>
+                                                                            @cell.Value
                                                                         }
-                                                                    </InputSelect>
+                                                                        else if (cell.SelectValues.Any())
+                                                                        {
+                                                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                                <option value="@string.Empty" disabled selected hidden></option>
+                                                                                @foreach (var value in cell.SelectValues)
+                                                                                {
+                                                                                    <option value="@value">@value</option>
+                                                                                }
+                                                                            </InputSelect>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
+                                                                        }
+                                                                    </td>
+
+                                                                    i++;
                                                                 }
                                                                 else
                                                                 {
-                                                                    <InputText class="form-control" @bind-Value="cell.Value" />
+                                                                    <td>
+                                                                        @if (cell is { Disable: true, Value: not null })
+                                                                        {
+                                                                            @cell.Value
+                                                                        }
+                                                                        else if (cell.SelectValues.Any())
+                                                                        {
+                                                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                                <option value="@string.Empty" disabled selected hidden></option>
+                                                                                @foreach (var value in cell.SelectValues)
+                                                                                {
+                                                                                    <option value="@value">@value</option>
+                                                                                }
+                                                                            </InputSelect>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
+                                                                        }
+                                                                    </td>
                                                                 }
-                                                            </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    @if (cell is { Disable: true, Value: not null })
+                                                                    {
+                                                                        @cell.Value
+                                                                    }
+                                                                    else if (cell.SelectValues.Any())
+                                                                    {
+                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                            <option value="@string.Empty" disabled selected hidden></option>
+                                                                            @foreach (var value in cell.SelectValues)
+                                                                            {
+                                                                                <option value="@value">@value</option>
+                                                                            }
+                                                                        </InputSelect>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
+                                                                    }
+                                                                </td>
+                                                            }
                                                         }
-                                                        @if (table.Name != "Персональные идентификаторы и показатели")
+                                                        @if (!table.IsPrefilled)
                                                         {
                                                             <td style="width: 50px;">
                                                                 <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="async () => await DeleteRow(table, row)" type="button" />
@@ -122,7 +184,7 @@
                                             </tbody>
                                         </table>
                                     }
-                                    @if (table.Name != "Персональные идентификаторы и показатели")
+                                    @if (!table.IsPrefilled)
                                     {
                                         <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
                                     }
@@ -274,6 +336,11 @@
 
     void CheckCell(CellModel cell)
     {
+        if (cell.Disable)
+        {
+            return;
+        }
+
         if (string.IsNullOrEmpty(cell.Value))
         {
             messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");

@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Models\MarkModel\" />
     <Folder Include="Data\SQLite\" />
   </ItemGroup>
 

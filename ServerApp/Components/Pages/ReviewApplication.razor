@@ -17,7 +17,7 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @model.SelectedTrackId</div> //todo: track
+                <div class="form-text">Выбранный трек: @data.GetTrackAsync(model.SelectedTrackId).Result.Name</div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
@@ -151,7 +151,7 @@
     [Parameter]
     public string? Id { get; set; }
 
-    MarkModel? model;
+    ReviewMarkModel? model;
     string? Comment;
     MarkBlockModel ResultBlock = new MarkBlockModel() {Id = Guid.NewGuid(), Name = "Итог"};
 

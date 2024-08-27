@@ -8,6 +8,9 @@ namespace ServerApp.Data.Entities
         public int Number { get; set; }
         [MaxLength(255)] 
         public string? Name { get; set; }
+
+        public bool IsAuto { get; set; } = true;
+        public int MaxValue { get; set; } = 10; //todo: remove default value
         public virtual Guid? FieldId { get; set; }
         public virtual Field? Field { get; set; }
         public virtual Guid? TableId { get; set; }

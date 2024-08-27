@@ -1,5 +1,6 @@
 ﻿using ServerApp.Data.Entities;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 
 namespace ServerApp.Data.Interfaces
@@ -18,7 +19,7 @@ namespace ServerApp.Data.Interfaces
         Task SetCurrentUserApplicationStatusWaitingForReviewedAsync();
         Task SetApplicationStatusReviewProcessAsync(Guid appId);
         Task<UserInfoModel[]> GetUserInfosModelsAsync();
-        Task<MarkModel> GetUserMarkModelAsync(Guid userInfoId);
+        Task<ReviewMarkModel> GetUserMarkModelAsync(Guid userInfoId);
         Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId);
         Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
@@ -26,5 +27,12 @@ namespace ServerApp.Data.Interfaces
         Task SaveCommentReviewBlockAsync(Guid? markBlockId, Guid? appId, string? comment);
         Task ApproveApplicationFormAsync(Guid? applicationId);
         Task RejectApplicationFormAsync(Guid? applicationId);
+        Task<TrackModel> GetTrackAsync(Guid? trackId);
+        
+        //Новые методы для страницы оценки
+        Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId);
+        Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId);
+        Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
+        Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
     }
 }
