@@ -1927,8 +1927,8 @@ namespace ServerApp.Data
                     new {MarkBlocksId = markBlk6.Id, MarksId = mark15.Id},
                     new {MarkBlocksId = markBlk6.Id, MarksId = mark23.Id},
                     new {MarkBlocksId = markBlk6.Id, MarksId = mark24.Id},
-                    new {MarkBlocksId = markBlk6.Id, MarksId = mark25.Id},
-                    new {MarkBlocksId = markBlk6.Id, MarksId = mark26.Id},
+                    new {MarkBlocksId = markBlk7.Id, MarksId = mark25.Id},
+                    new {MarkBlocksId = markBlk7.Id, MarksId = mark26.Id},
                 ]));
         }
     }

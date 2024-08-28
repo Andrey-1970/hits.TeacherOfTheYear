@@ -960,7 +960,7 @@ namespace ServerApp.Data.Services
                         Value = markVal?.Value ?? 0,
                         MaxValue = e.MaxValue,
                         IsAuto = e.IsAuto,
-                        // ValId = markVal?.Id ?? Guid.NewGuid()
+                        ValId = markVal?.Id ?? Guid.NewGuid()
                     };
                 }).ToList();
 

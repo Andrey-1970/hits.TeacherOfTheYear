@@ -209,6 +209,14 @@
     {
         mark.Value = value;
         await data.SaveMarkAsync(mark, model!.ApplicationId);
+        model.MarkBlocks = await data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId);
+        var newMarkBlocks = model.MarkBlocks.ToList();
+        var sum = model.MarkBlocks.Sum(mb => mb.SummaryMarksBlock);
+        ResultBlock.SummaryMarksBlock = sum;
+        var maxSum = model.Marks.Sum(m => m.MaxValue) + 10; //todo: добавить поле общественного признания
+        ResultBlock.Procent = Math.Round((double)((double)sum / maxSum * 100)!, 2);
+        newMarkBlocks.Add(ResultBlock);
+        model.MarkBlocks = newMarkBlocks.ToArray();
     }
 
     async Task Assessment()
