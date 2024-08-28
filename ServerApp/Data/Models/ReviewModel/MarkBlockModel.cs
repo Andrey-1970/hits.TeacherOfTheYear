@@ -18,4 +18,5 @@ public class MarkBlockModel
     public Guid Id { get; set; }
     public string? Name { get; set; }
     public int SummaryMarksBlock { get; set; } = 0;
+    public double Procent { get; set; } = 0;
 }

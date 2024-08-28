@@ -1568,7 +1568,8 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Баллы за объем учебной нагрузки:",
-                TableId = tbl3.Id
+                TableId = tbl3.Id,
+                MaxValue = 3
             };
             var mark2 = new Mark()
             {
@@ -1576,7 +1577,8 @@ namespace ServerApp.Data
                 Number = 2,
                 Name = "Баллы за количество дисциплин на иностранном языке," +
                        " которые вел претендент, в предыдущем учебном году:",
-                TableId = tbl3.Id
+                TableId = tbl3.Id,
+                MaxValue = 2
             };
             var mark3 = new Mark()
             {
@@ -1584,21 +1586,24 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
-                FieldId = fld23.Id
+                FieldId = fld23.Id,
+                MaxValue = 5
             };
             var mark4 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld19.Id
+                FieldId = fld19.Id,
+                MaxValue = 2
             };
             var mark5 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld20.Id
+                FieldId = fld20.Id,
+                MaxValue = 4
             };
             var mark6 = new Mark()
             {
@@ -1606,141 +1611,161 @@ namespace ServerApp.Data
                 Number = 6,
                 Name = "Баллы за количество подготовленных студентов, бакалавров, " +
                        "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:",
-                TableId = tbl4.Id
+                TableId = tbl4.Id,
+                MaxValue = 4
             };
             var mark7 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 7,
                 Name = "Баллы за количество онлайн курсов на открытых площадках:",
-                TableId = tbl8.Id
+                TableId = tbl8.Id,
+                MaxValue = 5
             };
             var mark8 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 8,
                 Name = "Баллы за труды с грифом и без соавторства:",
-                TableId = tbl6.Id
+                TableId = tbl6.Id,
+                MaxValue = 5
             };
             var mark9 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 9,
                 Name = "Баллы за труды с грифом в соавторстве:",
-                TableId = tbl6.Id
+                TableId = tbl6.Id,
+                MaxValue = 3
             };
             var mark10 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 10,
                 Name = "Баллы за труды без грифа и без соавторства:",
-                TableId = tbl6.Id
+                TableId = tbl6.Id,
+                MaxValue = 2
             };
             var mark11 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 11,
                 Name = "Баллы за труды без грифа в соавторстве:",
-                TableId = tbl6.Id
+                TableId = tbl6.Id,
+                MaxValue = 2
             };
             var mark12 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 12,
                 Name = "Баллы за количество практикумов и курсов лекций:",
-                TableId = tbl7.Id
+                TableId = tbl7.Id,
+                MaxValue = 4
             };
             var mark13 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Баллы за ученое звание:",
-                FieldId = fld16.Id
+                FieldId = fld16.Id,
+                MaxValue = 5
             };
             var mark14 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 14,
                 Name = "Баллы за награды:",
-                TableId = tbl1.Id
+                TableId = tbl1.Id,
+                MaxValue = 2
             };
             var mark15 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 15,
                 Name = "Баллы за профессиональное развитие:",
-                TableId = tbl2.Id
+                TableId = tbl2.Id,
+                MaxValue = 2
             };
             var mark16 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 16,
                 Name = "Баллы за научные публикации:",
-                TableId = tbl9.Id
+                TableId = tbl9.Id,
+                MaxValue = 5
             };
             var mark17 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 17,
                 Name = "Баллы по базе Scopus:",
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                MaxValue = 5
             };
             var mark18 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 18,
                 Name = "Баллы по базе РИНЦ:",
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                MaxValue = 3
             };
             var mark19 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld24.Id
+                FieldId = fld24.Id,
+                MaxValue = 2
             };
             var mark20 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld25.Id
+                FieldId = fld25.Id,
+                MaxValue = 4
             };
             var mark21 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве руководителя:",
-                TableId = tbl11.Id
+                TableId = tbl11.Id,
+                MaxValue = 4
             };
             var mark22 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 22,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве исполнителя:",
-                TableId = tbl11.Id
+                TableId = tbl11.Id,
+                MaxValue = 2
             };
             var mark23 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 23,
                 Name = "Баллы за количество объектов интеллектуальной собственности:",
-                TableId = tbl12.Id
+                TableId = tbl12.Id,
+                MaxValue = 5
             };
             var mark24 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 24,
                 Name = "Баллы за количество разработок:",
-                TableId = tbl13.Id
+                TableId = tbl13.Id,
+                MaxValue = 5
             };
             var mark25 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 25,
                 Name = "Оценка уровня предоставленной работы:",
-                IsAuto = false
-                //todo: добавить Field конкурсной работы
+                IsAuto = false,
+                FieldId = fld15.Id,
+                MaxValue = 10
             };
             var mark26 = new Mark()
             {
@@ -1749,8 +1774,9 @@ namespace ServerApp.Data
                 Name = "Использование в представленной работе" +
                        " инновационных методов (проблемного и проективного обучения, " +
                        "тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
-                IsAuto = false
-                //todo: добавить Field конкурсной работы
+                IsAuto = false,
+                FieldId = fld15.Id,
+                MaxValue = 10
             };
 
             #endregion

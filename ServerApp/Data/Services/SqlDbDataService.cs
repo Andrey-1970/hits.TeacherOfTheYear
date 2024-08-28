@@ -459,111 +459,418 @@ namespace ServerApp.Data.Services
         private async Task AutoSetMarks(Guid? appId)
         {
             var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
-                .ThenInclude(track => track.EditBlocks).Include(applicationForm => applicationForm.Track)
-                .ThenInclude(track => track.MarkBlocks).ThenInclude(markBlock => markBlock.Marks).FirstOrDefaultAsync(e => e.Id == appId)
+                          .ThenInclude(track => track.EditBlocks).Include(applicationForm => applicationForm.Track)
+                          .ThenInclude(track => track.MarkBlocks).ThenInclude(markBlock => markBlock.Marks)
+                          .ThenInclude(mark => mark.Field!).ThenInclude(field => field.FieldVals).FirstOrDefaultAsync(e => e.Id == appId)
                 ?? throw new NullReferenceException("Current application not found.");
-            MarkVal markValRes= new MarkVal() { Id = Guid.NewGuid(), ApplicationId = app.Id};
-            if (app!.Track.Name == "Научно-педагогическая деятельность")
+            MarkVal markValRes= new MarkVal() { ApplicationId = app.Id};
+            foreach (var markBlock in app.Track.MarkBlocks)
             {
-                foreach (var markBlock in app.Track.MarkBlocks)
+                foreach (var mark in markBlock.Marks)
                 {
-                    foreach (var mark in markBlock.Marks)
+                    if (mark.IsAuto)
                     {
+                        markValRes.Id = Guid.NewGuid();
                         markValRes.MarkId = mark.Id;
-                        if (mark.Number == 1)
+                        markValRes.Mark = mark;
+                        switch (mark.Number)
                         {
-                            var vals = context.CellVals.Where(c => c.ApplicationId == appId && c.Row!.TableId == mark.TableId).ToArray();
-                            int resval = 0;
-                            foreach (var val in vals.Where(c => c.Column!.Name == "Итого (час)"))
+                            case 1:
                             {
-                                resval += int.Parse(val.Value ?? "0");
-                            }
-                            
-                            if (resval is >= 1 and <= 199)
-                            {
-                                markValRes.Value = 1;
-                            } 
-                            else if (resval is >= 200 and <= 399)
-                            {
-                                markValRes.Value = 2;
-                            } 
-                            else if (resval >= 400)
-                            {
-                                markValRes.Value = 3;
-                            }
-                            else
-                            {
-                                markValRes.Value = 0;
-                            }
-                        }
-                        else if (mark.Number == 2)
-                        {
-                            var vals = context.CellVals.Where(c => c.ApplicationId == appId && c.Row!.TableId == mark.TableId).ToArray();
-                            var resval = vals.Length;
-                            if (resval == 1)
-                            {
-                                markValRes.Value = 1;
-                            }
-                            else if (resval >= 2)
-                            {
-                                markValRes.Value = 2;
-                            }
-                            else
-                            {
-                                markValRes.Value = 0;
-                            }
-                        }
-                        else if (mark.Number == 3)
-                        {
-                            var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
-                            var val = int.Parse(fld!.Value ?? "0");
+                                var vals = context.CellVals
+                                    .Where(c => c.ApplicationId == appId && c.Row!.TableId == mark.TableId).ToArray();
+                                int resval = 0;
+                                foreach (var val in vals.Where(c => c.Column!.Name == "Итого (час.)"))
+                                {
+                                    resval += int.Parse(val.Value ?? "0");
+                                }
 
-                            if (val == 1)
-                            {
-                                markValRes.Value = 1;
+                                markValRes.Value = resval switch
+                                {
+                                    >= 1 and <= 199 => 1,
+                                    >= 200 and <= 399 => 2,
+                                    >= 400 => 3,
+                                    _ => 0
+                                };
+                                break;
                             }
-                            else if(val == 2)
+                            case 2:
                             {
-                                markValRes.Value = 2;
+                                var vals = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId && r.CellVals.Any(c => c.ApplicationId == appId));
+                                var resval = vals.Count();
+
+                                markValRes.Value = resval switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
                             }
-                            else if(val == 3)
+                            case 3:
                             {
-                                markValRes.Value = 3;
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = int.Parse(fld!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    1 => 1,
+                                    2 => 2,
+                                    3 => 3,
+                                    4 => 4,
+                                    >= 5 => 5,
+                                    _ => 0
+                                };
+                                break;
                             }
-                            else if(val == 4)
+                            case 4:
                             {
-                                markValRes.Value = 4;
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = int.Parse(fld!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
                             }
-                            else if(val >= 5)
+                            case 5:
                             {
-                                markValRes.Value = 5;
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = int.Parse(fld!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    1 => 2,
+                                    >= 2 => 4,
+                                    _ => 0
+                                };
+                                break;
                             }
-                            else
+                            case 6:
                             {
-                                markValRes.Value = 0;
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    >= 1 and <= 2 => 1,
+                                    >= 3 and <= 4 => 2,
+                                    >= 5 and <= 6 => 3,
+                                    >= 7 => 4,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 7:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    2 => 2,
+                                    >= 3 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 8:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" &&
+                                        c.Value == "1") &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Соавторы" &&
+                                        (c.Value == null || c.Value == ""))
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 4,
+                                    >= 2 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 9:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" &&
+                                        c.Value == "1") &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Соавторы" &&
+                                        (c.Value != null || c.Value != ""))
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 2,
+                                    >= 2 => 3,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 10:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" &&
+                                        c.Value == "0") &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Соавторы" &&
+                                        (c.Value == null || c.Value == ""))
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 11:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" &&
+                                        c.Value == "0") &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId && c.Column!.Name == "Соавторы" &&
+                                        (c.Value != null || c.Value != ""))
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 12:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    >= 1 and <= 2 => 1,
+                                    >= 3 and <= 4 => 2,
+                                    >= 5 and <= 6 => 3,
+                                    >= 7 => 4,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 13:
+                            {
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = fld!.Value;
+
+                                markValRes.Value = val switch
+                                {
+                                    "Доцент" => 2,
+                                    "Профессор" => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 14:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 15:
+                            {
+                                var anyRows = context.Rows.Any(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+
+                                markValRes.Value = anyRows ? 2 : 0;
+                                break;
+                            }
+                            case 16:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    2 => 2,
+                                    3 => 3,
+                                    4 => 4,
+                                    >= 5 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 17:
+                            {
+                                var row = context.Rows.Include(row => row.CellVals)
+                                    .ThenInclude(cellVal => cellVal.Column).FirstOrDefault(r =>
+                                        r.CellVals.Any(c =>
+                                            c.ApplicationId == appId && c.Column!.Name == "Тип идентификатора" &&
+                                            c.Value == "ScopusID")
+                                    );
+                                var val = int.Parse(row.CellVals.FirstOrDefault(c =>
+                                    c.Column!.Name == "Индекс Хирша (за все время)")!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    <= 1 => 0,
+                                    4 => 4,
+                                    >= 5 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 18:
+                            {
+                                var row = context.Rows.Include(row => row.CellVals)
+                                    .ThenInclude(cellVal => cellVal.Column).FirstOrDefault(r =>
+                                        r.CellVals.Any(c =>
+                                            c.ApplicationId == appId && c.Column!.Name == "Тип идентификатора" &&
+                                            c.Value == "РИНЦ AuthorID")
+                                    );
+                                var val = int.Parse(row.CellVals.FirstOrDefault(c =>
+                                    c.Column!.Name == "Индекс Хирша (за все время)")!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    <= 1 => 0,
+                                    4 => 4,
+                                    >= 5 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 19:
+                            {
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = int.Parse(fld!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 2,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 20:
+                            {
+                                var fld = mark.Field!.FieldVals.FirstOrDefault(e => e.ApplicationId == appId);
+                                var val = int.Parse(fld!.Value ?? "0");
+
+                                markValRes.Value = val switch
+                                {
+                                    1 => 2,
+                                    >= 2 => 4,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 21:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId &&
+                                        c.Column!.Name == "Статус (руководитель/исполнитель)" &&
+                                        c.Value == "Руководитель")
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    >= 1 and <= 2 => 2,
+                                    >= 3 => 4,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 22:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c =>
+                                        c.ApplicationId == appId &&
+                                        c.Column!.Name == "Статус (руководитель/исполнитель)" &&
+                                        c.Value == "Исполнитель")
+                                ).ToList();
+                                var count = rows.Count;
+
+                                markValRes.Value = count switch
+                                {
+                                    >= 1 and <= 2 => 1,
+                                    >= 3 => 2,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 23:
+                            {
+                                var rows = context.Rows.Where(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+                                var count = rows.Count();
+
+                                markValRes.Value = count switch
+                                {
+                                    1 => 1,
+                                    >= 2 => 5,
+                                    _ => 0
+                                };
+                                break;
+                            }
+                            case 24:
+                            {
+                                var anyRows = context.Rows.Any(r =>
+                                    r.TableId == mark.TableId &&
+                                    r.CellVals.Any(c => c.ApplicationId == appId));
+
+                                markValRes.Value = anyRows ? 5 : 0;
+                                break;
                             }
                         }
-                        else if (mark.Number == 4)
-                        {
-                            
-                        }
-                        else if (mark.Number == 3)
-                        {
-                            
-                        }
-                        else if (mark.Number == 3)
-                        {
-                            
-                        }
-                        else if (mark.Number == 3)
-                        {
-                            
-                        }
-                        else if (mark.Number == 3)
-                        {
-                            
-                        }
+                        context.MarkVals.Add(markValRes);
                     }
+                    await context.SaveChangesAsync();
                 }
             }
         }
@@ -582,7 +889,9 @@ namespace ServerApp.Data.Services
             app.ApplicationStatusId = context.ApplicationStatuses.FirstOrDefault(e => e.Number == 4)!.Id;
             context.Update(app);
             await context.SaveChangesAsync();
-            
+
+            await AutoSetMarks(app.Id);
+
             //todo: Добавление пользователю роли "Participant"
         }
 
@@ -606,37 +915,107 @@ namespace ServerApp.Data.Services
         {
             return new TrackModel(await context.Tracks.FirstOrDefaultAsync(e => e.Id == trackId) ?? throw new InvalidOperationException("Does not have track for this Id."));
         }
+        
+        public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
+        {
+            var user = await auth.GetUserAsync();
+            var userInfos = await context.UserInfos
+                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4))
+                .Include(userInfo => userInfo.Applications)
+                .ThenInclude(applicationForm => applicationForm.ApplicationStatus)
+                .ToListAsync();
+
+            var userInfoModels = userInfos 
+                .Select(e => new UserInfoModel(e))
+                .ToArray();
+
+            return userInfoModels;        
+        }
 
         public async Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId)
         {
-            var user = await context.UserInfos.Include(userInfo => userInfo.Applications).FirstOrDefaultAsync(e => e.Id == userInfoId) ??
+            var user = await context.UserInfos
+                           .Include(userInfo => userInfo.Applications)
+                           .ThenInclude(applicationForm => applicationForm.Track)
+                           .FirstOrDefaultAsync(e => e.Id == userInfoId) ?? 
                        throw new UnauthorizedAccessException("User unauthorized.");
-            var app = user.Applications.First();
+
+            var app = user.Applications.FirstOrDefault() ?? 
+                      throw new InvalidOperationException("Application not found.");
+
             var assModel = new AssessmentModel(app);
-            var markBlocks = context.Tracks.FirstOrDefault(e => e.Id == app.Track.Id)?.MarkBlocks ?? throw new InvalidOperationException("Track not found");
+            var markBlocks = context.Tracks
+                                 .Include(t => t.MarkBlocks)
+                                 .ThenInclude(mb => mb.Marks)
+                                 .ThenInclude(m => m.MarkVals)
+                                 .FirstOrDefault(e => e.Id == app.Track.Id)?.MarkBlocks ?? 
+                             throw new InvalidOperationException("Track not found");
+
+            var resMarks = assModel.Marks.ToList();
             foreach (var markBlock in markBlocks)
             {
-                assModel.Marks = markBlock.Marks.Select(e => new MarkModel()
+                var markModels = markBlock.Marks.Select(e =>
                 {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Value = 0, // todo: e.MarkVals.FirstOrDefault(mv => mv.ApplicationId == appId)!.Value ?? 0
-                    MaxValue = e.MaxValue,
-                    IsAuto = e.IsAuto
-                }).ToArray();
+                    var markVal = e.MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id);
+                    return new MarkModel()
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        Value = markVal?.Value ?? 0,
+                        MaxValue = e.MaxValue,
+                        IsAuto = e.IsAuto
+                    };
+                }).ToList();
+
+                resMarks.AddRange(markModels);
             }
+
+// Присваиваем результат обратно в assModel
+            assModel.Marks = resMarks.ToArray();
 
             return assModel;
         }
         
-        public async Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId)
+        public async Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId)
         {
             var track = await context.Tracks.Include(track => track.MarkBlocks)
+                .ThenInclude(markBlock => markBlock.Marks).ThenInclude(mark => mark.MarkVals)
                 .FirstOrDefaultAsync(x => x.Id == trackId);
             var markBlocks = track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ?? [];
+            
+            var maxSum = track!.MarkBlocks
+                .SelectMany(mb => mb.Marks)
+                .Sum(e => e.MaxValue) + 10; //todo: добавить поле оценки зрительских симпатий
             foreach (var markBlock in markBlocks)
             {
-                markBlock.SummaryMarksBlock = 30;
+                // Находим текущий MarkBlock
+                var currentMarkBlock = track!.MarkBlocks.FirstOrDefault(mb => mb.Id == markBlock.Id);
+
+                // Продолжаем только если текущий MarkBlock не null
+                if (currentMarkBlock != null)
+                {
+                    // Суммируем значение баллов для текущего ApplicationId
+                    var sum = currentMarkBlock.Marks
+                        .SelectMany(e => e.MarkVals.Where(mv => mv.ApplicationId == appId))
+                        .Sum(mv => mv.Value) ?? 0;
+
+                    markBlock.SummaryMarksBlock = sum!;
+
+                    // Продолжаем только если maxSum больше нуля
+                    if (maxSum > 0)
+                    {
+                        markBlock.Procent = Math.Round((double)sum / maxSum * 100, 2);
+                    }
+                    else
+                    {
+                        markBlock.Procent = 0;
+                    }
+                }
+                else
+                {
+                    markBlock.SummaryMarksBlock = 0;
+                    markBlock.Procent = 0;
+                }
             }
 
             return markBlocks;
@@ -665,7 +1044,7 @@ namespace ServerApp.Data.Services
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Value = 0, // todo: m.MarkVals.FirstOrDefault(mv => mv.ApplicationId == appId)!.Value ?? 0
+                    Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                     MaxValue = m.MaxValue,
                     IsAuto = m.IsAuto
                 } ).ToArray();
@@ -682,6 +1061,8 @@ namespace ServerApp.Data.Services
                 .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
                 .ThenInclude(cellVal => cellVal.Column!)
                 .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
+                .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Marks)
+                .ThenInclude(mark => mark.MarkVals)
                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId);
 
             if (markBlock == null)
@@ -715,7 +1096,7 @@ namespace ServerApp.Data.Services
                     {
                         Id = m.Id,
                         Name = m.Name,
-                        Value = 0, // todo: m.MarkVals.FirstOrDefault(mv => mv.ApplicationId == appId)!.Value ?? 0
+                        Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                         MaxValue = m.MaxValue,
                         IsAuto = m.IsAuto
                     }).ToArray()

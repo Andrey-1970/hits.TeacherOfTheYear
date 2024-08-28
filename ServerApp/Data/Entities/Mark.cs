@@ -10,7 +10,7 @@ namespace ServerApp.Data.Entities
         public string? Name { get; set; }
 
         public bool IsAuto { get; set; } = true;
-        public int MaxValue { get; set; } = 10; //todo: remove default value
+        public int MaxValue { get; set; }
         public virtual Guid? FieldId { get; set; }
         public virtual Field? Field { get; set; }
         public virtual Guid? TableId { get; set; }

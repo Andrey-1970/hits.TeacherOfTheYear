@@ -56,7 +56,7 @@
     UserInfoModel[] participants = default!;
     protected override async void OnInitialized()
     {
-        participants = await data.GetUserInfosModelsAsync();
+        participants = await data.GetUserInfosModelsAssesmentAsync();
     }
 
     private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)

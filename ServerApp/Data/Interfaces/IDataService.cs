@@ -30,8 +30,9 @@ namespace ServerApp.Data.Interfaces
         Task<TrackModel> GetTrackAsync(Guid? trackId);
         
         //Новые методы для страницы оценки
+        Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync();
         Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId);
-        Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId);
+        Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId);
         Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
     }
