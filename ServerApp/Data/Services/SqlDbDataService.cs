@@ -68,7 +68,8 @@ namespace ServerApp.Data.Services
             {
                 if (table.IsPrefilled)
                 {
-                    if (table.Rows.Any(r => r.CellVals.Any(c => c.ApplicationId == user.Applications.First().Id)))
+                    if (table.Rows.Any(r => r.CellVals.Any(c => c.ApplicationId ==
+                            (user.Applications.FirstOrDefault() ?? new ApplicationForm()).Id)) && (user.Applications.FirstOrDefault() ?? new ApplicationForm()).Id != Guid.Empty)
                     {
                         res.Add(new TableModel()
                         {
@@ -81,12 +82,26 @@ namespace ServerApp.Data.Services
                     }
                     else
                     {
-                        res.Add(new TableModel(table));
+                        res.Add(new TableModel()
+                        {
+                            Id = table.Id,
+                            Name = table.Name,
+                            IsPrefilled = table.IsPrefilled,
+                            Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+                            Rows = table.Rows.Where(r => r.IsPrefilled).Select(r => new RowModel(r)).ToList()
+                        });
                     }
                 }
                 else
                 {
-                    res.Add(new TableModel(table));
+                    res.Add(new TableModel()
+                    {
+                        Id = table.Id,
+                        Name = table.Name,
+                        IsPrefilled = table.IsPrefilled,
+                        Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+                        Rows = table.Rows.Where(r => r.CellVals.Any(c => c.ApplicationId == (user.Applications.FirstOrDefault() ?? new ApplicationForm()).Id)).Select(r => new RowModel(r)).ToList()
+                    });
                 }
             }
 
@@ -95,14 +110,15 @@ namespace ServerApp.Data.Services
 
         public async Task<RowModel> GetRowModelAsync(Guid? tableId)
         {
-            var table = await context.Tables.FirstOrDefaultAsync(e => e.Id == tableId);
+            var table = await context.Tables.Include(table => table.Columns).ThenInclude(column => column.SelectValues)
+                .Include(table => table.Columns).ThenInclude(column => column.ValueType!).FirstOrDefaultAsync(e => e.Id == tableId);
             return new RowModel()
             {
                 Id = Guid.NewGuid(),
                 Cells = table!.Columns.OrderBy(t => t.Number).Select(e => new CellModel()
                 {
                     Id = Guid.NewGuid(), ValueType = e.ValueType!.Name,
-                    SelectValues = e.SelectValues.Select(e => e.Value).ToArray(),
+                    SelectValues = e.SelectValues.Select(sv => sv.Value).ToArray(),
                     ColumnId = e.Id
                 }).ToList()
             };
@@ -134,7 +150,7 @@ namespace ServerApp.Data.Services
 
             var app = await context.ApplicationForms
                 .Include(a => a.UserInfo)
-                .FirstOrDefaultAsync(a => a.UserInfo!.Id == user.Id);
+                .FirstOrDefaultAsync(a => a.UserInfo.Id == user.Id);
 
             if (app == null)
             {
@@ -148,13 +164,13 @@ namespace ServerApp.Data.Services
 
                 user.Applications.Add(app);
                 await context.ApplicationForms.AddAsync(app);
-                await context.SaveChangesAsync(); // Сохраняем, чтобы получить Id нового приложения
+                await context.SaveChangesAsync();
             }
             else
             {
                 app.TrackId = model.SelectedTrackId.Value;
                 context.ApplicationForms.Update(app);
-                await context.SaveChangesAsync(); // Сохраняем, чтобы обновить приложение
+                await context.SaveChangesAsync(); 
             }
 
             // Обработка полей
@@ -184,38 +200,19 @@ namespace ServerApp.Data.Services
 
             foreach (var tbl in tables)
             {
-                if (tbl.IsPrefilled)
-                {
-                    foreach (var row in tbl.Rows)
-                    {
-                        row.IsPrefilled = false;
-                        row.Id = Guid.NewGuid();
-
-                        foreach (var cell in row.CellVals)
-                        {
-                            cell.ApplicationId = app.Id;
-                            cell.RowId = row.Id;
-                            cell.Id = Guid.NewGuid();
-                        }
-
-                        context.Rows.Add(row);
-                    }
-                }
-                else
-                {
+                
                     foreach (var row in tbl.Rows)
                     {
                         row.TableId = tbl.Id;
 
                         var existingRow = await context.Rows
-                            .Include(r => r.CellVals) // Включаем ячейки для проверки ApplicationId
+                            .Include(r => r.CellVals) 
                             .FirstOrDefaultAsync(r =>
                                 r.Id == row.Id && r.TableId == row.TableId &&
                                 r.CellVals.Any(c => c.ApplicationId == app.Id));
 
                         if (existingRow == null)
                         {
-                            // Генерация нового идентификатора для новой строки
                             row.Id = Guid.NewGuid();
                             row.IsPrefilled = false;
 
@@ -251,7 +248,7 @@ namespace ServerApp.Data.Services
                             context.Rows.Update(existingRow);
                         }
                     }
-                }
+                
             }
 
             await context.SaveChangesAsync();
@@ -393,7 +390,7 @@ namespace ServerApp.Data.Services
                 .Include(e => e.Fields).ThenInclude(e => e.ValueType)
                 .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == markBlockId);
-            return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray() ?? [];
+            return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
         
         public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
@@ -433,7 +430,7 @@ namespace ServerApp.Data.Services
                                     ColumnId = cv.ColumnId
                                 }).ToList()
                         }).ToList()
-                }).ToArray() ?? [];
+                }).ToArray();
 
             return tables;
         }
@@ -918,7 +915,6 @@ namespace ServerApp.Data.Services
         
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
-            var user = await auth.GetUserAsync();
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4))
                 .Include(userInfo => userInfo.Applications)
@@ -988,20 +984,16 @@ namespace ServerApp.Data.Services
                 .Sum(e => e.MaxValue) + 10; //todo: добавить поле оценки зрительских симпатий
             foreach (var markBlock in markBlocks)
             {
-                // Находим текущий MarkBlock
-                var currentMarkBlock = track!.MarkBlocks.FirstOrDefault(mb => mb.Id == markBlock.Id);
+                var currentMarkBlock = track.MarkBlocks.FirstOrDefault(mb => mb.Id == markBlock.Id);
 
-                // Продолжаем только если текущий MarkBlock не null
                 if (currentMarkBlock != null)
                 {
-                    // Суммируем значение баллов для текущего ApplicationId
                     var sum = currentMarkBlock.Marks
                         .SelectMany(e => e.MarkVals.Where(mv => mv.ApplicationId == appId))
                         .Sum(mv => mv.Value) ?? 0;
 
                     markBlock.SummaryMarksBlock = sum!;
 
-                    // Продолжаем только если maxSum больше нуля
                     if (maxSum > 0)
                     {
                         markBlock.Procent = Math.Round((double)sum / maxSum * 100, 2);
@@ -1108,5 +1100,3 @@ namespace ServerApp.Data.Services
         
     }
 }
-//todo: Метод для итога оценок
-//todo: Методы для просчета оценок (при одобрении заявки)

@@ -27,7 +27,8 @@ public class TableModel
             Id = this.Id,
             Name = this.Name,
             Columns = this.Columns.Select(c => c.ToEntity()).ToList(),
-            Rows = this.Rows.Select(r => r.ToEntity()).ToList()
+            Rows = this.Rows.Select(r => r.ToEntity()).ToList(),
+            IsPrefilled = this.IsPrefilled
         };
     }
     public Guid Id { get; set; }

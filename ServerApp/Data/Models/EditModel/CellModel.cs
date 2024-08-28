@@ -26,7 +26,8 @@ public class CellModel
         {
             Id = this.Id,
             Value = this.Value,
-            ColumnId = this.ColumnId
+            ColumnId = this.ColumnId,
+            Disable = this.Disable
         };
     }
     public Guid Id { get; set; }
