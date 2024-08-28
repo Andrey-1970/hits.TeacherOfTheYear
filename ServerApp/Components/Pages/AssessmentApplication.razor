@@ -53,7 +53,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <InputNumber class="form-control" style="width: 70px;" @bind-Value="mark.Value" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
+                                                    <InputNumber TValue="int?" Value="@mark.Value" ValueExpression="@(() => @mark.Value)" ValueChanged="(value) => SaveMark(mark, value)" class="form-control" style="width: 70px;" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
                                                 }
                                             </div>
                                         </div>
@@ -111,10 +111,10 @@
                                             }
                                             else
                                             {
-                                                <InputNumber class="form-control" style="width: 70px;" @bind-Value="mark.Value" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
+                                                <InputNumber TValue="int?" Value="@mark.Value" ValueExpression="@(() => @mark.Value)" ValueChanged="(value) => SaveMark(mark, value)" class="form-control" style="width: 70px;" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
                                             }
                                         </div>
-                                        </div>
+                                    </div>
                                 }
                             </div>
                         }
@@ -205,8 +205,9 @@
         model.Tables = await data.GetTableMarkModelsForMarkBlockAsync(blockId, model.ApplicationId);
     }
 
-    async Task SaveMark(MarkModel mark)
+    async Task SaveMark(MarkModel mark, int? value)
     {
+        mark.Value = value;
         await data.SaveMarkAsync(mark, model!.ApplicationId);
     }
 
