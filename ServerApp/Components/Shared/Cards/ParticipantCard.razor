@@ -1,0 +1,26 @@
+@inject NavigationManager navigate
+
+<div class="card-form" type="button" @* @onclick="async () => await ViewInfo(Participant.Id!)" *@>
+    <div class="professor-avatar"></div>
+    <div class="description">
+        @* <div class="div">@Participant.Name</div> *@
+        <div class="institution">
+            <div class="div2">Учебное заведение:</div>
+            @* <div class="div3">@Participant.WorkPlace</div> *@
+        </div>
+        <div class="degree">
+            <div class="div2">Ученая степень:</div>
+            @* <div class="div3">@Participant.AcademicDegree</div> *@
+        </div>
+    </div>
+</div>
+
+@code {
+    // [Parameter, EditorRequired]
+    // public Participant? Participant { get; set; }
+
+    // async Task ViewInfo(Guid Id)
+    // {
+    //     await Task.Run(() => navigate.NavigateTo($"/voting/category/participant/{Id}#"));
+    // }
+}

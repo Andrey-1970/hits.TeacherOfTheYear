@@ -1,0 +1,87 @@
+.card-form,
+.card-form * {
+  box-sizing: border-box;
+}
+.card-form {
+  background: #ffffff;
+  border-radius: var(--corner-small, 8px);
+  border-style: solid;
+  border-color: #d0d0d0;
+  border-width: 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0px;
+  align-items: center;
+  flex-shrink: 0;
+  width: 320px;
+  position: relative;
+  box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.professor-avatar {
+  background: #7a78fc;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 313px;
+  position: relative;
+  overflow: hidden;
+}
+.description {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.div {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+.institution {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.div2 {
+  color: #555555;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+.div3 {
+  color: #000000;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+.degree {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
