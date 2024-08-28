@@ -168,11 +168,10 @@
 </div>
 
 @code {
-    [Parameter]
-    public string? Id { get; set; }
+    [Parameter] public string? Id { get; set; }
 
     AssessmentModel? model;
-    MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог"};
+    MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -180,6 +179,7 @@
         {
             return;
         }
+        
         model = await data.GetUserAssessmentModelAsync(userId);
         if (model?.SelectedTrackId != null)
         {
@@ -204,6 +204,11 @@
         if (blockId == ResultBlock.Id) return;
         model.Fields = await data.GetFieldMarkModelsForMarkBlockAsync(blockId, model.ApplicationId);
         model.Tables = await data.GetTableMarkModelsForMarkBlockAsync(blockId, model.ApplicationId);
+    }
+
+    async Task SaveMark(MarkModel mark)
+    {
+        await data.SaveMarkAsync(mark, model!.ApplicationId);
     }
 
     async Task Assessment()

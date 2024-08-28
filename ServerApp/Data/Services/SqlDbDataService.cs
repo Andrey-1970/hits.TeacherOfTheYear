@@ -959,14 +959,14 @@ namespace ServerApp.Data.Services
                         Name = e.Name,
                         Value = markVal?.Value ?? 0,
                         MaxValue = e.MaxValue,
-                        IsAuto = e.IsAuto
+                        IsAuto = e.IsAuto,
+                        // ValId = markVal?.Id ?? Guid.NewGuid()
                     };
                 }).ToList();
 
                 resMarks.AddRange(markModels);
             }
 
-// Присваиваем результат обратно в assModel
             assModel.Marks = resMarks.ToArray();
 
             return assModel;
@@ -1038,7 +1038,8 @@ namespace ServerApp.Data.Services
                     Name = m.Name,
                     Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                     MaxValue = m.MaxValue,
-                    IsAuto = m.IsAuto
+                    IsAuto = m.IsAuto,
+                    // ValId = m.MarkVals.FirstOrDefault()!.Id
                 } ).ToArray();
             }
 
@@ -1090,13 +1091,31 @@ namespace ServerApp.Data.Services
                         Name = m.Name,
                         Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                         MaxValue = m.MaxValue,
-                        IsAuto = m.IsAuto
+                        IsAuto = m.IsAuto,
+                        // ValId = m.MarkVals.FirstOrDefault()!.Id
                     }).ToArray()
                 }).ToArray();
 
             return tables;
         }
-        
-        
+
+        public async Task SaveMarkAsync(MarkModel mark, Guid appId)
+        {
+            //todo: отслеживание того, кто поставил оценку
+            var existingMarkVal = context.MarkVals.FirstOrDefault(mv => mv.Id == mark.ValId);
+            if (existingMarkVal == null)
+            {
+                var markRes = mark.ToEntity();
+                markRes.ApplicationId = appId;
+                context.MarkVals.Add(markRes);
+            }
+            else
+            {
+                existingMarkVal.Value = mark.Value;
+                context.MarkVals.Update(existingMarkVal);
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }

@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-ServerApp-cdfcacd9-7ef5-467d-9b1b-c75fd30c650e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +35,12 @@
     <None Include="Components\Shared\HomeBlocks\ContestInfo.razor" />
     <None Include="Components\Shared\HomeBlocks\ParticipantInfo.razor" />
     <None Include="Components\Shared\HomeBlocks\VotingInfo.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
 
 </Project>
