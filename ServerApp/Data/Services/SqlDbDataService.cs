@@ -1039,7 +1039,7 @@ namespace ServerApp.Data.Services
                     Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                     MaxValue = m.MaxValue,
                     IsAuto = m.IsAuto,
-                    // ValId = m.MarkVals.FirstOrDefault()!.Id
+                    ValId = (m.MarkVals.FirstOrDefault() ?? new MarkVal()).Id
                 } ).ToArray();
             }
 
@@ -1092,7 +1092,7 @@ namespace ServerApp.Data.Services
                         Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
                         MaxValue = m.MaxValue,
                         IsAuto = m.IsAuto,
-                        // ValId = m.MarkVals.FirstOrDefault()!.Id
+                        ValId = (m.MarkVals.FirstOrDefault() ?? new MarkVal()).Id
                     }).ToArray()
                 }).ToArray();
 
