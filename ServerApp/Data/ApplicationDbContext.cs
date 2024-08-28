@@ -1569,7 +1569,8 @@ namespace ServerApp.Data
                 Number = 1,
                 Name = "Баллы за объем учебной нагрузки:",
                 TableId = tbl3.Id,
-                MaxValue = 3
+                MaxValue = 3,
+                EvaluationMethodName = "EvaluateMark1"
             };
             var mark2 = new Mark()
             {
@@ -1578,7 +1579,8 @@ namespace ServerApp.Data
                 Name = "Баллы за количество дисциплин на иностранном языке," +
                        " которые вел претендент, в предыдущем учебном году:",
                 TableId = tbl3.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark2"
             };
             var mark3 = new Mark()
             {
@@ -1587,7 +1589,8 @@ namespace ServerApp.Data
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
                 FieldId = fld23.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark3"
             };
             var mark4 = new Mark()
             {
@@ -1595,7 +1598,8 @@ namespace ServerApp.Data
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
                 FieldId = fld19.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark4"
             };
             var mark5 = new Mark()
             {
@@ -1603,7 +1607,8 @@ namespace ServerApp.Data
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
                 FieldId = fld20.Id,
-                MaxValue = 4
+                MaxValue = 4,
+                EvaluationMethodName = "EvaluateMark5"
             };
             var mark6 = new Mark()
             {
@@ -1612,7 +1617,8 @@ namespace ServerApp.Data
                 Name = "Баллы за количество подготовленных студентов, бакалавров, " +
                        "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:",
                 TableId = tbl4.Id,
-                MaxValue = 4
+                MaxValue = 4,
+                EvaluationMethodName = "EvaluateMark6"
             };
             var mark7 = new Mark()
             {
@@ -1620,7 +1626,8 @@ namespace ServerApp.Data
                 Number = 7,
                 Name = "Баллы за количество онлайн курсов на открытых площадках:",
                 TableId = tbl8.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark7"
             };
             var mark8 = new Mark()
             {
@@ -1628,7 +1635,8 @@ namespace ServerApp.Data
                 Number = 8,
                 Name = "Баллы за труды с грифом и без соавторства:",
                 TableId = tbl6.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark8"
             };
             var mark9 = new Mark()
             {
@@ -1636,7 +1644,8 @@ namespace ServerApp.Data
                 Number = 9,
                 Name = "Баллы за труды с грифом в соавторстве:",
                 TableId = tbl6.Id,
-                MaxValue = 3
+                MaxValue = 3,
+                EvaluationMethodName = "EvaluateMark9"
             };
             var mark10 = new Mark()
             {
@@ -1644,7 +1653,8 @@ namespace ServerApp.Data
                 Number = 10,
                 Name = "Баллы за труды без грифа и без соавторства:",
                 TableId = tbl6.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark10"
             };
             var mark11 = new Mark()
             {
@@ -1652,7 +1662,8 @@ namespace ServerApp.Data
                 Number = 11,
                 Name = "Баллы за труды без грифа в соавторстве:",
                 TableId = tbl6.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark11"
             };
             var mark12 = new Mark()
             {
@@ -1660,7 +1671,8 @@ namespace ServerApp.Data
                 Number = 12,
                 Name = "Баллы за количество практикумов и курсов лекций:",
                 TableId = tbl7.Id,
-                MaxValue = 4
+                MaxValue = 4,
+                EvaluationMethodName = "EvaluateMark12"
             };
             var mark13 = new Mark()
             {
@@ -1668,7 +1680,8 @@ namespace ServerApp.Data
                 Number = 13,
                 Name = "Баллы за ученое звание:",
                 FieldId = fld16.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark13"
             };
             var mark14 = new Mark()
             {
@@ -1676,7 +1689,8 @@ namespace ServerApp.Data
                 Number = 14,
                 Name = "Баллы за награды:",
                 TableId = tbl1.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark14"
             };
             var mark15 = new Mark()
             {
@@ -1684,7 +1698,8 @@ namespace ServerApp.Data
                 Number = 15,
                 Name = "Баллы за профессиональное развитие:",
                 TableId = tbl2.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark15"
             };
             var mark16 = new Mark()
             {
@@ -1692,7 +1707,8 @@ namespace ServerApp.Data
                 Number = 16,
                 Name = "Баллы за научные публикации:",
                 TableId = tbl9.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark16"
             };
             var mark17 = new Mark()
             {
@@ -1700,7 +1716,8 @@ namespace ServerApp.Data
                 Number = 17,
                 Name = "Баллы по базе Scopus:",
                 TableId = tbl10.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark17"
             };
             var mark18 = new Mark()
             {
@@ -1708,7 +1725,8 @@ namespace ServerApp.Data
                 Number = 18,
                 Name = "Баллы по базе РИНЦ:",
                 TableId = tbl10.Id,
-                MaxValue = 3
+                MaxValue = 3,
+                EvaluationMethodName = "EvaluateMark18"
             };
             var mark19 = new Mark()
             {
@@ -1716,7 +1734,8 @@ namespace ServerApp.Data
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
                 FieldId = fld24.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark19"
             };
             var mark20 = new Mark()
             {
@@ -1724,7 +1743,8 @@ namespace ServerApp.Data
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
                 FieldId = fld25.Id,
-                MaxValue = 4
+                MaxValue = 4,
+                EvaluationMethodName = "EvaluateMark20"
             };
             var mark21 = new Mark()
             {
@@ -1732,7 +1752,8 @@ namespace ServerApp.Data
                 Number = 21,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве руководителя:",
                 TableId = tbl11.Id,
-                MaxValue = 4
+                MaxValue = 4,
+                EvaluationMethodName = "EvaluateMark21"
             };
             var mark22 = new Mark()
             {
@@ -1740,7 +1761,8 @@ namespace ServerApp.Data
                 Number = 22,
                 Name = "Баллы за выполненные НИР/НИОКР в качестве исполнителя:",
                 TableId = tbl11.Id,
-                MaxValue = 2
+                MaxValue = 2,
+                EvaluationMethodName = "EvaluateMark22"
             };
             var mark23 = new Mark()
             {
@@ -1748,7 +1770,8 @@ namespace ServerApp.Data
                 Number = 23,
                 Name = "Баллы за количество объектов интеллектуальной собственности:",
                 TableId = tbl12.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark23"
             };
             var mark24 = new Mark()
             {
@@ -1756,7 +1779,8 @@ namespace ServerApp.Data
                 Number = 24,
                 Name = "Баллы за количество разработок:",
                 TableId = tbl13.Id,
-                MaxValue = 5
+                MaxValue = 5,
+                EvaluationMethodName = "EvaluateMark24"
             };
             var mark25 = new Mark()
             {

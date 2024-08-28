@@ -17,5 +17,7 @@ namespace ServerApp.Data.Entities
         public virtual Table? Table { get; set; }
         public virtual List<MarkBlock> MarkBlocks { get; set; } = [];
         public virtual List<MarkVal> MarkVals { get; set; } = [];
+        [MaxLength(128)]
+        public string? EvaluationMethodName { get; set; }
     }
 }
