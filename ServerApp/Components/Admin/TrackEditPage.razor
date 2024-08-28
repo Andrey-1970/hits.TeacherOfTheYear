@@ -26,7 +26,7 @@
             @if (editBlocks.Count != 0)
             {
                 <div class="table-container">
-                    <table class="table table-bordered table-striped opacity-50">
+                    <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
                                 <th class="p-2">EditBlocks, прикрепленные к этому треку</th>
@@ -35,7 +35,7 @@
                         <tbody>
                             @foreach (var editBlock in editBlocks)
                             {
-                                <tr>
+                                <tr @onclick="() => GoToEditBlock(editBlock.Id)" style="cursor: pointer;">
                                     <td class="p-2">
                                         @editBlock.Name
                                     </td>
@@ -49,7 +49,7 @@
             @if (markBlocks.Count != 0)
             {
                 <div class="table-container">
-                    <table class="table table-bordered table-striped opacity-50">
+                    <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
                                 <th class="p-2">MarkBlocks, прикрепленные к этому треку</th>
@@ -58,7 +58,7 @@
                         <tbody>
                             @foreach (var markBlock in markBlocks)
                             {
-                                <tr>
+                                <tr @onclick="() => GoToMarkBlock(markBlock.Id)" style="cursor: pointer;">
                                     <td class="p-2">
                                         @markBlock.Name
                                     </td>
@@ -95,6 +95,16 @@
 
         editBlocks = track.EditBlocks;
         markBlocks = track.MarkBlocks;
+    }
+
+    void GoToEditBlock(Guid id)
+    {
+        navigation.NavigateTo($"/admin/editblocks/{id}");
+    }
+
+    void GoToMarkBlock(Guid id)
+    {
+        navigation.NavigateTo($"/admin/markblocks/{id}");
     }
 
     async Task OnValidSumbit()

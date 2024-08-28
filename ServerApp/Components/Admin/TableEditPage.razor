@@ -107,7 +107,7 @@
             @if (columns.Count != 0)
             {
                 <div class="table-container">
-                    <table class="table table-bordered table-striped opacity-50">
+                    <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
                                 <th class="p-2">Столбцы, содержащиеся в этой таблице</th>
@@ -116,7 +116,7 @@
                         <tbody>
                             @foreach (var column in columns)
                             {
-                                <tr>
+                                <tr @onclick="() => GoToColumn(column.Id)" style="cursor: pointer;">
                                     <td class="p-2">
                                         @column.Name
                                     </td>
@@ -195,6 +195,11 @@
         {
             filteredMarks = marks.Where(m => m.Name != null && m.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
         }
+    }
+
+    void GoToColumn(Guid id)
+    {
+        navigation.NavigateTo($"/admin/columns/{id}");
     }
 
     async Task OnValidSumbit()

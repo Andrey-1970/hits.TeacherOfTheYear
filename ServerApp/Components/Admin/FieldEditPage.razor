@@ -93,7 +93,7 @@
         }
         
         markBlocks = await data.MarkBlock.GetAllAsync();
-        if (field.Id != Guid.Empty)
+        if (!markBlockSelections.ContainsKey(field.Id))
         {
             markBlockSelections[field.Id] = markBlocks.ToDictionary(block => block.Id!, block => field.MarkBlocks!.Any(b => b.Id == block.Id));
         }

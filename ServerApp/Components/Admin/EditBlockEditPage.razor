@@ -54,7 +54,7 @@
             @if (fields.Count != 0)
             {
                 <div class="table-container">
-                    <table class="table table-bordered table-striped opacity-50">
+                    <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
                                 <th class="p-2">Поля, содержащиеся в этом блоке</th>
@@ -63,7 +63,7 @@
                         <tbody>
                             @foreach (var field in fields)
                             {
-                                <tr>
+                                <tr @onclick="() => GoToField(field.Id)" style="cursor: pointer;">
                                     <td class="p-2">
                                         @field.Name
                                     </td>
@@ -77,7 +77,7 @@
             @if (tables.Count != 0)
             {
                 <div class="table-container">
-                    <table class="table table-bordered table-striped opacity-50">
+                    <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
                                 <th class="p-2">Таблицы, содержащиеся в этом блоке</th>
@@ -86,7 +86,7 @@
                         <tbody>
                             @foreach (var table in tables)
                             {
-                                <tr>
+                                <tr @onclick="() => GoToTable(table.Id)" style="cursor: pointer;">
                                     <td class="p-2">
                                         @table.Name
                                     </td>
@@ -131,6 +131,16 @@
 
         fields = block.Fields;
         tables = block.Tables;
+    }
+
+    void GoToField(Guid id)
+    {
+        navigation.NavigateTo($"/admin/fields/{id}");
+    }
+    
+    void GoToTable(Guid id)
+    {
+        navigation.NavigateTo($"/admin/tables/{id}");
     }
 
     async Task OnValidSubmit()
