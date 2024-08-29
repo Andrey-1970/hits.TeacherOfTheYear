@@ -2,19 +2,22 @@
 
 <div class="category-card" type="button" @onclick="async () => await ViewInfoHandler(Track.Id)">
   <div class="category-description">
-    <div class="category-title">@Track.Name</div>
+    <div class="category-title">@Title</div>
   </div>
 </div>
 
 @code {
     [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
+
+    [Parameter, EditorRequired]
     public TrackModel Track { get; set; } = default!;
 
     [Parameter, EditorRequired]
-    public EventCallback<Guid> ViewInfo { get; set; }
+    public EventCallback<Guid> ViewParticipants { get; set; }
 
     async Task ViewInfoHandler(Guid trackId)
     {
-        await ViewInfo.InvokeAsync(trackId);
+        await ViewParticipants.InvokeAsync(trackId);
     }
 }

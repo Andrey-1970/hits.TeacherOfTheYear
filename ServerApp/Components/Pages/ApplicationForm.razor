@@ -326,7 +326,10 @@
     {
         if (string.IsNullOrEmpty(fld.Value))
         {
-            messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
+            if (fld.IsRequired)
+            {
+                messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.")
+            }
         }
         else if (fld.ValueType == "int" && !Int32.TryParse(fld.Value, out _))
         {
@@ -341,9 +344,12 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(cell.Value) && cell.IsRequired)
+        if (string.IsNullOrEmpty(cell.Value))
         {
-            messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
+            if (cell.IsRequired)
+            {
+                messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
+            }
         }
         else if (cell.ValueType == "int" && !Int32.TryParse(cell.Value, out _))
         {

@@ -18,24 +18,45 @@
         </div>
 
         <div class="block-content">
-            @foreach (var track in tracks)
-            {
-                <CategoryCard Track="track" ViewInfo="async (trackId) => await ViewInfoHandler(trackId)" />
-            }
+            <Accordion Class="w-100">
+                @foreach (var track in tracks)
+                {
+                    <AccordionItem Title="@track.Name">
+                        <Content>
+                            @foreach (var category in categories)
+                            {
+                                <CategoryCard Title="@category.Name" Track="track" ViewParticipants="async (trackId) => await ViewParticipantsHandler(trackId)"></CategoryCard>
+                            }
+                        </Content>
+                    </AccordionItem>
+                }
+            </Accordion>
+
         </div>
     </div>
 </div>
 
 @code {
     IEnumerable<TrackModel> tracks = default!;
+    List<Category> categories = default!;
 
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
+        categories = new()
+        {
+            new(){Name = "Строительство и архитектура"},
+            new(){Name = "Строительство и архитектура"},
+        };
     }
 
-    async Task ViewInfoHandler(Guid trackId)
+    async Task ViewParticipantsHandler(Guid trackId)
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{trackId.ToString()}#"));
+    }
+
+    class Category
+    {
+        public string? Name;
     }
 }
