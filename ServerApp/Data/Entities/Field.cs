@@ -13,7 +13,7 @@ namespace ServerApp.Data.Entities
         [MaxLength(255)]
         public string? EditGroup { get; set; }
 
-        public bool Required { get; set; } = true;
+        public bool IsRequired { get; set; } = true;
         
         public virtual Guid ValueTypeId { get; set; }
         public virtual ValuesType? ValueType { get; set; }

@@ -87,13 +87,15 @@ namespace ServerApp.Data
             var appStatus1 = new ApplicationStatus()
                 { Id = Guid.NewGuid(), Number = 1, Status = "В ожидании заполнения" };
             var appStatus2 = new ApplicationStatus()
-                { Id = Guid.NewGuid(), Number = 2, Status = "В ожидании оценки" };
+                { Id = Guid.NewGuid(), Number = 2, Status = "В ожидании рассмотрения" };
             var appStatus3 = new ApplicationStatus()
-                { Id = Guid.NewGuid(), Number = 3, Status = "В процессе оценки" };
+                { Id = Guid.NewGuid(), Number = 3, Status = "В процессе рассмотрения" };
             var appStatus4 = new ApplicationStatus()
                 { Id = Guid.NewGuid(), Number = 4, Status = "Одобрена" };
             var appStatus5 = new ApplicationStatus()
                 { Id = Guid.NewGuid(), Number = 5, Status = "Отклонена" };
+            var appStatus6 = new ApplicationStatus()
+                { Id = Guid.NewGuid(), Number = 6, Status = "Оценена" };
 
             #endregion
 
@@ -459,6 +461,14 @@ namespace ServerApp.Data
                 ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
+            var col67 = new Column()
+            {
+                Id = Guid.NewGuid(),
+                Number = 7,
+                Name = "Ссылка на открытый доступ",
+                ValueTypeId = valType1.Id,
+                TableId = tbl6.Id
+            }; //todo: Дождаться новой правки от заказчика | столбец с выбором языка
 
             #endregion
 
@@ -1426,12 +1436,12 @@ namespace ServerApp.Data
                 Value = "НЕДРОПОЛЬЗОВАНИЕ И ГОРНЫЕ НАУКИ",
                 FieldId = fld12.Id
             };
-            var slctVall7 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Аспиранты, адъюнкты, ординаторы, ассистенты-стажеры, не имеющие ученой степени",
-                FieldId = fld13.Id
-            };
+            // var slctVall7 = new SelectValue()
+            // {
+            //     Id = Guid.NewGuid(),
+            //     Value = "Аспиранты, адъюнкты, ординаторы, ассистенты-стажеры, не имеющие ученой степени",
+            //     FieldId = fld13.Id
+            // };
             var slctVall8 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
@@ -1805,7 +1815,7 @@ namespace ServerApp.Data
 
             #endregion
             
-            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5]);
+            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
@@ -1837,7 +1847,7 @@ namespace ServerApp.Data
                 cell1071, cell1072, cell1073, cell1074, cell1075 
             ]);
             builder.Entity<SelectValue>().HasData([
-                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7, slctVall8, slctVall9,
+                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall8, slctVall9,
                 slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, slctVall16, slctVall17,
                 slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24, slctVall25,
                 slctVall26, slctVall27, slctVall28
