@@ -18,5 +18,7 @@ namespace ServerApp.Data.Services
         public IAdminBase<Table> Table => new AdminBaseService<Table>(context);
 
         public IAdminBase<Column> Column => new AdminBaseService<Column>(context);
+
+        public IAdminBase<ValuesType> ValuesType => new AdminBaseService<ValuesType>(context);
     }
 }

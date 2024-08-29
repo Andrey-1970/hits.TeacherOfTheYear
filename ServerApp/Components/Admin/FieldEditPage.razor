@@ -26,6 +26,21 @@
             <div class="form-input w-100 mb-3">
                 <InputText class="form-control mb-3" placeholder="Введите Placeholder для поля" @bind-Value="field.Placeholder" />
             </div>
+            <div class="form-text">EditGroup</div>
+            <div class="form-input w-100 mb-3">
+                <InputText class="form-control mb-3" placeholder="Введите EditGroup для поля" @bind-Value="field.EditGroup" />
+            </div>
+
+            <div class="form-text">Тип данных</div>
+            <div class="form-input w-100 mb-3">
+                <InputSelect class="form-control" @bind-Value="field.ValueTypeId">
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите тип данных</option>
+                    @foreach (var type in valueTypes)
+                    {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                </InputSelect>
+            </div>
 
             <div class="form-text">EditBlock</div>
             <div class="form-input w-100 mb-3">
@@ -83,6 +98,7 @@
     Dictionary<Guid, Dictionary<Guid, bool>> markBlockSelections = new();
     
     IEnumerable<EditBlock> editBlocks = Enumerable.Empty<EditBlock>();
+    IEnumerable<ValuesType> valueTypes = Enumerable.Empty<ValuesType>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,6 +115,7 @@
         }
 
         editBlocks = await data.EditBlock.GetAllAsync();
+        valueTypes = await data.ValuesType.GetAllAsync();
     }
 
     async Task OnValidSumbit()
@@ -111,6 +128,11 @@
         if (field.EditBlockId != Guid.Empty)
         {
             field.EditBlock = editBlocks.Single(b => b.Id == field.EditBlockId);
+        }
+
+        if (field.ValueTypeId != Guid.Empty)
+        {
+            field.ValueType = valueTypes.Single(t => t.Id == field.ValueTypeId);
         }
 
         await data.Field.SaveAsync(field);

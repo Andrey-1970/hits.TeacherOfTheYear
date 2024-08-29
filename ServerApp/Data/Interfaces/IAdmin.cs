@@ -11,5 +11,6 @@ namespace ServerApp.Data.Interfaces
         IAdminBase<Field> Field { get; }
         IAdminBase<Table> Table { get; }
         IAdminBase<Column> Column { get; }
+        IAdminBase<ValuesType> ValuesType { get; }
     }
 }
