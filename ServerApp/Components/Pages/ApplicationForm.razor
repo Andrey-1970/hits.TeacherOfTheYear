@@ -328,7 +328,7 @@
         {
             if (fld.IsRequired)
             {
-                messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.")
+                messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
             }
         }
         else if (fld.ValueType == "int" && !Int32.TryParse(fld.Value, out _))
