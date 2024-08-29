@@ -1266,6 +1266,7 @@ namespace ServerApp.Data
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
+                IsRequired = false,
                 Number = 11,
                 Name = "Дополнительная информация",
                 Placeholder = "Пример",//todo: расписать пример

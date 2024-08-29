@@ -13,6 +13,7 @@ namespace ServerApp.Data.Models.EditModel
             ArgumentNullException.ThrowIfNull(field);
             Id = field.Id;
             ValId = (field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id) ?? new FieldVal()).Id;
+            IsRequired = field.IsRequired;
             Number = field.Number;
             Name = field.Name;
             EditGroup = field.EditGroup;
@@ -34,6 +35,7 @@ namespace ServerApp.Data.Models.EditModel
 
         public Guid Id { get; set; }
         public Guid ValId { get; set; }
+        public bool IsRequired { get; set; }
         public int? Number { get; set; }
         public string? Name { get; set; }
         public string? EditGroup { get; set; }
