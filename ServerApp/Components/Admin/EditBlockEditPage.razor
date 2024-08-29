@@ -14,20 +14,20 @@
     </div>
     <div class="block-content">
         <EditForm Class="w-100" Model="block" OnValidSubmit="OnValidSubmit">
-            <div class="form-text">Номер блока</div>
+            <div class="form-text">Номер EditBlock</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control mb-3" placeholder="Введите номер блока" @bind-Value="block.Number" />
+                <InputNumber class="form-control mb-3" placeholder="Введите номер EditBlock" @bind-Value="block.Number" />
             </div>
-            <div class="form-text">Название блока</div>
+            <div class="form-text">Название EditBlock</div>
             <div class="form-input w-100 mb-3">
-                <InputText class="form-control mb-3" placeholder="Введите название блока" @bind-Value="block.Name" />
+                <InputText class="form-control mb-3" placeholder="Введите название EditBlock" @bind-Value="block.Name" />
             </div>
 
             <div class="table-container">
                 <table class="table table-hover table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th class="p-2">Треки</th>
+                            <th class="p-2">Tracks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@
                     <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
-                                <th class="p-2">Поля, содержащиеся в этом блоке</th>
+                                <th class="p-2">Fields, содержащиеся в этом EditBlock</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,7 +80,7 @@
                     <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
-                                <th class="p-2">Таблицы, содержащиеся в этом блоке</th>
+                                <th class="p-2">Tables, содержащиеся в этом EditBlock</th>
                             </tr>
                         </thead>
                         <tbody>

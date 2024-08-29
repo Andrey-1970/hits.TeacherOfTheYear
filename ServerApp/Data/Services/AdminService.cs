@@ -20,5 +20,7 @@ namespace ServerApp.Data.Services
         public IAdminBase<Column> Column => new AdminBaseService<Column>(context);
 
         public IAdminBase<ValuesType> ValuesType => new AdminBaseService<ValuesType>(context);
+
+        public IAdminBase<SelectValue> SelectValue => new AdminBaseService<SelectValue>(context);
     }
 }

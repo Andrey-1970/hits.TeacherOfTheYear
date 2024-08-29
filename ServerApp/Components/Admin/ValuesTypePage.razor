@@ -2,12 +2,12 @@
 
 @inject IAdmin data
 
-<PageTitle>Настройка типов</PageTitle>
+<PageTitle>Настройка ValueTypes</PageTitle>
 
 <div class="block">
     <div class="block-content">
         <Card class="w-100">
-            <CardHeader>Типы данных</CardHeader>
+            <CardHeader>ValueTypes</CardHeader>
             <CardBody>
                 <div class="table-container">
                     <table class="table table-hover table-bordered table-striped">
@@ -27,8 +27,8 @@
             </CardBody>
         </Card>
         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-            <InputText class="form-control w-25" @bind-Value="newTypeName" placeholder="Введите имя типа данных" />
-            <Button Color="ButtonColor.Primary" @onclick="CreateType">Создать тип данных</Button>
+            <InputText class="form-control w-25" @bind-Value="newType.Name" placeholder="Введите имя ValueType" />
+            <Button Color="ButtonColor.Primary" @onclick="CreateType">Создать ValueType</Button>
             <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
         </div>
     </div>
@@ -36,7 +36,7 @@
 
 @code {
     IEnumerable<ValuesType> valueTypes = Enumerable.Empty<ValuesType>();
-    private string? newTypeName = String.Empty;
+    ValuesType newType = new() { Id = Guid.NewGuid(), Name = String.Empty };
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,12 +46,11 @@
 
     async Task CreateType()
     {
-        if (newTypeName != String.Empty)
+        if (newType.Name != String.Empty)
         {
-            ValuesType newType = new() { Id = Guid.NewGuid(), Name = newTypeName };
             await data.ValuesType.SaveAsync(newType);
 
-            newTypeName = String.Empty;
+            newType = new() { Id = Guid.NewGuid(), Name = String.Empty };
             StateHasChanged();
         }
     }

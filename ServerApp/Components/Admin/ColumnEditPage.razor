@@ -4,34 +4,91 @@
 @inject IAdmin data
 @inject NavigationManager navigation
 
-<PageTitle>Настройка столбца</PageTitle>
+<PageTitle>Настройка Column</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Редактирование столбца
+            Редактирование Column
         </div>
     </div>
     <div class="block-content">
         <EditForm Class="w-100" Model="column" OnValidSubmit="OnValidSumbit">
-            <div class="form-text">Номер столбцы</div>
+            <div class="form-text">Номер Column</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control" placeholder="Введите номер таблицы" @bind-Value="column.Number" />
+                <InputNumber class="form-control" placeholder="Введите номер Column" @bind-Value="column.Number" />
             </div>
-            <div class="form-text">Название столбца</div>
+            <div class="form-text">Название Column</div>
             <div class="form-input w-100 mb-3">
-                <InputText class="form-control mb-3" placeholder="Введите название таблицы" @bind-Value="column.Name" />
+                <InputText class="form-control mb-3" placeholder="Введите название Column" @bind-Value="column.Name" />
             </div>
 
-            <div class="form-text">Таблица</div>
+            <div class="form-text">ValueType</div>
+            <div class="form-input w-100 mb-3">
+                <InputSelect class="form-control" @bind-Value="column.ValueTypeId">
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите ValueType</option>
+                    @foreach (var type in valueTypes)
+                    {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="form-text">Table</div>
             <div class="form-input w-100 mb-3">
                 <InputSelect class="form-control" @bind-Value="column.TableId">
-                    <option value="@Guid.Empty" disabled selected hidden>Выберите таблицу</option>
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите Table</option>
                     @foreach (var table in tables)
                     {
                         <option value="@table.Id">@(table.Name!.Length > 120 ? table.Name.Substring(0, 120) + "..." : table.Name)</option>
                     }
                 </InputSelect>
+            </div>
+
+            <div class="form-text">
+                Список возможных ответов
+                <strong>(в этом случае Column становится выборочным и ввод вручную будет невозможен)</strong> <span class="text-danger">*</span>
+            </div>
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">SelectValues</th>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <input type="text" class="form-control" placeholder="Поиск по значению SelectValue" @bind="searchQuery" @oninput="OnSearchInput" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (filteredSelectValues.Any())
+                        {
+                            @foreach (var selectValue in filteredSelectValues)
+                            {
+                                <tr>
+                                    <td class="p-2">
+                                        <div class="d-flex justify-content-between">
+                                            <label class="form-check-label" for="@selectValue.Id-@column.Id">
+                                                @selectValue.Value
+                                            </label>
+                                            <div>
+                                                <input class="form-check-input" type="checkbox" id="@selectValue.Id-@column.Id"
+                                                       @bind="selectValueSelections[column.Id][selectValue.Id!]" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center">Не найдено</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
@@ -47,7 +104,14 @@
     public Guid Id { set; get; }
     Column column = new();
 
+    IEnumerable<SelectValue> selectValues = Enumerable.Empty<SelectValue>();
+    Dictionary<Guid, Dictionary<Guid, bool>> selectValueSelections = new();
+
     IEnumerable<Table> tables = Enumerable.Empty<Table>();
+    IEnumerable<ValuesType> valueTypes = Enumerable.Empty<ValuesType>();
+
+    IEnumerable<SelectValue> filteredSelectValues = new List<SelectValue>();
+    string searchQuery = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,17 +121,60 @@
             column = await data.Column.GetByIdAsync(Id);
         }
 
+        selectValues = await data.SelectValue.GetAllAsync();
+        if (!selectValueSelections.ContainsKey(column.Id))
+        {
+            selectValueSelections[column.Id] = selectValues.ToDictionary(selVal => selVal.Id!, selVal => column.SelectValues!.Any(s => s.Id == selVal.Id));
+        }
+
         tables = await data.Table.GetAllAsync();
+        valueTypes = await data.ValuesType.GetAllAsync();
+
+        filteredSelectValues = selectValues;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterMarks();
+    }
+
+    private void FilterMarks()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredSelectValues = selectValues;
+        }
+        else
+        {
+            filteredSelectValues = selectValues.Where(selVal => selVal.Value != null && selVal.Value.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 
     async Task OnValidSumbit()
     {
+        if (selectValueSelections.TryGetValue(column.Id, out var selectValueSelection))
+        {
+            column.SelectValues = selectValues.Where(selVal => selectValueSelection.TryGetValue(selVal.Id!, out bool selected) && selected).ToList();
+        }
+
         if (column.TableId != Guid.Empty)
         {
             column.Table = tables.Single(t => t.Id == column.TableId);
         }
 
+        if (column.ValueTypeId != Guid.Empty)
+        {
+            column.ValueType = valueTypes.Single(t => t.Id == column.ValueTypeId);
+        }
+
         await data.Column.SaveAsync(column);
+
+        if (!selectValueSelections.ContainsKey(column.Id))
+        {
+            selectValueSelections[column.Id] = selectValues.ToDictionary(selVal => selVal.Id!, selVal => column.SelectValues!.Any(selVal => selVal.Id == selVal.Id));
+        }
+
         navigation.NavigateTo("/admin/columns");
     }
 }

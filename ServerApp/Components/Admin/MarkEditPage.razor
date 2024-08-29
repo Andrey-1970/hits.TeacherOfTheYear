@@ -4,23 +4,23 @@
 @inject IAdmin data
 @inject NavigationManager navigation
 
-<PageTitle>Настройка оценки</PageTitle>
+<PageTitle>Настройка Mark</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Редактирование оценки
+            Редактирование Mark
         </div>
     </div>
     <div class="block-content">
         <EditForm Class="w-100" Model="mark" OnValidSubmit="OnValidSumbit">
-            <div class="form-text">Номер оценки</div>
+            <div class="form-text">Номер Mark</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control" placeholder="Введите номер оценки" @bind-Value="mark.Number" />
+                <InputNumber class="form-control" placeholder="Введите номер Mark" @bind-Value="mark.Number" />
             </div>
-            <div class="form-text">Название оценки</div>
+            <div class="form-text">Название Mark</div>
             <div class="form-input w-100 mb-3">
-                <InputText class="form-control mb-3" placeholder="Введите название оценки" @bind-Value="mark.Name" />
+                <InputText class="form-control mb-3" placeholder="Введите название Mark" @bind-Value="mark.Name" />
             </div>
 
             <div class="table-container">

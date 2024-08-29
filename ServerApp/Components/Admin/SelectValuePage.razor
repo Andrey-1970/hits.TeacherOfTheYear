@@ -1,16 +1,16 @@
-﻿@page "/admin/marks"
+﻿@page "/admin/selectvalues"
 
 @inject IAdmin data
 @inject NavigationManager navigation
 
-<PageTitle>Настройка Marks</PageTitle>
+<PageTitle>Настройка SelectValues</PageTitle>
 
 <div class="block">
     <div class="block-content">
-        @if (marks != null)
+        @if (selectValues != null)
         {
             <Card class="w-100">
-                <CardHeader>Marks</CardHeader>
+                <CardHeader>SelectValues</CardHeader>
                 <CardBody>
                     <div class="d-flex flex-column gap-3">
                         <input type="text" class="form-control" placeholder="Поиск по названию" @bind="searchQuery" @oninput="OnSearchInput" />
@@ -19,23 +19,23 @@
                             <table class="table table-hover table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="p-2">Название Mark</th>
+                                        <th class="p-2">Название SelectValue</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (filteredMarks.Any())
+                                    @if (filteredSelectValues.Any())
                                     {
-                                        @foreach (var mark in filteredMarks)
+                                        @foreach (var selectValue in filteredSelectValues)
                                         {
                                             <tr>
                                                 <td class="p-2">
                                                     <div class="d-flex justify-content-between">
                                                         <div style="width: 94%;">
-                                                            @mark.Name
+                                                            @selectValue.Value
                                                         </div>
                                                         <div>
-                                                            <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(mark.Id)" />
-                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveMark(mark)" />
+                                                            <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(selectValue.Id)" />
+                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveSelectValue(selectValue)" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -56,15 +56,15 @@
             </Card>
         }
         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-            <a type="button" class="btn btn-primary" href="/admin/marks/new">Добавить</a>
+            <a type="button" class="btn btn-primary" href="/admin/selectvalues/new">Добавить</a>
             <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
         </div>
     </div>
 </div>
 
 @code {
-    IEnumerable<Mark> marks = default!;
-    IEnumerable<Mark> filteredMarks = new List<Mark>();
+    IEnumerable<SelectValue> selectValues = default!;
+    IEnumerable<SelectValue> filteredSelectValues = new List<SelectValue>();
 
     string searchQuery = string.Empty;
 
@@ -72,38 +72,38 @@
     {
         await base.OnInitializedAsync();
 
-        marks = await data.Mark.GetAllAsync();
-        filteredMarks = marks;
+        selectValues = await data.SelectValue.GetAllAsync();
+        filteredSelectValues = selectValues;
     }
 
     private void OnSearchInput(ChangeEventArgs e)
     {
         searchQuery = e.Value?.ToString() ?? string.Empty;
-        FilterMarks();
+        FilterFields();
     }
 
-    private void FilterMarks()
+    private void FilterFields()
     {
         if (string.IsNullOrEmpty(searchQuery))
         {
-            filteredMarks = marks;
+            filteredSelectValues = selectValues;
         }
         else
         {
-            filteredMarks = marks.Where(m => m.Name != null && m.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+            filteredSelectValues = selectValues.Where(v => v.Value != null && v.Value.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
 
-    async Task RemoveMark(Mark mark)
+    async Task RemoveSelectValue(SelectValue selectValue)
     {
-        await data.Mark.RemoveAsync(mark);
-        marks = await data.Mark.GetAllAsync();
+        await data.SelectValue.RemoveAsync(selectValue);
+        selectValues = await data.SelectValue.GetAllAsync();
 
         StateHasChanged();
     }
 
     void GoTo(Guid id)
     {
-        navigation.NavigateTo($"/admin/marks/{id}");
+        navigation.NavigateTo($"/admin/selectvalues/{id}");
     }
 }

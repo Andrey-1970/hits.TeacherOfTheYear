@@ -4,23 +4,23 @@
 @inject IAdmin data
 @inject NavigationManager navigation
 
-<PageTitle>Настройка таблицы</PageTitle>
+<PageTitle>Настройка Table</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Редактирование таблицы
+            Редактирование Table
         </div>
     </div>
     <div class="block-content">
         <EditForm Class="w-100" Model="table" OnValidSubmit="OnValidSumbit">
-            <div class="form-text">Номер таблицы</div>
+            <div class="form-text">Номер Table</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control" placeholder="Введите номер таблицы" @bind-Value="table.Number" />
+                <InputNumber class="form-control" placeholder="Введите номер Table" @bind-Value="table.Number" />
             </div>
-            <div class="form-text">Название таблицы</div>
+            <div class="form-text">Название Table</div>
             <div class="form-input w-100 mb-3">
-                <InputText class="form-control mb-3" placeholder="Введите название таблицы" @bind-Value="table.Name" />
+                <InputText class="form-control mb-3" placeholder="Введите название Table" @bind-Value="table.Name" />
             </div>
 
             <div class="form-text">EditBlock</div>
@@ -66,11 +66,11 @@
                 <table class="table table-hover table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th class="p-2">Оценки</th>     
+                            <th class="p-2">Marks</th>     
                         </tr>
                         <tr>
                             <th class="p-2">
-                                <input type="text" class="form-control" placeholder="Поиск по названию оценки" @bind="searchQuery" @oninput="OnSearchInput" />
+                                <input type="text" class="form-control" placeholder="Поиск по названию Mark" @bind="searchQuery" @oninput="OnSearchInput" />
                             </th>
                         </tr>
                     </thead>
@@ -110,7 +110,7 @@
                     <table class="table table-hover table-bordered opacity-50">
                         <thead>
                             <tr>
-                                <th class="p-2">Столбцы, содержащиеся в этой таблице</th>
+                                <th class="p-2">Columns, содержащиеся в этой Table</th>
                             </tr>
                         </thead>
                         <tbody>
