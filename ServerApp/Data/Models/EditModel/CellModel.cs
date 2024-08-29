@@ -18,6 +18,7 @@ public class CellModel
         Disable = cell.Disable;
         Value = cell.Value;
         ColumnId = cell.ColumnId;
+        IsRequired = cell.Column!.IsRequired;
     }
 
     public CellVal ToEntity()
@@ -33,6 +34,7 @@ public class CellModel
     public Guid Id { get; set; }
     public bool IsPrefilled { get; set; }
     public bool Disable { get; set; }
+    public bool IsRequired { get; set; }
     public string? ValueType { get; set; }
     public string?[] SelectValues { get; set; } = [];
     public string? Value { get; set; }

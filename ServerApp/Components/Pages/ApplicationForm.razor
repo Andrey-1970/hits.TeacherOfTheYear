@@ -341,7 +341,7 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(cell.Value))
+        if (string.IsNullOrEmpty(cell.Value) && cell.IsRequired)
         {
             messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
         }
@@ -359,8 +359,10 @@
             var selectedBlock = model.EditBlocks.FirstOrDefault(e => e.Id == model.SelectedEditBlockId);
             if (selectedBlock != null)
             {
-                selectedBlock.Status = true; //todo: костыль
+                selectedBlock.Status = true;
             }
+
+            model.Tables = await data.GetTableModelsForEditBlockAsync(model.SelectedEditBlockId);
             await jsRuntime.InvokeVoidAsync("scrollToTop");
             toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
         }

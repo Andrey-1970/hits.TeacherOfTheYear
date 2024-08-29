@@ -435,7 +435,8 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Соавторы",
                 ValueTypeId = valType2.Id,
-                TableId = tbl6.Id
+                TableId = tbl6.Id,
+                IsRequired = false
             };
             var col64 = new Column()
             {
@@ -609,7 +610,8 @@ namespace ServerApp.Data
                 Number = 1,
                 Name = "Тип идентификатора",
                 ValueTypeId = valType2.Id,
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                IsRequired = false
             };
             var col102 = new Column()
             {
@@ -617,7 +619,8 @@ namespace ServerApp.Data
                 Number = 2,
                 Name = "Идентификатор",
                 ValueTypeId = valType2.Id,
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                IsRequired = false
             };
             var col103 = new Column()
             {
@@ -625,7 +628,8 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Количество публикаций в БАЗЕ",
                 ValueTypeId = valType1.Id,
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                IsRequired = false
             };
             var col104 = new Column()
             {
@@ -633,7 +637,8 @@ namespace ServerApp.Data
                 Number = 4,
                 Name = "Количество цитирований",
                 ValueTypeId = valType1.Id,
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                IsRequired = false
             };
             var col105 = new Column()
             {
@@ -641,7 +646,8 @@ namespace ServerApp.Data
                 Number = 5,
                 Name = "Индекс Хирша (за все время)",
                 ValueTypeId = valType2.Id,
-                TableId = tbl10.Id
+                TableId = tbl10.Id,
+                IsRequired = false
             };
 
             #endregion
