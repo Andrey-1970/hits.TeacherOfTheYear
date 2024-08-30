@@ -1854,7 +1854,7 @@ namespace ServerApp.Data
                 cell1071, cell1072, cell1073, cell1074, cell1075 
             ]);
             builder.Entity<SelectValue>().HasData([
-                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall8, slctVall9,
+                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall8, slctVall9,//todo: delete slct val 4 category
                 slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, slctVall16, slctVall17,
                 slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24, slctVall25,
                 slctVall26, slctVall27, slctVall28
