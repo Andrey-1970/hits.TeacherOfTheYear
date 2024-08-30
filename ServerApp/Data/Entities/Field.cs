@@ -11,6 +11,9 @@ namespace ServerApp.Data.Entities
         public string? Placeholder { get; set; }
         [MaxLength(255)]
         public string? EditGroup { get; set; }
+
+        public bool IsRequired { get; set; } = true;
+        
         public virtual Guid ValueTypeId { get; set; }
         public virtual ValuesType? ValueType { get; set; }
         public virtual List<SelectValue> SelectValues { get; set; } = [];

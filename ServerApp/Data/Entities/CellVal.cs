@@ -6,8 +6,10 @@ namespace ServerApp.Data.Entities
     {
         public Guid Id { get; set; }
         [MaxLength(255)]
-        public string? Value { get; set; }
-        public virtual Guid ApplicationId { get; set; }
+        public string? Value { get; set; }        
+        public bool IsPrefilled { get; set; } = false;
+        public bool Disable { get; set; } = false;
+        public virtual Guid? ApplicationId { get; set; }
         public virtual ApplicationForm? Application { get; set; }
         public virtual Guid RowId { get; set; }
         public virtual Row? Row { get; set; }

@@ -1,6 +1,6 @@
 using ServerApp.Data.Entities;
 
-namespace ServerApp.Data.Models;
+namespace ServerApp.Data.Models.EditModel;
 
 public class ColumnModel
 {

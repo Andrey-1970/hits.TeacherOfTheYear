@@ -1,8 +1,6 @@
-﻿using BlazorBootstrap;
-using ServerApp.Data.Entities;
+﻿using ServerApp.Data.Entities;
 
-
-namespace ServerApp.Data.Models
+namespace ServerApp.Data.Models.EditModel
 {
     public class FieldModel
     {

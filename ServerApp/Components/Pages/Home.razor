@@ -1,28 +1,18 @@
 ﻿@page "/"
-@rendermode InteractiveServer
-@inject IDataService service
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Конкурс на соискание премий в области научно-педагогической и научно-исследовательской деятельности</PageTitle>
 
-@if (user == null)
-{
-    <p>Loading ...</p>
-}
-else
-{
-    <Card>
-        <CardBody>
-            <p>@user.Name - @user.Username</p>
-        </CardBody>
-    </Card>
-}
+<div class="block-group">
+    <div class="intro-background">
+        <div class="container intro">
+            <div class="intro-title">Конкурс на соискание премий 2024</div>
+            <div class="intro-text">в области научно-педагогической и научно-исследовательской деятельности</div>
+        </div>
+    </div>
 
-@code {
-    UserInfo? user;
+    <ContestInfo />
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        user = await service.GetCurrentUserInfoAsync();
-    }
-}
+    <VotingInfo />
+
+    <ParticipantInfo />
+</div>

@@ -10,5 +10,6 @@ namespace ServerApp.Data.Entities
         public virtual List<Track> Tracks { get; set; } = [];
         public virtual List<Field> Fields { get; set; } = [];
         public virtual List<Table> Tables { get; set; } = [];
+        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = [];
     }
 }

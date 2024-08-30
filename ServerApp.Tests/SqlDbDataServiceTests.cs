@@ -3,7 +3,6 @@ using Moq;
 using ServerApp.Data;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
-using ServerApp.Data.Models;
 using ServerApp.Data.Services;
 
 namespace ServerApp.Tests
@@ -81,7 +80,7 @@ namespace ServerApp.Tests
             var track = tracks.First();
             var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
             var editBlock = editBlocks.First();
-            var inputs = await service.GetFieldModelsAsync(editBlock.Id);
+            var inputs = await service.GetFieldModelsForEditBlockAsync(editBlock.Id);
             Assert.IsNotNull(inputs);
         }
 
@@ -92,7 +91,7 @@ namespace ServerApp.Tests
             var track = tracks.First();
             var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
             var editBlock = editBlocks.First();
-            var tables = await service.GetTableModelsAsync(editBlock.Id);
+            var tables = await service.GetTableModelsForEditBlockAsync(editBlock.Id);
             Assert.IsNotNull(tables);
         }
     }

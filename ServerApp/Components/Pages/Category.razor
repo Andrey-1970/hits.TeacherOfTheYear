@@ -1,0 +1,61 @@
+@page "/voting/category/{TrackId}"
+
+@using ServerApp.Data.Models.EditModel
+
+@inject IDataService data
+@inject NavigationManager navigate
+
+<PageTitle>Голосование</PageTitle>
+
+<div class="block-group">
+    <div class="block">
+        <div class="block-title">
+            <div class="title-direction">
+                <div class="block-title-text">@track.Name</div>
+                <div class="text-direction">
+                    <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
+                </div>
+            </div>
+            <div class="form-text">
+                Выберите кандидата для голосования
+            </div>
+        </div>
+
+        <div class="page-content">
+            @* @if (participants == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                @foreach (var participant in participants)
+                {
+                    <ParticipantCard Participant="participant" />
+                }
+            } *@
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? TrackId { get; set; }
+
+    TrackModel track = default!;
+
+    //Participant[] participants;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Guid.TryParse(TrackId, out var trackId))
+        {
+            track = await data.GetTrackAsync(trackId);
+            //participants = await data.GetParticipantAsync(trackId);
+        }
+    }
+
+    async Task Back()
+    {
+        await Task.Run(() => navigate.NavigateTo("/voting#"));
+    }
+}

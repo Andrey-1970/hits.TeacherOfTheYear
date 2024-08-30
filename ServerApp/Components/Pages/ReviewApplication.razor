@@ -1,5 +1,211 @@
 ﻿@page "/review/application/{Id}"
+@using ServerApp.Data.Models.ReviewModel
+
+@inject IDataService data
+@inject NavigationManager nav
+
+<PageTitle>Проверка заявки</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Проверка заявки
+        </div>
+    </div>
+    @if (model is not null)
+    {
+        <div class="block-content">
+            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
+            {
+                <div class="form-text">Выбранный трек: @data.GetTrackAsync(model.SelectedTrackId).Result.Name</div>
+                <div class="block-content-text">
+                    <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
+                </div>
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Name != ResultBlock.Name)
+                {
+                    @if (model.Fields is not null && model.Fields.Any())
+                    {
+                        @foreach (var fld in model.Fields)
+                        {
+                            @if (!string.IsNullOrEmpty(fld.EditGroup))
+                            {
+                                <div class="block-subtitle-text">@fld.EditGroup</div>
+                            }
+                            <div class="row block-content-text border border-primary rounded m-0 mb-2">
+                                <div class="col border-end border-primary p-2">@fld.Name</div>
+                                <div class="col p-2">@fld.Value</div>
+                            </div>
+                        }
+                    }
+                    @if (model.Tables is not null && model.Tables.Any())
+                    {
+                        @foreach (var table in model.Tables)
+                        {
+                            <div class="table-container mb-2">
+                                <div class="block-subtitle-text">@table.Name</div>
+                                @if (table.Rows is not null && table.Rows.Any())
+                                {
+                                    <table class="table-stand">
+                                        <thead>
+                                            <tr>
+                                                @foreach (var column in table.Columns)
+                                                {
+                                                    <th>@column.Name</th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var row in table.Rows)
+                                            {
+                                                <tr>
+                                                    @foreach (var cell in row.Cells)
+                                                    {
+                                                        <td>@cell.Value</td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <div class="d-flex justify-content-center w-100">
+                                        <div class="text-danger">Информация отсутствует</div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                    <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
+                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                            Блок проверен?
+                            <Switch Style="scale: 1.2; margin-right: 7px;" Value="model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status" ValueExpression="() => model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status" @onclick="async () => await ChangeBlockStatus()" />
+                        </div>
+
+                        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                            Комментарий для участника:
+                            <div class="form-input w-75">
+                                <InputTextArea class="form-control" Value="@Comment" ValueExpression="() => Comment" ValueChanged="async (value) => await ChangeBlockComment(value)" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-container mb-2">
+                        <div class="block-subtitle-text">Итоги проверки</div>
+                        <table class="table-stand">
+                            <thead>
+                                <tr>
+                                    <th>Блок</th>
+                                    <th>Статус</th>
+                                    <th>Комментарий</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var block in model.MarkBlocks)
+                                {
+                                    if (block.Name != ResultBlock.Name)
+                                    {
+                                        <tr>
+                                            <td>@block.Name</td>
+                                            <td>@if ((bool)model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Status)
+                                                { <div>Проверен</div> }
+                                                else 
+                                                { <div>Не проверен</div> } 
+                                            </td>
+                                            <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Commentary</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+                        <Button Type="ButtonType.Button" 
+                                Color="ButtonColor.Danger"
+                                @onclick="async () => await RejectApplication()"
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
+                            Отклонить
+                        </Button>
+                        <Button Type="ButtonType.Button"
+                                Color="ButtonColor.Success"
+                                @onclick="async () =>  await ApproveApplication()"
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
+                            Одобрить
+                        </Button>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
+</div>
 
 @code {
-    
+    [Parameter]
+    public string? Id { get; set; }
+
+    ReviewMarkModel? model;
+    string? Comment;
+    MarkBlockModel ResultBlock = new MarkBlockModel() {Id = Guid.NewGuid(), Name = "Итог"};
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null || !Guid.TryParse(Id, out Guid userId))
+        {
+            return;
+        }
+        model = await data.GetUserMarkModelAsync(userId);
+        if (model?.SelectedTrackId != null)
+        {
+            model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+            var newMarkBlocks = model.MarkBlocks.ToList();
+            newMarkBlocks.Add(ResultBlock);
+            model.MarkBlocks = newMarkBlocks.ToArray();
+            await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
+        }
+    }
+
+    async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
+        
+        model.SelectedMarkBlockId = blockId.Value;
+        
+        if (blockId == ResultBlock.Id) return;
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        Comment = model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Commentary;
+    }
+
+    async Task ApproveApplication()
+    {
+        await data.ApproveApplicationFormAsync(model!.ApplicationId);
+        nav.NavigateTo("/review#");
+    }
+
+    async Task RejectApplication()
+    {
+        await data.RejectApplicationFormAsync(model!.ApplicationId);
+        nav.NavigateTo("/review#");
+    }
+
+    async Task ChangeBlockStatus()
+    {
+        await data.ChangeBlockReviewStatus(model!.SelectedMarkBlockId, model.ApplicationId);
+        model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status = !model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status;
+    }
+
+    async Task ChangeBlockComment(string? comment)
+    {
+        Comment = comment;
+        model!.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Commentary = comment;
+        await data.SaveCommentReviewBlockAsync(model!.SelectedMarkBlockId, model.ApplicationId, comment);
+    }
 }

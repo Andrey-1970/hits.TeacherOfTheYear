@@ -1,0 +1,15 @@
+﻿version: '3.8'
+
+services:
+  serverapp:
+    build:
+      context: .
+      dockerfile: ServerApp/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Data source=/app/Data/SQLite/data.db
+    ports:
+      - "80:80"
+    volumes:
+      - ./ServerApp/Data/SQLite:/app/Data/SQLite

@@ -1,0 +1,264 @@
+﻿@page "/assessment/application/{Id}"
+@using ServerApp.Data.Models.MarkModel
+@using ServerApp.Data.Models.ReviewModel
+
+@inject IDataService data
+@inject NavigationManager nav
+
+<PageTitle>Оценка заявки</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Оценка заявки
+        </div>
+    </div>
+    @if (model is not null)
+    {
+        <div class="block-content">
+            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
+            {
+                <div class="form-text">Выбранный трек: @data.GetTrackAsync(model.SelectedTrackId).Result.Name</div>
+                <div class="block-content-text">
+                    <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
+                </div>
+                @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Id != ResultBlock.Id)
+                {
+                    <EditForm EditContext="editContext">
+                        @if (model.Fields is not null && model.Fields.Any())
+                        {
+                            @foreach (var fld in model.Fields)
+                            {
+                                @if (!string.IsNullOrEmpty(fld.EditGroup))
+                                {
+                                    <div class="block-subtitle-text">@fld.EditGroup</div>
+                                }
+                                <div class="mb-2 w-100">
+                                    <div class="row block-content-text border border-primary rounded m-0">
+                                        <div class="col border-end border-primary p-2">@fld.Name</div>
+                                        <div class="col p-2">@fld.Value</div>
+                                    </div>
+                                    @if (model.SelectedMarkBlockId != model.MarkBlocks.FirstOrDefault(mb => mb.Name == "Основной")!.Id)
+                                    {
+                                        @foreach (var mark in fld.Marks)
+                                        {
+                                            <div class="d-flex justify-content-between pt-2">
+                                                <div class="d-flex align-items-center form-text">@mark.Name</div>
+                                                <div class="d-flex align-items-center">
+                                                    @if (mark.IsAuto)
+                                                    {
+                                                        <span class="badge bg-primary"
+                                                              style="font-size: 22px;">
+                                                            @mark.Value
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="d-flex flex-column align-items-center" style="width: 100px;">
+                                                            <ValidationMessage For="() => mark.Value" />
+                                                            <InputNumber @bind-Value="@mark.Value" class="form-control" style="width: 70px;" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        }
+                        @if (model.Tables is not null && model.Tables.Any())
+                        {
+                            @foreach (var table in model.Tables)
+                            {
+                                <div class="table-container mb-2">
+                                    <div class="block-subtitle-text">@table.Name</div>
+                                    @if (table.Rows is not null && table.Rows.Any())
+                                    {
+                                        <table class="table-stand">
+                                            <thead>
+                                                <tr>
+                                                    @foreach (var column in table.Columns)
+                                                    {
+                                                        <th>@column.Name</th>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var row in table.Rows)
+                                                {
+                                                    <tr>
+                                                        @foreach (var cell in row.Cells)
+                                                        {
+                                                            <td>@cell.Value</td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex justify-content-center w-100">
+                                            <div class="text-danger">Информация отсутствует</div>
+                                        </div>
+                                    }
+                                    @foreach (var mark in table.Marks)
+                                    {
+                                        <div class="d-flex justify-content-between pt-2 w-100">
+                                            <div class="d-flex align-items-center form-text">@mark.Name</div>
+                                            <div class="d-flex align-items-center">
+                                                @if (mark.IsAuto)
+                                                {
+                                                    <span class="badge bg-primary" style="font-size: 22px;">
+                                                        @mark.Value
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <div class="d-flex flex-column align-items-center" style="width: 100px;">
+                                                        <ValidationMessage For="() => mark.Value" />
+                                                        <InputNumber @bind-Value="@mark.Value" class="form-control" style="width: 70px;" EnableMinMax="true" Min="0" Max="@mark.MaxValue" />
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </EditForm>
+                }
+                else
+                {
+                    <div class="table-container mb-2">
+                        <div class="block-subtitle-text">Итоги оценки</div>
+                        <table class="table-stand">
+                            <thead>
+                                <tr>
+                                    <th>Блок</th>
+                                    <th>Сумма баллов</th>
+                                    <th>Процент</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var block in model.MarkBlocks)
+                                {
+                                    if (block.Name != "Основной")
+                                    {
+                                        <tr>
+                                            <td>@block.Name</td>
+                                            <td>@block.SummaryMarksBlock</td>
+                                            <td>@(block.Procent + " %")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+                        <Button Type="ButtonType.Button"
+                                Color="ButtonColor.Success"
+                                @onclick="async () =>  await Assessment()">
+                            Оценить
+                        </Button>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? Id { get; set; }
+
+    AssessmentModel? model;
+    EditContext? editContext;
+    ValidationMessageStore? messageStore;
+    MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null || !Guid.TryParse(Id, out Guid userId))
+        {
+            return;
+        }
+
+        model = await data.GetUserAssessmentModelAsync(userId);
+        if (model?.SelectedTrackId != null)
+        {
+            model.MarkBlocks = await data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId);
+
+            var newMarkBlocks = model.MarkBlocks.ToList();
+            newMarkBlocks.Add(ResultBlock);
+            model.MarkBlocks = newMarkBlocks.ToArray();
+
+            var sum = model.MarkBlocks.Sum(mb => mb.SummaryMarksBlock);
+            ResultBlock.SummaryMarksBlock = sum;
+
+            var maxSum = model.Marks.Sum(m => m.MaxValue) + 10; //todo: добавить поле общественного признания
+            ResultBlock.Procent = Math.Round((double)((double)sum / maxSum * 100)!, 2);
+
+            await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
+        }
+    }
+
+    async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
+
+        model.SelectedMarkBlockId = blockId.Value;
+
+        if (blockId == ResultBlock.Id) return;
+        model.Fields = await data.GetFieldMarkModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model.Tables = await data.GetTableMarkModelsForMarkBlockAsync(blockId, model.ApplicationId);
+
+        InitializeEditContext(model);
+    }
+
+    void InitializeEditContext(AssessmentModel model)
+    {
+        editContext = new(model);
+        editContext.OnFieldChanged += HandleFieldChanged;
+        messageStore = new(editContext);
+    }
+
+    void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        if (e.FieldIdentifier.Model is MarkModel fld)
+        {
+            messageStore?.Clear(() => fld.Value!);
+            CheckField(fld);
+        }
+        editContext?.NotifyValidationStateChanged();
+    }
+
+    void CheckField(MarkModel mark)
+    {
+        if (mark.Value < 0 || mark.Value > mark.MaxValue)
+        {
+            messageStore?.Add(() => mark.Value!, $"От 0 до {mark.MaxValue}");
+        }
+        else
+        {
+            SaveMark(mark);
+        };
+    }
+
+    void SaveMark(MarkModel mark)
+    {
+        data.SaveMarkAsync(mark, model!.ApplicationId);
+    }
+
+    async Task Assessment()
+    {
+        await Task.Delay(500);
+        nav.NavigateTo("/assessment#");
+    }
+
+}

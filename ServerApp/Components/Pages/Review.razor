@@ -1,5 +1,84 @@
 ﻿@page "/review"
 
+@using ServerApp.Data.Models.ReviewModel
+
+@inject IDataService data
+@inject NavigationManager NavigationManager
+
+<PageTitle>Список заявок</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Список заявок на участие
+        </div>
+    </div>
+    <div style="align-items: flex-start; overflow: auto;">
+        <Grid TItem="UserInfoModel"
+              Class="table-filter"
+              FiltersRowCssClass="filters-row"
+              HeaderRowCssClass="header-row"
+              DataProvider="UserDataProvider"
+              FiltersTranslationProvider="GridFiltersTranslationProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="8"
+              AllowSorting="true"
+              Responsive="true"
+              AllowRowClick="true"
+              OnRowClick="OnRowClick">
+
+            <GridColumn TItem="UserInfoModel" HeaderText="ФИО кандидата" PropertyName="FullName" SortKeySelector="item => item.FullName">
+                @context.FullName
+            </GridColumn>
+            <GridColumn TItem="UserInfoModel" HeaderText="Номер телефона" PropertyName="PhoneNumber" SortKeySelector="item => item.PhoneNumber">
+                @context.PhoneNumber
+            </GridColumn>
+            <GridColumn TItem="UserInfoModel" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
+                @context.Email
+            </GridColumn>
+        </Grid>
+    </div>
+</div>
+
 @code {
-    
+    UserInfoModel[] participants = default!;
+    protected override async void OnInitialized()
+    {
+        participants = await data.GetUserInfosModelsAsync();
+    }
+
+    private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)
+    {
+        return await Task.FromResult(request.ApplyTo(participants));
+    }
+
+    private async Task<IEnumerable<FilterOperatorInfo>> GridFiltersTranslationProvider()
+    {
+        var filtersTranslation = new List<FilterOperatorInfo>();
+
+        // number/date/boolean
+        filtersTranslation.Add(new("=", "Равно", FilterOperator.Equals));
+        filtersTranslation.Add(new("!=", "Не равно", FilterOperator.NotEquals));
+        // number/date
+        filtersTranslation.Add(new("<", "Меньше", FilterOperator.LessThan));
+        filtersTranslation.Add(new("<=", "Меньше или равно", FilterOperator.LessThanOrEquals));
+        filtersTranslation.Add(new(">", "Больше", FilterOperator.GreaterThan));
+        filtersTranslation.Add(new(">=", "Больше или равно", FilterOperator.GreaterThanOrEquals));
+        // string
+        filtersTranslation.Add(new("*a*", "Включает", FilterOperator.Contains));
+        filtersTranslation.Add(new("a**", "Начинается с", FilterOperator.StartsWith));
+        filtersTranslation.Add(new("**a", "Заканчивается на", FilterOperator.EndsWith));
+        filtersTranslation.Add(new("=", "Равно", FilterOperator.Equals));
+        // common
+        filtersTranslation.Add(new("x", "Очистить фильтр", FilterOperator.Clear));
+
+        return await Task.FromResult(filtersTranslation);
+    }
+
+    private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
+    {
+        await data.SetApplicationStatusReviewProcessAsync(row.Item.Id);
+        await Task.Run(() => NavigationManager.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
+    }
 }
