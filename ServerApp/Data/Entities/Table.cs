@@ -8,7 +8,7 @@ namespace ServerApp.Data.Entities
         [MaxLength(255)] 
         public string? Name { get; set; }
 
-        public bool IsPrefilled { get; set; } = false;
+        public bool IsPrefilled { get; set; } = false; // сделать настройку строк в админ панели
 
         public virtual Guid EditBlockId { get; set; }
         public virtual EditBlock? EditBlock { get; set; }

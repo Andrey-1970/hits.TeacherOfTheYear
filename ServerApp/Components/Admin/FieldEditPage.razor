@@ -31,6 +31,11 @@
                 <InputText class="form-control mb-3" placeholder="Введите EditGroup для Field" @bind-Value="field.EditGroup" />
             </div>
 
+            <div class="form-text form-input mb-3 text-end">
+                Field обязательно для заполнения:
+                <InputCheckbox class="darker-border-checkbox form-check-input mt-0" @bind-Value="field.IsRequired" />
+            </div>
+
             <div class="form-text">ValueType</div>
             <div class="form-input w-100 mb-3">
                 <InputSelect class="form-control" @bind-Value="field.ValueTypeId">
@@ -40,32 +45,7 @@
                         <option value="@type.Id">@type.Name</option>
                     }
                 </InputSelect>
-            </div>
-            
-            <Card class="w-100">
-                <CardHeader>SelectValues</CardHeader>
-                <CardBody>
-                    <div class="table-container">
-                        <table class="table table-hover table-bordered table-striped">
-                            <tbody>
-                                @foreach (var selVal in selectValues)
-                                {
-                                    <tr>
-                                        <td class="d-flex justify-content-between p-2">
-                                            @selVal.Value
-                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveSelectValue(selVal)" />
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </CardBody>
-            </Card>
-            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-                <InputText class="form-control w-25" @bind-Value="newSelectValue" placeholder="Введите значение SelectValue" />
-                <Button Color="ButtonColor.Primary" @onclick="CreateSelectValue">Добавить</Button>
-            </div>
+            </div>       
 
             <div class="form-text">EditBlock</div>
             <div class="form-input w-100 mb-3">
@@ -106,6 +86,48 @@
                 </table>
             </div>
 
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">Marks</th>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <input type="text" class="form-control" placeholder="Поиск по названию Mark" @bind="searchQuery" @oninput="OnSearchInput" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (filteredMarks.Any())
+                        {
+                            @foreach (var mark in filteredMarks)
+                            {
+                                <tr>
+                                    <td class="p-2">
+                                        <div class="d-flex justify-content-between">
+                                            <label class="form-check-label" for="@mark.Id-@field.Id">
+                                                @mark.Name
+                                            </label>
+                                            <div>
+                                                <input class="form-check-input" type="checkbox" id="@mark.Id-@field.Id"
+                                                       @bind="marksSelections[field.Id][mark.Id!]" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center">Не найдено</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
                 <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
                 <a type="button" class="btn btn-secondary" href="/admin/fields">Назад</a>
@@ -121,12 +143,18 @@
 
     IEnumerable<MarkBlock> markBlocks = Enumerable.Empty<MarkBlock>();
     Dictionary<Guid, Dictionary<Guid, bool>> markBlockSelections = new();
-    
+
+    IEnumerable<Mark> marks = Enumerable.Empty<Mark>();
+    Dictionary<Guid, Dictionary<Guid, bool>> marksSelections = new();
+
     IEnumerable<EditBlock> editBlocks = Enumerable.Empty<EditBlock>();
     IEnumerable<ValuesType> valueTypes = Enumerable.Empty<ValuesType>();
 
     List<SelectValue> selectValues = new();
     private string newSelectValue = String.Empty;
+
+    IEnumerable<Mark> filteredMarks = new List<Mark>();
+    string searchQuery = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,30 +163,43 @@
         {
             field = await data.Field.GetByIdAsync(Id);
         }
-        
+
         markBlocks = await data.MarkBlock.GetAllAsync();
         if (!markBlockSelections.ContainsKey(field.Id))
         {
             markBlockSelections[field.Id] = markBlocks.ToDictionary(block => block.Id!, block => field.MarkBlocks!.Any(b => b.Id == block.Id));
         }
 
+        marks = await data.Mark.GetAllAsync();
+        if (!marksSelections.ContainsKey(field.Id))
+        {
+            marksSelections[field.Id] = marks.ToDictionary(mark => mark.Id!, mark => field.Marks!.Any(m => m.Id == mark.Id));
+        }
+
         editBlocks = await data.EditBlock.GetAllAsync();
         valueTypes = await data.ValuesType.GetAllAsync();
 
         selectValues = field.SelectValues;
+
+        filteredMarks = marks;
     }
 
-    async Task CreateSelectValue()
+    private void OnSearchInput(ChangeEventArgs e)
     {
-        if (newSelectValue != String.Empty)
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterMarks();
+    }
+
+    private void FilterMarks()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
         {
-            
+            filteredMarks = marks;
         }
-    }
-
-    async Task RemoveSelectValue(SelectValue selVal)
-    {
-        
+        else
+        {
+            filteredMarks = marks.Where(m => m.Name != null && m.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
     }
 
     async Task OnValidSumbit()
@@ -178,11 +219,21 @@
             field.MarkBlocks = markBlocks.Where(b => blockSelection.TryGetValue(b.Id!, out bool selected) && selected).ToList();
         } 
 
+        if (marksSelections.TryGetValue(field.Id, out var markSelection))
+        {
+            field.Marks = marks.Where(m => markSelection.TryGetValue(m.Id!, out bool selected) && selected).ToList();
+        }
+
         await data.Field.SaveAsync(field);
 
         if (!markBlockSelections.ContainsKey(field.Id))
         {
             markBlockSelections[field.Id] = markBlocks.ToDictionary(block => block.Id!, block => field.MarkBlocks!.Any(b => b.Id == block.Id));
+        }
+
+        if (!marksSelections.ContainsKey(field.Id))
+        {
+            marksSelections[field.Id] = marks.ToDictionary(mark => mark.Id!, mark => field.Marks!.Any(m => m.Id == mark.Id));
         }
 
         navigation.NavigateTo("/admin/fields");
