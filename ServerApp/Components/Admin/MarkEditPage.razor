@@ -16,7 +16,7 @@
         <EditForm Class="w-100" Model="mark" OnValidSubmit="OnValidSumbit">
             <div class="form-text">Номер Mark</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control" placeholder="Введите номер Mark" @bind-Value="mark.Number" />
+                <InputNumber class="form-control" placeholder="Введите номер Mark" @bind-Value="mark.Number" disabled="@(mark.Id != Guid.Empty)" />
             </div>
             <div class="form-text">Название Mark</div>
             <div class="form-input w-100 mb-3">
