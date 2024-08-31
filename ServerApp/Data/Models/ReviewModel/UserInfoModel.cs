@@ -12,7 +12,13 @@ public class UserInfoModel
     public UserInfoModel(UserInfo userInfo)
     {
         Id = userInfo.Id;
-        FullName = userInfo.Name;
+        var fullName = userInfo.Applications
+            .SelectMany(app => app.FieldVals)
+            .FirstOrDefault(f => f.Field!.Name == "ФИО");
+        if (fullName != null)
+        {
+            FullName = fullName.Value;
+        }
         var phoneField = userInfo.Applications
             .SelectMany(app => app.FieldVals)
             .FirstOrDefault(f => f.Field!.Name == "Контактный телефон");
