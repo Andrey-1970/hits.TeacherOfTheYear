@@ -452,7 +452,7 @@ namespace ServerApp.Data
                 ValueTypeId = valType2.Id,
                 TableId = tbl6.Id,
                 IsRequired = false
-            }; //todo: селект валуес да или нет
+            };
             var col64 = new Column()
             {
                 Id = Guid.NewGuid(),
@@ -484,7 +484,7 @@ namespace ServerApp.Data
                 Name = "Язык публикации",
                 ValueTypeId = valType1.Id,
                 TableId = tbl6.Id
-            }; //todo: селект валуес русский /иностраный
+            };
             var col68 = new Column()
             {
                 Id = Guid.NewGuid(),
@@ -492,7 +492,7 @@ namespace ServerApp.Data
                 Name = "Ссылка на открытый доступ",
                 ValueTypeId = valType1.Id,
                 TableId = tbl6.Id
-            }; //todo: Дождаться новой правки от заказчика | столбец с выбором языка
+            };
 
             #endregion
 
@@ -1039,7 +1039,7 @@ namespace ServerApp.Data
                 Placeholder = "Введите свой стаж",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
-            }; //todo: нумерация
+            };
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
@@ -1049,7 +1049,7 @@ namespace ServerApp.Data
                 Placeholder = "Выберите категорию участника конкруса",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
-            }; //todo: selctvals
+            };
             var fld12 = new Field()
             {
                 Id = Guid.NewGuid(),
@@ -1275,6 +1275,30 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Value = "База данных",
                 ColumnId = col131.Id
+            };
+            var slctVall22 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Да",
+                ColumnId = col63.Id
+            };
+            var slctVall23 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Нет",
+                ColumnId = col63.Id
+            };
+            var slctVall24 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Русский",
+                ColumnId = col67.Id
+            };
+            var slctVall25 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Иностранный",
+                ColumnId = col67.Id
             };
 
             #endregion
@@ -1503,7 +1527,7 @@ namespace ServerApp.Data
                 MaxValue = 10
             };
 
-            #endregion // todo: изменить критерии оценки и максимальный балл
+            #endregion // todo: изменить критерии оценки и максимальный балл???????
 
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
@@ -1519,7 +1543,7 @@ namespace ServerApp.Data
                 col31, col32, col33, col34, col35,
                 col41, col42, col43, col44, col45,
                 col51, col52, col53, col54,
-                col61, col62, col63, col64, col65, col66,
+                col61, col62, col63, col64, col65, col66, col67, col68,
                 col71, col72,
                 col81, col82, col83, col84,
                 col91, col92, col93, col94,
@@ -1539,7 +1563,8 @@ namespace ServerApp.Data
             builder.Entity<SelectValue>().HasData([
                 slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
                 slctVall8, slctVall9, slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, 
-                slctVall16, slctVall17, slctVall18, slctVall19, slctVall20, slctVall21
+                slctVall16, slctVall17, slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, 
+                slctVall24, slctVall25
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
                 fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21]);
@@ -1580,7 +1605,7 @@ namespace ServerApp.Data
                     new
                     {
                         MarkBlocksId = markBlk2.Id, TablesId = tbl5.Id
-                    }, //todo: узнать у заказчика к какому MarkBlock относится и исправить
+                    }, //todo: узнать у заказчика к какому MarkBlock относится и исправить????!?!?!??!?!?!?!
                     new { MarkBlocksId = markBlk2.Id, TablesId = tbl8.Id },
                     new { MarkBlocksId = markBlk3.Id, TablesId = tbl6.Id },
                     new { MarkBlocksId = markBlk3.Id, TablesId = tbl7.Id },
