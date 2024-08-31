@@ -22,7 +22,7 @@
         <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Пароль" />
     </div>
     <div class="checkbox">
-        <label class="form-check-label" @onclick="ToggleRememberMe">
+        <label class="form-check-label">
             <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" /> Запомнить меня
         </label>
     </div>
@@ -77,11 +77,6 @@
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
-    }
-
-    private void ToggleRememberMe()
-    {
-        Input.RememberMe = !Input.RememberMe; // Toggle the checkbox value
     }
 
     public async Task LoginUser()

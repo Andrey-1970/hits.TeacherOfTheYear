@@ -28,6 +28,12 @@
         <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
         <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Подтверждение пароля" />
     </div>
+    <div class="checkbox">
+        <ValidationMessage For="() => Input.PersonalData" class="text-danger" />
+        <label class="form-check-label">
+            <InputCheckbox @bind-Value="Input.PersonalData" class="darker-border-checkbox form-check-input" /> Я согласен(а) на <a href="#">обработку персональных данных</a>
+        </label>
+    </div>
     <div class="form-buttons">
         <Button Type="ButtonType.Submit"
                 Color="ButtonColor.Primary">
@@ -129,7 +135,10 @@
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают.")]
+        [Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают")]
         public string ConfirmPassword { get; set; } = "";
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Необходимо согласие на обработку персональных данных")]
+        public bool PersonalData { get; set; }
     }
 }
