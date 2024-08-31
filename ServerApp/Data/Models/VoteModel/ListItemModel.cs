@@ -13,7 +13,7 @@ public class ListItemModel
     public ListItemModel(ApplicationForm applicationForm)
     {
         Id = applicationForm.Id;
-        FullName = applicationForm.FieldVals.FirstOrDefault(e => e.Field.Name == "ФИО").Value;
+        FullName = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "ФИО")!.Value;
     }
     
     public Guid Id { get; set; }

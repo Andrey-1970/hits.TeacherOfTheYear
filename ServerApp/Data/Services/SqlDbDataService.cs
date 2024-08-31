@@ -547,7 +547,11 @@ namespace ServerApp.Data.Services
         {
             return new TrackModel(await context.Tracks.FirstOrDefaultAsync(e => e.Id == trackId) ?? throw new InvalidOperationException("Does not have track for this Id."));
         }
-        
+        public async Task<CategoryModel> GetCategoryAsync(Guid? categoryId)
+        {
+            return new CategoryModel(await context.Categories.FirstOrDefaultAsync(e => e.Id == categoryId) ?? throw new InvalidOperationException("Does not have category for this Id."));
+        }
+
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
             var userInfos = await context.UserInfos

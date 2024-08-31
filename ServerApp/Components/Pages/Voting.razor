@@ -5,15 +5,15 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>�����������</PageTitle>
+<PageTitle>Голосование</PageTitle>
 <div class="block-group">
     <div class="block">
         <div class="block-title">
             <div class="block-title-text">
-                �����o��� �����������
+                Категoрии голосования
             </div>
             <div class="form-text">
-                �������� ���������, � ������� ������ �� �������������
+                Выберите категорию, в которой хотели бы проголосовать
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                         <Content>
                             @foreach (var category in categories)
                             {
-                                <CategoryCard Title="@category.Name" Track="track" ViewParticipants="async (trackId) => await ViewParticipantsHandler(trackId)"></CategoryCard>
+                                <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" />
                             }
                         </Content>
                     </AccordionItem>
@@ -46,8 +46,8 @@
         categories = await data.GetCategoriesAsync();
     }
 
-    async Task ViewParticipantsHandler(Guid trackId)
+    async Task ViewParticipantsHandler(Guid trackId, Guid categoryId)
     {
-        await Task.Run(() => navigate.NavigateTo($"/voting/category/{trackId.ToString()}#"));
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/{trackId.ToString()}/{categoryId.ToString()}#"));
     }
 }

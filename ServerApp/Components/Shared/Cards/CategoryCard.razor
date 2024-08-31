@@ -1,8 +1,8 @@
 @using ServerApp.Data.Models.EditModel
 
-<div class="category-card" type="button" @onclick="async () => await ViewInfoHandler(Track.Id)">
+<div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
   <div class="category-description">
-    <div class="category-title">@Title</div>
+        <div class="category-title">@Title</div>
   </div>
 </div>
 
@@ -11,13 +11,10 @@
     public string Title { get; set; } = default!;
 
     [Parameter, EditorRequired]
-    public TrackModel Track { get; set; } = default!;
+    public EventCallback OnClick { get; set; }
 
-    [Parameter, EditorRequired]
-    public EventCallback<Guid> ViewParticipants { get; set; }
-
-    async Task ViewInfoHandler(Guid trackId)
+    async Task OnClickHandler()
     {
-        await ViewParticipants.InvokeAsync(trackId);
+        await OnClick.InvokeAsync();
     }
 }

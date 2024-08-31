@@ -1,11 +1,12 @@
-@page "/voting/category/{TrackId}"
+@page "/voting/category/{TrackId}/{CategoryId}"
 
 @using ServerApp.Data.Models.EditModel
+@using ServerApp.Data.Models.VoteModel
 
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>Голосование</PageTitle>
+<PageTitle>Р“РѕР»РѕСЃРѕРІР°РЅРёРµ</PageTitle>
 
 <div class="block-group">
     <div class="block">
@@ -16,13 +17,14 @@
                     <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
                 </div>
             </div>
+            <div class="block-subtitle-text">@category.Name</div>
             <div class="form-text">
-                Выберите кандидата для голосования
+                Р’С‹Р±РµСЂРёС‚Рµ РєР°РЅРґРёРґР°С‚Р° РґР»СЏ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ
             </div>
         </div>
 
         <div class="page-content">
-            @* @if (participants == null)
+            @if (participants == null)
             {
                 <p>Loading...</p>
             }
@@ -30,9 +32,9 @@
             {
                 @foreach (var participant in participants)
                 {
-                    <ParticipantCard Participant="participant" />
+                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)"/>
                 }
-            } *@
+            }
         </div>
     </div>
 </div>
@@ -41,21 +43,30 @@
     [Parameter]
     public string? TrackId { get; set; }
 
-    TrackModel track = default!;
+    [Parameter]
+    public string? CategoryId { get; set; }
 
-    //Participant[] participants;
+    TrackModel track = default!;
+    CategoryModel category = default!;
+    ListItemModel[] participants = default!;
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Guid.TryParse(TrackId, out var trackId))
+        if (Guid.TryParse(TrackId, out var trackId) && Guid.TryParse(CategoryId, out var categoryId))
         {
             track = await data.GetTrackAsync(trackId);
-            //participants = await data.GetParticipantAsync(trackId);
+            category = await data.GetCategoryAsync(categoryId);
+            participants = await data.GetListForVotingPageAsync(trackId, categoryId);
         }
     }
 
     async Task Back()
     {
         await Task.Run(() => navigate.NavigateTo("/voting#"));
+    }
+    
+    async Task ViewParticipant(Guid participantId)
+    {
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}/participant/{participantId}#"));
     }
 }

@@ -2,6 +2,7 @@
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
+using ServerApp.Data.Models.VoteModel;
 
 namespace ServerApp.Data.Interfaces
 {
@@ -29,7 +30,8 @@ namespace ServerApp.Data.Interfaces
         Task ApproveApplicationFormAsync(Guid? applicationId);
         Task RejectApplicationFormAsync(Guid? applicationId);
         Task<TrackModel> GetTrackAsync(Guid? trackId);
-        
+        Task<CategoryModel> GetCategoryAsync(Guid? categoryId);
+
         //Новые методы для страницы оценки
         Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync();
         Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId);
@@ -38,5 +40,7 @@ namespace ServerApp.Data.Interfaces
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
         Task RatedApplicationAsync(Guid? appId);
+        Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
+        Task<VoteModel> GetVoteModelAsync(Guid appId);
     }
 }
