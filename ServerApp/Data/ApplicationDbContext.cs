@@ -12,6 +12,7 @@ namespace ServerApp.Data
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
         public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
         public DbSet<BlockReview> BlockReviews { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<CellVal> CellVals { get; set; }
         public DbSet<Column> Columns { get; set; }
         public DbSet<EditBlock> EditBlocks { get; set; }
@@ -46,6 +47,8 @@ namespace ServerApp.Data
         private static void OnConfiguringConstraction(ModelBuilder builder)
         {
             builder.Entity<ApplicationStatus>().HasIndex(e => e.Status).IsUnique();
+            builder.Entity<Category>().HasIndex(e => e.Name).IsUnique();
+            builder.Entity<Category>().HasIndex(e => e.Number).IsUnique();
             builder.Entity<CellVal>().HasIndex(cv => new { cv.ApplicationId, cv.RowId, cv.ColumnId }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Name }).IsUnique();
             builder.Entity<Column>().HasIndex(t => new { t.TableId, t.Number }).IsUnique();
@@ -76,10 +79,12 @@ namespace ServerApp.Data
         private static void OnConfiguringData(ModelBuilder builder)
         {
             #region UserInfos
+
             builder.Entity<UserInfo>().HasData([
-                new() { Id = Guid.NewGuid(), Name="User 1", Username="admin@mail.ru"},
-                new() { Id = Guid.NewGuid(), Name="User 2", Username="user@mail.ru"},
+                new() { Id = Guid.NewGuid(), Name = "User 1", Username = "admin@mail.ru" },
+                new() { Id = Guid.NewGuid(), Name = "User 2", Username = "user@mail.ru" },
             ]);
+
             #endregion
 
             #region ApplicationStatuses
@@ -102,7 +107,15 @@ namespace ServerApp.Data
             #region Tracks
 
             var track1 = new Track() { Id = Guid.NewGuid(), Number = 1, Name = "Научно-педагогическая деятельность" };
-            var track2 = new Track() { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
+            var track2 = new Track()
+                { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
+
+            #endregion
+
+            #region Categories
+
+            var category1 = new Category() { Id = Guid.NewGuid(), Number = 1, Name = "Строительство и архитектура" };
+            var category2 = new Category() { Id = Guid.NewGuid(), Number = 2, Name = "Энергетика и нефтегазовая индустрия" };
 
             #endregion
 
@@ -123,9 +136,9 @@ namespace ServerApp.Data
             var markBlk3 = new MarkBlock() { Id = Guid.NewGuid(), Number = 3, Name = "Методическая деятельность" };
             var markBlk4 = new MarkBlock() { Id = Guid.NewGuid(), Number = 4, Name = "Профессиональные показатели" };
             var markBlk5 = new MarkBlock()
-            { Id = Guid.NewGuid(), Number = 5, Name = "Научно-исследовательская деятельность" };
+                { Id = Guid.NewGuid(), Number = 5, Name = "Научно-исследовательская деятельность" };
             var markBlk6 = new MarkBlock()
-            { Id = Guid.NewGuid(), Number = 6, Name = "Инновационная и иная деятельность" };
+                { Id = Guid.NewGuid(), Number = 6, Name = "Инновационная и иная деятельность" };
             var markBlk7 = new MarkBlock() { Id = Guid.NewGuid(), Number = 7, Name = "Конкурсная работа" };
 
             #endregion
@@ -165,7 +178,7 @@ namespace ServerApp.Data
                     "Награждение премиями, наградами в области научно-педагогической деятельности" +
                     " городского, всероссийского или международного уровня (в том числе зарубежными), " +
                     "победы в профессиональных конкурсах за весь период научно-педагогической деятельности",
-                EditBlockId = editBlk3.Id
+                EditBlockId = editBlk3.Id //todo: дождаться ответа заказчика
             };
 
             #region Columns4Table1
@@ -406,8 +419,10 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 6,
                 Name =
-                    "Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, " +
-                    "Министерств РФ или государственных академий наук, изданные типографским способом за последние 5 лет",
+                    "Список трудов участника конкурса. Количество монографий, учебников, учебных и учебно-методических" +
+                    " пособий с грифами УМО, Министерств РФ или государственных академий наук, изданных типографским" +
+                    "способом за весь период научно-педагогической деятельности, либо аналогичных работ на иностранном" +
+                    "языке без грифа УМО",
                 EditBlockId = editBlk4.Id
             };
 
@@ -437,7 +452,7 @@ namespace ServerApp.Data
                 ValueTypeId = valType2.Id,
                 TableId = tbl6.Id,
                 IsRequired = false
-            };
+            }; //todo: селект валуес да или нет
             var col64 = new Column()
             {
                 Id = Guid.NewGuid(),
@@ -466,6 +481,14 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 7,
+                Name = "Язык публикации",
+                ValueTypeId = valType1.Id,
+                TableId = tbl6.Id
+            }; //todo: селект валуес русский /иностраный
+            var col68 = new Column()
+            {
+                Id = Guid.NewGuid(),
+                Number = 8,
                 Name = "Ссылка на открытый доступ",
                 ValueTypeId = valType1.Id,
                 TableId = tbl6.Id
@@ -497,6 +520,14 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Вид (лекции, лабораторные)",
+                ValueTypeId = valType2.Id,
+                TableId = tbl7.Id
+            };
+            var col73 = new Column()
+            {
+                Id = Guid.NewGuid(),
+                Number = 3,
+                Name = "Ссылка на подтверждающий документ (в качестве подтверждения может быть выписка из учебной нагрузки по форме организации или ссылка на онлайн платформу с курсом лекций, например, «Открытое образование»)",
                 ValueTypeId = valType2.Id,
                 TableId = tbl7.Id
             };
@@ -597,7 +628,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 10,
-                Name = "Персональные идентификаторы и показатели",
+                Name = "Персональные идентификаторы",
                 EditBlockId = editBlk5.Id,
                 IsPrefilled = true
             };
@@ -618,33 +649,6 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Идентификатор",
-                ValueTypeId = valType2.Id,
-                TableId = tbl10.Id,
-                IsRequired = false
-            };
-            var col103 = new Column()
-            {
-                Id = Guid.NewGuid(),
-                Number = 3,
-                Name = "Количество публикаций в БАЗЕ",
-                ValueTypeId = valType1.Id,
-                TableId = tbl10.Id,
-                IsRequired = false
-            };
-            var col104 = new Column()
-            {
-                Id = Guid.NewGuid(),
-                Number = 4,
-                Name = "Количество цитирований",
-                ValueTypeId = valType1.Id,
-                TableId = tbl10.Id,
-                IsRequired = false
-            };
-            var col105 = new Column()
-            {
-                Id = Guid.NewGuid(),
-                Number = 5,
-                Name = "Индекс Хирша (за все время)",
                 ValueTypeId = valType2.Id,
                 TableId = tbl10.Id,
                 IsRequired = false
@@ -680,30 +684,6 @@ namespace ServerApp.Data
                 ColumnId = col102.Id,
                 Disable = false
             };
-            var cell1013 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row101.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1014 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row101.Id,
-                ColumnId = col104.Id,
-                Disable = false
-            };
-            var cell1015 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row101.Id,
-                ColumnId = col105.Id,
-                Disable = false
-            };
 
             #endregion
 
@@ -733,30 +713,6 @@ namespace ServerApp.Data
                 ColumnId = col102.Id,
                 Disable = false
             };
-            var cell1023 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row102.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1024 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row102.Id,
-                ColumnId = col104.Id,
-                Disable = true
-            };
-            var cell1025 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row102.Id,
-                ColumnId = col105.Id,
-                Disable = true
-            };
 
             #endregion
 
@@ -784,30 +740,6 @@ namespace ServerApp.Data
                 IsPrefilled = true,
                 RowId = row103.Id,
                 ColumnId = col102.Id,
-                Disable = false
-            };
-            var cell1033 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row103.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1034 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row103.Id,
-                ColumnId = col104.Id,
-                Disable = false
-            };
-            var cell1035 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row103.Id,
-                ColumnId = col105.Id,
                 Disable = false
             };
 
@@ -839,30 +771,6 @@ namespace ServerApp.Data
                 ColumnId = col102.Id,
                 Disable = false
             };
-            var cell1043 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row104.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1044 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row104.Id,
-                ColumnId = col104.Id,
-                Disable = false
-            };
-            var cell1045 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row104.Id,
-                ColumnId = col105.Id,
-                Disable = false
-            };
 
             #endregion
 
@@ -892,137 +800,6 @@ namespace ServerApp.Data
                 ColumnId = col102.Id,
                 Disable = false
             };
-            var cell1053 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row105.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1054 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row105.Id,
-                ColumnId = col104.Id,
-                Disable = false
-            };
-            var cell1055 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row105.Id,
-                ColumnId = col105.Id,
-                Disable = false
-            };
-
-            #endregion
-
-            var row106 = new Row()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                TableId = tbl10.Id
-            };
-
-            #region Cells4Row106
-
-            var cell1061 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row106.Id,
-                ColumnId = col101.Id,
-                Disable = true,
-                Value = "Количество монографий/глав в монографии"
-            };
-            var cell1062 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row106.Id,
-                ColumnId = col102.Id,
-                Disable = true
-            };
-            var cell1063 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row106.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1064 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row106.Id,
-                ColumnId = col104.Id,
-                Disable = false
-            };
-            var cell1065 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row106.Id,
-                ColumnId = col105.Id,
-                Disable = true
-            };
-
-            #endregion
-
-            var row107 = new Row()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                TableId = tbl10.Id
-            };
-
-            #region Cells4Row107
-
-            var cell1071 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row107.Id,
-                ColumnId = col101.Id,
-                Disable = true,
-                Value = "Количество патентов"
-            };
-            var cell1072 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row107.Id,
-                ColumnId = col102.Id,
-                Disable = true
-            };
-            var cell1073 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row107.Id,
-                ColumnId = col103.Id,
-                Disable = false
-            };
-            var cell1074 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row107.Id,
-                ColumnId = col104.Id,
-                Disable = true
-            };
-            var cell1075 = new CellVal()
-            {
-                Id = Guid.NewGuid(),
-                IsPrefilled = true,
-                RowId = row107.Id,
-                ColumnId = col105.Id,
-                Disable = true
-            };
-
 
             #endregion
 
@@ -1172,7 +949,7 @@ namespace ServerApp.Data
             #endregion
 
             #region Fields
-            
+
             var fld1 = new Field()
             {
                 Id = Guid.NewGuid(),
@@ -1262,23 +1039,23 @@ namespace ServerApp.Data
                 Placeholder = "Введите свой стаж",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk1.Id
-            };
+            }; //todo: нумерация
             var fld11 = new Field()
             {
                 Id = Guid.NewGuid(),
-                IsRequired = false,
                 Number = 11,
-                Name = "Дополнительная информация",
-                Placeholder = "Пример",//todo: расписать пример
+                Name =
+                    "Категория участника конкурса (Работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность)",
+                Placeholder = "Выберите категорию участника конкруса",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk1.Id
-            };
+                EditBlockId = editBlk2.Id
+            }; //todo: selctvals
             var fld12 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 12,
-                Name = "Направление конкурса",
-                Placeholder = "Выберите направление конкурса",
+                Name = "Название конкурсной работы",
+                Placeholder = "Введите название своей конкурсной работы",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1286,8 +1063,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 13,
-                Name = "Категория участника конкурса (Работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность)",
-                Placeholder = "Выберите категорию участника конкруса",
+                Name = "Ссылка на конкурсную работу",
+                Placeholder = "Введите ссылку своей конкурсной работы",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1295,8 +1072,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 14,
-                Name = "Название конкурсной работы",
-                Placeholder = "Введите название своей конкурсной работы",
+                Name = "Ученое звание",
+                Placeholder = "Выберите ученое звание",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1304,8 +1081,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 15,
-                Name = "Ссылка на конкурсную работу",
-                Placeholder = "Введите ссылку своей конкурсной работы",
+                Name = "Ученая степень",
+                Placeholder = "Выберите ученую степень",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1313,8 +1090,8 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 16,
-                Name = "Ученое звание",
-                Placeholder = "Выберите ученое звание",
+                Name = "Научная специальность (по классификации ВАК)",
+                Placeholder = "Введите научную специальность (по классификации ВАК)",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
             };
@@ -1322,27 +1099,29 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 17,
-                Name = "Ученая степень",
-                Placeholder = "Выберите ученую степень",
-                ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
+                Name = "Защитившиеся кадидаты наук",
+                Placeholder = "Введите количество",
+                EditGroup =
+                    "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
+                ValueTypeId = valType1.Id,
+                EditBlockId = editBlk4.Id
             };
             var fld18 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 18,
-                Name = "Научная специальность (по классификации ВАК)",
-                Placeholder = "Введите научную специальность (по классификации ВАК)",
-                ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
+                Name = "Защитившиеся доктора наук",
+                Placeholder = "Введите количество",
+                ValueTypeId = valType1.Id,
+                EditBlockId = editBlk4.Id
             };
             var fld19 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
-                Name = "Защитившиеся кадидаты наук",
+                Name = "Защитившиеся бакалавры, специалисты, магистры",
                 Placeholder = "Введите количество",
-                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
+                EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                 ValueTypeId = valType1.Id,
                 EditBlockId = editBlk4.Id
             };
@@ -1350,53 +1129,17 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
-                Name = "Защитившиеся доктора наук",
+                Name = "Защитившиеся кандидаты наук",
                 Placeholder = "Введите количество",
+                EditGroup =
+                    "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
                 ValueTypeId = valType1.Id,
-                EditBlockId = editBlk4.Id
+                EditBlockId = editBlk5.Id
             };
             var fld21 = new Field()
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
-                Name = "Защитившиеся бакалавры",
-                Placeholder = "Введите количество",
-                EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
-                ValueTypeId = valType1.Id,
-                EditBlockId = editBlk4.Id
-            };
-            var fld22 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 22,
-                Name = "Защитившиеся специалисты",
-                Placeholder = "Введите количество",
-                ValueTypeId = valType1.Id,
-                EditBlockId = editBlk4.Id
-            };
-            var fld23 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 23,
-                Name = "Защитившиеся магистры",
-                Placeholder = "Введите количество",
-                ValueTypeId = valType1.Id,
-                EditBlockId = editBlk4.Id
-            };
-            var fld24 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 24,
-                Name = "Защитившиеся кандидаты наук",
-                Placeholder = "Введите количество",
-                EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
-                ValueTypeId = valType1.Id,
-                EditBlockId = editBlk5.Id
-            };
-            var fld25 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 25,
                 Name = "Защитившиеся доктора наук",
                 Placeholder = "Введите количество",
                 ValueTypeId = valType1.Id,
@@ -1406,170 +1149,128 @@ namespace ServerApp.Data
             #endregion
 
             #region SelectValues
-
+            
             var slctVall1 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "АРХИТЕКТУРА",
-                FieldId = fld12.Id,
+                Value = "Докторанты, имеющие ученую степень кандидата наук",
+                FieldId = fld11.Id
             };
             var slctVall2 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "ТЕХНИКА И ТЕХНОЛОГИИ СТРОИТЕЛЬСТВА",
-                FieldId = fld12.Id
+                Value = "Имеющие ученую степень доктора наук",
+                FieldId = fld11.Id
             };
             var slctVall3 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "СТРОИТЕЛЬСТВО И АРХИТЕКТУРА",
-                FieldId = fld12.Id
+                Value = "Нет",
+                FieldId = fld14.Id
             };
             var slctVall4 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "ЭЛЕКТРО- И ТЕПЛОЭНЕРГЕТИКА",
-                FieldId = fld12.Id
+                Value = "Доцент",
+                FieldId = fld14.Id
             };
             var slctVall5 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "ПРИКЛАДНАЯ ГЕОЛОГИЯ, ГОРНОЕ ДЕЛО, НЕФТЕГАЗОВОЕ ДЕЛО И ГЕОДЕЗИЯ",
-                FieldId = fld12.Id
+                Value = "Профессор",
+                FieldId = fld14.Id
             };
             var slctVall6 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "НЕДРОПОЛЬЗОВАНИЕ И ГОРНЫЕ НАУКИ",
-                FieldId = fld12.Id
-            };
-            // var slctVall7 = new SelectValue()
-            // {
-            //     Id = Guid.NewGuid(),
-            //     Value = "Аспиранты, адъюнкты, ординаторы, ассистенты-стажеры, не имеющие ученой степени",
-            //     FieldId = fld13.Id
-            // };
-            var slctVall8 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Докторанты, имеющие ученую степень кандидата наук",
-                FieldId = fld13.Id
-            };
-            var slctVall9 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Имеющие ученую степень доктора наук",
-                FieldId = fld13.Id
-            };
-            var slctVall28 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Нет",
-                FieldId = fld16.Id
-            };
-            var slctVall10 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Доцент",
-                FieldId = fld16.Id
-            };
-            var slctVall11 = new SelectValue()
-            {
-                Id = Guid.NewGuid(),
-                Value = "Профессор",
-                FieldId = fld16.Id
-            };
-            var slctVall12 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Региональный",
                 ColumnId = col13.Id
             };
-            var slctVall13 = new SelectValue()
+            var slctVall7 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Всероссийский",
                 ColumnId = col13.Id
             };
-            var slctVall14 = new SelectValue()
+            var slctVall8 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Международный",
                 ColumnId = col13.Id
             };
-            var slctVall15 = new SelectValue()
+            var slctVall9 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Учебное и/или учебно-методическое пособие",
                 ColumnId = col61.Id
             };
-            var slctVall16 = new SelectValue()
+            var slctVall10 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Учебник",
                 ColumnId = col61.Id
             };
-            var slctVall17 = new SelectValue()
+            var slctVall11 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Монография",
                 ColumnId = col61.Id
             };
-            var slctVall18 = new SelectValue()
+            var slctVall12 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Лекции",
                 ColumnId = col72.Id
             };
-            var slctVall19 = new SelectValue()
+            var slctVall13 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Лабораторные",
                 ColumnId = col72.Id
             };
-            var slctVall20 = new SelectValue()
+            var slctVall14 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Руководитель",
                 ColumnId = col114.Id
             };
-            var slctVall21 = new SelectValue()
+            var slctVall15 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Исполнитель",
                 ColumnId = col114.Id
             };
-            var slctVall22 = new SelectValue()
+            var slctVall16 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Изобретение",
                 ColumnId = col121.Id
             };
-            var slctVall23 = new SelectValue()
+            var slctVall17 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Полезная модель",
                 ColumnId = col121.Id
             };
-            var slctVall24 = new SelectValue()
+            var slctVall18 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "База данных",
                 ColumnId = col121.Id
             };
-            var slctVall25 = new SelectValue()
+            var slctVall19 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Изобретение",
                 ColumnId = col131.Id
             };
-            var slctVall26 = new SelectValue()
+            var slctVall20 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Полезная модель",
                 ColumnId = col131.Id
             };
-            var slctVall27 = new SelectValue()
+            var slctVall21 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "База данных",
@@ -1605,7 +1306,7 @@ namespace ServerApp.Data
                 Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
-                FieldId = fld23.Id,
+                FieldId = fld19.Id,
                 MaxValue = 5,
                 EvaluationMethodName = "EvaluateMark3"
             };
@@ -1614,7 +1315,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld19.Id,
+                FieldId = fld17.Id,
                 MaxValue = 2,
                 EvaluationMethodName = "EvaluateMark4"
             };
@@ -1623,7 +1324,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 5,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld20.Id,
+                FieldId = fld18.Id,
                 MaxValue = 4,
                 EvaluationMethodName = "EvaluateMark5"
             };
@@ -1696,7 +1397,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 13,
                 Name = "Баллы за ученое звание:",
-                FieldId = fld16.Id,
+                FieldId = fld14.Id,
                 MaxValue = 5,
                 EvaluationMethodName = "EvaluateMark13"
             };
@@ -1727,30 +1428,12 @@ namespace ServerApp.Data
                 MaxValue = 5,
                 EvaluationMethodName = "EvaluateMark16"
             };
-            var mark17 = new Mark()
-            {
-                Id = Guid.NewGuid(),
-                Number = 17,
-                Name = "Баллы по базе Scopus:",
-                TableId = tbl10.Id,
-                MaxValue = 5,
-                EvaluationMethodName = "EvaluateMark17"
-            };
-            var mark18 = new Mark()
-            {
-                Id = Guid.NewGuid(),
-                Number = 18,
-                Name = "Баллы по базе РИНЦ:",
-                TableId = tbl10.Id,
-                MaxValue = 3,
-                EvaluationMethodName = "EvaluateMark18"
-            };
             var mark19 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 19,
                 Name = "Баллы за количество защитившихся кандидатов наук:",
-                FieldId = fld24.Id,
+                FieldId = fld20.Id,
                 MaxValue = 2,
                 EvaluationMethodName = "EvaluateMark19"
             };
@@ -1759,7 +1442,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 20,
                 Name = "Баллы за количество защитившихся докторов наук:",
-                FieldId = fld25.Id,
+                FieldId = fld21.Id,
                 MaxValue = 4,
                 EvaluationMethodName = "EvaluateMark20"
             };
@@ -1805,7 +1488,7 @@ namespace ServerApp.Data
                 Number = 25,
                 Name = "Оценка уровня предоставленной работы:",
                 IsAuto = false,
-                FieldId = fld15.Id,
+                FieldId = fld13.Id,
                 MaxValue = 10
             };
             var mark26 = new Mark()
@@ -1816,13 +1499,15 @@ namespace ServerApp.Data
                        " инновационных методов (проблемного и проективного обучения, " +
                        "тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
                 IsAuto = false,
-                FieldId = fld15.Id,
+                FieldId = fld13.Id,
                 MaxValue = 10
             };
 
-            #endregion
-            
-            builder.Entity<ApplicationStatus>().HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
+            #endregion // todo: изменить критерии оценки и максимальный балл
+
+            builder.Entity<ApplicationStatus>()
+                .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
+            builder.Entity<Category>().HasData([category1, category2]);
             builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
@@ -1838,32 +1523,29 @@ namespace ServerApp.Data
                 col71, col72,
                 col81, col82, col83, col84,
                 col91, col92, col93, col94,
-                col101, col102, col103, col104, col105,
+                col101, col102,
                 col111, col112, col113, col114, col115,
                 col121, col122, col123, col124,
                 col131, col132, col133
             ]);
-            builder.Entity<Row>().HasData([row101, row102, row103, row104, row105, row106, row107]);
+            builder.Entity<Row>().HasData([row101, row102, row103, row104, row105]);
             builder.Entity<CellVal>().HasData([
-                cell1011, cell1012, cell1013, cell1014, cell1015,
-                cell1021, cell1022, cell1023, cell1024, cell1025,
-                cell1031, cell1032, cell1033, cell1034, cell1035,
-                cell1041, cell1042, cell1043, cell1044, cell1045,
-                cell1051, cell1052, cell1053, cell1054, cell1055,
-                cell1061, cell1062, cell1063, cell1064, cell1065,
-                cell1071, cell1072, cell1073, cell1074, cell1075 
+                cell1011, cell1012,
+                cell1021, cell1022,
+                cell1031, cell1032,
+                cell1041, cell1042,
+                cell1051, cell1052
             ]);
             builder.Entity<SelectValue>().HasData([
-                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall8, slctVall9,//todo: delete slct val 4 category
-                slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, slctVall16, slctVall17,
-                slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24, slctVall25,
-                slctVall26, slctVall27, slctVall28
+                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
+                slctVall8, slctVall9, slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, 
+                slctVall16, slctVall17, slctVall18, slctVall19, slctVall20, slctVall21
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
-                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21, fld22, fld23, fld24, fld25]);
+                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
-                mark15, mark16, mark17, mark18, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
+                mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
             ]);
 
             builder.Entity<Track>().HasMany(e => e.EditBlocks).WithMany(e => e.Tracks)
@@ -1893,83 +1575,79 @@ namespace ServerApp.Data
                 );
             builder.Entity<MarkBlock>().HasMany(e => e.Tables).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
-                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl3.Id},
-                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl4.Id},
-                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl5.Id},//todo: узнать у заказчика к какому MarkBlock относится и исправить
-                    new {MarkBlocksId = markBlk2.Id, TablesId = tbl8.Id},
-                    new {MarkBlocksId = markBlk3.Id, TablesId = tbl6.Id},
-                    new {MarkBlocksId = markBlk3.Id, TablesId = tbl7.Id},
-                    new {MarkBlocksId = markBlk4.Id, TablesId = tbl1.Id},
-                    new {MarkBlocksId = markBlk4.Id, TablesId = tbl2.Id},
-                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl1.Id},
-                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl9.Id},
-                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl10.Id},
-                    new {MarkBlocksId = markBlk5.Id, TablesId = tbl11.Id},
-                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl2.Id},
-                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id},
-                    new {MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id},
+                    new { MarkBlocksId = markBlk2.Id, TablesId = tbl3.Id },
+                    new { MarkBlocksId = markBlk2.Id, TablesId = tbl4.Id },
+                    new
+                    {
+                        MarkBlocksId = markBlk2.Id, TablesId = tbl5.Id
+                    }, //todo: узнать у заказчика к какому MarkBlock относится и исправить
+                    new { MarkBlocksId = markBlk2.Id, TablesId = tbl8.Id },
+                    new { MarkBlocksId = markBlk3.Id, TablesId = tbl6.Id },
+                    new { MarkBlocksId = markBlk3.Id, TablesId = tbl7.Id },
+                    new { MarkBlocksId = markBlk4.Id, TablesId = tbl1.Id },
+                    new { MarkBlocksId = markBlk4.Id, TablesId = tbl2.Id },
+                    new { MarkBlocksId = markBlk5.Id, TablesId = tbl1.Id },
+                    new { MarkBlocksId = markBlk5.Id, TablesId = tbl9.Id },
+                    new { MarkBlocksId = markBlk5.Id, TablesId = tbl11.Id },
+                    new { MarkBlocksId = markBlk6.Id, TablesId = tbl2.Id },
+                    new { MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id },
+                    new { MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id },
                 ]));
             builder.Entity<MarkBlock>().HasMany(e => e.Fields).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld1.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld2.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld3.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld4.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld5.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld6.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld7.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld8.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld9.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld10.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld11.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld12.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld13.Id},
-                    new {MarkBlocksId = markBlk7.Id, FieldsId = fld14.Id},
-                    new {MarkBlocksId = markBlk7.Id, FieldsId = fld15.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld17.Id},
-                    new {MarkBlocksId = markBlk1.Id, FieldsId = fld18.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld19.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld20.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld21.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld22.Id},
-                    new {MarkBlocksId = markBlk2.Id, FieldsId = fld23.Id},
-                    new {MarkBlocksId = markBlk4.Id, FieldsId = fld16.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld16.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld24.Id},
-                    new {MarkBlocksId = markBlk5.Id, FieldsId = fld25.Id}
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld1.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld2.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld3.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld4.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld5.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld6.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld7.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld8.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld9.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld10.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld11.Id },
+                    new { MarkBlocksId = markBlk7.Id, FieldsId = fld12.Id },
+                    new { MarkBlocksId = markBlk7.Id, FieldsId = fld13.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld14.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld15.Id },
+                    new { MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id },
+                    new { MarkBlocksId = markBlk2.Id, FieldsId = fld17.Id },
+                    new { MarkBlocksId = markBlk2.Id, FieldsId = fld18.Id },
+                    new { MarkBlocksId = markBlk2.Id, FieldsId = fld19.Id },
+                    new { MarkBlocksId = markBlk4.Id, FieldsId = fld14.Id },
+                    new { MarkBlocksId = markBlk5.Id, FieldsId = fld14.Id },
+                    new { MarkBlocksId = markBlk5.Id, FieldsId = fld20.Id },
+                    new { MarkBlocksId = markBlk5.Id, FieldsId = fld21.Id }
                 ]));
             builder.Entity<MarkBlock>().HasMany(e => e.Marks).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark1.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark2.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark3.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark4.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark5.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark6.Id},
-                    new {MarkBlocksId = markBlk2.Id, MarksId = mark7.Id},
-                    new {MarkBlocksId = markBlk3.Id, MarksId = mark8.Id},
-                    new {MarkBlocksId = markBlk3.Id, MarksId = mark9.Id},
-                    new {MarkBlocksId = markBlk3.Id, MarksId = mark10.Id},
-                    new {MarkBlocksId = markBlk3.Id, MarksId = mark11.Id},
-                    new {MarkBlocksId = markBlk3.Id, MarksId = mark12.Id},
-                    new {MarkBlocksId = markBlk4.Id, MarksId = mark13.Id},
-                    new {MarkBlocksId = markBlk4.Id, MarksId = mark14.Id},
-                    new {MarkBlocksId = markBlk4.Id, MarksId = mark15.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark13.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark14.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark16.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark17.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark18.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark19.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark20.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark21.Id},
-                    new {MarkBlocksId = markBlk5.Id, MarksId = mark22.Id},
-                    new {MarkBlocksId = markBlk6.Id, MarksId = mark15.Id},
-                    new {MarkBlocksId = markBlk6.Id, MarksId = mark23.Id},
-                    new {MarkBlocksId = markBlk6.Id, MarksId = mark24.Id},
-                    new {MarkBlocksId = markBlk7.Id, MarksId = mark25.Id},
-                    new {MarkBlocksId = markBlk7.Id, MarksId = mark26.Id},
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark1.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark2.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark3.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark4.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark5.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark6.Id },
+                    new { MarkBlocksId = markBlk2.Id, MarksId = mark7.Id },
+                    new { MarkBlocksId = markBlk3.Id, MarksId = mark8.Id },
+                    new { MarkBlocksId = markBlk3.Id, MarksId = mark9.Id },
+                    new { MarkBlocksId = markBlk3.Id, MarksId = mark10.Id },
+                    new { MarkBlocksId = markBlk3.Id, MarksId = mark11.Id },
+                    new { MarkBlocksId = markBlk3.Id, MarksId = mark12.Id },
+                    new { MarkBlocksId = markBlk4.Id, MarksId = mark13.Id },
+                    new { MarkBlocksId = markBlk4.Id, MarksId = mark14.Id },
+                    new { MarkBlocksId = markBlk4.Id, MarksId = mark15.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark13.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark14.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark16.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark19.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark20.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark21.Id },
+                    new { MarkBlocksId = markBlk5.Id, MarksId = mark22.Id },
+                    new { MarkBlocksId = markBlk6.Id, MarksId = mark15.Id },
+                    new { MarkBlocksId = markBlk6.Id, MarksId = mark23.Id },
+                    new { MarkBlocksId = markBlk6.Id, MarksId = mark24.Id },
+                    new { MarkBlocksId = markBlk7.Id, MarksId = mark25.Id },
+                    new { MarkBlocksId = markBlk7.Id, MarksId = mark26.Id },
                 ]));
         }
     }

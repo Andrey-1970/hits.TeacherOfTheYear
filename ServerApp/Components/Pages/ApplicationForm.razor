@@ -15,7 +15,7 @@
         {
             <Button Type="ButtonType.Button"
                     Color="ButtonColor.Success"
-                    Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty"
+                    Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
                     @onclick="ChangeStatus">
                 Отправить заявку
             </Button>
@@ -29,6 +29,13 @@
                 @foreach (var track in model.Tracks)
                 {
                     <option value="@track!.Id">@track.Name</option>
+                }
+            </InputSelect>
+            <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?" ValueExpression="() => model.SelectedCategoryId" ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
+                <option value="@Guid.Empty" disabled selected hidden>Выберите направление</option>
+                @foreach (var category in categories)
+                {
+                    <option value="@category!.Id">@category.Name</option>
                 }
             </InputSelect>
             @if (model.SelectedTrackId != Guid.Empty)
@@ -215,10 +222,12 @@
     EditModel? model;
     EditContext? editContext;
     ValidationMessageStore? messageStore;
+    CategoryModel[] categories = [];
 
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
+        categories = await data.GetCategoriesAsync();
         if (model != null)
         {
             model.Tracks = await data.GetTrackModelsAsync();

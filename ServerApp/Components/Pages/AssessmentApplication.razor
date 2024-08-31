@@ -257,7 +257,7 @@
 
     async Task Assessment()
     {
-        await Task.Delay(500);
+        await data.RatedApplicationAsync(model!.ApplicationId);
         nav.NavigateTo("/assessment#");
     }
 

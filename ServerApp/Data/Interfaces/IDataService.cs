@@ -8,6 +8,7 @@ namespace ServerApp.Data.Interfaces
     public interface IDataService
     {
         Task<UserInfo?> GetCurrentUserInfoAsync();
+        Task<CategoryModel[]> GetCategoriesAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();
         Task<IEnumerable<TrackModel>> GetTrackModelsAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
@@ -36,5 +37,6 @@ namespace ServerApp.Data.Interfaces
         Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
+        Task RatedApplicationAsync(Guid? appId);
     }
 }

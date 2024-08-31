@@ -9,6 +9,7 @@ using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
+using ServerApp.Data.Models.VoteModel;
 using YourProject.Data.Services;
 
 namespace ServerApp.Data.Services
@@ -18,6 +19,11 @@ namespace ServerApp.Data.Services
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
             return await auth.GetUserAsync();
+        }
+
+        public async Task<CategoryModel[]> GetCategoriesAsync()
+        {
+            return await context.Categories.Select(e => new CategoryModel(e)).ToArrayAsync();
         }
 
         public async Task<EditModel> GetCurrentUserEditModelAsync()
@@ -161,6 +167,7 @@ namespace ServerApp.Data.Services
                     Id = Guid.NewGuid(),
                     UserInfoId = user.Id,
                     TrackId = model.SelectedTrackId.Value,
+                    CategoryId = model.SelectedCategoryId.HasValue ? model.SelectedCategoryId.Value : null,
                     ApplicationStatusId = context.ApplicationStatuses.FirstOrDefault(e => e.Number == 1)!.Id
                 };
 
@@ -744,6 +751,27 @@ namespace ServerApp.Data.Services
             }
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task RatedApplicationAsync(Guid? appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ?? throw new InvalidOperationException("App not found.");
+            app.ApplicationStatus = (await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 6))!;
+
+            context.Update(app);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
+        {
+            var apps = context.ApplicationForms.Where(e => e.TrackId == trackId && e.CategoryId == categoryId);
+            return await apps.Select(e => new ListItemModel(e)).ToArrayAsync();
+        }
+
+        public async Task<VoteModel> GetVoteModelAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            return new VoteModel(app);
         }
     }
 }

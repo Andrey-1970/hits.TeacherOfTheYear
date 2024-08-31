@@ -5,15 +5,15 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>Голосование</PageTitle>
+<PageTitle>пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ</PageTitle>
 <div class="block-group">
     <div class="block">
         <div class="block-title">
             <div class="block-title-text">
-                Категoрии голосования
+                пїЅпїЅпїЅпїЅпїЅoпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             </div>
             <div class="form-text">
-                Выберите категорию, в которой хотели бы проголосовать
+                пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             </div>
         </div>
 
@@ -38,25 +38,16 @@
 
 @code {
     IEnumerable<TrackModel> tracks = default!;
-    List<Category> categories = default!;
+    CategoryModel[] categories = default!;
 
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
-        categories = new()
-        {
-            new(){Name = "СТРОИТЕЛЬСТВО И АРХИТЕКТУРА"},
-            new(){Name = "ЭНЕРГЕТИКА И НЕФТЕГАЗОВАЯ ИНДУСТРИЯ"},
-        };
+        categories = await data.GetCategoriesAsync();
     }
 
     async Task ViewParticipantsHandler(Guid trackId)
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{trackId.ToString()}#"));
-    }
-
-    class Category
-    {
-        public string? Name;
     }
 }

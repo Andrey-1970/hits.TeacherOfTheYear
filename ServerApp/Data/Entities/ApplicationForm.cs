@@ -16,6 +16,9 @@ namespace ServerApp.Data.Entities
 
         public Guid TrackId { get; set; }
         public virtual Track Track { get; set; }
+        
+        public virtual Guid? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
 
         public Guid? ReviewerId { get; set; }
         [ForeignKey(nameof(ReviewerId))]

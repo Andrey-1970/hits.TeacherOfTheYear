@@ -67,8 +67,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 1,
-                >= 2 => 2,
+                1 => 6,
+                >= 2 => 8,
                 _ => 0
             };
         }
@@ -81,8 +81,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 2,
-                >= 2 => 4,
+                1 => 8,
+                >= 2 => 12,
                 _ => 0
             };
         }
@@ -228,40 +228,6 @@ namespace YourProject.Data.Services
                 1 => 1,
                 2 => 2,
                 3 => 3,
-                4 => 4,
-                >= 5 => 5,
-                _ => 0
-            };
-        }
-
-        public static int EvaluateMark17(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
-        {
-            var row = context.Rows.Include(row => row.CellVals)
-                .ThenInclude(cellVal => cellVal.Column)
-                .FirstOrDefault(r => r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Тип идентификатора" && c.Value == "ScopusID"));
-            if (row == null) return 0; 
-
-            var val = int.Parse(row.CellVals.FirstOrDefault(c => c.Column!.Name == "Индекс Хирша (за все время)")?.Value ?? "0");
-            return val switch
-            {
-                <= 1 => 0,
-                4 => 4,
-                >= 5 => 5,
-                _ => 0
-            };
-        }
-
-        public static int EvaluateMark18(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
-        {
-            var row = context.Rows.Include(row => row.CellVals)
-                .ThenInclude(cellVal => cellVal.Column)
-                .FirstOrDefault(r => r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Тип идентификатора" && c.Value == "РИНЦ AuthorID"));
-            if (row == null) return 0; 
-
-            var val = int.Parse(row.CellVals.FirstOrDefault(c => c.Column!.Name == "Индекс Хирша (за все время)")?.Value ?? "0");
-            return val switch
-            {
-                <= 1 => 0,
                 4 => 4,
                 >= 5 => 5,
                 _ => 0
