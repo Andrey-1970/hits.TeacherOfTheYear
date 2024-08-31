@@ -340,7 +340,7 @@
                 messageStore?.Add(() => fld.Value!, $"Поле '{fld.Name}' обязательно для заполнения.");
             }
         }
-        else if (fld.ValueType == "int" && !Int32.TryParse(fld.Value, out _))
+        else if (fld.ValueType == "int" && !Int64.TryParse(fld.Value, out _))
         {
             messageStore?.Add(() => fld.Value, $"Поле '{fld.Name}' должно содержать число.");
         }
@@ -360,7 +360,7 @@
                 messageStore?.Add(() => cell.Value!, $"Поле таблицы обязательно для заполнения.");
             }
         }
-        else if (cell.ValueType == "int" && !Int32.TryParse(cell.Value, out _))
+        else if (cell.ValueType == "int" && !Int64.TryParse(cell.Value, out _))
         {
             messageStore?.Add(() => cell.Value, $"Поле таблицы должно содержать число.");
         }
