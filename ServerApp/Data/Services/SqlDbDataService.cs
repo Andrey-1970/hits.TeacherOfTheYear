@@ -768,7 +768,9 @@ namespace ServerApp.Data.Services
 
         public async Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
         {
-            var apps = context.ApplicationForms.Where(e => e.TrackId == trackId && e.CategoryId == categoryId);
+            var apps = context.ApplicationForms.Where(e =>
+                e.TrackId == trackId && e.CategoryId == categoryId && e.ApplicationStatusId ==
+                context.ApplicationStatuses.FirstOrDefault(s => s.Number == 6)!.Id);
             return await apps.Select(e => new ListItemModel(e)).ToArrayAsync();
         }
 
