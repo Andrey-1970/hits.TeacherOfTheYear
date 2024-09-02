@@ -10,7 +10,7 @@
 <div class="block">
     <div class="block-title">
         <div class="title-direction">
-            <div class="block-title-text">@participant.Fields.First(f => f.Name == "ФИО").Value</div>
+            <div class="block-title-text">@participant.FullName</div>
             <div class="text-direction">
                 <div class="brief-title">Количество голосов: @participant.TotalVotes</div>
                 <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="Back" type="button" />

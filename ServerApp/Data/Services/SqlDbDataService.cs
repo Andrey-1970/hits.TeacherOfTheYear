@@ -815,7 +815,14 @@ namespace ServerApp.Data.Services
         {
             var user = await auth.GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            return new VoteModel(app, user.Id);
+            if (user == null)
+            {
+                return new VoteModel() { Id = app.Id, FullName = app.UserInfo.Name, IsVoteOfThisApplication = false, TotalVotes = app.Votes.Count};
+            }
+            else
+            {
+                return new VoteModel(app, user.Id);
+            }
         }
 
         public async Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId)
