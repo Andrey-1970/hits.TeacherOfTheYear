@@ -48,7 +48,7 @@ else if (status == "В ожидании рассмотрения")
         <AntiforgeryToken />
 
         <div class="alert alert-warning" role="alert">
-            Ваша заявка <strong>ожидает рассмотрения организаторами</strong>. Пожалуйста, дождитесь решения.
+            Ваша заявка <strong>ожидает рассмотрения экспертами</strong>. Пожалуйста, дождитесь решения.
         </div>
         <Button Type="ButtonType.Submit"
                 Color="ButtonColor.Danger">
@@ -60,7 +60,7 @@ else if (status == "В ожидании рассмотрения")
 else if (status == "В процессе рассмотрения")
 {
     <div class="alert alert-info" role="alert">
-        Ваша заявка <strong>в процессе рассмотрения организатором</strong>, совсем скоро он примет решение
+        Ваша заявка <strong>в процессе рассмотрения экспертом</strong>, совсем скоро он примет решение
     </div>
 }
 else if (status == "Одобрена")
