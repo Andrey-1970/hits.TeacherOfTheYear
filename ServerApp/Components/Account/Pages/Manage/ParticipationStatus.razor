@@ -44,7 +44,7 @@ else if (status == "В ожидании заполнения")
 }
 else if (status == "В ожидании рассмотрения" || status == "В процессе рассмотрения")
 {
-    <form @formname="CancelForm" @onsubmit="DeleteForm" class="w-100" method="post">
+    <form @formname="CancelForm" @onsubmit="WithdrawApplication" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-warning" role="alert">
@@ -66,7 +66,7 @@ else if (status == "В ожидании рассмотрения" || status == "
 }
 else if (status == "Одобрена")
 {
-    <form @formname="Success" @onsubmit="DeleteForm" class="w-100" method="post">
+    <form @formname="Success" @onsubmit="WithdrawApplication" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-success" role="alert">
@@ -92,7 +92,8 @@ else if (status == "Отклонена")
             Редактировать заявку
         </Button>
         <Button Type="ButtonType.Link"
-                Color="ButtonColor.Primary">
+                Color="ButtonColor.Primary"
+                To="/feedback#">
             Связаться с поддержкой
         </Button>
     </form>
@@ -114,5 +115,10 @@ else if (status == "Отклонена")
     void DeleteForm()
     {
         NavManager.NavigateTo("/form-deleted#");
+    }
+
+    void WithdrawApplication()
+    {
+        
     }
 }
