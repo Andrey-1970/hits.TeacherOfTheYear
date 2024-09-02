@@ -1,0 +1,95 @@
+@page "/voting/category/{TrackId}/{CategoryId}/participant/{ParticipantId}"
+
+@using ServerApp.Data.Models.VoteModel
+
+@inject IDataService data
+@inject NavigationManager navigate
+
+<PageTitle>Кандидат</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="title-direction">
+            <div class="block-title-text">@participant.Fields.First(f => f.Name == "ФИО").Value</div>
+            <div class="text-direction">
+                <div class="brief-title">Количество голосов: @participant.TotalVotes</div>
+                <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="Back" type="button" />
+            </div>
+        </div>
+    </div>
+    <div class="block-content flex-row">
+        <div class="leftside">
+            <div class="brief-info">
+                <div class="row w-100">
+                    @foreach (var field in participant.Fields)
+                    {
+                        <div class="col-6">
+                            <div class="brief-title">@field.Name</div>
+                            <div class="brief-text">@field.Value</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="rightside">
+            <div class="photo"></div>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <Button Color="ButtonColor.Primary"
+                            Class="w-100"
+                            @onclick="NavToLogin">
+                        Проголосовать
+                    </Button>
+                </NotAuthorized>
+                <Authorized>
+                    <Button Color="ButtonColor.Primary"
+                            Class="w-100"
+                            Disabled="participant.IsVoteOfThisApplication"
+                            @onclick="Vote">
+                        Проголосовать
+                    </Button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? TrackId { get; set; }
+
+    [Parameter]
+    public string? CategoryId { get; set; }
+
+    [Parameter]
+    public string? ParticipantId { get; set; }
+
+    VoteModel participant = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Guid.TryParse(ParticipantId, out var participantId))
+        {
+            participant = await data.GetVoteModelAsync(participantId);
+            participant.Fields = await data.GetFieldModelsForVotePageAsync(participantId);
+            participant.Tables = await data.GetTableModelsForVotePageAsync(participantId);
+        }
+    }
+
+    async Task Back()
+    {
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}#"));
+    }
+
+    async Task Vote()
+    {
+        await data.CastVoteAsync(participant.Id);
+        participant.IsVoteOfThisApplication = true;
+        participant.TotalVotes += 1;
+    }
+
+    private void NavToLogin()
+    {
+        navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
+    }
+}
