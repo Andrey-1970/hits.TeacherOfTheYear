@@ -14,8 +14,13 @@ using YourProject.Data.Services;
 
 namespace ServerApp.Data.Services
 {
-    public class SqlDbDataService(ApplicationDbContext context, IAuthorization auth) : IDataService
+    public class SqlDbDataService(ApplicationDbContext context, IAuthorization auth, UserManager<ApplicationUser> userManager) : IDataService
     {
+        public async Task CreateCurrentUserInfoAsync(string username)
+        {
+            context.UserInfos.Add(new UserInfo() { Id = Guid.NewGuid(), Username = username });
+            await context.SaveChangesAsync();
+        }
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
             return await auth.GetUserAsync();
@@ -510,6 +515,7 @@ namespace ServerApp.Data.Services
 
         public async Task ApproveApplicationFormAsync(Guid? applicationId)
         {
+            var user = await auth.GetUserAsync();
             var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
                           .ThenInclude(track => track.MarkBlocks)
                           .Include(applicationForm => applicationForm.BlockReviews).FirstOrDefaultAsync(e => e.Id == applicationId) ??
@@ -524,6 +530,9 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
 
             await AutoSetMarksWithDynamicMethods(app.Id);
+
+            await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(user.Username),
+                (context.Roles.FirstOrDefaultAsync(r => r.Name == "Participant").Result ?? throw new NullReferenceException("Not found role with name 'Participant'")).Name!);
 
             //todo: Добавление пользователю роли "Participant"
         }

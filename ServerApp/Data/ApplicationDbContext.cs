@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Data.Entities;
@@ -1530,6 +1531,16 @@ namespace ServerApp.Data
 
             #endregion // todo: изменить критерии оценки и максимальный балл???????
 
+            #region Roles
+
+            var role1 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Voter", NormalizedName = "VOTER" };
+            var role2 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Participant", NormalizedName = "PARTICIPANT" };
+            var role3 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Expert", NormalizedName = "EXPERT" };
+            var role4 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Organiser", NormalizedName = "ORGANISER" };
+            var role5 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" };
+
+            #endregion
+
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<Category>().HasData([category1, category2]);
@@ -1573,6 +1584,7 @@ namespace ServerApp.Data
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
                 mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
             ]);
+            builder.Entity<IdentityRole>().HasData([role1, role2, role3, role4]);
 
             builder.Entity<Track>().HasMany(e => e.EditBlocks).WithMany(e => e.Tracks)
                 .UsingEntity(j => j.HasData([

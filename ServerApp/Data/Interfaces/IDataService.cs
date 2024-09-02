@@ -8,6 +8,7 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task CreateCurrentUserInfoAsync(string username);
         Task<UserInfo?> GetCurrentUserInfoAsync();
         Task<CategoryModel[]> GetCategoriesAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();
@@ -42,5 +43,6 @@ namespace ServerApp.Data.Interfaces
         Task RatedApplicationAsync(Guid? appId);
         Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
         Task<VoteModel> GetVoteModelAsync(Guid appId);
+        // Task CastVoteAsync(Guid appId);
     }
 }
