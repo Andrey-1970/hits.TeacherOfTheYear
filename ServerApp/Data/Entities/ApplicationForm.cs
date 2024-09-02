@@ -24,10 +24,11 @@ namespace ServerApp.Data.Entities
         [ForeignKey(nameof(ReviewerId))]
         public virtual UserInfo? Reviewer { get; set; }
 
-        public virtual List<BlockReview> BlockReviews { get; set; } = new List<BlockReview>();
-        public virtual List<MarkVal> MarkVals { get; set; } = new List<MarkVal>();
-        public virtual List<FieldVal> FieldVals { get; set; } = new List<FieldVal>();
-        public virtual List<CellVal> CellVals { get; set; } = new List<CellVal>();
-        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new List<EditBlockStatus>();
+        public virtual List<BlockReview> BlockReviews { get; set; } = new();
+        public virtual List<MarkVal> MarkVals { get; set; } = new();
+        public virtual List<FieldVal> FieldVals { get; set; } = new();
+        public virtual List<CellVal> CellVals { get; set; } = new();
+        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new();
+        public virtual List<Vote> Votes { get; set; } = new();
     }
 }

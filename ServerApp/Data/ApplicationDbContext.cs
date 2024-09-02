@@ -28,6 +28,7 @@ namespace ServerApp.Data
         public DbSet<Track> Tracks { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<ValuesType> ValueTypes { get; set; }
+        public DbSet<Vote> Votes { get; set; }
 
         #endregion
 
@@ -1544,7 +1545,7 @@ namespace ServerApp.Data
                 col41, col42, col43, col44, col45,
                 col51, col52, col53, col54,
                 col61, col62, col63, col64, col65, col66, col67, col68,
-                col71, col72,
+                col71, col72, col73,
                 col81, col82, col83, col84,
                 col91, col92, col93, col94,
                 col101, col102,

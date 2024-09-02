@@ -178,6 +178,7 @@ namespace ServerApp.Data.Services
             else
             {
                 app.TrackId = model.SelectedTrackId.Value;
+                app.CategoryId = model.SelectedCategoryId;
                 context.ApplicationForms.Update(app);
                 await context.SaveChangesAsync(); 
             }
@@ -778,6 +779,17 @@ namespace ServerApp.Data.Services
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
             return new VoteModel(app);
+        }
+
+        public async Task CastVoteAsync(Guid appId)
+        {
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            // var appCategory = context.ApplicationForms.Where(af => af.CategoryId == app.CategoryId && af.TrackId == app.TrackId).ToList();
+            // if (context.Votes.Any(e => e.VoterId == user.Id && appCategory.Any(ac => ac.Id == appId)))
+            app.Votes.Add(new Vote(){Id = Guid.NewGuid(), VoteTime = DateTime.Now, VoterId = user.Id, ApplicationFormId = app.Id});
+            context.Update(app);
+            await context.SaveChangesAsync();
         }
     }
 }

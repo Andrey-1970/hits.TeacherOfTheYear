@@ -15,8 +15,9 @@ namespace ServerApp.Data.Entities
         [MaxLength(255)]
         public string? Username { get; set; }
 
-        public virtual List<ApplicationForm> Applications { get; set; } = new List<ApplicationForm>();
+        public virtual List<ApplicationForm> Applications { get; set; } = new();
         [InverseProperty("Reviewer")]
-        public virtual List<ApplicationForm> ReviewedApplications { get; set; } = new List<ApplicationForm>();
+        public virtual List<ApplicationForm> ReviewedApplications { get; set; } = new();
+        public virtual List<Vote> Votes { get; set; } = new();
     }
 }
