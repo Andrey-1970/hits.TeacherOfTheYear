@@ -16,6 +16,23 @@
             </div>
         </div>
     </div>
+    <AuthorizeView>
+        <NotAuthorized>
+            <Button Color="ButtonColor.Primary"
+                    Class="w-100"
+                    @onclick="NavToLogin">
+                Проголосовать
+            </Button>
+        </NotAuthorized>
+        <Authorized>
+            <Button Color="ButtonColor.Primary"
+                    Class="w-100"
+                    Disabled="participant.IsVoteOfThisApplication"
+                    @onclick="Vote">
+                Проголосовать
+            </Button>
+        </Authorized>
+    </AuthorizeView>
 </div>
 
 @code {
@@ -41,5 +58,15 @@
     async Task Back()
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}#"));
+    }
+
+    async Task Vote()
+    {
+        await data.CastVoteAsync(participant.Id);
+    }
+
+    private void NavToLogin()
+    {
+        navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
     }
 }
