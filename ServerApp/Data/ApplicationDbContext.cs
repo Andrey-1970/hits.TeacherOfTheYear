@@ -158,6 +158,11 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Name = "DateTime",
             };
+            var valType5 = new ValuesType()
+            {
+                Id = Guid.NewGuid(),
+                Name = "TextArea",
+            };
 
             #endregion
 
@@ -965,7 +970,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Значение",
-                ValueTypeId = valType2.Id,
+                ValueTypeId = valType5.Id,
                 TableId = tbl14.Id,
                 IsRequired = true
             };
@@ -1759,7 +1764,7 @@ namespace ServerApp.Data
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<Category>().HasData([category1, category2]);
-            builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4]);
+            builder.Entity<ValuesType>().HasData([valType1, valType2, valType3, valType4, valType5]);
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
             builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7]);

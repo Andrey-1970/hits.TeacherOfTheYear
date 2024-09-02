@@ -40,6 +40,7 @@ namespace ServerApp.Data.Interfaces
         Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId);
         Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
+        Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
         Task RatedApplicationAsync(Guid? appId);
         Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);

@@ -755,6 +755,20 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
+        public Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId)
+        {
+            return Task.FromResult(context.Tables.Include(table => table.Marks).ThenInclude(mark => mark.MarkVals)
+                .FirstOrDefault(e => e.Id == tableId)!.Marks.Select(m => new MarkModel()
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    MaxValue = m.MaxValue,
+                    IsAuto = m.IsAuto,
+                    ValId = m.MarkVals.Any(mv => mv.ApplicationId == appId) ? m.MarkVals.First(mv => mv.ApplicationId == appId).Id : Guid.Empty,
+                    Value = m.MarkVals.Any(mv => mv.ApplicationId == appId) ? m.MarkVals.First(mv => mv.ApplicationId == appId).Value : 0
+                }).ToArray());
+        }
+
         public async Task SaveMarkAsync(MarkModel mark, Guid appId)
         {
             //todo: отслеживание того, кто поставил оценку

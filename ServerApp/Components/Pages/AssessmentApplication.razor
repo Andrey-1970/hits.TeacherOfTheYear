@@ -254,6 +254,13 @@
     {
         data.SaveMarkAsync(mark, model!.ApplicationId);
         model.MarkBlocks = data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId).Result;
+        var tables =model.Tables.ToList();
+        var table = tables.FirstOrDefault(e => e.Marks.Any(m => m.Name == mark.Name));
+        var currentMarkModel = data.GetMarkModelsForTable(model.ApplicationId, table.Id).Result;
+        foreach (var markModel in table.Marks)
+        {
+            markModel.ValId = currentMarkModel.FirstOrDefault(e => e.Id == markModel.Id)!.ValId;
+        }
         var newMarkBlocks = model.MarkBlocks.ToList();
         var sum = model.MarkBlocks.Sum(mb => mb.SummaryMarksBlock);
         ResultBlock.SummaryMarksBlock = sum;
