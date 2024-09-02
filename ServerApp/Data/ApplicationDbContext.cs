@@ -1855,6 +1855,7 @@ namespace ServerApp.Data
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl1.Id },
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl9.Id },
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl11.Id },
+                    new { MarkBlocksId = markBlk5.Id, TablesId = tbl10.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl2.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id },

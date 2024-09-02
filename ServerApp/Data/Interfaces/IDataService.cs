@@ -9,6 +9,7 @@ namespace ServerApp.Data.Interfaces
     public interface IDataService
     {
         Task CreateCurrentUserInfoAsync(string username);
+        Task<string> GetApplicationStatusNameAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
         Task<CategoryModel[]> GetCategoriesAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();

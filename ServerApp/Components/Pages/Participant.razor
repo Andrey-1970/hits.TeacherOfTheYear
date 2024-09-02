@@ -63,6 +63,7 @@
     async Task Vote()
     {
         await data.CastVoteAsync(participant.Id);
+        participant.IsVoteOfThisApplication = true;
     }
 
     private void NavToLogin()

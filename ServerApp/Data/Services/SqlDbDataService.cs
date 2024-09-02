@@ -21,6 +21,13 @@ namespace ServerApp.Data.Services
             context.UserInfos.Add(new UserInfo() { Id = Guid.NewGuid(), Username = username });
             await context.SaveChangesAsync();
         }
+
+        public async Task<string> GetApplicationStatusNameAsync()
+        {
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            return user.Applications.Any() ? user.Applications.First().ApplicationStatus.Status : "Нет заявки";
+        }
+
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
             return await auth.GetUserAsync();
@@ -738,11 +745,11 @@ namespace ServerApp.Data.Services
                     {
                         Id = m.Id,
                         Name = m.Name,
-                        Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
+                        Value = m.MarkVals.Any(e => e.ApplicationId == appId) ? m.MarkVals.First(e => e.ApplicationId == appId).Value : 0,
                         MaxValue = m.MaxValue,
                         IsAuto = m.IsAuto,
-                        ValId = (m.MarkVals.FirstOrDefault() ?? new MarkVal()).Id
-                    }).ToArray()
+                        ValId = (m.MarkVals.FirstOrDefault(e => e.ApplicationId == appId) ?? new MarkVal()).Id
+                    }).ToArray() 
                 }).ToArray();
 
             return tables;
@@ -786,18 +793,31 @@ namespace ServerApp.Data.Services
 
         public async Task<VoteModel> GetVoteModelAsync(Guid appId)
         {
+            var user = await auth.GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            return new VoteModel(app);
+            return new VoteModel(app, user.Id);
         }
 
         public async Task CastVoteAsync(Guid appId)
         {
             var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            // var appCategory = context.ApplicationForms.Where(af => af.CategoryId == app.CategoryId && af.TrackId == app.TrackId).ToList();
-            // if (context.Votes.Any(e => e.VoterId == user.Id && appCategory.Any(ac => ac.Id == appId)))
-            app.Votes.Add(new Vote(){Id = Guid.NewGuid(), VoteTime = DateTime.Now, VoterId = user.Id, ApplicationFormId = app.Id});
-            context.Update(app);
+            
+            if (context.Votes.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId).Any(e => e.VoterId == user.Id))
+            {
+                var vote = context.Votes
+                    .Where(v => v.ApplicationForm.CategoryId == app.CategoryId &&
+                                v.ApplicationForm.TrackId == app.TrackId).First(e => e.VoterId == user.Id);
+                vote.ApplicationFormId = appId;
+                vote.VoteTime = DateTime.Now;
+                context.Votes.Update(vote);
+            }
+            else
+            {
+                context.Votes.Add(new Vote()
+                        { Id = Guid.NewGuid(), VoteTime = DateTime.Now, VoterId = user.Id, ApplicationFormId = app.Id });
+            }
+            
             await context.SaveChangesAsync();
         }
     }
