@@ -385,6 +385,8 @@
 
     async Task ChangeStatus()
     {
+        await data.SaveApplicationFormFromEditModelAsync(model!);
+        await data.SetCurrentUserNameAsync();
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
         nav.NavigateTo("/account/manage/participation-status");
     }

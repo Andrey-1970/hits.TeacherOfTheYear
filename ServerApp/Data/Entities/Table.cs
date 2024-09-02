@@ -10,6 +10,8 @@ namespace ServerApp.Data.Entities
         public string? Name { get; set; }
 
         public bool IsPrefilled { get; set; } = false;
+        
+        public bool IsDisplayedOnVotingPage { get; set; } = false;
 
         public virtual Guid EditBlockId { get; set; }
         public virtual EditBlock? EditBlock { get; set; }

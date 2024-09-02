@@ -20,6 +20,7 @@ namespace ServerApp.Data.Interfaces
         Task<RowModel> GetRowModelAsync(Guid? tableId);
         Task DeleteRowAsync(Guid rowId);
         Task SaveApplicationFormFromEditModelAsync(EditModel model);
+        Task SetCurrentUserNameAsync();
         Task SetCurrentUserApplicationStatusWaitingForReviewedAsync();
         Task SetApplicationStatusReviewProcessAsync(Guid appId);
         Task<UserInfoModel[]> GetUserInfosModelsAsync();

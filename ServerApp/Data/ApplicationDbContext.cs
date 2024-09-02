@@ -628,7 +628,8 @@ namespace ServerApp.Data
                 Number = 10,
                 Name = "Персональные идентификаторы",
                 EditBlockId = editBlk5.Id,
-                IsPrefilled = true
+                IsPrefilled = true,
+                IsDisplayedOnVotingPage = true
             };
 
             #region Columns4Table10
@@ -952,7 +953,8 @@ namespace ServerApp.Data
                 Number = 14,
                 Name = "Краткая аннотация конкурсной работы",
                 IsPrefilled = true,
-                EditBlockId = editBlk2.Id
+                EditBlockId = editBlk2.Id,
+                IsDisplayedOnVotingPage = true
             };
 
             #region Columns4Table14
@@ -1242,7 +1244,8 @@ namespace ServerApp.Data
                 Name = "Место работы/учебы",
                 Placeholder = "Название организации",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk1.Id
+                EditBlockId = editBlk1.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld7 = new Field()
             {
@@ -1260,7 +1263,8 @@ namespace ServerApp.Data
                 Name = "Институт, факультет, кафедра, лаборатория",
                 Placeholder = "Введите институт, факультет, кафедру, лабораторию",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk1.Id
+                EditBlockId = editBlk1.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld9 = new Field()
             {
@@ -1269,7 +1273,8 @@ namespace ServerApp.Data
                 Name = "Должность",
                 Placeholder = "Введите свою должность в организации",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk1.Id
+                EditBlockId = editBlk1.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld10 = new Field()
             {
@@ -1278,7 +1283,8 @@ namespace ServerApp.Data
                 Name = "Стаж научно-педагогической деятельности по трудовой книжке",
                 Placeholder = "Введите свой стаж",
                 ValueTypeId = valType1.Id,
-                EditBlockId = editBlk1.Id
+                EditBlockId = editBlk1.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld11 = new Field()
             {
@@ -1297,7 +1303,8 @@ namespace ServerApp.Data
                 Name = "Ученое звание",
                 Placeholder = "Выберите ученое звание",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
+                EditBlockId = editBlk2.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld15 = new Field()
             {
@@ -1306,7 +1313,8 @@ namespace ServerApp.Data
                 Name = "Ученая степень",
                 Placeholder = "Выберите ученую степень",
                 ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
+                EditBlockId = editBlk2.Id,
+                IsDisplayedOnVotingPage = true
             };
             var fld16 = new Field()
             {

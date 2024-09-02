@@ -15,6 +15,8 @@ namespace ServerApp.Data.Entities
 
         public bool IsRequired { get; set; } = true;
         
+        public bool IsDisplayedOnVotingPage { get; set; } = false;
+        
         public virtual Guid ValueTypeId { get; set; }
         public virtual ValuesType? ValueType { get; set; }
         public virtual List<SelectValue> SelectValues { get; set; } = [];
