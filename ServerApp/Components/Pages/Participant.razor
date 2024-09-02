@@ -52,6 +52,8 @@
         if (Guid.TryParse(ParticipantId, out var participantId))
         {
             participant = await data.GetVoteModelAsync(participantId);
+            participant.Fields = await data.GetFieldModelsForVotePageAsync(participantId);
+            participant.Tables = await data.GetTableModelsForVotePageAsync(participantId);
         }
     }
 

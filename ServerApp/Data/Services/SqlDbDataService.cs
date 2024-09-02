@@ -798,6 +798,73 @@ namespace ServerApp.Data.Services
             return new VoteModel(app, user.Id);
         }
 
+        public async Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId)
+        {
+            var app = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo).FirstOrDefault(e => e.Id == appId);
+            var user = app!.UserInfo;
+            List<FieldModel> listRes = [new FieldModel(context.Fields.FirstOrDefault(e => e.Name == "ФИО")!, user)];
+            listRes.Add(new FieldModel(context.Fields.FirstOrDefault(e => e.Name == "Место работы/учебы")!, user));
+            return listRes.ToArray(); 
+        }
+        
+        public async Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo).FirstOrDefaultAsync(e => e.Id == appId);
+            var user = app!.UserInfo;
+            var t = await context.Tables.Include(table => table.Columns).Include(table => table.Rows)
+                .ThenInclude(row => row.CellVals).ThenInclude(cellVal => cellVal.Column!)
+                .FirstOrDefaultAsync(t => t.Name == "Персональные идентификаторы");
+            
+            List<TableModel> tables = [new TableModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+                    Rows = t.Rows
+                        .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                        .Select(r => new RowModel
+                        {
+                            Id = r.Id,
+                            Cells = r.CellVals
+                                .OrderBy(c => c.Column!.Number)
+                                .Where(cv => cv.ApplicationId == appId)
+                                .Select(cv => new CellModel
+                                {
+                                    Id = cv.Id,
+                                    Value = cv.Value,
+                                    ColumnId = cv.ColumnId
+                                }).ToList()
+                        }).ToList()
+                }];
+            
+            t = context.Tables.Include(table => table.Columns).Include(table => table.Rows)
+                .ThenInclude(row => row.CellVals).ThenInclude(cellVal => cellVal.Column!)
+                .FirstOrDefault(tb => tb.Name == "Краткая аннотация конкурсной работы");
+            tables.Add(new TableModel
+            {
+                Id = t!.Id,
+                Name = t.Name,
+                Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+                Rows = t.Rows
+                    .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                    .Select(r => new RowModel
+                    {
+                        Id = r.Id,
+                        Cells = r.CellVals
+                            .OrderBy(c => c.Column!.Number)
+                            .Where(cv => cv.ApplicationId == appId)
+                            .Select(cv => new CellModel
+                            {
+                                Id = cv.Id,
+                                Value = cv.Value,
+                                ColumnId = cv.ColumnId
+                            }).ToList()
+                    }).ToList()
+            });
+            
+            return tables.ToArray(); 
+        }
+
         public async Task CastVoteAsync(Guid appId)
         {
             var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");

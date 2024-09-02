@@ -1,4 +1,5 @@
 using ServerApp.Data.Entities;
+using ServerApp.Data.Models.EditModel;
 
 namespace ServerApp.Data.Models.VoteModel;
 
@@ -12,12 +13,14 @@ public class VoteModel
     public VoteModel(ApplicationForm applicationForm, Guid userId)
     {
         Id = applicationForm.Id;
-        TotalVotes = applicationForm.Votes.Count;
         IsVoteOfThisApplication = applicationForm.Votes.Any(e => e.ApplicationFormId == applicationForm.Id && e.VoterId == userId);
+        TotalVotes = applicationForm.Votes.Count;
     }
     
     public Guid Id { get; set; } //fullname WorkPlace Идентификаторы КонкурснаяWork 
-    public int TotalVotes { get; set; }
     public bool IsVoteOfThisApplication { get; set; }
+    public int TotalVotes { get; set; }
+    public FieldModel[] Fields { get; set; } 
+    public TableModel[] Tables { get; set; } 
     //todo: Проработать поля
 }
