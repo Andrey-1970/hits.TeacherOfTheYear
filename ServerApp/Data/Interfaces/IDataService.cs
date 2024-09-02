@@ -43,6 +43,6 @@ namespace ServerApp.Data.Interfaces
         Task RatedApplicationAsync(Guid? appId);
         Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
         Task<VoteModel> GetVoteModelAsync(Guid appId);
-        // Task CastVoteAsync(Guid appId);
+        Task CastVoteAsync(Guid appId);
     }
 }
