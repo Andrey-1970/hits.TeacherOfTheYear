@@ -10,7 +10,7 @@
 
 @if (status == "Нет заявки")
 {
-    <form @formname="SendRequest" @onsubmit="ToEditForm" class="w-100" method="post">
+    <form @formname="SendRequest" @onsubmit="ToApplicationForm" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-primary" role="alert">
@@ -25,7 +25,7 @@
 }
 else if (status == "В ожидании заполнения")
 {
-    <form @formname="EditForm" @onsubmit="DeleteForm" class="w-100" method="post">
+    <form @formname="EditForm" @onsubmit="DeleteApplication" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-secondary" role="alert">
@@ -42,27 +42,26 @@ else if (status == "В ожидании заполнения")
         </Button>
     </form>
 }
-else if (status == "В ожидании рассмотрения" || status == "В процессе рассмотрения")
+else if (status == "В ожидании рассмотрения")
 {
     <form @formname="CancelForm" @onsubmit="WithdrawApplication" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-warning" role="alert">
-            Заявка на участие была отправлена <strong>на рассмотрение администрацией</strong>. Пожалуйста, дождитесь решения.
+            Ваша заявка <strong>ожидает рассмотрения организаторами</strong>. Пожалуйста, дождитесь решения.
         </div>
-        
-        @if (status == "В ожидании рассмотрения")
-        {
         <Button Type="ButtonType.Submit"
                 Color="ButtonColor.Danger">
             Отозвать заявку
         </Button>
         }
-        else if (status == "В процессе рассмотрения")
-        {
-            <div>Вашу заявку принял админстратор, совсем скоро он примет решение</div>//todo: Убрать костыль и сделать по красоте
-        }
     </form>
+}
+else if (status == "В процессе рассмотрения")
+{
+    <div class="alert alert-info" role="alert">
+        Ваша заявка <strong>в процессе рассмотрения организатором</strong>, совсем скоро он примет решение
+    </div>
 }
 else if (status == "Одобрена")
 {
@@ -80,7 +79,7 @@ else if (status == "Одобрена")
 }
 else if (status == "Отклонена")
 {
-    <form @formname="Denied" @onsubmit="ToEditForm" class="w-100" method="post">
+    <form @formname="Denied" @onsubmit="ToApplicationForm" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-danger" role="alert">
@@ -107,12 +106,12 @@ else if (status == "Отклонена")
         status = await data.GetApplicationStatusNameAsync();
     }
 
-    void ToEditForm()
+    void ToApplicationForm()
     {
         NavManager.NavigateTo("/application-form#");
     }
 
-    void DeleteForm()
+    void DeleteApplication()
     {
         NavManager.NavigateTo("/form-deleted#");
     }
