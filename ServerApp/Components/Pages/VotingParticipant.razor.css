@@ -15,6 +15,11 @@
     gap: 2rem;
 }
 
+.block-info {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
 .leftside {
     display: flex;
     flex-direction: column;
@@ -64,7 +69,7 @@
     position: relative;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .block-info {
         flex-direction: column-reverse;
         align-items: center;

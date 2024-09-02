@@ -67,6 +67,10 @@
                                             }
                                         </InputSelect>
                                     }
+                                    else if (fld.ValueType == "TextArea")
+                                    {
+                                        <InputTextArea class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                    }
                                     else
                                     {
                                         <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
@@ -99,86 +103,32 @@
                                                 @foreach (var row in table.Rows)
                                                 {
                                                     <tr>
-                                                        @for (int i = 0; i < row.Cells.Count; i++)
+                                                        @foreach (var cell in row.Cells)
                                                         {
-                                                            var cell = row.Cells[i];
-
-                                                            if (i < row.Cells.Count - 1)
-                                                            {
-                                                                var nextCell = row.Cells[i + 1];
-
-                                                                if (cell is { Disable: true, Value: not null } && nextCell is { Disable: true, Value: null })
+                                                            <td>
+                                                                @if (cell is { Disable: true, Value: not null })
                                                                 {
-                                                                    <td colspan="2">
-                                                                        @if (cell is { Disable: true, Value: not null })
+                                                                    @cell.Value
+                                                                }
+                                                                else if (cell.SelectValues.Any())
+                                                                {
+                                                                    <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                        <option value="@string.Empty" disabled selected hidden></option>
+                                                                        @foreach (var value in cell.SelectValues)
                                                                         {
-                                                                            @cell.Value
+                                                                            <option value="@value">@value</option>
                                                                         }
-                                                                        else if (cell.SelectValues.Any())
-                                                                        {
-                                                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
-                                                                                <option value="@string.Empty" disabled selected hidden></option>
-                                                                                @foreach (var value in cell.SelectValues)
-                                                                                {
-                                                                                    <option value="@value">@value</option>
-                                                                                }
-                                                                            </InputSelect>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
-                                                                        }
-                                                                    </td>
-
-                                                                    i++;
+                                                                    </InputSelect>
+                                                                }
+                                                                else if (cell.ValueType == "TextArea")
+                                                                {
+                                                                    <InputTextArea class="form-control" @bind-Value="cell.Value" />
                                                                 }
                                                                 else
                                                                 {
-                                                                    <td>
-                                                                        @if (cell is { Disable: true, Value: not null })
-                                                                        {
-                                                                            @cell.Value
-                                                                        }
-                                                                        else if (cell.SelectValues.Any())
-                                                                        {
-                                                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
-                                                                                <option value="@string.Empty" disabled selected hidden></option>
-                                                                                @foreach (var value in cell.SelectValues)
-                                                                                {
-                                                                                    <option value="@value">@value</option>
-                                                                                }
-                                                                            </InputSelect>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
-                                                                        }
-                                                                    </td>
+                                                                    <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value" />
                                                                 }
-                                                            }
-                                                            else
-                                                            {
-                                                                <td>
-                                                                    @if (cell is { Disable: true, Value: not null })
-                                                                    {
-                                                                        @cell.Value
-                                                                    }
-                                                                    else if (cell.SelectValues.Any())
-                                                                    {
-                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
-                                                                            <option value="@string.Empty" disabled selected hidden></option>
-                                                                            @foreach (var value in cell.SelectValues)
-                                                                            {
-                                                                                <option value="@value">@value</option>
-                                                                            }
-                                                                        </InputSelect>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value"/>
-                                                                    }
-                                                                </td>
-                                                            }
+                                                            </td>
                                                         }
                                                         @if (!table.IsPrefilled)
                                                         {

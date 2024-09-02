@@ -23,17 +23,19 @@
             </div>
         </div>
 
-        <div class="page-content">
-            @if (participants == null)
-            {
-                <p>Loading...</p>
-            }
-            else
+        <div class="d-flex flex-wrap justify-content-center g-1 mt-1 mb-1">
+            @if (participants is not null)
             {
                 @foreach (var participant in participants)
                 {
-                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)"/>
-                }
+                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
+                }            
+            }
+            else
+            {
+                <div class="d-flex justify-content-center">
+                    <Spinner Color="SpinnerColor.Primary" />
+                </div>
             }
         </div>
     </div>
@@ -48,7 +50,7 @@
 
     TrackModel track = default!;
     CategoryModel category = default!;
-    ListItemModel[] participants = default!;
+    ListItemModel[]? participants;
 
     protected override async Task OnParametersSetAsync()
     {

@@ -25,7 +25,7 @@ namespace ServerApp.Data.Services
         public async Task<string> GetApplicationStatusNameAsync()
         {
             var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
-            return user.Applications.Any() ? user.Applications.First().ApplicationStatus.Status : "Нет заявки";
+            return user.Applications.Count != 0 ? user.Applications.First().ApplicationStatus.Status : "Нет заявки";
         }
 
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
@@ -125,7 +125,7 @@ namespace ServerApp.Data.Services
                 }
             }
 
-            return res.ToArray();
+            return [.. res];
         }
 
         public async Task<RowModel> GetRowModelAsync(Guid? tableId)
@@ -394,7 +394,7 @@ namespace ServerApp.Data.Services
                     e.ApplicationId == application.Id && e.MarkBlockId == markBlock.Id)!));
             }
 
-            markModel.ReviewedBlocks = blockReviewModels.ToArray();
+            markModel.ReviewedBlocks = [.. blockReviewModels];
             return await Task.FromResult(markModel);
         }
         
@@ -408,12 +408,7 @@ namespace ServerApp.Data.Services
         public async Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
             var user = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
-                .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo;
-            if (user == null)
-            {
-                throw new InvalidOperationException("User does not exist.");
-            }
-
+                .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo ?? throw new InvalidOperationException("User does not exist.");
             var markBlock = await context.MarkBlocks
                 .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
                 .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
@@ -431,13 +426,7 @@ namespace ServerApp.Data.Services
                 .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
                 .ThenInclude(cellVal => cellVal.Column!)
                 .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
-                .FirstOrDefaultAsync(mb => mb.Id == markBlockId);
-
-            if (markBlock == null)
-            {
-                throw new InvalidOperationException("MarkBlock not found");
-            }
-
+                .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ?? throw new InvalidOperationException("MarkBlock not found");
             var tables = markBlock.Tables
                 .OrderBy(t => t.Number)
                 .Select(t => new TableModel
@@ -499,13 +488,13 @@ namespace ServerApp.Data.Services
                     if (mark.IsAuto)
                     {
                         var methodName = mark.EvaluationMethodName;
-                        var methodInfo = typeof(EvaluationMethods).GetMethod(methodName,
+                        var methodInfo = typeof(EvaluationMethods).GetMethod(methodName!,
                             BindingFlags.Static | BindingFlags.Public | BindingFlags.IgnoreCase);
 
                         if (methodInfo != null)
                         {
-                            var result = (int)methodInfo.Invoke(null,
-                                new object[] { appId, mark.Id, mark.TableId, context });
+                            var result = (int?)methodInfo.Invoke(null,
+                                [appId, mark.Id, mark.TableId, context]);
 
                             var markValRes = new MarkVal
                             {
@@ -530,7 +519,7 @@ namespace ServerApp.Data.Services
 
         public async Task ApproveApplicationFormAsync(Guid? applicationId)
         {
-            var user = await auth.GetUserAsync();
+            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
                           .ThenInclude(track => track.MarkBlocks)
                           .Include(applicationForm => applicationForm.BlockReviews).FirstOrDefaultAsync(e => e.Id == applicationId) ??
@@ -629,7 +618,7 @@ namespace ServerApp.Data.Services
                 resMarks.AddRange(markModels);
             }
 
-            assModel.Marks = resMarks.ToArray();
+            assModel.Marks = [.. resMarks];
 
             return assModel;
         }
@@ -678,12 +667,7 @@ namespace ServerApp.Data.Services
         public async Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
             var user = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
-                .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo;
-            if (user == null)
-            {
-                throw new InvalidOperationException("User does not exist.");
-            }
-
+                .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo ?? throw new InvalidOperationException("User does not exist.");
             var markBlock = await context.MarkBlocks
                 .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
                 .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
@@ -694,7 +678,7 @@ namespace ServerApp.Data.Services
 
             foreach (var field in fields)
             {
-                field.Marks = context.Marks.Where(m => m.FieldId == field.Id).Select(m => new MarkModel()
+                field.Marks = [.. context.Marks.Where(m => m.FieldId == field.Id).Select(m => new MarkModel()
                 {
                     Id = m.Id,
                     Name = m.Name,
@@ -702,7 +686,7 @@ namespace ServerApp.Data.Services
                     MaxValue = m.MaxValue,
                     IsAuto = m.IsAuto,
                     ValId = (m.MarkVals.FirstOrDefault() ?? new MarkVal()).Id
-                } ).ToArray();
+                } )];
             }
 
             return fields;
@@ -718,13 +702,7 @@ namespace ServerApp.Data.Services
                 .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
                 .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Marks)
                 .ThenInclude(mark => mark.MarkVals)
-                .FirstOrDefaultAsync(mb => mb.Id == markBlockId);
-
-            if (markBlock == null)
-            {
-                throw new InvalidOperationException("MarkBlock not found");
-            }
-
+                .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ?? throw new InvalidOperationException("MarkBlock not found");
             var tables = markBlock.Tables
                 .OrderBy(t => t.Number)
                 .Select(t => new TableMarkModel()
@@ -859,13 +837,13 @@ namespace ServerApp.Data.Services
                         }).ToList()
                 });
             
-            return tables.ToArray(); 
+            return [.. tables]; 
         }
 
         public async Task CastVoteAsync(Guid appId)
         {
             var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ?? throw new InvalidOperationException("App not found.");
             
             if (context.Votes.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId).Any(e => e.VoterId == user.Id))
             {
