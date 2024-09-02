@@ -948,6 +948,248 @@ namespace ServerApp.Data
 
             #endregion
 
+            #region Table14
+
+            var tbl14 = new Table()
+            {
+                Id = Guid.NewGuid(),
+                Number = 14,
+                Name = "Краткая аннотация конкурсной работы",
+                IsPrefilled = true,
+                EditBlockId = editBlk2.Id
+            };
+
+            #region Columns4Table14
+
+            var col141 = new Column()
+            {
+                Id = Guid.NewGuid(),
+                Number = 1,
+                Name = "Название",
+                ValueTypeId = valType2.Id,
+                TableId = tbl14.Id,
+            };
+            var col142 = new Column()
+            {
+                Id = Guid.NewGuid(),
+                Number = 2,
+                Name = "Значение",
+                ValueTypeId = valType2.Id,
+                TableId = tbl14.Id,
+                IsRequired = true
+            };
+
+            #endregion
+
+            #region Rows4Table14
+
+            var row141 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row141
+
+            var cell1411 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row141.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Название работы"
+            };
+            
+            var cell1412 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row141.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row142 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row142
+
+            var cell1421 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row142.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Актуальность конкурсной работы"
+            };
+            
+            var cell1422 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row142.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row143 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row143
+
+            var cell1431 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row143.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Методология и методы, используемые в работе"
+            };
+            
+            var cell1432 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row143.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row144 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row144
+
+            var cell1441 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row144.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Инновационность"
+            };
+            
+            var cell1442 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row144.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row145 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row145
+
+            var cell1451 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row145.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Возможность практического применения (Внедрено ли в практику? В какому курсе/программе подготовки используется/ на кого рассчитано)"
+            };
+            
+            var cell1452 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row145.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row146 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row146
+
+            var cell1461 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row146.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Результаты и выводы"
+            };
+            
+            var cell1462 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row146.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            var row147 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row147
+
+            var cell1471 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row147.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Рекомендации и перспективы дальнейшей разработки темы"
+            };
+            
+            var cell1472 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row147.Id,
+                IsPrefilled = true
+            };
+
+            #endregion
+
+            #endregion
+            
+            #endregion
+
             #endregion
 
             #region Fields
@@ -1051,25 +1293,7 @@ namespace ServerApp.Data
                 Placeholder = "Выберите категорию участника конкруса",
                 ValueTypeId = valType2.Id,
                 EditBlockId = editBlk2.Id
-            };
-            var fld12 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 12,
-                Name = "Название конкурсной работы",
-                Placeholder = "Введите название своей конкурсной работы",
-                ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
-            };
-            var fld13 = new Field()
-            {
-                Id = Guid.NewGuid(),
-                Number = 13,
-                Name = "Ссылка на конкурсную работу",
-                Placeholder = "Введите ссылку своей конкурсной работы",
-                ValueTypeId = valType2.Id,
-                EditBlockId = editBlk2.Id
-            };
+            };//todo: numeration
             var fld14 = new Field()
             {
                 Id = Guid.NewGuid(),
@@ -1514,7 +1738,7 @@ namespace ServerApp.Data
                 Number = 25,
                 Name = "Оценка уровня предоставленной работы:",
                 IsAuto = false,
-                FieldId = fld13.Id,
+                TableId = tbl14.Id,
                 MaxValue = 10
             };
             var mark26 = new Mark()
@@ -1525,7 +1749,7 @@ namespace ServerApp.Data
                        " инновационных методов (проблемного и проективного обучения, " +
                        "тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
                 IsAuto = false,
-                FieldId = fld13.Id,
+                TableId = tbl14.Id,
                 MaxValue = 10
             };
 
@@ -1548,7 +1772,7 @@ namespace ServerApp.Data
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5]);
             builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7]);
-            builder.Entity<Table>().HasData([tbl1, tbl2, tbl3, tbl4, tbl5, tbl6, tbl7, tbl8, tbl9, tbl10, tbl11, tbl12, tbl13]);
+            builder.Entity<Table>().HasData([tbl1, tbl2, tbl3, tbl4, tbl5, tbl6, tbl7, tbl8, tbl9, tbl10, tbl11, tbl12, tbl13, tbl14]);
             builder.Entity<Column>().HasData([
                 col11, col12, col13, col14, col15,
                 col21, col22,
@@ -1562,15 +1786,28 @@ namespace ServerApp.Data
                 col101, col102,
                 col111, col112, col113, col114, col115,
                 col121, col122, col123, col124,
-                col131, col132, col133
+                col131, col132, col133,
+                col141, col142
             ]);
-            builder.Entity<Row>().HasData([row101, row102, row103, row104, row105]);
+            builder.Entity<Row>().HasData(
+            [
+                row101, row102, row103, row104, row105,
+                row141, row142, row143, row144, row145, row146, row147
+            ]);
             builder.Entity<CellVal>().HasData([
                 cell1011, cell1012,
                 cell1021, cell1022,
                 cell1031, cell1032,
                 cell1041, cell1042,
-                cell1051, cell1052
+                cell1051, cell1052,
+                
+                cell1411, cell1412, 
+                cell1421, cell1422, 
+                cell1431, cell1432, 
+                cell1441, cell1442, 
+                cell1451, cell1452, 
+                cell1461, cell1462, 
+                cell1471, cell1472
             ]);
             builder.Entity<SelectValue>().HasData([
                 slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
@@ -1578,13 +1815,13 @@ namespace ServerApp.Data
                 slctVall16, slctVall17, slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, 
                 slctVall24, slctVall25
             ]);
-            builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, fld12,
-                fld13, fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21]);
+            builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, 
+                fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
                 mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
             ]);
-            builder.Entity<IdentityRole>().HasData([role1, role2, role3, role4]);
+            builder.Entity<IdentityRole>().HasData([role1, role2, role3, role4, role5]);
 
             builder.Entity<Track>().HasMany(e => e.EditBlocks).WithMany(e => e.Tracks)
                 .UsingEntity(j => j.HasData([
@@ -1630,6 +1867,7 @@ namespace ServerApp.Data
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl2.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id },
+                    new { MarkBlocksId = markBlk7.Id, TablesId = tbl14.Id }
                 ]));
             builder.Entity<MarkBlock>().HasMany(e => e.Fields).WithMany(e => e.MarkBlocks)
                 .UsingEntity(j => j.HasData([
@@ -1644,8 +1882,6 @@ namespace ServerApp.Data
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld9.Id },
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld10.Id },
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld11.Id },
-                    new { MarkBlocksId = markBlk7.Id, FieldsId = fld12.Id },
-                    new { MarkBlocksId = markBlk7.Id, FieldsId = fld13.Id },
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld14.Id },
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld15.Id },
                     new { MarkBlocksId = markBlk1.Id, FieldsId = fld16.Id },

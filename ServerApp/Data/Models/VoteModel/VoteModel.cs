@@ -16,7 +16,8 @@ public class VoteModel
         IsVoteOfThisApplication = applicationForm.Votes.Any(e => e.ApplicationFormId == applicationForm.Id);
     }
     
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } //fullname WorkPlace Идентификаторы КонкурснаяWork 
+    
     public int TotalVotes { get; set; }
     public bool IsVoteOfThisApplication { get; set; }
     //todo: Проработать поля
