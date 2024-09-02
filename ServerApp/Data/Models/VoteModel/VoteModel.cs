@@ -24,5 +24,4 @@ public class VoteModel
     public int TotalVotes { get; set; }
     public FieldModel[] Fields { get; set; } 
     public TableModel[] Tables { get; set; } 
-    //todo: Проработать поля
 }

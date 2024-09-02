@@ -548,8 +548,6 @@ namespace ServerApp.Data.Services
 
             await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(user.Username),
                 (context.Roles.FirstOrDefaultAsync(r => r.Name == "Participant").Result ?? throw new NullReferenceException("Not found role with name 'Participant'")).Name!);
-
-            //todo: Добавление пользователю роли "Participant"
         }
 
         public async Task RejectApplicationFormAsync(Guid? applicationId)
@@ -822,10 +820,10 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId)
         {
-            var app = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo).FirstOrDefault(e => e.Id == appId);
+            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo).FirstOrDefaultAsync(e => e.Id == appId);
             var user = app!.UserInfo;
             var listRes = context.Fields.OrderBy(f => f.Number).Where(e => e.IsDisplayedOnVotingPage).Select(e => new FieldModel(e, user));
-            return listRes.ToArray(); 
+            return await listRes.ToArrayAsync(); 
         }
         
         public async Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId)
