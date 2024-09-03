@@ -14,6 +14,7 @@ namespace ServerApp.Data.Models.EditModel
             ApplicationId = applicationForm.Id;
             SelectedTrackId = applicationForm.TrackId;
             SelectedCategoryId = applicationForm.CategoryId;
+            ApplicationStatus = applicationForm.ApplicationStatus.Status;
         }
 
         public ApplicationForm ToEntity()
@@ -33,6 +34,7 @@ namespace ServerApp.Data.Models.EditModel
         public Guid? SelectedTrackId { get; set; }
         public Guid? SelectedCategoryId { get; set; }
         public Guid? SelectedEditBlockId { get; set; }
+        public string? ApplicationStatus { get; set; }
         public IEnumerable<TrackModel> Tracks { get; set; } = [];
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];
         public FieldModel[] Fields { get; set; } = [];

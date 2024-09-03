@@ -277,19 +277,22 @@ namespace ServerApp.Data.Services
 
             await context.SaveChangesAsync();
 
-            var editBlockStatus = await context.EditBlockStatuses
-                .FirstOrDefaultAsync(
-                    e => e.EditBlockId == model.SelectedEditBlockId!.Value && e.ApplicationId == app.Id);
-
-            if (editBlockStatus == null)
+            if (model.SelectedEditBlockId != null)
             {
-                context.EditBlockStatuses.Add(new EditBlockStatus()
+                var editBlockStatus = await context.EditBlockStatuses
+                    .FirstOrDefaultAsync(
+                        e => e.EditBlockId == model.SelectedEditBlockId!.Value && e.ApplicationId == app.Id);
+
+                if (editBlockStatus == null)
                 {
-                    Id = Guid.NewGuid(),
-                    EditBlockId = model.SelectedEditBlockId!.Value,
-                    ApplicationId = app.Id,
-                    Status = true
-                });
+                    context.EditBlockStatuses.Add(new EditBlockStatus()
+                    {
+                        Id = Guid.NewGuid(),
+                        EditBlockId = model.SelectedEditBlockId!.Value,
+                        ApplicationId = app.Id,
+                        Status = true
+                    });
+                }
             }
 
             await context.SaveChangesAsync();
@@ -311,6 +314,31 @@ namespace ServerApp.Data.Services
             var track = app.Track ?? throw new InvalidOperationException("No track found for the application.");
             var editBlocks = track.EditBlocks;
 
+            if (app.ReviewerId != null)
+            {
+                app.ReviewerId = null;
+                context.Update(app);
+                
+                await context.SaveChangesAsync();
+
+                var markBlocks = track.MarkBlocks;
+                
+                foreach (var markBlock in markBlocks)
+                {
+                    var existingBlockReview = context.BlockReviews.FirstOrDefault(e =>
+                        e.ApplicationId == app.Id && e.MarkBlockId == markBlock.Id);
+                    if (existingBlockReview != null)
+                    {
+                        existingBlockReview.Commentary = string.Empty;
+                        existingBlockReview.Status = false;
+                        context.Update(existingBlockReview);
+                    }
+                }
+                
+                await context.SaveChangesAsync();
+            }
+
+            
             foreach (var editBlock in editBlocks)
             {
                 var editBlockStatus = await context.EditBlockStatuses
@@ -355,13 +383,18 @@ namespace ServerApp.Data.Services
 
                 foreach (var markBlock in app.Track.MarkBlocks)
                 {
-                    var blockReview = new BlockReview()
+                    var existingBlockReview = context.BlockReviews.FirstOrDefault(e =>
+                        e.ApplicationId == app.Id && e.MarkBlockId == markBlock.Id);
+                    if (existingBlockReview == null)
                     {
-                        Id = Guid.NewGuid(),
-                        MarkBlockId = markBlock.Id,
-                        ApplicationId = app.Id
-                    };
-                    context.Add(blockReview);
+                        var blockReview = new BlockReview()
+                        {
+                            Id = Guid.NewGuid(),
+                            MarkBlockId = markBlock.Id,
+                            ApplicationId = app.Id
+                        };
+                        context.Add(blockReview);
+                    }
                 }
 
                 await context.SaveChangesAsync();
@@ -537,7 +570,7 @@ namespace ServerApp.Data.Services
 
             await AutoSetMarksWithDynamicMethods(app.Id);
 
-            await userManager.AddToRoleAsync(await userManager.FindByEmailAsync(user.Username),
+            await userManager.AddToRoleAsync((await userManager.FindByEmailAsync(user.Username!))!,
                 (context.Roles.FirstOrDefaultAsync(r => r.Name == "Participant").Result ?? throw new NullReferenceException("Not found role with name 'Participant'")).Name!);
         }
 

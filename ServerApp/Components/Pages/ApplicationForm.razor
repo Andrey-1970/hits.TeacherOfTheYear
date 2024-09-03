@@ -335,7 +335,13 @@
 
     async Task ChangeStatus()
     {
-        await data.SaveApplicationFormFromEditModelAsync(model!);
+        var newModel = new EditModel()
+            { 
+                ApplicationId = model!.ApplicationId, 
+                SelectedTrackId = model.SelectedTrackId,
+                SelectedCategoryId = model.SelectedCategoryId 
+            };
+        await data.SaveApplicationFormFromEditModelAsync(newModel);
         await data.SetCurrentUserNameAsync();
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
         nav.NavigateTo("/account/manage/participation-status");
