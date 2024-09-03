@@ -1575,13 +1575,13 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Value = "Кандидат наук",
-                ColumnId = fld15.Id
+                FieldId = fld15.Id
             };
             var slctVall29 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
                 Value = "Доктор наук",
-                ColumnId = fld15.Id
+                FieldId = fld15.Id
             };
 
             #endregion
