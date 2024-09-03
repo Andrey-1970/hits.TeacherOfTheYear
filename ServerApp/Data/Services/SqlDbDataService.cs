@@ -137,9 +137,11 @@ namespace ServerApp.Data.Services
                 Id = Guid.NewGuid(),
                 Cells = table!.Columns.OrderBy(t => t.Number).Select(e => new CellModel()
                 {
-                    Id = Guid.NewGuid(), ValueType = e.ValueType!.Name,
+                    Id = Guid.NewGuid(), 
+                    ValueType = e.ValueType!.Name,
                     SelectValues = e.SelectValues.Select(sv => sv.Value).ToArray(),
-                    ColumnId = e.Id
+                    ColumnId = e.Id,
+                    IsRequired = e.IsRequired
                 }).ToList()
             };
         }
