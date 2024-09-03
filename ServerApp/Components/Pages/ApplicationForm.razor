@@ -283,7 +283,7 @@
 
     void CheckField(FieldModel fld)
     {
-        if (string.IsNullOrEmpty(fld.Value))
+        if (string.IsNullOrWhiteSpace(fld.Value))
         {
             if (fld.IsRequired)
             {
@@ -303,7 +303,7 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(cell.Value))
+        if (string.IsNullOrWhiteSpace(cell.Value))
         {
             if (cell.IsRequired)
             {
