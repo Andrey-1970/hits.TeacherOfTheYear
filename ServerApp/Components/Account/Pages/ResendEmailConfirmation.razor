@@ -1,5 +1,6 @@
 ﻿@page "/account/resend-email-confirmation"
-
+@using ServerApp.Services;
+@inject IMailService MailService
 @inject UserManager<ApplicationUser> UserManager
 @inject IEmailSender<ApplicationUser> EmailSender
 @inject NavigationManager NavigationManager
@@ -46,9 +47,26 @@
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        string htmlBody = $@"
+            <div class='text-left' style='font-family: Arial, sans-serif; padding: 20px;'>
+                Здравствуйте, уважаемый участник всеросийского конкурса Педагог Года!<br><br>
 
+                Вы зарегистрировались в личном кабинете на сайте
+                <a href='https://google.com' style='color: blue; text-decoration: underline;'>клик</a>.
+                Ваша учетная запись создана, но нуждается в активации.<br><br>
+
+                Чтобы активировать Вашу учетную запись, нужно перейти по
+                <a href='{callbackUrl}' style='color: blue; text-decoration: underline;'>ссылке клик</a>.<br><br>
+
+                На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.<br><br>
+                <hr style='border: 1px solid #ccc; margin: 20px 0;'>
+                В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.<br
+            </div>";
+
+
+        await MailService.SendEmailAsync(Input.Email, "Подтверждение регистрации на Педагог Года", htmlBody);
         message = "Письмо с подтверждением отправлено. Пожалуйста, проверьте свой адрес электронной почты.";
+
     }
 
     private sealed class InputModel

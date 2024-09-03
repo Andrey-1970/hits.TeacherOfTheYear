@@ -1,5 +1,6 @@
 ﻿@page "/account/register-confirmation"
-
+@using ServerApp.Services;
+@inject IMailService MailService
 @inject UserManager<ApplicationUser> UserManager
 @inject IEmailSender<ApplicationUser> EmailSender
 @inject NavigationManager NavigationManager
@@ -12,21 +13,11 @@
 
     <StatusMessage Message="@statusMessage" />
 
-    @if (emailConfirmationLink is not null)
-    {
-        <div class="text-center">
-            This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-            Normally this would be emailed: <a href="@emailConfirmationLink">Нажмите здесь</a> для подтверждения регистрации.
-        </div>
-    }
-    else
-    {
-        <div class="text-center">Пожалуйста, проверьте свою электронную почту, чтобы подтвердить свою учетную запись.</div>
-    }
+    <div class="text-center">Пожалуйста, проверьте свою электронную почту, чтобы подтвердить свою учетную запись.</div>
 </div>
 
 @code {
-    private string? emailConfirmationLink;
+    string? emailConfirmationLink;
     private string? statusMessage;
 
     [CascadingParameter]
@@ -60,6 +51,24 @@
             emailConfirmationLink = NavigationManager.GetUriWithQueryParameters(
                 NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
                 new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+            string htmlBody = $@"
+            <div class='text-left' style='font-family: Arial, sans-serif; padding: 20px;'>
+                Здравствуйте, уважаемый участник всеросийского конкурса Педагог Года!<br><br>
+
+                Вы зарегистрировались в личном кабинете на сайте
+                <a href='https://google.com' style='color: blue; text-decoration: underline;'>клик</a>.
+                Ваша учетная запись создана, но нуждается в активации.<br><br>
+
+                Чтобы активировать Вашу учетную запись, нужно перейти по
+                <a href='{emailConfirmationLink}' style='color: blue; text-decoration: underline;'>ссылке клик</a>.<br><br>
+
+                На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.<br><br>
+                <hr style='border: 1px solid #ccc; margin: 20px 0;'>
+                В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.<br
+            </div>";
+
+
+                await MailService.SendEmailAsync(Email, "Подтверждение регистрации на Педагог Года", htmlBody);
         }
     }
 }

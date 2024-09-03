@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using ServerApp.Components;
 using ServerApp.Components.Account;
 using ServerApp.Data;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Services;
+using ServerApp.Services;
 
 namespace ServerApp
 {
@@ -48,6 +50,14 @@ namespace ServerApp
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAuthorization, AppAuthorization>();
+            // Загрузка конфигурации из файла appsettings.Development.json, если он существует
+            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            // Configure MailSettings from appsettings
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+            builder.Services.AddSingleton<IMailService, MailService>();
+
 
             var app = builder.Build();
 

@@ -1,0 +1,13 @@
+﻿@using ServerApp.Services;
+@inject IMailService MailService
+@page "/mail"
+
+<button @onclick="SendEmail">Send Email</button>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await MailService.SendEmailAsync("nakrnakrut@gmail.com", "Test Subject", "This is a test email.");
+    }
+
+}
