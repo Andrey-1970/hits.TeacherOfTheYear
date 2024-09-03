@@ -14,7 +14,7 @@ namespace ServerApp.Data.Models.EditModel
             ApplicationId = applicationForm.Id;
             SelectedTrackId = applicationForm.TrackId;
             SelectedCategoryId = applicationForm.CategoryId;
-            ApplicationStatus = applicationForm.ApplicationStatus.Status;
+            ApplicationStatus = applicationForm.ApplicationStatus is not null  ? applicationForm.ApplicationStatus.Status : null;
         }
 
         public ApplicationForm ToEntity()
