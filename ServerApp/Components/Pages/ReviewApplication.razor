@@ -109,7 +109,7 @@
                                     {
                                         <tr>
                                             <td>@block.Name</td>
-                                            <td>@if ((bool)model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Status)
+                                            <td>@if ((model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id) ?? new BlockReviewModel()).Status)
                                                 { <div>Проверен</div> }
                                                 else 
                                                 { <div>Не проверен</div> } 
@@ -125,13 +125,13 @@
                         <Button Type="ButtonType.Button" 
                                 Color="ButtonColor.Danger"
                                 @onclick="async () => await RejectApplication()"
-                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false) || model.ReviewedBlocks.All(e => string.IsNullOrWhiteSpace(e.Commentary))">
                             Отклонить
                         </Button>
                         <Button Type="ButtonType.Button"
                                 Color="ButtonColor.Success"
                                 @onclick="async () =>  await ApproveApplication()"
-                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false)">
+                                Disabled="model.ReviewedBlocks.Any(e => e.Status == false) || model.ReviewedBlocks.Any(e => !string.IsNullOrWhiteSpace(e.Commentary))">
                             Одобрить
                         </Button>
                     </div>
