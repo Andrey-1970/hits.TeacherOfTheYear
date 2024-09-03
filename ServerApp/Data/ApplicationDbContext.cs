@@ -627,7 +627,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 10,
                 Name = "Персональные идентификаторы",
-                EditBlockId = editBlk5.Id,
+                EditBlockId = editBlk3.Id,
                 IsPrefilled = true,
                 IsDisplayedOnVotingPage = true
             };
@@ -1182,8 +1182,37 @@ namespace ServerApp.Data
                 IsPrefilled = true
             };
 
+            var row148 = new Row()
+            {
+                Id = Guid.NewGuid(),
+                IsPrefilled = true,
+                TableId = tbl14.Id
+            };
+
+            #region Cells4Row147
+
+            var cell1481 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col141.Id,
+                RowId = row148.Id,
+                Disable = true,
+                IsPrefilled = true,
+                Value = "Ссылка на конкурсную работу"
+            };
+            
+            var cell1482 = new CellVal()
+            {
+                Id = Guid.NewGuid(),
+                ColumnId = col142.Id,
+                RowId = row148.Id,
+                IsPrefilled = true
+            };
+
             #endregion
-            //todo: добавить строку Ссылка на конкурсную работу
+            
+            #endregion
+            
             #endregion
             
             #endregion
@@ -1808,7 +1837,7 @@ namespace ServerApp.Data
             builder.Entity<Row>().HasData(
             [
                 row101, row102, row103, row104, row105,
-                row141, row142, row143, row144, row145, row146, row147
+                row141, row142, row143, row144, row145, row146, row147, row148
             ]);
             builder.Entity<CellVal>().HasData([
                 cell1011, cell1012,
@@ -1823,7 +1852,8 @@ namespace ServerApp.Data
                 cell1441, cell1442, 
                 cell1451, cell1452, 
                 cell1461, cell1462, 
-                cell1471, cell1472
+                cell1471, cell1472, 
+                cell1481, cell1482
             ]);
             builder.Entity<SelectValue>().HasData([
                 slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
