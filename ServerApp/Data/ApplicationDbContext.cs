@@ -1571,6 +1571,18 @@ namespace ServerApp.Data
                 Value = "Нет",
                 ColumnId = col92.Id
             };
+            var slctVall28 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Кандидат наук",
+                ColumnId = fld15.Id
+            };
+            var slctVall29 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Доктор наук",
+                ColumnId = fld15.Id
+            };
 
             #endregion
 
@@ -1859,7 +1871,7 @@ namespace ServerApp.Data
                 slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
                 slctVall8, slctVall9, slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, 
                 slctVall16, slctVall17, slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, 
-                slctVall24, slctVall25
+                slctVall24, slctVall25, slctVall26, slctVall27, slctVall28, slctVall29
             ]);
             builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, fld11, 
                 fld14, fld15, fld16, fld17, fld18, fld19, fld20, fld21]);
