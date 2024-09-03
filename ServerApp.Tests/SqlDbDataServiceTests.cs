@@ -43,7 +43,7 @@ namespace ServerApp.Tests
         }
 
         [TestMethod]
-        public async Task GetCurrentUserInfoValid()
+        public async Task GetCurrentUserInfoValidAsync()
         {
             var userinfo = await service.GetCurrentUserInfoAsync();
             Assert.IsNotNull(userinfo);
@@ -51,21 +51,21 @@ namespace ServerApp.Tests
         }
 
         [TestMethod]
-        public async Task GetCurrentUserEditModelValid()
+        public async Task GetCurrentUserEditModelValidAsync()
         {
             var editModel = await service.GetCurrentUserEditModelAsync();
             Assert.IsNotNull(editModel);
         }
 
         [TestMethod]
-        public async Task GetTrackModelsValid()
+        public async Task GetTrackModelsValidAsync()
         {
             var tracks = await service.GetTrackModelsAsync();
             Assert.IsNotNull(tracks);
         }
 
         [TestMethod]
-        public async Task GetEditBlockModelsValid()
+        public async Task GetEditBlockModelsValidAsync()
         {
             var tracks = await service.GetTrackModelsAsync();
             var track = tracks.First();
@@ -74,25 +74,37 @@ namespace ServerApp.Tests
         }
 
         [TestMethod]
-        public async Task GetFieldsModelsValid()
+        public async Task GetFieldsModelsValidAsync()
         {
             var tracks = await service.GetTrackModelsAsync();
             var track = tracks.First();
             var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
             var editBlock = editBlocks.First();
-            var inputs = await service.GetFieldModelsAsync(editBlock.Id);
-            Assert.IsNotNull(inputs);
+            var fields = await service.GetFieldModelsForEditBlockAsync(editBlock.Id);
+            Assert.IsNotNull(fields);
         }
 
         [TestMethod]
-        public async Task GetTablesModelByEditBlockIdAsyncValid()
+        public async Task GetTablesModelByEditBlockIdValidAsync()
         {
             var tracks = await service.GetTrackModelsAsync();
             var track = tracks.First();
             var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
             var editBlock = editBlocks.First();
-            var tables = await service.GetTableModelsAsync(editBlock.Id);
+            var tables = await service.GetTableModelsForEditBlockAsync(editBlock.Id);
             Assert.IsNotNull(tables);
+        }
+
+        [TestMethod]
+        public async Task GetSelectValuesValidAsync()
+        {
+            var tracks = await service.GetTrackModelsAsync();
+            var track = tracks.First();
+            var editBlocks = await service.GetEditBlockModelsAsync(track.Id);
+            var editBlock = editBlocks.First(x => x.Name == "Категория участников");
+            var fields = await service.GetFieldModelsForEditBlockAsync(editBlock.Id);
+            Assert.AreEqual(6, fields.First().SelectValues.Count());
+            Assert.AreEqual(0, fields.First(x => x.Name == "Ссылка на конкурсную работу").SelectValues.Count());
         }
     }
 }

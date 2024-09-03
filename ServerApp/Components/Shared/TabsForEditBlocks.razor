@@ -8,11 +8,11 @@
 
             @foreach (var block in EditBlocks)
             {
-                <li class="nav-item">
-                    <button class="nav-link @(block.Id == SelectedEditBlockId ? "active" : "")" @onclick="async () => await BlockChange(block.Id)">
-                        @block.Name
-                    </button>
-                </li>
+            <li class="nav-item">
+                <button class="nav-link @(block.Id == SelectedEditBlockId ? "active" : "") @(block.Status ? "text-success" : "")" @onclick="async () => await BlockChange(block.Id)">
+                    @block.Name
+                </button>
+            </li>
             }
         </ul>
     </div>

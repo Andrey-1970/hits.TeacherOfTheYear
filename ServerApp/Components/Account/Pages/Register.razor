@@ -7,6 +7,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject IDataService data
 
 <PageTitle>Регистрация</PageTitle>
 
@@ -27,6 +28,12 @@
     <div class="form-input">
         <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
         <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Подтверждение пароля" />
+    </div>
+    <div class="checkbox">
+        <ValidationMessage For="() => Input.PersonalData" class="text-danger" />
+        <label class="form-check-label">
+            <InputCheckbox @bind-Value="Input.PersonalData" class="darker-border-checkbox form-check-input" /> Я согласен(а) на <a href="#" target="_blank" rel="noopener noreferrer">обработку персональных данных</a>
+        </label>
     </div>
     <div class="form-buttons">
         <Button Type="ButtonType.Submit"
@@ -59,6 +66,7 @@
     {
         var user = CreateUser();
 
+        await data.CreateCurrentUserInfoAsync(Input.Email);
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -87,7 +95,7 @@
                 "account/register-confirmation",
                 new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
         }
-
+        
         await SignInManager.SignInAsync(user, isPersistent: false);
         RedirectManager.RedirectTo(ReturnUrl);
     }
@@ -129,7 +137,10 @@
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают.")]
+        [Compare("Password", ErrorMessage = "Пароль и подтверждение пароля не совпадают")]
         public string ConfirmPassword { get; set; } = "";
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Необходимо согласие на обработку персональных данных")]
+        public bool PersonalData { get; set; }
     }
 }

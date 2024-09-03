@@ -1,0 +1,20 @@
+@using ServerApp.Data.Models.EditModel
+
+<div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
+  <div class="category-description">
+        <div class="category-title">@Title</div>
+  </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public EventCallback OnClick { get; set; }
+
+    async Task OnClickHandler()
+    {
+        await OnClick.InvokeAsync();
+    }
+}

@@ -1,18 +1,20 @@
 ﻿@page "/review"
 
+@using ServerApp.Data.Models.ReviewModel
+
 @inject IDataService data
 @inject NavigationManager NavigationManager
 
 <PageTitle>Список заявок</PageTitle>
 
-<div class="block-group">
+<div class="block">
     <div class="block-title">
         <div class="block-title-text">
             Список заявок на участие
         </div>
     </div>
     <div style="align-items: flex-start; overflow: auto;">
-        <Grid TItem="Participant"
+        <Grid TItem="UserInfoModel"
               Class="table-filter"
               FiltersRowCssClass="filters-row"
               HeaderRowCssClass="header-row"
@@ -26,59 +28,27 @@
               AllowRowClick="true"
               OnRowClick="OnRowClick">
 
-            <GridColumn TItem="Participant" HeaderText="ФИО кандидата" PropertyName="FullName" SortKeySelector="item => item.FullName">
+            <GridColumn TItem="UserInfoModel" HeaderText="ФИО кандидата" PropertyName="FullName" SortKeySelector="item => item.FullName">
                 @context.FullName
             </GridColumn>
-            <GridColumn TItem="Participant" HeaderText="Номер телефона" PropertyName="PhoneNumber" SortKeySelector="item => item.PhoneNumber">
+            <GridColumn TItem="UserInfoModel" HeaderText="Номер телефона" PropertyName="PhoneNumber" SortKeySelector="item => item.PhoneNumber">
                 @context.PhoneNumber
             </GridColumn>
-            <GridColumn TItem="Participant" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
+            <GridColumn TItem="UserInfoModel" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
                 @context.Email
-            </GridColumn>
-            <GridColumn TItem="Participant" HeaderText="Оценено" PropertyName="ReviewStatus" SortKeySelector="item => item.ReviewStatus"
-                        IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
-                @if (context.ReviewStatus)
-                {
-                    <div class="text-success">Да</div>
-                }
-                else
-                {
-                    <div class="text-danger">Нет</div>
-                }
             </GridColumn>
         </Grid>
     </div>
 </div>
 
 @code {
-    private List<Participant> participants = new();
-
-    protected override void OnInitialized()
+    UserInfoModel[] participants = default!;
+    protected override async void OnInitialized()
     {
-        participants.Add(new Participant
-            {
-                Id = Guid.NewGuid(),
-                FullName = "Иванов Иван Иванович",
-                PhoneNumber = "+7 (800)-555-35-35",
-                Email = "ivanov@mail.ru",
-            });
-        participants.Add(new Participant
-            {
-                Id = Guid.NewGuid(),
-                FullName = "Петров Петр Петрович",
-                PhoneNumber = "+7 (800)-555-35-35",
-                Email = "petrov@mail.ru",
-            });
-        participants.Add(new Participant
-            {
-                Id = Guid.NewGuid(),
-                FullName = "Федоров Федор Федорович",
-                PhoneNumber = "+7 (800)-555-35-35",
-                Email = "fedorov@mail.ru",
-            });
+        participants = await data.GetUserInfosModelsAsync();
     }
 
-    private async Task<GridDataProviderResult<Participant>> UserDataProvider(GridDataProviderRequest<Participant> request)
+    private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)
     {
         return await Task.FromResult(request.ApplyTo(participants));
     }
@@ -106,17 +76,9 @@
         return await Task.FromResult(filtersTranslation);
     }
 
-    private async Task OnRowClick(GridRowEventArgs<Participant> row)
+    private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
     {
+        await data.SetApplicationStatusReviewProcessAsync(row.Item.Id);
         await Task.Run(() => NavigationManager.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
-    }
-
-    private class Participant
-    {
-        public Guid Id { get; set; }
-        public string? FullName { get; set; }
-        public string? PhoneNumber { get; set; }
-        public string? Email { get; set; }
-        public bool ReviewStatus { get; set; } = false;
     }
 }

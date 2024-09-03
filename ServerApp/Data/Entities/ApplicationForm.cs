@@ -1,16 +1,34 @@
-﻿namespace ServerApp.Data.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System;
+
+namespace ServerApp.Data.Entities
 {
     public class ApplicationForm
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Guid Id { get; set; }
-        public virtual Guid UserInfoId { get; set; }
+        
+        public Guid ApplicationStatusId { get; set; }
+        public virtual ApplicationStatus ApplicationStatus { get; set; } = default!;
+        
+        public Guid UserInfoId { get; set; }
         public virtual UserInfo UserInfo { get; set; }
-        public virtual Guid TrackId { get; set; }
+
+        public Guid TrackId { get; set; }
         public virtual Track Track { get; set; }
-        public virtual List<MarkVal> MarkVals { get; set; } = [];
-        public virtual List<FieldVal> FieldVals { get; set; } = [];
-        public virtual List<CellVal> CellVals { get; set; } = [];
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        
+        public virtual Guid? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
+
+        public Guid? ReviewerId { get; set; }
+        [ForeignKey(nameof(ReviewerId))]
+        public virtual UserInfo? Reviewer { get; set; }
+
+        public virtual List<BlockReview> BlockReviews { get; set; } = new();
+        public virtual List<MarkVal> MarkVals { get; set; } = new();
+        public virtual List<FieldVal> FieldVals { get; set; } = new();
+        public virtual List<CellVal> CellVals { get; set; } = new();
+        public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new();
+        public virtual List<Vote> Votes { get; set; } = new();
     }
 }

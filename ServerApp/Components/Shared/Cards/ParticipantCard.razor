@@ -1,0 +1,31 @@
+@using ServerApp.Data.Models.VoteModel
+
+@inject NavigationManager navigate
+
+<div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
+    <div class="professor-avatar"></div>
+    <div class="description">
+        <div class="div">@Participant!.FullName</div>
+        <div class="institution">
+            <div class="div2">Учебное заведение:</div>
+            <div class="div3">@Participant.WorkPlace</div>
+        </div>
+        <div class="degree">
+            <div class="div2">Ученая степень:</div>
+            <div class="div3">@Participant.AcademicDegree</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ListItemModel? Participant { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback OnClick { get; set; }
+
+    async Task OnClickHandler()
+    {
+        await OnClick.InvokeAsync();
+    }
+}

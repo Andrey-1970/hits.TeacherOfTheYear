@@ -1,105 +1,137 @@
 ﻿@page "/account/manage/participation-status"
 
 @inject NavigationManager NavManager
+@inject IDataService data
 
 <PageTitle>Статус участника</PageTitle>
 
 <h3>Статус участника</h3>
 <StatusMessage />
 
-<form @formname="SendRequest" @onsubmit="ToEditForm" class="w-100" method="post">
-    <AntiforgeryToken />
-
-    <div class="alert alert-primary" role="alert">
-        Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
-        и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
+@if (status == "Нет заявки")
+{
+    <div class="w-100">
+        <div class="alert alert-primary" role="alert">
+            Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
+            и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
+        </div>
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Success"
+                To="/application-form#">
+            Подать заявку
+        </Button>
     </div>
-    <Button Type="ButtonType.Submit"
-            Color="ButtonColor.Success">
-        Подать заявку
-    </Button>
-</form>
-        
-<hr />
+}
+else if (status == "В ожидании заполнения")
+{
+    <form @formname="AwaitingCompletion" @onsubmit="DeleteApplication" class="w-100" method="post">
+        <AntiforgeryToken />
 
-<form @formname="EditForm" @onsubmit="DeleteForm" class="w-100" method="post">
-    <AntiforgeryToken />
+        <div class="alert alert-secondary" role="alert">
+            Заявка на участие создана и <strong>ожидает заполнения</strong>.
+        </div>
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Primary"
+                To="/application-form#">
+            Продолжить заполнение
+        </Button>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Удалить заявку
+        </Button>
+    </form>
+}
+else if (status == "В ожидании рассмотрения")
+{
+    <form @formname="AwaitingReview" @onsubmit="WithdrawApplication" class="w-100" method="post">
+        <AntiforgeryToken />
 
-    <div class="alert alert-secondary" role="alert">
-        Заявка на участие создана и <strong>ожидает заполнения</strong>.
+        <div class="alert alert-warning" role="alert">
+            Ваша заявка <strong>ожидает рассмотрения экспертами</strong>. Пожалуйста, дождитесь решения.
+        </div>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Отозвать заявку
+        </Button>
+    </form>
+}
+else if (status == "В процессе рассмотрения")
+{
+    <div class="w-100">
+        <div class="alert alert-info" role="alert">
+            Ваша заявка <strong>в процессе рассмотрения экспертом</strong>, совсем скоро он примет решение
+        </div>
     </div>
-    <Button Type="ButtonType.Link"
-            Color="ButtonColor.Primary"
-            To="/application-form#">
-        Продолжить заполнение
-    </Button>
-    <Button Type="ButtonType.Submit"
-            Color="ButtonColor.Danger">
-        Удалить заявку
-    </Button>
-</form>
+}
+else if (status == "Одобрена")
+{
+    <form @formname="Approved" @onsubmit="WithdrawApplication" class="w-100" method="post">
+        <AntiforgeryToken />
 
-<hr />
+        <div class="alert alert-success" role="alert">
+            Поздравляем! Наши эксперты <strong>одобрили вашу заявку на участие</strong> в конкурсе. Вы получаете статус <strong>Участник</strong>.
+        </div>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Отозвать заявку
+        </Button>
+    </form>
+}
+else if (status == "Отклонена")
+{
+    <form @formname="Denied" @onsubmit="DeleteApplication" class="w-100" method="post">
+        <AntiforgeryToken />
 
-<form @formname="CancelForm" @onsubmit="DeleteForm" class="w-100" method="post">
-    <AntiforgeryToken />
+        <div class="alert alert-danger" role="alert">
+            К сожалению, наши специалисты <strong>отклонили заявку</strong> на ваше участие. Однако мы предоставляем возможность повторной отправки,
+            поэтому внимательно изучите причину отказа. Если у вас возникнут вопросы, вы можете обратиться в службу поддержки через форму обратной связи.
+        </div>
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Primary"
+                To="/application-form#">
+            Редактировать заявку
+        </Button>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Удалить заявку
+        </Button>
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Primary"
+                To="/feedback#">
+            Связаться с поддержкой
+        </Button>
+    </form>
+}
+else if (status == "Оценена")
+{
+    <form @formname="Assessed" @onsubmit="DeleteApplication" class="w-100" method="post">
+        <AntiforgeryToken />
 
-    <div class="alert alert-warning" role="alert">
-        Заявка на участие была отправлена <strong>на рассмотрение администрацией</strong>. Пожалуйста, дождитесь решения.
-    </div>
-    <Button Type="ButtonType.Submit"
-            Color="ButtonColor.Danger">
-        Отозвать заявку
-    </Button>
-</form>
-
-<hr />
-
-<form @formname="Success" @onsubmit="DeleteForm" class="w-100" method="post">
-    <AntiforgeryToken />
-
-    <div class="alert alert-success" role="alert">
-        Поздравляем! Наши эксперты одобрили вашу заявку на участие в конкурсе. Вы получаете статус <strong>Участник</strong>.
-        Теперь вам доступна анкета участника конкурса. Нажмите кнопку ниже, чтобы начать заполнение.
-    </div>
-    <Button Type="ButtonType.Link"
-            Color="ButtonColor.Primary"
-            To="/display-form#">
-        Заполнить анкету педагога
-    </Button>
-    <Button Type="ButtonType.Submit"
-            Color="ButtonColor.Danger">
-        Отозвать заявку
-    </Button>
-</form>
-
-<hr />
-
-<form @formname="Denied" @onsubmit="ToEditForm" class="w-100" method="post">
-    <AntiforgeryToken />
-
-    <div class="alert alert-danger" role="alert">
-        К сожалению, наши специалисты <strong>отклонили заявку</strong> на ваше участие. Однако мы предоставляем возможность повторной отправки,
-        поэтому внимательно изучите причину отказа. Если у вас возникнут вопросы, вы можете обратиться в службу поддержки через форму обратной связи.
-    </div>
-    <Button Type="ButtonType.Link"
-            Color="ButtonColor.Primary">
-        Редактировать заявку
-    </Button>
-    <Button Type="ButtonType.Link"
-            Color="ButtonColor.Primary">
-        Связаться с поддержкой
-    </Button>
-</form>
+        <div class="alert alert-success" role="alert">
+            Ваша анкета была оценена экспертом
+        </div>
+        <Button Type="ButtonType.Submit"
+                Color="ButtonColor.Danger">
+            Удалить заявку
+        </Button>
+    </form>
+}
 
 @code {
-    public void ToEditForm()
+    string? status;
+
+    protected override async Task OnInitializedAsync()
     {
-        NavManager.NavigateTo("/application-form#");
+        status = await data.GetApplicationStatusNameAsync();
     }
 
-    public void DeleteForm()
+    void DeleteApplication()
     {
-        NavManager.NavigateTo("/form-deleted#");
+
+    }
+
+    void WithdrawApplication()
+    {
+
     }
 }

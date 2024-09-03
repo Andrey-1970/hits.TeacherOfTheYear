@@ -1,11 +1,3 @@
-.gallery-prizes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 1rem;
-    justify-content: center;
-}
-
 .countdown {
   display: flex;
   justify-content: center;
@@ -26,13 +18,4 @@
 .label {
   font-size: 0.8em;
   color: #999;
-}
-
-.statistics-now {
-    font-family: "Inter-ExtraBold", sans-serif;
-    font-size: 30px;
-    font-weight: 600;
-    display: flex;
-    justify-content: center;
-    margin: 2rem;
 }

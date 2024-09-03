@@ -1,0 +1,53 @@
+@page "/voting"
+
+@using ServerApp.Data.Models.EditModel
+
+@inject IDataService data
+@inject NavigationManager navigate
+
+<PageTitle>Голосование</PageTitle>
+<div class="block-group">
+    <div class="block">
+        <div class="block-title">
+            <div class="block-title-text">
+                Категoрии голосования
+            </div>
+            <div class="form-text">
+                Выберите категорию, в которой хотели бы проголосовать
+            </div>
+        </div>
+
+        <div class="block-content">
+            <Accordion Class="w-100">
+                @foreach (var track in tracks)
+                {
+                    <AccordionItem Title="@track.Name">
+                        <Content>
+                            @foreach (var category in categories)
+                            {
+                                <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" />
+                            }
+                        </Content>
+                    </AccordionItem>
+                }
+            </Accordion>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<TrackModel> tracks = default!;
+    CategoryModel[] categories = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tracks = await data.GetTrackModelsAsync();
+        categories = await data.GetCategoriesAsync();
+    }
+
+    async Task ViewParticipantsHandler(Guid trackId, Guid categoryId)
+    {
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/{trackId.ToString()}/{categoryId.ToString()}#"));
+    }
+}

@@ -17,5 +17,15 @@ namespace ServerApp.Data.Services
             }
             return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == userState.User.Identity!.Name!);
         }
+
+        public async Task<string> GetCurrentUserUsername()
+        {
+            var userState = await userStateProvider.GetAuthenticationStateAsync();
+            if (userState == null || userState.User == null || userState.User.Identity == null)
+            {
+                throw new SecurityException("User is not authorizred to this action.");
+            }
+            return userState.User.Identity!.Name!;
+        }
     }
 }

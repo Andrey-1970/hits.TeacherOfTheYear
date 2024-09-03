@@ -12,5 +12,6 @@ namespace ServerApp.Data.Entities
         public virtual List<Mark> Marks { get; set; } = [];
         public virtual List<Field> Fields { get; set; } = [];
         public virtual List<Table> Tables { get; set; } = [];
+        public virtual List<BlockReview> BlockReviews { get; set; } = [];
     }
 }
