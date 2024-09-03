@@ -480,7 +480,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 7,
                 Name = "Язык публикации",
-                ValueTypeId = valType1.Id,
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
             var col68 = new Column()
@@ -488,7 +488,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 8,
                 Name = "Ссылка на открытый доступ",
-                ValueTypeId = valType1.Id,
+                ValueTypeId = valType2.Id,
                 TableId = tbl6.Id
             };
 
@@ -1183,7 +1183,7 @@ namespace ServerApp.Data
             };
 
             #endregion
-
+            //todo: добавить строку Ссылка на конкурсную работу
             #endregion
             
             #endregion
@@ -1509,7 +1509,7 @@ namespace ServerApp.Data
             var slctVall22 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
-                Value = "Да",
+                Value = "Есть",
                 ColumnId = col63.Id
             };
             var slctVall23 = new SelectValue()
@@ -1529,6 +1529,18 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Value = "Иностранный",
                 ColumnId = col67.Id
+            };
+            var slctVall26 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Есть",
+                ColumnId = col92.Id
+            };
+            var slctVall27 = new SelectValue()
+            {
+                Id = Guid.NewGuid(),
+                Value = "Нет",
+                ColumnId = col92.Id
             };
 
             #endregion

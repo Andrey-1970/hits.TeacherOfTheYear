@@ -20,6 +20,7 @@ public class CellModel
         ColumnId = cell.ColumnId;
         IsRequired = cell.Column!.IsRequired;
         ValueType = cell.Column.ValueType!.Name;
+        SelectValues = cell.Column.SelectValues.Select(e => e.Value).ToArray();
     }
 
     public CellVal ToEntity()
