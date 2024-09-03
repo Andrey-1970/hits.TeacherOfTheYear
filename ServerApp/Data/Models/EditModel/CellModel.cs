@@ -19,6 +19,7 @@ public class CellModel
         Value = cell.Value;
         ColumnId = cell.ColumnId;
         IsRequired = cell.Column!.IsRequired;
+        ValueType = cell.Column.ValueType!.Name;
     }
 
     public CellVal ToEntity()
