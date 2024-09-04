@@ -45,7 +45,32 @@
                         <option value="@type.Id">@type.Name</option>
                     }
                 </InputSelect>
-            </div>       
+            </div>
+            
+            <Card class="w-100">
+                <CardHeader>SelectValues</CardHeader>
+                <CardBody>
+                    <div class="table-container">
+                        <table class="table table-hover table-bordered table-striped">
+                            <tbody>
+                                @foreach (var selVal in selectValues)
+                                {
+                                    <tr>
+                                        <td class="d-flex justify-content-between p-2">
+                                            @selVal.Value
+                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveSelectValue(selVal)" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </CardBody>
+            </Card>
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <InputText class="form-control w-25" @bind-Value="newSelectValue" placeholder="Введите значение SelectValue" />
+                <Button Color="ButtonColor.Primary" @onclick="CreateSelectValue">Добавить</Button>
+            </div>
 
             <div class="form-text">EditBlock</div>
             <div class="form-input w-100 mb-3">
@@ -182,6 +207,20 @@
         selectValues = field.SelectValues;
 
         filteredMarks = marks;
+    }
+
+    void CreateSelectValue()
+    {
+        if (newSelectValue != String.Empty)
+        {
+            field.SelectValues.Add(new() { Id = Guid.NewGuid(), Value = newSelectValue, Field = field, FieldId = field.Id });
+            newSelectValue = String.Empty;
+        }
+    }
+
+    void RemoveSelectValue(SelectValue selVal)
+    {
+        field.SelectValues.Remove(selVal);
     }
 
     private void OnSearchInput(ChangeEventArgs e)
