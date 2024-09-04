@@ -39,6 +39,31 @@
                 </InputSelect>
             </div>
 
+            <Card class="w-100">
+                <CardHeader>SelectValues</CardHeader>
+                <CardBody>
+                    <div class="table-container">
+                        <table class="table table-hover table-bordered table-striped">
+                            <tbody>
+                                @foreach (var selVal in selectValues)
+                                {
+                                    <tr>
+                                        <td class="d-flex justify-content-between p-2">
+                                            @selVal.Value
+                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveSelectValue(selVal)" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </CardBody>
+            </Card>
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <InputText class="form-control w-25" @bind-Value="newSelectValue" placeholder="Введите значение SelectValue" />
+                <Button Color="ButtonColor.Primary" @onclick="CreateSelectValue">Добавить</Button>
+            </div>
+
             <div class="form-text">Table</div>
             <div class="form-input w-100 mb-3">
                 <InputSelect class="form-control" @bind-Value="column.TableId">
@@ -49,29 +74,6 @@
                     }
                 </InputSelect>
             </div>
-
-            @* @if (selectValues.Count != 0)
-            {
-                <div class="table-container">
-                    <table class="table table-hover table-bordered opacity-50">
-                        <thead>
-                            <tr>
-                                <th class="p-2">SelectValues, содержащиеся в этом Column</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var selVal in selectValues)
-                            {
-                                <tr @onclick="() => GoToSelVal(selVal.Id)" style="cursor: pointer;">
-                                    <td class="p-2">
-                                        @selVal.Value
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            } *@
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
                 <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
@@ -90,6 +92,7 @@
     IEnumerable<ValuesType> valueTypes = Enumerable.Empty<ValuesType>();
 
     List<SelectValue> selectValues = new();
+    private string newSelectValue = String.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -105,9 +108,18 @@
         selectValues = column.SelectValues;
     }
 
-    void GoToSelVal(Guid id)
+    void CreateSelectValue()
     {
-        navigation.NavigateTo($"/admin/selectvalues/{id}");
+        if (newSelectValue != String.Empty)
+        {
+            column.SelectValues.Add(new() { Value = newSelectValue, Column = column, ColumnId = column.Id });
+            newSelectValue = String.Empty;
+        }
+    }
+
+    void RemoveSelectValue(SelectValue selVal)
+    {
+        column.SelectValues.Remove(selVal);
     }
 
     async Task OnValidSumbit()

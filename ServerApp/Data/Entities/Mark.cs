@@ -10,9 +10,9 @@ namespace ServerApp.Data.Entities
 
         public bool IsAuto { get; set; } = true;
         public int MaxValue { get; set; }
-        public virtual Guid? FieldId { get; set; } // подумать над подвязкой данных в админ панели
+        public virtual Guid? FieldId { get; set; }
         public virtual Field? Field { get; set; }
-        public virtual Guid? TableId { get; set; } // подумать над подвязкой данных в админ панели
+        public virtual Guid? TableId { get; set; }
         public virtual Table? Table { get; set; }
         public virtual List<MarkBlock> MarkBlocks { get; set; } = [];
         public virtual List<MarkVal> MarkVals { get; set; } = [];
