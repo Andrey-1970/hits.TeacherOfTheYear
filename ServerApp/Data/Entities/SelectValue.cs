@@ -2,9 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServerApp.Data.Entities;
 
-public class SelectValue
+public class SelectValue : BaseEntity
 {
-    public Guid Id { get; set; }
     [MaxLength(255)]
     public string? Value { get; set; }
     public virtual Guid? FieldId { get; set; }

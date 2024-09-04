@@ -1,0 +1,115 @@
+﻿@page "/admin/tracks/{Id:guid}"
+@page "/admin/tracks/new"
+
+@inject IAdmin data
+@inject NavigationManager navigation
+
+<PageTitle>Настройка Track</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Редактирование Track
+        </div>
+    </div>
+    <div class="block-content">
+        <EditForm Class="w-100" Model="track" OnValidSubmit="OnValidSumbit">
+            <div class="form-text">Номер Track</div>
+            <div class="form-input w-100 mb-3">
+                <InputNumber class="form-control" placeholder="Введите номер Track" @bind-Value="track.Number" disabled="@(track.Id != Guid.Empty)" />
+            </div>
+            <div class="form-text">Название Track</div>
+            <div class="form-input w-100 mb-3">
+                <InputText class="form-control mb-3" placeholder="Введите название Track" @bind-Value="track.Name" />
+            </div>
+
+            @if (editBlocks.Count != 0)
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered opacity-50">
+                        <thead>
+                            <tr>
+                                <th class="p-2">EditBlocks, прикрепленные к этому Track</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var editBlock in editBlocks)
+                            {
+                                <tr @onclick="() => GoToEditBlock(editBlock.Id)" style="cursor: pointer;">
+                                    <td class="p-2">
+                                        @editBlock.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (markBlocks.Count != 0)
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered opacity-50">
+                        <thead>
+                            <tr>
+                                <th class="p-2">MarkBlocks, прикрепленные к этому Track</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var markBlock in markBlocks)
+                            {
+                                <tr @onclick="() => GoToMarkBlock(markBlock.Id)" style="cursor: pointer;">
+                                    <td class="p-2">
+                                        @markBlock.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
+                <a type="button" class="btn btn-secondary" href="/admin/tracks">Назад</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { set; get; }
+    Track track = new();
+
+    List<EditBlock> editBlocks = new();
+    List<MarkBlock> markBlocks = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Id != Guid.Empty)
+        {
+            track = await data.Track.GetByIdAsync(Id);
+        }
+
+        editBlocks = track.EditBlocks;
+        markBlocks = track.MarkBlocks;
+    }
+
+    void GoToEditBlock(Guid id)
+    {
+        navigation.NavigateTo($"/admin/editblocks/{id}");
+    }
+
+    void GoToMarkBlock(Guid id)
+    {
+        navigation.NavigateTo($"/admin/markblocks/{id}");
+    }
+
+    async Task OnValidSumbit()
+    {
+        await data.Track.SaveAsync(track);
+        navigation.NavigateTo("/admin/tracks");
+    }
+}

@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using ServerApp.Components;
 using ServerApp.Components.Account;
 using ServerApp.Data;
+using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Services;
+
 
 namespace ServerApp
 {
@@ -48,6 +50,7 @@ namespace ServerApp
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAuthorization, AppAuthorization>();
+            builder.Services.AddScoped<IAdmin, AdminService>();
 
             var app = builder.Build();
 

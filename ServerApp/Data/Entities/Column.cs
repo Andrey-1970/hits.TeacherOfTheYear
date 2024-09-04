@@ -2,9 +2,8 @@
 
 namespace ServerApp.Data.Entities
 {
-    public class Column
+    public class Column : BaseEntity
     {
-        public Guid Id { get; set; }
         public int Number { get; set; }
         [MaxLength(255)] 
         public string? Name { get; set; }

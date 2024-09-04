@@ -2,14 +2,13 @@
 
 namespace ServerApp.Data.Entities
 {
-    public class Table
+    public class Table : BaseEntity
     {
-        public Guid Id { get; set; }
         public int Number { get; set; }
         [MaxLength(255)] 
         public string? Name { get; set; }
 
-        public bool IsPrefilled { get; set; } = false;
+        public bool IsPrefilled { get; set; } = false; //todo: сделать настройку строк в админ панели
         
         public bool IsDisplayedOnVotingPage { get; set; } = false;
 

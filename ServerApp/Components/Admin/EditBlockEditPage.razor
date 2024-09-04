@@ -1,0 +1,162 @@
+﻿@page "/admin/editblocks/{Id:guid}"
+@page "/admin/editblocks/new"
+
+@inject IAdmin data
+@inject NavigationManager navigation
+
+<PageTitle>Настройка EditBlock</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Редактирование EditBlock
+        </div>
+    </div>
+    <div class="block-content">
+        <EditForm Class="w-100" Model="block" OnValidSubmit="OnValidSubmit">
+            <div class="form-text">Номер EditBlock</div>
+            <div class="form-input w-100 mb-3">
+                <InputNumber class="form-control mb-3" placeholder="Введите номер EditBlock" @bind-Value="block.Number" disabled="@(block.Id != Guid.Empty)" />
+            </div>
+            <div class="form-text">Название EditBlock</div>
+            <div class="form-input w-100 mb-3">
+                <InputText class="form-control mb-3" placeholder="Введите название EditBlock" @bind-Value="block.Name" />
+            </div>
+
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">Tracks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var track in tracks)
+                        {
+                            <tr>
+                                <td class="p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-check-label" for="@track.Id-@block.Id">
+                                            @track.Name
+                                        </label>
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" id="@track.Id-@block.Id"
+                                                   @bind="trackSelections[block.Id][track.Id!]" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (fields.Count != 0)
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered opacity-50">
+                        <thead>
+                            <tr>
+                                <th class="p-2">Fields, содержащиеся в этом EditBlock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var field in fields)
+                            {
+                                <tr @onclick="() => GoToField(field.Id)" style="cursor: pointer;">
+                                    <td class="p-2">
+                                        @field.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (tables.Count != 0)
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered opacity-50">
+                        <thead>
+                            <tr>
+                                <th class="p-2">Tables, содержащиеся в этом EditBlock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var table in tables)
+                            {
+                                <tr @onclick="() => GoToTable(table.Id)" style="cursor: pointer;">
+                                    <td class="p-2">
+                                        @table.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
+                <a type="button" class="btn btn-secondary" href="/admin/editblocks">Назад</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    EditBlock block = new();
+
+    IEnumerable<Track> tracks = Enumerable.Empty<Track>();
+    Dictionary<Guid, Dictionary<Guid, bool>> trackSelections = new();
+
+    List<Field> fields = new();
+    List<Table> tables = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != Guid.Empty)
+        {
+            block = await data.EditBlock.GetByIdAsync(Id);
+        }
+
+        tracks = await data.Track.GetAllAsync();
+        if (!trackSelections.ContainsKey(block.Id))
+        {
+            trackSelections[block.Id] = tracks.ToDictionary(track => track.Id!, track => block.Tracks.Any(t => t.Id == track.Id));
+        }
+
+        fields = block.Fields;
+        tables = block.Tables;
+    }
+
+    void GoToField(Guid id)
+    {
+        navigation.NavigateTo($"/admin/fields/{id}");
+    }
+    
+    void GoToTable(Guid id)
+    {
+        navigation.NavigateTo($"/admin/tables/{id}");
+    }
+
+    async Task OnValidSubmit()
+    {
+        if (trackSelections.TryGetValue(block.Id, out var trackSelection))
+        {
+            block.Tracks = tracks.Where(t => trackSelection.TryGetValue(t.Id!, out bool selected) && selected).ToList();
+        }
+
+        await data.EditBlock.SaveAsync(block);
+
+        if (!trackSelections.ContainsKey(block.Id))
+        {
+            trackSelections[block.Id] = tracks.ToDictionary(track => track.Id!, track => block.Tracks.Any(t => t.Id == track.Id));
+        }
+
+        navigation.NavigateTo("/admin/editblocks");
+    }
+}

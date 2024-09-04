@@ -1,0 +1,133 @@
+﻿@page "/admin/users"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using ServerApp.Data
+
+@inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+
+<PageTitle>Настройка пользователей</PageTitle>
+
+<div class="block">
+    <div class="block-content">
+        <Card class="w-100">
+            <CardHeader>Пользователи</CardHeader>
+            <CardBody>
+                <div class="d-flex flex-column gap-3">
+                    <input type="text" class="form-control" placeholder="Поиск по email" @bind="searchQuery" @oninput="OnSearchInput" />
+
+                    <div class="table-container">
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="p-2">Email</th>
+                                    <th class="p-2">Роли</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (filteredUsers.Any())
+                                {
+                                    @foreach (var user in filteredUsers)
+                                    {
+                                        <tr style="vertical-align: middle;">
+                                            <td class="p-2">
+                                                @user.Email
+                                            </td>
+                                            <td class="p-2">
+                                                @foreach (var role in roles)
+                                                {
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="checkbox" id="@role.Name-@user.Id"
+                                                               @bind="roleSelections[user.Id][role.Name!]" />
+                                                        <label class="form-check-label" for="@role.Name-@user.Id">
+                                                            @role.Name
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2" class="text-center">Не найдено</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100"> 
+            <Button Color="ButtonColor.Success" @onclick="SaveChanges">Сохранить</Button>
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<IdentityRole> roles = new List<IdentityRole>();
+    IEnumerable<ApplicationUser> users = new List<ApplicationUser>();
+    IEnumerable<ApplicationUser> filteredUsers = new List<ApplicationUser>();
+
+    Dictionary<string, Dictionary<string, bool>> roleSelections = new();
+    string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        roles = roleManager.Roles.ToList();
+        users = userManager.Users.ToList();
+        filteredUsers = users;
+
+        foreach (var user in users)
+        {
+            var userRoles = await userManager.GetRolesAsync(user);
+            roleSelections[user.Id] = roles.ToDictionary(
+                role => role.Name!,
+                role => userRoles.Contains(role.Name!)
+            );
+        }
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterUsers();
+    }
+
+    private void FilterUsers()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredUsers = users;
+        }
+        else
+        {
+            filteredUsers = users.Where(u => u.Email != null && u.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        foreach (var user in filteredUsers)
+        {
+            var currentRoles = await userManager.GetRolesAsync(user);
+            var rolesToRemove = currentRoles.Where(role => !roleSelections[user.Id].TryGetValue(role, out var isSelected) || !isSelected).ToList();
+            var rolesToAdd = roleSelections[user.Id].Where(kvp => kvp.Value && !currentRoles.Contains(kvp.Key)).Select(kvp => kvp.Key).ToList();
+
+            if (rolesToRemove.Any())
+            {
+                await userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            }
+            if (rolesToAdd.Any())
+            {
+                await userManager.AddToRolesAsync(user, rolesToAdd);
+            }
+        }
+        StateHasChanged();
+    }
+}
