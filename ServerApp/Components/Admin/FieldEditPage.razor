@@ -213,7 +213,7 @@
     {
         if (newSelectValue != String.Empty)
         {
-            field.SelectValues.Add(new() { Id = Guid.NewGuid(), Value = newSelectValue, Field = field, FieldId = field.Id });
+            field.SelectValues.Add(new() {Value = newSelectValue, Field = field, FieldId = field.Id });
             newSelectValue = String.Empty;
         }
     }
