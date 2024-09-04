@@ -2,7 +2,7 @@
 
 @inject NavigationManager navigate
 
-<div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
+<div class="card-form @GetCardClass()" type="button" @onclick="async () => await OnClickHandler()">
     <div class="professor-avatar"></div>
     <div class="description">
         <div class="div">@Participant!.FullName</div>
@@ -27,5 +27,10 @@
     async Task OnClickHandler()
     {
         await OnClick.InvokeAsync();
+    }
+
+    private string GetCardClass()
+    {
+        return Participant != null && Participant.IsVoted ? "voted" : "";
     }
 }

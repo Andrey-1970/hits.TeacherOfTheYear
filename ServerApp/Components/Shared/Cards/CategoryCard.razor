@@ -1,20 +1,42 @@
 @using ServerApp.Data.Models.EditModel
 
-<div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
-  <div class="category-description">
+@inject IDataService data;
+
+<div class="category-card @GetCardClass()" type="button" @onclick="async () => await OnClickHandler()">
+    <div class="category-description">
         <div class="category-title">@Title</div>
-  </div>
+    </div>
 </div>
+
 
 @code {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
+    
+    [Parameter, EditorRequired]
+    public TrackModel Track { get; set; } = default!;
+    
+    [Parameter, EditorRequired]
+    public CategoryModel Category { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
+    
+    public bool IsVoted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsVoted = await data.VoteInThisCategory(Track.Id, Category.Id);
+    }
 
     async Task OnClickHandler()
     {
         await OnClick.InvokeAsync();
     }
+    
+    private string GetCardClass()
+    {
+        return IsVoted ? "voted" : "";
+    }
+
 }

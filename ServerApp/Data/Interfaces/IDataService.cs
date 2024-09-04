@@ -49,5 +49,6 @@ namespace ServerApp.Data.Interfaces
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
+        Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId);
     }
 }

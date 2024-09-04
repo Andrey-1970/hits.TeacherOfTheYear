@@ -24,4 +24,6 @@ public class ListItemModel
     [MaxLength(255)]
     public string? WorkPlace { get; set; }
     public string? AcademicDegree { get; set; }
+
+    public bool IsVoted { get; set; } = false;
 }
