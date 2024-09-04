@@ -11,7 +11,7 @@ using ServerApp.Data;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240903155951_InitialCreate")]
+    [Migration("20240904170435_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,43 +41,43 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            EditBlocksId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            EditBlocksId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            EditBlocksId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            EditBlocksId = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            EditBlocksId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            EditBlocksId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            EditBlocksId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            EditBlocksId = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            EditBlocksId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            EditBlocksId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         });
                 });
 
@@ -98,108 +98,108 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            FieldsId = new Guid("b3c24491-c6da-47a4-801e-6398f01c84ea"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("dec7c50e-159c-4a33-8c10-6ae7eab9cef5"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("c7a1cee9-5574-4bbd-a833-b19f8a1b94bb"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("c3bc5252-b4a8-4770-8600-4fcc879f5931"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("b0a6b87c-4215-4ed7-b231-152768bebdfc"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("3d261b2d-5712-47db-a982-d51b7eb76aa5"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("cd3e1045-03ac-4128-83ec-34a7f60b4c62"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("366e943f-f9fb-49b9-b97a-fd45785211d1"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("4b208a9b-de6c-45cd-a6d5-9c8a5c355be2"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("066c0316-8a53-4a63-966a-2fb92c5e6942"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("8b235541-dc33-416c-9ab8-f260552d0947"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("6972e48f-2e19-4003-a817-c19816093218"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("cbe0c196-6f27-4fd5-aa6d-e970a85ba15f"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("1aa3dd0a-d5c3-4707-8b76-bdd6f281608f"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("242fb983-7377-46f3-845c-854f8b0fc720"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("448191f3-500f-4fdf-8c94-4423da92a999"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("df63cce5-5401-428a-9d15-e52f99423e97"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("799a6c2c-a463-436b-8114-e74751db3567"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("de30041f-7abf-443c-8cb2-92e4ada98059"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("c889e901-2a92-4870-b4d5-83cc7f768468"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("ecfac8ee-c355-41cf-bf26-43a6d4f20b96"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("4dcd7230-b9b3-4386-9df7-8de1dc999e66"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("91cbc2dc-4ef6-4372-be9c-6a7e45d54815"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("2f00c35b-196e-4220-8e05-e41f470b1faa"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("54a90f7e-d306-4919-b31d-f738fb65f423"),
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd")
+                            FieldsId = new Guid("386b4d0c-415a-44ae-b0ff-96d0664208b9"),
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8")
                         },
                         new
                         {
-                            FieldsId = new Guid("b63cd50d-6925-4578-ae4c-9cc2c6348404"),
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a")
+                            FieldsId = new Guid("1e80c81a-0f98-4c6d-8c1b-366729adcadc"),
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4")
                         },
                         new
                         {
-                            FieldsId = new Guid("4c0847d9-ed81-4df5-843f-d28fc4a47c61"),
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a")
+                            FieldsId = new Guid("790ab317-974a-4d72-92b6-1b7447853a8d"),
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4")
                         },
                         new
                         {
-                            FieldsId = new Guid("00278116-7f0d-409e-9224-011d419aeee4"),
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a")
+                            FieldsId = new Guid("c08ec9d8-54c3-4953-b8d8-83da6b84c391"),
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4")
                         },
                         new
                         {
-                            FieldsId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365")
+                            FieldsId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b")
                         },
                         new
                         {
-                            FieldsId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4")
+                            FieldsId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204")
                         },
                         new
                         {
-                            FieldsId = new Guid("dc816470-261b-4762-bd58-82f2de72eff6"),
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4")
+                            FieldsId = new Guid("b82d32e4-78c1-4370-b6bc-1e986295b8b8"),
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204")
                         },
                         new
                         {
-                            FieldsId = new Guid("9587a134-12ff-428c-a68b-071794f63518"),
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4")
+                            FieldsId = new Guid("ef5d92b2-3f99-4373-ae42-c332ada51e9d"),
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204")
                         });
                 });
 
@@ -220,83 +220,83 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            TablesId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            TablesId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            TablesId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            TablesId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            TablesId = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            TablesId = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            TablesId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            TablesId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            TablesId = new Guid("a501c362-4f48-4249-8267-096b76f2c610")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            TablesId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            TablesId = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            TablesId = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            TablesId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            TablesId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            TablesId = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            TablesId = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            TablesId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            TablesId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            TablesId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            TablesId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            TablesId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            TablesId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            TablesId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            TablesId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            TablesId = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            TablesId = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            TablesId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            TablesId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            TablesId = new Guid("e327245f-83d9-4d92-bc26-976e89787346")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            TablesId = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
-                            TablesId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            MarkBlocksId = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
+                            TablesId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         });
                 });
 
@@ -317,48 +317,48 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
-                            TracksId = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269")
+                            MarkBlocksId = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
+                            TracksId = new Guid("42490083-2b0a-4fb7-968e-783f3059e926")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            MarkBlocksId = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
-                            TracksId = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8")
+                            MarkBlocksId = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
+                            TracksId = new Guid("87208b10-2eba-4975-978e-1a8a3e929876")
                         });
                 });
 
@@ -379,138 +379,138 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("de2122f4-91a8-4083-8b8f-f9c35ce80577")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("a84005eb-1779-4496-b7d4-79cf9d5c6f61")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("d919b2a6-2d33-4d63-94fc-20a51af0ae2b")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("343d9e29-0c85-4efc-94b2-8ca5b22246b7")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("38c4eeae-6507-49f5-a42b-f2fd9ae21702")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("9ffbda46-c558-416b-b41e-f8179139802b")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("8cfc4838-95a5-423f-b167-3f2bcef111a1")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("3ae5a79c-8f1e-41e2-a358-92778583be9d")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("143d8144-bffd-4ef8-b377-167a0865e107")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("21242f99-fe94-4af7-909f-a90c3921121c")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("721f1580-adef-450d-b41b-b62a27b47d5e")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("482076aa-859b-45ee-a710-75848bacc3bc")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
-                            MarksId = new Guid("7c11f4a5-8793-46dc-acc7-1272205d3ae0")
+                            MarkBlocksId = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
+                            MarksId = new Guid("2ec4594f-fec6-4f64-94de-d4038be47b35")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            MarksId = new Guid("cbe51dbd-0239-41ae-9acb-07453c8d6dd8")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            MarksId = new Guid("93be4bfe-bdf6-40ee-a84a-7880dde12772")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            MarksId = new Guid("d296679e-7f8b-47fb-9413-bf9ac9591ea1")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            MarksId = new Guid("f84c0231-2709-4501-bdc2-c6e5d92b5419")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            MarksId = new Guid("c26dc76b-4783-4814-8c6d-1c149ddcbf79")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            MarksId = new Guid("f1b03f4c-0ad4-4597-bbd5-a478c0fd57d1")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            MarksId = new Guid("4a123172-fb20-4fa7-bceb-d2e61cdc9b35")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            MarksId = new Guid("1f6f6273-ee1f-4c21-8da2-7b278fe2d5a9")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
-                            MarksId = new Guid("95e9a5cd-d463-4c3f-adec-b532fb56b82d")
+                            MarkBlocksId = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
+                            MarksId = new Guid("cc67a686-d5ec-4242-8278-a28419fb8ea2")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            MarksId = new Guid("0cfd810b-133d-4777-9a88-90224b7d2769")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            MarksId = new Guid("266fe377-ffdb-4f3d-854d-727f25a38559")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            MarksId = new Guid("0d691f9d-f668-4f4e-8edd-cd3f20165b89")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            MarksId = new Guid("e01f2eb4-f5ec-4cf7-8509-8aa7fd324e89")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
-                            MarksId = new Guid("2403cc33-5b0b-4da5-b7c0-a4545cfdfb03")
+                            MarkBlocksId = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
+                            MarksId = new Guid("29d803f9-0c97-4ab3-9f96-d0956e0fd904")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("0cfd810b-133d-4777-9a88-90224b7d2769")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("266fe377-ffdb-4f3d-854d-727f25a38559")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("0d691f9d-f668-4f4e-8edd-cd3f20165b89")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("e01f2eb4-f5ec-4cf7-8509-8aa7fd324e89")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("d9e5ca02-e409-4d74-a43a-fc80cbbc9aa3")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("c1a455df-a6ee-440d-9d80-1071af65f3a8")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("6b7515ae-2e4d-4d11-a3c9-0b4ff25b0268")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("fec459ca-d0c1-4164-b568-334999f414f3")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("d58844d3-5f44-444b-84a5-ed05b0ab3e12")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("851f2eda-4b50-43e2-9a41-ea66aa408c84")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("4d786230-8090-466c-a526-afd082d59dfc")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("aa8b667b-6133-4c13-bda9-7e2e38230f8d")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
-                            MarksId = new Guid("dd2cb777-452b-4904-83fa-50c9b995134d")
+                            MarkBlocksId = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
+                            MarksId = new Guid("1df82884-b2e3-4bef-8df6-3dfb6d256d38")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            MarksId = new Guid("2403cc33-5b0b-4da5-b7c0-a4545cfdfb03")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            MarksId = new Guid("29d803f9-0c97-4ab3-9f96-d0956e0fd904")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            MarksId = new Guid("de755bf0-6526-490a-a36d-d77504490cd5")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            MarksId = new Guid("052d7de8-84dc-4272-b11e-e175658c89ed")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
-                            MarksId = new Guid("365af9cd-310a-48da-9eb9-53c90a33f648")
+                            MarkBlocksId = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
+                            MarksId = new Guid("e447b18c-c592-46e1-94f6-352673750f42")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
-                            MarksId = new Guid("dca77c1a-4f8d-48b5-a4f8-991903e1cdb1")
+                            MarkBlocksId = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
+                            MarksId = new Guid("97f01ee3-5f54-4f6b-aae2-721ddc4ff279")
                         },
                         new
                         {
-                            MarkBlocksId = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
-                            MarksId = new Guid("b19c307c-9abd-42c2-8d4c-4c2d13a7491c")
+                            MarkBlocksId = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
+                            MarksId = new Guid("6e94f099-3820-4b80-82ec-748ad0907cef")
                         });
                 });
 
@@ -542,31 +542,31 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f10f17e8-7fa9-45ac-b8af-79cf9d7a27d4",
+                            Id = "7bbf4c5e-1f09-4e7b-989e-38da706ae389",
                             Name = "Voter",
                             NormalizedName = "VOTER"
                         },
                         new
                         {
-                            Id = "9aa9eb27-a79a-46a7-aea7-58201527530b",
+                            Id = "d412f2db-c470-48c4-af6b-48cb526c9a48",
                             Name = "Participant",
                             NormalizedName = "PARTICIPANT"
                         },
                         new
                         {
-                            Id = "8d5061b5-6c95-4cda-b342-92d19111267d",
+                            Id = "303798bc-123d-4d29-a90b-bd5e01894b35",
                             Name = "Expert",
                             NormalizedName = "EXPERT"
                         },
                         new
                         {
-                            Id = "7da0af8f-129c-41d6-b360-e04b35b3011e",
+                            Id = "97055bad-06da-498a-988e-7a75d1b09459",
                             Name = "Organiser",
                             NormalizedName = "ORGANISER"
                         },
                         new
                         {
-                            Id = "4217d2f1-998d-4752-b6d2-42e5da244f2d",
+                            Id = "5b669d73-7508-4763-8cf0-32cd83eced24",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -798,37 +798,37 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e6d13736-e9bf-4f15-95ff-673088d020bf"),
+                            Id = new Guid("2a76e94f-2546-4396-b736-22ebe111b88a"),
                             Number = 1,
                             Status = "В ожидании заполнения"
                         },
                         new
                         {
-                            Id = new Guid("ceb30454-02ed-45b6-b4e9-19ebbc57243e"),
+                            Id = new Guid("7b625e48-beee-4ee8-a506-10036a5e65a4"),
                             Number = 2,
                             Status = "В ожидании рассмотрения"
                         },
                         new
                         {
-                            Id = new Guid("2216f661-4a64-4270-8820-7f7306e4b274"),
+                            Id = new Guid("9f4eb9c3-d6b5-4e95-99a6-65ca0e5f9797"),
                             Number = 3,
                             Status = "В процессе рассмотрения"
                         },
                         new
                         {
-                            Id = new Guid("b45b412a-ec4a-4a40-9d97-be280115582f"),
+                            Id = new Guid("5d765973-071c-40cc-8558-db10009b5024"),
                             Number = 4,
                             Status = "Одобрена"
                         },
                         new
                         {
-                            Id = new Guid("4e726fa7-9c0f-419e-9f47-daeb7e0ac931"),
+                            Id = new Guid("40636cd6-e8ae-4b5b-bc06-f29adf1b30e3"),
                             Number = 5,
                             Status = "Отклонена"
                         },
                         new
                         {
-                            Id = new Guid("a6bd44cb-fd0a-4fdb-a2d3-af0c814640f9"),
+                            Id = new Guid("59b23276-76d2-470b-9a4c-1cbb29e00d9d"),
                             Number = 6,
                             Status = "Оценена"
                         });
@@ -888,13 +888,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("920f1ca6-d82b-49d4-9d82-21b1c6f19e65"),
+                            Id = new Guid("6cd1e44f-3e5a-4be7-bbbf-60efdb976454"),
                             Name = "Строительство и архитектура",
                             Number = 1
                         },
                         new
                         {
-                            Id = new Guid("568baf80-3319-4d7d-a515-668177549f45"),
+                            Id = new Guid("ca7e113b-0f70-4ea4-be0e-0c9ca7403f23"),
                             Name = "Энергетика и нефтегазовая индустрия",
                             Number = 2
                         });
@@ -939,224 +939,224 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2c41c499-a3c1-4f12-9f3e-5434eff6ca7c"),
-                            ColumnId = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("f0623258-1dab-468e-88a2-df5da04f3b9d"),
+                            ColumnId = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("70c4acb7-64aa-46d4-a25a-86c2556acc53"),
+                            RowId = new Guid("4699176d-ee88-4d28-b760-36c41d0eaee9"),
                             Value = "ScopusID"
                         },
                         new
                         {
-                            Id = new Guid("b5a05b0e-bfbe-4e6b-82f4-653440e38d75"),
-                            ColumnId = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("cfbc7c4d-f3b2-4b2b-80d6-ee2f5342ca96"),
+                            ColumnId = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("70c4acb7-64aa-46d4-a25a-86c2556acc53")
+                            RowId = new Guid("4699176d-ee88-4d28-b760-36c41d0eaee9")
                         },
                         new
                         {
-                            Id = new Guid("d0394c59-119b-47a4-b305-c934ff4c0df9"),
-                            ColumnId = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("17154216-8e73-4516-9f09-9a7b82666033"),
+                            ColumnId = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("d29115dd-4a34-40f3-bbf1-52c46f909bb0"),
+                            RowId = new Guid("fd822556-7cce-4728-a1c6-2aeac15ae4d8"),
                             Value = "ORCiD"
                         },
                         new
                         {
-                            Id = new Guid("5bcf8be0-f008-4bc4-900f-4900514b6980"),
-                            ColumnId = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("752c0c5a-1db2-49d7-81fa-d41ab8063d7c"),
+                            ColumnId = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("d29115dd-4a34-40f3-bbf1-52c46f909bb0")
+                            RowId = new Guid("fd822556-7cce-4728-a1c6-2aeac15ae4d8")
                         },
                         new
                         {
-                            Id = new Guid("454a5133-0369-45bc-9f80-3301c32d9c46"),
-                            ColumnId = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("9c5f8d33-c658-463d-b6f5-63e3c31dc371"),
+                            ColumnId = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("372570d2-b8e5-4159-8cdd-7dc5d07566b1"),
+                            RowId = new Guid("cbad16e6-3792-48af-8cee-4266aa879caa"),
                             Value = "ResearcherID"
                         },
                         new
                         {
-                            Id = new Guid("f6f54e7a-fb4f-4251-b1d0-f24bdb0acb68"),
-                            ColumnId = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("31337694-18a9-4ff1-901b-c20d16f6a0b3"),
+                            ColumnId = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("372570d2-b8e5-4159-8cdd-7dc5d07566b1")
+                            RowId = new Guid("cbad16e6-3792-48af-8cee-4266aa879caa")
                         },
                         new
                         {
-                            Id = new Guid("2b66fa5f-21f2-444d-98f7-51aa73ed76cd"),
-                            ColumnId = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("0823127c-6cf8-4cbf-9edf-43ca0548ecb8"),
+                            ColumnId = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("ba54e270-9203-43a9-889f-a5eac891d7bb"),
+                            RowId = new Guid("402b5da1-e546-48d3-a529-e5ae52f54d1e"),
                             Value = "РИНЦ AuthorID"
                         },
                         new
                         {
-                            Id = new Guid("ac6a20d0-4dd4-459c-842d-e27fe4669480"),
-                            ColumnId = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("ab3713ab-8cca-4472-953d-0d2c3d17b96a"),
+                            ColumnId = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("ba54e270-9203-43a9-889f-a5eac891d7bb")
+                            RowId = new Guid("402b5da1-e546-48d3-a529-e5ae52f54d1e")
                         },
                         new
                         {
-                            Id = new Guid("fc93729b-81a1-408f-bc5e-a17258b9e44c"),
-                            ColumnId = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("f1dd36a4-36a6-4de7-80b9-548d42517ade"),
+                            ColumnId = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("7c6d7fbc-b1e2-4832-9751-6971c818b00c"),
+                            RowId = new Guid("ec9d3934-94a5-41a2-9469-558a9432d81f"),
                             Value = "Google Scholar ID"
                         },
                         new
                         {
-                            Id = new Guid("f40dc752-9dc9-4694-9e31-76aad68921fa"),
-                            ColumnId = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("145312c3-2335-40c2-b4e2-93512eaa0a58"),
+                            ColumnId = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("7c6d7fbc-b1e2-4832-9751-6971c818b00c")
+                            RowId = new Guid("ec9d3934-94a5-41a2-9469-558a9432d81f")
                         },
                         new
                         {
-                            Id = new Guid("dd1d259d-9458-4446-ab0d-bb35b27d2f91"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("fc9a44eb-4ac9-4457-bf2c-1b504911514f"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("a8d839a5-3fae-420e-8189-bb174f043de0"),
+                            RowId = new Guid("a07bf6ea-47c5-4705-b653-5b3dfc5386f5"),
                             Value = "Название работы"
                         },
                         new
                         {
-                            Id = new Guid("9fac8f23-8802-4fdf-8dbe-8e7a13aa9774"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("0de192bd-d66d-476c-b6e2-14fd3e6d1153"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("a8d839a5-3fae-420e-8189-bb174f043de0")
+                            RowId = new Guid("a07bf6ea-47c5-4705-b653-5b3dfc5386f5")
                         },
                         new
                         {
-                            Id = new Guid("7c21e6fe-15ba-49fe-931f-9c47aed3d4c0"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("4dced5e1-f634-47fb-9915-c2384b601be1"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("4c9d50e7-881f-460d-8515-9f160a5fde97"),
+                            RowId = new Guid("c82e5949-f6b4-4724-a1b3-b439d8a3c30c"),
                             Value = "Актуальность конкурсной работы"
                         },
                         new
                         {
-                            Id = new Guid("4edbdfdc-5a02-48f3-8231-99cafd61b60f"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("ed38e704-3623-492c-8cb0-330b327c2061"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("4c9d50e7-881f-460d-8515-9f160a5fde97")
+                            RowId = new Guid("c82e5949-f6b4-4724-a1b3-b439d8a3c30c")
                         },
                         new
                         {
-                            Id = new Guid("2f133f64-436e-4cfa-a402-4533217dbfef"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("686c10d0-8b20-418b-80d1-99ce2ad0793d"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("9c22e8f5-d94d-48b1-8cdb-f4eec9bf18b4"),
+                            RowId = new Guid("fcb9a4f1-c2cc-486c-9b48-c0378d9195a5"),
                             Value = "Методология и методы, используемые в работе"
                         },
                         new
                         {
-                            Id = new Guid("6dfbd7e8-b76a-42c7-8929-9407e41ec132"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("fd17168c-b333-4c6b-ab17-9ec732153d60"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("9c22e8f5-d94d-48b1-8cdb-f4eec9bf18b4")
+                            RowId = new Guid("fcb9a4f1-c2cc-486c-9b48-c0378d9195a5")
                         },
                         new
                         {
-                            Id = new Guid("bc52d03f-7313-421f-afea-f98ece8ebb52"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("3aef29c7-eb81-4191-bd87-fbccf88c980f"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("7d6f738d-17c8-47da-8a0b-661bfb43b403"),
+                            RowId = new Guid("3c46ded4-d623-4ab9-9032-0a2e927b2dd7"),
                             Value = "Инновационность"
                         },
                         new
                         {
-                            Id = new Guid("36fbc6bd-7a81-499d-b3f4-2ec4d9888682"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("569a3a77-374f-46e0-a942-564abf2cc540"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("7d6f738d-17c8-47da-8a0b-661bfb43b403")
+                            RowId = new Guid("3c46ded4-d623-4ab9-9032-0a2e927b2dd7")
                         },
                         new
                         {
-                            Id = new Guid("745b3a88-73f3-470b-9aae-756c1e327603"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("748f3d80-0a2b-4a7f-a5ba-0f47c487a73f"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("97b9e443-147d-480c-8d03-d5a6c92d4754"),
+                            RowId = new Guid("de535381-df07-407c-8503-99925e7b3ab2"),
                             Value = "Возможность практического применения (Внедрено ли в практику? В какому курсе/программе подготовки используется/ на кого рассчитано)"
                         },
                         new
                         {
-                            Id = new Guid("659b1d61-564b-4b17-965f-b47cc697a595"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("d1bb0090-6057-456a-8e40-100a809dbb82"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("97b9e443-147d-480c-8d03-d5a6c92d4754")
+                            RowId = new Guid("de535381-df07-407c-8503-99925e7b3ab2")
                         },
                         new
                         {
-                            Id = new Guid("611c7996-ffa7-4d44-a1f6-cd3f07c7ed2a"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("3219923e-bf00-491d-835d-508b2ce401e5"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("c60d4623-8597-4192-8aa6-fa4368fb23c0"),
+                            RowId = new Guid("4624369a-47bb-4e1c-8382-9af732c6b532"),
                             Value = "Результаты и выводы"
                         },
                         new
                         {
-                            Id = new Guid("c00b6315-c494-462e-b8e7-587cd1263b17"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("160fa53f-dae2-4905-921d-1c5c6692e901"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("c60d4623-8597-4192-8aa6-fa4368fb23c0")
+                            RowId = new Guid("4624369a-47bb-4e1c-8382-9af732c6b532")
                         },
                         new
                         {
-                            Id = new Guid("7da728f1-aa25-475a-b707-ebf38052b009"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("6b7bc4a4-4c1e-453f-a256-00dc08edf63c"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("fef86462-e1e6-40a2-8ddc-f5ec0a955980"),
+                            RowId = new Guid("40f22299-5c5a-49d9-8539-d0cfa4ec1a39"),
                             Value = "Рекомендации и перспективы дальнейшей разработки темы"
                         },
                         new
                         {
-                            Id = new Guid("9f888cba-0cb8-4590-9b09-33900f9949ba"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("2cc6202d-319b-47f3-94d9-aec4462ae9cf"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("fef86462-e1e6-40a2-8ddc-f5ec0a955980")
+                            RowId = new Guid("40f22299-5c5a-49d9-8539-d0cfa4ec1a39")
                         },
                         new
                         {
-                            Id = new Guid("687dbd80-115c-452a-9020-dc982a8ab0d6"),
-                            ColumnId = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("28bf6b08-0a44-458f-878d-8da31f0dcdf1"),
+                            ColumnId = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             Disable = true,
                             IsPrefilled = true,
-                            RowId = new Guid("ce6bce24-b73d-4401-9530-1eada73b5848"),
+                            RowId = new Guid("8d600746-6328-4a27-82cc-9ad37258abbd"),
                             Value = "Ссылка на конкурсную работу"
                         },
                         new
                         {
-                            Id = new Guid("c4ba6d6a-b067-40cf-8a0b-f49c7621c0c8"),
-                            ColumnId = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("9288735c-170d-4a33-ba18-511f9801dcf0"),
+                            ColumnId = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             Disable = false,
                             IsPrefilled = true,
-                            RowId = new Guid("ce6bce24-b73d-4401-9530-1eada73b5848")
+                            RowId = new Guid("8d600746-6328-4a27-82cc-9ad37258abbd")
                         });
                 });
 
@@ -1197,507 +1197,507 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("49c32f41-9ec5-4b4b-8b20-ff5c8c4544cf"),
+                            Id = new Guid("8b5c9022-009d-4e8b-9d4a-553e85790fa5"),
                             IsRequired = true,
                             Name = "Год",
                             Number = 1,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("2bd78dce-11fe-4106-8e02-daa0a3de2514"),
+                            Id = new Guid("240fa670-91a1-4b1b-a71f-66dd6b4ebc6b"),
                             IsRequired = true,
                             Name = "Название конкурса",
                             Number = 2,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("d312793d-7ef3-440a-90b3-72453cd162bb"),
+                            Id = new Guid("e5fffa64-1afd-47d9-84b2-8ec5a47a9688"),
                             IsRequired = true,
                             Name = "Статус конкурса",
                             Number = 3,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("c0526bcf-884d-4f29-9a62-273cf926e971"),
+                            Id = new Guid("979072dd-8e1d-452e-8b3d-87a8c478e7e8"),
                             IsRequired = true,
                             Name = "Награда",
                             Number = 4,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("fbc2e568-9967-4f43-9706-161cf0b0080f"),
+                            Id = new Guid("5243d1f2-be6e-4f43-80a6-29050c4f9808"),
                             IsRequired = true,
                             Name = "Ссылка",
                             Number = 5,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("3f23956e-4bee-4aa2-a3e1-a2eb0e8956e5"),
+                            Id = new Guid("bba9c0f0-2ee6-41be-96dc-80c50873ab85"),
                             IsRequired = true,
                             Name = "Название документа, реквизиты",
                             Number = 1,
-                            TableId = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("4cb0fe81-61ba-452e-9892-ff1716714a33"),
+                            Id = new Guid("e781c0f9-4459-43cd-b13a-a72d9bb43576"),
                             IsRequired = true,
                             Name = "Год получения документа",
                             Number = 2,
-                            TableId = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("0bf6ef1b-f80c-4180-bf47-be5fa8762742"),
+                            Id = new Guid("d1326e90-55c8-46d7-b809-30121eb1cb22"),
                             IsRequired = true,
                             Name = "Наименование курса",
                             Number = 1,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("44eed77f-df38-4a15-b8d6-014bcdf2a2e1"),
+                            Id = new Guid("32f68b52-be5b-42de-b475-d043649ba488"),
                             IsRequired = true,
                             Name = "Язык преподавания (русск./англ./др.)",
                             Number = 2,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("878e322f-7920-4d57-8abc-719a756204ea"),
+                            Id = new Guid("96c155df-ed12-4b6d-a564-62708cc9329e"),
                             IsRequired = true,
                             Name = "Лекции (час.)",
                             Number = 3,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("f32f424b-8546-43a0-af0a-c5ac05c20b19"),
+                            Id = new Guid("2153a756-d463-437a-8dfd-76ab075286cf"),
                             IsRequired = true,
                             Name = "Практические занятия (час.)",
                             Number = 4,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("c95613c7-0480-4dbc-9c56-2b0f35a91195"),
+                            Id = new Guid("78fef200-c2ff-4d2b-b6c7-3c0850d5f964"),
                             IsRequired = true,
                             Name = "Итого (час.)",
                             Number = 5,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("0648314a-2a7a-4634-9f5c-b6a3a1082452"),
+                            Id = new Guid("8dcf67f3-aa01-4887-a7a8-3b12f21397f3"),
                             IsRequired = true,
                             Name = "ФИО",
                             Number = 1,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("e4e706c4-2212-46e9-ab13-3636eeecd89b"),
+                            Id = new Guid("78fe2232-f5d5-41af-a378-ab2b3f73dcf2"),
                             IsRequired = true,
                             Name = "Название конкурса/премии",
                             Number = 2,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("ef2f3e49-1bee-4073-b703-398f6aae7e96"),
+                            Id = new Guid("91dd13e5-e646-4d2f-af65-f950b458df83"),
                             IsRequired = true,
                             Name = "Год",
                             Number = 3,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("bce42912-1f1d-4f42-b628-72ae36fe5372"),
+                            Id = new Guid("17157ba7-4297-4555-8b70-369dc1cbae0d"),
                             IsRequired = true,
                             Name = "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)",
                             Number = 4,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("e619707f-4602-4e4d-9436-f5db6cf543a8"),
+                            Id = new Guid("d4ccb932-671c-4588-90fd-f1ccd9593652"),
                             IsRequired = true,
                             Name = "Награда/премия (медаль, диплом с указанием степени)",
                             Number = 5,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f2932e62-b3ec-4728-931f-ca02a5197438"),
+                            Id = new Guid("5e61e78a-1f1e-4e19-bd2b-ee3c1bf7475a"),
                             IsRequired = true,
                             Name = "Название организации/должность/ставка",
                             Number = 1,
-                            TableId = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("23e24f62-083e-44aa-8086-08e39a3c3524"),
+                            Id = new Guid("031e4aef-7c11-4679-95a2-8df63f04f7cd"),
                             IsRequired = true,
                             Name = "Место нахождения (субъект РФ, зарубежье)",
                             Number = 2,
-                            TableId = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("01af0b95-c8ac-4283-888f-32885d698f19"),
+                            Id = new Guid("5a9b906e-d838-4a8a-8471-a7cda330bd69"),
                             IsRequired = true,
                             Name = "Вид деятельности (преподавательская)",
                             Number = 3,
-                            TableId = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("3b498ed4-db28-4f2e-a8a8-6c24d6306b1a"),
+                            Id = new Guid("76a011d8-6868-456e-96a0-09ac336e05e8"),
                             IsRequired = true,
                             Name = "Количество часов",
                             Number = 4,
-                            TableId = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("6067a92a-f1f5-49c2-87cf-6398f02d70f0"),
+                            Id = new Guid("a14943c0-143b-4a26-b016-d49cbc0e0cb9"),
                             IsRequired = true,
                             Name = "Вид публикации",
                             Number = 1,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("efa744a3-dd97-4a21-b376-8820c280bfe0"),
+                            Id = new Guid("d59ef7db-7a0e-488e-87e2-7fe38857724d"),
                             IsRequired = true,
                             Name = "Название",
                             Number = 2,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("a88d23ed-8218-462f-afda-9f63ba18309b"),
+                            Id = new Guid("b95d8c1e-4e59-47e7-ac2c-a3671fbc2982"),
                             IsRequired = false,
                             Name = "Соавторы",
                             Number = 3,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("b012df17-8f98-4624-b267-1ed0255fe3ea"),
+                            Id = new Guid("d193ae17-9cd1-40de-8b5b-f697ceadc227"),
                             IsRequired = true,
                             Name = "Количество печатных листов",
                             Number = 4,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("7c7c9464-5a86-4bf7-9e6e-2fcc59bdfa86"),
+                            Id = new Guid("72a73d9b-5811-4bd4-a1e7-c904a4d492ca"),
                             IsRequired = true,
                             Name = "Наличие грифа",
                             Number = 5,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("81080d62-7250-4988-b9ec-a11b725fbb87")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("7a248a1e-1a44-4c90-b761-a2354275ec1d")
                         },
                         new
                         {
-                            Id = new Guid("54800d50-ef14-4a1c-89f5-9d4597adcd79"),
+                            Id = new Guid("cf485c92-7295-4e7e-8617-70560cc3392f"),
                             IsRequired = true,
                             Name = "Издательство, год",
                             Number = 6,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("ad4d8d8f-f352-44bd-a978-ff125f382e05"),
+                            Id = new Guid("2ed3b8ec-4511-4365-8f17-077a01139d07"),
                             IsRequired = true,
                             Name = "Язык публикации",
                             Number = 7,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f5d5f9db-bc73-4035-8afc-71d6250fe9d2"),
+                            Id = new Guid("f937d905-7379-4d93-b5ba-cd1fd3eea41a"),
                             IsRequired = true,
                             Name = "Ссылка на открытый доступ",
                             Number = 8,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("238100db-3b59-4086-8676-042df260119c"),
+                            Id = new Guid("adbedf1d-84af-4e34-b7ea-21ebf778ea5b"),
                             IsRequired = true,
                             Name = "Название дисциплины",
                             Number = 1,
-                            TableId = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("4d5a1ee6-1d8e-4ccd-ae31-19b18e7fb27e"),
+                            Id = new Guid("992795f8-24a4-483a-b653-8fd8cfca517f"),
                             IsRequired = true,
                             Name = "Вид (лекции, лабораторные)",
                             Number = 2,
-                            TableId = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("2844155e-d3bd-424e-a441-fefe911f1742"),
+                            Id = new Guid("f6c16329-ae75-4aa9-bb1d-117e7d1e0d1f"),
                             IsRequired = true,
                             Name = "Ссылка на подтверждающий документ (в качестве подтверждения может быть выписка из учебной нагрузки по форме организации или ссылка на онлайн платформу с курсом лекций, например, «Открытое образование»)",
                             Number = 3,
-                            TableId = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("46f7bb9e-db2c-464e-85f7-73189d08ed34"),
+                            Id = new Guid("7b176b10-1311-4c2b-999d-62ed097e2561"),
                             IsRequired = true,
                             Name = "Название курса",
                             Number = 1,
-                            TableId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("b846e140-bd1d-4d87-9f1a-83b9b34d7411"),
+                            Id = new Guid("128244e6-a819-4c06-806c-b4848f14632c"),
                             IsRequired = true,
                             Name = "Соавторы",
                             Number = 2,
-                            TableId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("01cfae13-8314-4129-84b4-795e2e4ba417"),
+                            Id = new Guid("2a163d1c-e900-4cc2-b6b5-46b011624792"),
                             IsRequired = true,
                             Name = "Ссылка на платформу",
                             Number = 3,
-                            TableId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("0031aabf-61f8-4d86-a532-eb6d7a895518"),
+                            Id = new Guid("092a8001-fa46-4812-967d-5326b445fce9"),
                             IsRequired = true,
                             Name = "Год",
                             Number = 4,
-                            TableId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("1a247c93-6bec-4b7f-8998-2b09f36529ce"),
+                            Id = new Guid("3c9ac657-94c1-4c30-9885-ecdf98e0ba18"),
                             IsRequired = true,
                             Name = "Название статьи",
                             Number = 1,
-                            TableId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("8d0dfd78-6d16-4694-8a85-244a5df64cea"),
+                            Id = new Guid("d31b724c-f15a-4917-9338-a5fbf964e8cd"),
                             IsRequired = true,
                             Name = "Соавторы",
                             Number = 2,
-                            TableId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("cc2c9b55-c9e5-42cf-94cc-2dfd048ccd81"),
+                            Id = new Guid("2fbc48b7-d5cc-4806-9d5d-8e926b131687"),
                             IsRequired = true,
                             Name = "Тип публикации (категория ВАК/квартиль МБД)",
                             Number = 3,
-                            TableId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f6016f7d-5517-4cfe-9f23-240bfa4842c0"),
+                            Id = new Guid("24f683dd-7f63-44cd-b1f0-fec5fb7de11e"),
                             IsRequired = true,
                             Name = "Издание, год",
                             Number = 4,
-                            TableId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("71bd793f-ef40-43fd-849d-69085af368ab"),
+                            Id = new Guid("58ad34d8-d732-42c3-8817-12d1f457f3d4"),
                             IsRequired = false,
                             Name = "Тип идентификатора",
                             Number = 1,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f38bec2d-365d-40a9-9c57-5813542bd52b"),
+                            Id = new Guid("952cb942-7ba5-413e-97b4-0644607fd751"),
                             IsRequired = false,
                             Name = "Идентификатор",
                             Number = 2,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("924077c5-d525-405d-b1b0-0ce31f90ddb3"),
+                            Id = new Guid("902428fa-53d4-4d97-9851-9aae0f3030a1"),
                             IsRequired = true,
                             Name = "Название НИР/НИОКР",
                             Number = 1,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f6af7299-51e5-41b7-9526-6d21cd6fb4ee"),
+                            Id = new Guid("034cad1a-6e84-4801-a456-40f1f5efe2aa"),
                             IsRequired = true,
                             Name = "Сумма финансирования (тыс. руб.)",
                             Number = 2,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("b02e467a-3bb7-425c-886b-20bacfd3af29"),
+                            Id = new Guid("d9c94ea9-1562-42e4-91ba-86aa694502b2"),
                             IsRequired = true,
                             Name = "Период выполнения",
                             Number = 3,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("6bb0bfcb-68c8-433a-84b5-787b88d7f3e3"),
+                            Id = new Guid("f5cb45c0-0a4b-45f8-9c09-097e8728b11f"),
                             IsRequired = true,
                             Name = "Статус (руководитель/исполнитель)",
                             Number = 4,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("f291d87a-5d2b-4813-b150-6722a777b830"),
+                            Id = new Guid("0316691c-fdf3-428e-be02-b1d3744426d2"),
                             IsRequired = true,
                             Name = "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)",
                             Number = 5,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("3d6fddbb-d927-41b3-9a8d-da9adbc9485e"),
+                            Id = new Guid("04b8e9a5-ef53-4481-80da-da0d8fae6cc6"),
                             IsRequired = true,
                             Name = "Вид",
                             Number = 1,
-                            TableId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("4319d9ad-7b06-4878-89a3-54a049394780"),
+                            Id = new Guid("9a844693-a658-4557-87ae-5db35af5fcfb"),
                             IsRequired = true,
                             Name = "Название",
                             Number = 2,
-                            TableId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("23095a63-29d1-4d34-af39-60ee1c2e4f2a"),
+                            Id = new Guid("c3c72a8f-e6b2-47df-970e-8de5bf48b594"),
                             IsRequired = true,
                             Name = "ФИО соавторов",
                             Number = 3,
-                            TableId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("43a411f6-1aa7-4cd9-b512-f39a98e4fd31"),
+                            Id = new Guid("5d9bd5b9-1fce-4cc6-a35e-b73ad8238d89"),
                             IsRequired = true,
                             Name = "Номер РИД",
                             Number = 4,
-                            TableId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("cf55f509-4e78-4851-ae09-4537e15492b7"),
+                            Id = new Guid("ac3f6654-e276-460f-8041-f469adfdacd7"),
                             IsRequired = true,
                             Name = "Вид",
                             Number = 1,
-                            TableId = new Guid("e327245f-83d9-4d92-bc26-976e89787346"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("7d4902cc-1c4b-49aa-8061-c3aee68c065d"),
+                            Id = new Guid("95ab4c33-5f49-4869-885f-ebaf8c716a8c"),
                             IsRequired = true,
                             Name = "Название разработки",
                             Number = 2,
-                            TableId = new Guid("e327245f-83d9-4d92-bc26-976e89787346"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("a1d18b38-c387-4f57-bc37-ef4ec1f73997"),
+                            Id = new Guid("912b422e-3f21-4c14-bba9-3ada9287f8a4"),
                             IsRequired = true,
                             Name = "Название организации в которую внедрена разработка",
                             Number = 3,
-                            TableId = new Guid("e327245f-83d9-4d92-bc26-976e89787346"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("bd72b4f7-ee00-44cb-8bd5-64618469531e"),
+                            Id = new Guid("3e5831b7-8cf0-4b52-be1f-56d148bf9065"),
                             IsRequired = true,
                             Name = "Название",
                             Number = 1,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8"),
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef"),
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("2870b9ca-de48-4859-b49d-768c66bd24a0"),
+                            Id = new Guid("938cb110-a064-48dc-bdc4-165ec871d2b0"),
                             IsRequired = true,
                             Name = "Значение",
                             Number = 2,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8"),
-                            ValueTypeId = new Guid("6b3b21b6-b770-4df0-be24-07617a3f5c4d")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef"),
+                            ValueTypeId = new Guid("a29c10b5-e74c-454c-b284-4bb03e023da7")
                         });
                 });
 
@@ -1724,31 +1724,31 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             Name = "Общая информация",
                             Number = 1
                         },
                         new
                         {
-                            Id = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             Name = "Категория участников",
                             Number = 2
                         },
                         new
                         {
-                            Id = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
+                            Id = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
                             Name = "Профессиональное развитие",
                             Number = 3
                         },
                         new
                         {
-                            Id = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             Name = "Деятельность",
                             Number = 4
                         },
                         new
                         {
-                            Id = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             Name = "Деятельность",
                             Number = 5
                         });
@@ -1826,215 +1826,215 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b3c24491-c6da-47a4-801e-6398f01c84ea"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("dec7c50e-159c-4a33-8c10-6ae7eab9cef5"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "ФИО",
                             Number = 1,
                             Placeholder = "Иванов Иван Иванович",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("c7a1cee9-5574-4bbd-a833-b19f8a1b94bb"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("c3bc5252-b4a8-4770-8600-4fcc879f5931"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Дата рождения",
                             Number = 2,
                             Placeholder = "01.01.2000",
-                            ValueTypeId = new Guid("9a6b5e74-b4f1-42e1-8b86-195c4381d181")
+                            ValueTypeId = new Guid("a3d4d7de-5d4a-4e2f-b7b4-47c1b320b38a")
                         },
                         new
                         {
-                            Id = new Guid("b0a6b87c-4215-4ed7-b231-152768bebdfc"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("3d261b2d-5712-47db-a982-d51b7eb76aa5"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Домашний адрес",
                             Number = 3,
                             Placeholder = "Регион, город, улица, дом, квартира",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("cd3e1045-03ac-4128-83ec-34a7f60b4c62"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("366e943f-f9fb-49b9-b97a-fd45785211d1"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Контактный телефон",
                             Number = 4,
                             Placeholder = "+8 (900)-000-00-00",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("4b208a9b-de6c-45cd-a6d5-9c8a5c355be2"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("066c0316-8a53-4a63-966a-2fb92c5e6942"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Электронная почта",
                             Number = 5,
                             Placeholder = "user@example.com",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("8b235541-dc33-416c-9ab8-f260552d0947"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("6972e48f-2e19-4003-a817-c19816093218"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Место работы/учебы",
                             Number = 6,
                             Placeholder = "Название организации",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("cbe0c196-6f27-4fd5-aa6d-e970a85ba15f"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("1aa3dd0a-d5c3-4707-8b76-bdd6f281608f"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Адрес работы/учебы",
                             Number = 7,
                             Placeholder = "Регион, город, улица, дом",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("242fb983-7377-46f3-845c-854f8b0fc720"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("448191f3-500f-4fdf-8c94-4423da92a999"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Институт, факультет, кафедра, лаборатория",
                             Number = 8,
                             Placeholder = "Введите институт, факультет, кафедру, лабораторию",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("df63cce5-5401-428a-9d15-e52f99423e97"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("799a6c2c-a463-436b-8114-e74751db3567"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Должность",
                             Number = 9,
                             Placeholder = "Введите свою должность в организации",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("de30041f-7abf-443c-8cb2-92e4ada98059"),
-                            EditBlockId = new Guid("78e24469-91a6-4129-8d74-f8470bdbdaaf"),
+                            Id = new Guid("c889e901-2a92-4870-b4d5-83cc7f768468"),
+                            EditBlockId = new Guid("f84f1f1a-140d-4304-9c3c-2b18436f01f4"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Стаж научно-педагогической деятельности по трудовой книжке",
                             Number = 10,
                             Placeholder = "Введите свой стаж",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("ecfac8ee-c355-41cf-bf26-43a6d4f20b96"),
-                            EditBlockId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("4dcd7230-b9b3-4386-9df7-8de1dc999e66"),
+                            EditBlockId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Категория участника конкурса (Работники высших учебных заведений, отраслевых и академических институтов, работники сектора промышленности (исследователи), осуществляющие научно-исследовательскую и/или научно-педагогическую деятельность)",
                             Number = 11,
                             Placeholder = "Выберите категорию участника конкруса",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
-                            EditBlockId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
+                            EditBlockId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Ученое звание",
                             Number = 14,
                             Placeholder = "Выберите ученое звание",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("91cbc2dc-4ef6-4372-be9c-6a7e45d54815"),
-                            EditBlockId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("2f00c35b-196e-4220-8e05-e41f470b1faa"),
+                            EditBlockId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Ученая степень",
                             Number = 15,
                             Placeholder = "Выберите ученую степень",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("54a90f7e-d306-4919-b31d-f738fb65f423"),
-                            EditBlockId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("386b4d0c-415a-44ae-b0ff-96d0664208b9"),
+                            EditBlockId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Научная специальность (по классификации ВАК)",
                             Number = 16,
                             Placeholder = "Введите научную специальность (по классификации ВАК)",
-                            ValueTypeId = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49")
+                            ValueTypeId = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6")
                         },
                         new
                         {
-                            Id = new Guid("b63cd50d-6925-4578-ae4c-9cc2c6348404"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("1e80c81a-0f98-4c6d-8c1b-366729adcadc"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся кадидаты наук",
                             Number = 17,
                             Placeholder = "Введите количество",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("4c0847d9-ed81-4df5-843f-d28fc4a47c61"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("790ab317-974a-4d72-92b6-1b7447853a8d"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся доктора наук",
                             Number = 18,
                             Placeholder = "Введите количество",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("00278116-7f0d-409e-9224-011d419aeee4"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("c08ec9d8-54c3-4953-b8d8-83da6b84c391"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся бакалавры, специалисты, магистры",
                             Number = 19,
                             Placeholder = "Введите количество",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("dc816470-261b-4762-bd58-82f2de72eff6"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("b82d32e4-78c1-4370-b6bc-1e986295b8b8"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся кандидаты наук",
                             Number = 20,
                             Placeholder = "Введите количество",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         },
                         new
                         {
-                            Id = new Guid("9587a134-12ff-428c-a68b-071794f63518"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("ef5d92b2-3f99-4373-ae42-c332ada51e9d"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся доктора наук",
                             Number = 21,
                             Placeholder = "Введите количество",
-                            ValueTypeId = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc")
+                            ValueTypeId = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa")
                         });
                 });
 
@@ -2107,29 +2107,29 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("de2122f4-91a8-4083-8b8f-f9c35ce80577"),
+                            Id = new Guid("a84005eb-1779-4496-b7d4-79cf9d5c6f61"),
                             EvaluationMethodName = "EvaluateMark1",
                             IsAuto = true,
                             MaxValue = 3,
                             Name = "Баллы за объем учебной нагрузки:",
                             Number = 1,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627")
                         },
                         new
                         {
-                            Id = new Guid("d919b2a6-2d33-4d63-94fc-20a51af0ae2b"),
+                            Id = new Guid("343d9e29-0c85-4efc-94b2-8ca5b22246b7"),
                             EvaluationMethodName = "EvaluateMark2",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за количество дисциплин на иностранном языке, которые вел претендент, в предыдущем учебном году:",
                             Number = 2,
-                            TableId = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce")
+                            TableId = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627")
                         },
                         new
                         {
-                            Id = new Guid("38c4eeae-6507-49f5-a42b-f2fd9ae21702"),
+                            Id = new Guid("9ffbda46-c558-416b-b41e-f8179139802b"),
                             EvaluationMethodName = "EvaluateMark3",
-                            FieldId = new Guid("00278116-7f0d-409e-9224-011d419aeee4"),
+                            FieldId = new Guid("c08ec9d8-54c3-4953-b8d8-83da6b84c391"),
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество квалификационных работ, выполненных под руководством претендента:",
@@ -2137,9 +2137,9 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8cfc4838-95a5-423f-b167-3f2bcef111a1"),
+                            Id = new Guid("3ae5a79c-8f1e-41e2-a358-92778583be9d"),
                             EvaluationMethodName = "EvaluateMark4",
-                            FieldId = new Guid("b63cd50d-6925-4578-ae4c-9cc2c6348404"),
+                            FieldId = new Guid("1e80c81a-0f98-4c6d-8c1b-366729adcadc"),
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за количество защитившихся кандидатов наук:",
@@ -2147,9 +2147,9 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("143d8144-bffd-4ef8-b377-167a0865e107"),
+                            Id = new Guid("21242f99-fe94-4af7-909f-a90c3921121c"),
                             EvaluationMethodName = "EvaluateMark5",
-                            FieldId = new Guid("4c0847d9-ed81-4df5-843f-d28fc4a47c61"),
+                            FieldId = new Guid("790ab317-974a-4d72-92b6-1b7447853a8d"),
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за количество защитившихся докторов наук:",
@@ -2157,79 +2157,79 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("721f1580-adef-450d-b41b-b62a27b47d5e"),
+                            Id = new Guid("482076aa-859b-45ee-a710-75848bacc3bc"),
                             EvaluationMethodName = "EvaluateMark6",
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за количество подготовленных студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:",
                             Number = 6,
-                            TableId = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c")
+                            TableId = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02")
                         },
                         new
                         {
-                            Id = new Guid("7c11f4a5-8793-46dc-acc7-1272205d3ae0"),
+                            Id = new Guid("2ec4594f-fec6-4f64-94de-d4038be47b35"),
                             EvaluationMethodName = "EvaluateMark7",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество онлайн курсов на открытых площадках:",
                             Number = 7,
-                            TableId = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9")
+                            TableId = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a")
                         },
                         new
                         {
-                            Id = new Guid("cbe51dbd-0239-41ae-9acb-07453c8d6dd8"),
+                            Id = new Guid("93be4bfe-bdf6-40ee-a84a-7880dde12772"),
                             EvaluationMethodName = "EvaluateMark8",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за труды с грифом и без соавторства:",
                             Number = 8,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033")
                         },
                         new
                         {
-                            Id = new Guid("d296679e-7f8b-47fb-9413-bf9ac9591ea1"),
+                            Id = new Guid("f84c0231-2709-4501-bdc2-c6e5d92b5419"),
                             EvaluationMethodName = "EvaluateMark9",
                             IsAuto = true,
                             MaxValue = 3,
                             Name = "Баллы за труды с грифом в соавторстве:",
                             Number = 9,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033")
                         },
                         new
                         {
-                            Id = new Guid("c26dc76b-4783-4814-8c6d-1c149ddcbf79"),
+                            Id = new Guid("f1b03f4c-0ad4-4597-bbd5-a478c0fd57d1"),
                             EvaluationMethodName = "EvaluateMark10",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за труды без грифа и без соавторства:",
                             Number = 10,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033")
                         },
                         new
                         {
-                            Id = new Guid("4a123172-fb20-4fa7-bceb-d2e61cdc9b35"),
+                            Id = new Guid("1f6f6273-ee1f-4c21-8da2-7b278fe2d5a9"),
                             EvaluationMethodName = "EvaluateMark11",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за труды без грифа в соавторстве:",
                             Number = 11,
-                            TableId = new Guid("a501c362-4f48-4249-8267-096b76f2c610")
+                            TableId = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033")
                         },
                         new
                         {
-                            Id = new Guid("95e9a5cd-d463-4c3f-adec-b532fb56b82d"),
+                            Id = new Guid("cc67a686-d5ec-4242-8278-a28419fb8ea2"),
                             EvaluationMethodName = "EvaluateMark12",
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за количество практикумов и курсов лекций:",
                             Number = 12,
-                            TableId = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392")
+                            TableId = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02")
                         },
                         new
                         {
-                            Id = new Guid("0cfd810b-133d-4777-9a88-90224b7d2769"),
+                            Id = new Guid("266fe377-ffdb-4f3d-854d-727f25a38559"),
                             EvaluationMethodName = "EvaluateMark13",
-                            FieldId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
+                            FieldId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за ученое звание:",
@@ -2237,39 +2237,39 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0d691f9d-f668-4f4e-8edd-cd3f20165b89"),
+                            Id = new Guid("e01f2eb4-f5ec-4cf7-8509-8aa7fd324e89"),
                             EvaluationMethodName = "EvaluateMark14",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за награды:",
                             Number = 14,
-                            TableId = new Guid("fd988499-732b-4255-8f66-93fcef93c48d")
+                            TableId = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0")
                         },
                         new
                         {
-                            Id = new Guid("2403cc33-5b0b-4da5-b7c0-a4545cfdfb03"),
+                            Id = new Guid("29d803f9-0c97-4ab3-9f96-d0956e0fd904"),
                             EvaluationMethodName = "EvaluateMark15",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за профессиональное развитие:",
                             Number = 15,
-                            TableId = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7")
+                            TableId = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a")
                         },
                         new
                         {
-                            Id = new Guid("d9e5ca02-e409-4d74-a43a-fc80cbbc9aa3"),
+                            Id = new Guid("c1a455df-a6ee-440d-9d80-1071af65f3a8"),
                             EvaluationMethodName = "EvaluateMark16",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за научные публикации:",
                             Number = 16,
-                            TableId = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114")
+                            TableId = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e")
                         },
                         new
                         {
-                            Id = new Guid("6b7515ae-2e4d-4d11-a3c9-0b4ff25b0268"),
+                            Id = new Guid("fec459ca-d0c1-4164-b568-334999f414f3"),
                             EvaluationMethodName = "EvaluateMark19",
-                            FieldId = new Guid("dc816470-261b-4762-bd58-82f2de72eff6"),
+                            FieldId = new Guid("b82d32e4-78c1-4370-b6bc-1e986295b8b8"),
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за количество защитившихся кандидатов наук:",
@@ -2277,9 +2277,9 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d58844d3-5f44-444b-84a5-ed05b0ab3e12"),
+                            Id = new Guid("851f2eda-4b50-43e2-9a41-ea66aa408c84"),
                             EvaluationMethodName = "EvaluateMark20",
-                            FieldId = new Guid("9587a134-12ff-428c-a68b-071794f63518"),
+                            FieldId = new Guid("ef5d92b2-3f99-4373-ae42-c332ada51e9d"),
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за количество защитившихся докторов наук:",
@@ -2287,61 +2287,61 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4d786230-8090-466c-a526-afd082d59dfc"),
+                            Id = new Guid("aa8b667b-6133-4c13-bda9-7e2e38230f8d"),
                             EvaluationMethodName = "EvaluateMark21",
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за выполненные НИР/НИОКР в качестве руководителя:",
                             Number = 21,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6")
                         },
                         new
                         {
-                            Id = new Guid("dd2cb777-452b-4904-83fa-50c9b995134d"),
+                            Id = new Guid("1df82884-b2e3-4bef-8df6-3dfb6d256d38"),
                             EvaluationMethodName = "EvaluateMark22",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за выполненные НИР/НИОКР в качестве исполнителя:",
                             Number = 22,
-                            TableId = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e")
+                            TableId = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6")
                         },
                         new
                         {
-                            Id = new Guid("de755bf0-6526-490a-a36d-d77504490cd5"),
+                            Id = new Guid("052d7de8-84dc-4272-b11e-e175658c89ed"),
                             EvaluationMethodName = "EvaluateMark23",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество объектов интеллектуальной собственности:",
                             Number = 23,
-                            TableId = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16")
+                            TableId = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022")
                         },
                         new
                         {
-                            Id = new Guid("365af9cd-310a-48da-9eb9-53c90a33f648"),
+                            Id = new Guid("e447b18c-c592-46e1-94f6-352673750f42"),
                             EvaluationMethodName = "EvaluateMark24",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество разработок:",
                             Number = 24,
-                            TableId = new Guid("e327245f-83d9-4d92-bc26-976e89787346")
+                            TableId = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b")
                         },
                         new
                         {
-                            Id = new Guid("dca77c1a-4f8d-48b5-a4f8-991903e1cdb1"),
+                            Id = new Guid("97f01ee3-5f54-4f6b-aae2-721ddc4ff279"),
                             IsAuto = false,
                             MaxValue = 10,
                             Name = "Оценка уровня предоставленной работы:",
                             Number = 25,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("b19c307c-9abd-42c2-8d4c-4c2d13a7491c"),
+                            Id = new Guid("6e94f099-3820-4b80-82ec-748ad0907cef"),
                             IsAuto = false,
                             MaxValue = 10,
                             Name = "Использование в представленной работе инновационных методов (проблемного и проективного обучения, тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
                             Number = 26,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         });
                 });
 
@@ -2371,43 +2371,43 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7d327318-1b95-4429-a3f4-9b2d27fc8bdd"),
+                            Id = new Guid("f57699dc-f591-4c43-be17-bdb3e54407d8"),
                             Name = "Основной",
                             Number = 1
                         },
                         new
                         {
-                            Id = new Guid("2a36b144-e5c9-4afc-abca-3f5da981af6a"),
+                            Id = new Guid("018546a7-1999-4648-8494-cef7ae2a41a4"),
                             Name = "Образовательная деятельность",
                             Number = 2
                         },
                         new
                         {
-                            Id = new Guid("da4d938d-4ef2-47a3-ae08-f202d78e3ee5"),
+                            Id = new Guid("b2c56947-3193-4a85-86c9-e4225acb6c13"),
                             Name = "Методическая деятельность",
                             Number = 3
                         },
                         new
                         {
-                            Id = new Guid("9a89ec8e-b4cc-4825-bc5a-724ef14a3365"),
+                            Id = new Guid("8c82806f-46ec-477c-b0c2-edec8f105c8b"),
                             Name = "Профессиональные показатели",
                             Number = 4
                         },
                         new
                         {
-                            Id = new Guid("9bdb2739-4a91-4292-bb2b-7d406b75f8f4"),
+                            Id = new Guid("42c01d27-3edd-4871-ac8c-dc10c05c9204"),
                             Name = "Научно-исследовательская деятельность",
                             Number = 5
                         },
                         new
                         {
-                            Id = new Guid("0c2d5754-2636-48ca-8218-8c367b15a23d"),
+                            Id = new Guid("b78d4cd3-c30d-4336-8b32-6db3b072b0a7"),
                             Name = "Инновационная и иная деятельность",
                             Number = 6
                         },
                         new
                         {
-                            Id = new Guid("3fabed82-4b6b-4cdd-8f7d-3a7db418756d"),
+                            Id = new Guid("deb64947-8cca-4cc6-b2d7-aa068876d1f0"),
                             Name = "Конкурсная работа",
                             Number = 7
                         });
@@ -2460,81 +2460,81 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("70c4acb7-64aa-46d4-a25a-86c2556acc53"),
+                            Id = new Guid("4699176d-ee88-4d28-b760-36c41d0eaee9"),
                             IsPrefilled = true,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            Id = new Guid("d29115dd-4a34-40f3-bbf1-52c46f909bb0"),
+                            Id = new Guid("fd822556-7cce-4728-a1c6-2aeac15ae4d8"),
                             IsPrefilled = true,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            Id = new Guid("372570d2-b8e5-4159-8cdd-7dc5d07566b1"),
+                            Id = new Guid("cbad16e6-3792-48af-8cee-4266aa879caa"),
                             IsPrefilled = true,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            Id = new Guid("ba54e270-9203-43a9-889f-a5eac891d7bb"),
+                            Id = new Guid("402b5da1-e546-48d3-a529-e5ae52f54d1e"),
                             IsPrefilled = true,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            Id = new Guid("7c6d7fbc-b1e2-4832-9751-6971c818b00c"),
+                            Id = new Guid("ec9d3934-94a5-41a2-9469-558a9432d81f"),
                             IsPrefilled = true,
-                            TableId = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4")
+                            TableId = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2")
                         },
                         new
                         {
-                            Id = new Guid("a8d839a5-3fae-420e-8189-bb174f043de0"),
+                            Id = new Guid("a07bf6ea-47c5-4705-b653-5b3dfc5386f5"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("4c9d50e7-881f-460d-8515-9f160a5fde97"),
+                            Id = new Guid("c82e5949-f6b4-4724-a1b3-b439d8a3c30c"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("9c22e8f5-d94d-48b1-8cdb-f4eec9bf18b4"),
+                            Id = new Guid("fcb9a4f1-c2cc-486c-9b48-c0378d9195a5"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("7d6f738d-17c8-47da-8a0b-661bfb43b403"),
+                            Id = new Guid("3c46ded4-d623-4ab9-9032-0a2e927b2dd7"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("97b9e443-147d-480c-8d03-d5a6c92d4754"),
+                            Id = new Guid("de535381-df07-407c-8503-99925e7b3ab2"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("c60d4623-8597-4192-8aa6-fa4368fb23c0"),
+                            Id = new Guid("4624369a-47bb-4e1c-8382-9af732c6b532"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("fef86462-e1e6-40a2-8ddc-f5ec0a955980"),
+                            Id = new Guid("40f22299-5c5a-49d9-8539-d0cfa4ec1a39"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         },
                         new
                         {
-                            Id = new Guid("ce6bce24-b73d-4401-9530-1eada73b5848"),
+                            Id = new Guid("8d600746-6328-4a27-82cc-9ad37258abbd"),
                             IsPrefilled = true,
-                            TableId = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8")
+                            TableId = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef")
                         });
                 });
 
@@ -2565,153 +2565,177 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4c26eddd-f712-4bf5-8195-1d2af2107c9e"),
-                            FieldId = new Guid("ecfac8ee-c355-41cf-bf26-43a6d4f20b96"),
+                            Id = new Guid("2c5103ad-ef50-4968-9ce6-f00864804e9f"),
+                            FieldId = new Guid("4dcd7230-b9b3-4386-9df7-8de1dc999e66"),
                             Value = "Докторанты, имеющие ученую степень кандидата наук"
                         },
                         new
                         {
-                            Id = new Guid("9eff6fb1-aa97-43fe-90e0-7584672a3207"),
-                            FieldId = new Guid("ecfac8ee-c355-41cf-bf26-43a6d4f20b96"),
+                            Id = new Guid("719248d1-b720-41b8-98c5-73643a5245c5"),
+                            FieldId = new Guid("4dcd7230-b9b3-4386-9df7-8de1dc999e66"),
                             Value = "Имеющие ученую степень доктора наук"
                         },
                         new
                         {
-                            Id = new Guid("c6b81e81-f48c-4d0d-b7d1-6027330348db"),
-                            FieldId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
+                            Id = new Guid("e2db9f05-175c-42b8-a0c9-61479937bd10"),
+                            FieldId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
                             Value = "Нет"
                         },
                         new
                         {
-                            Id = new Guid("8146a6dd-8323-4caa-b88c-e73960c9ba63"),
-                            FieldId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
+                            Id = new Guid("644512d2-a8ac-4660-938b-799d381cf6d5"),
+                            FieldId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
                             Value = "Доцент"
                         },
                         new
                         {
-                            Id = new Guid("24999737-c581-4a0c-9000-ee1be2f1cfa2"),
-                            FieldId = new Guid("1f0d2214-3e26-4e1c-943f-c40d1ec31802"),
+                            Id = new Guid("5b50eb8a-a674-41a2-814b-69d2b721b9c8"),
+                            FieldId = new Guid("539522a2-3453-4500-94aa-74b66a9a6fca"),
                             Value = "Профессор"
                         },
                         new
                         {
-                            Id = new Guid("2c7dc8c5-0f1e-48bc-9dd2-c38da0c4f671"),
-                            ColumnId = new Guid("d312793d-7ef3-440a-90b3-72453cd162bb"),
+                            Id = new Guid("1226f498-e3c9-412c-bdbc-86061a1a32cf"),
+                            ColumnId = new Guid("e5fffa64-1afd-47d9-84b2-8ec5a47a9688"),
                             Value = "Региональный"
                         },
                         new
                         {
-                            Id = new Guid("57eb10d9-3e91-44f3-b811-4abe44f2aee4"),
-                            ColumnId = new Guid("d312793d-7ef3-440a-90b3-72453cd162bb"),
+                            Id = new Guid("1244bfd3-4a41-459b-83ea-d5352a0977cb"),
+                            ColumnId = new Guid("e5fffa64-1afd-47d9-84b2-8ec5a47a9688"),
                             Value = "Всероссийский"
                         },
                         new
                         {
-                            Id = new Guid("b8e52c70-c088-450b-a47a-d78a58ed8365"),
-                            ColumnId = new Guid("d312793d-7ef3-440a-90b3-72453cd162bb"),
+                            Id = new Guid("269fe772-81ac-49e8-a107-38fa6abfef7e"),
+                            ColumnId = new Guid("e5fffa64-1afd-47d9-84b2-8ec5a47a9688"),
                             Value = "Международный"
                         },
                         new
                         {
-                            Id = new Guid("39f56909-0d09-4702-8355-345797345aa0"),
-                            ColumnId = new Guid("6067a92a-f1f5-49c2-87cf-6398f02d70f0"),
+                            Id = new Guid("c3f78573-bc54-4840-bd65-6d21c7cafbf8"),
+                            ColumnId = new Guid("a14943c0-143b-4a26-b016-d49cbc0e0cb9"),
                             Value = "Учебное и/или учебно-методическое пособие"
                         },
                         new
                         {
-                            Id = new Guid("64faab79-616d-49df-9f25-e36f0e302cd9"),
-                            ColumnId = new Guid("6067a92a-f1f5-49c2-87cf-6398f02d70f0"),
+                            Id = new Guid("e55d1792-c1ce-419f-8309-9ba870c00f58"),
+                            ColumnId = new Guid("a14943c0-143b-4a26-b016-d49cbc0e0cb9"),
                             Value = "Учебник"
                         },
                         new
                         {
-                            Id = new Guid("8cf7f295-5c3c-4810-a5d4-72af7e2fc56f"),
-                            ColumnId = new Guid("6067a92a-f1f5-49c2-87cf-6398f02d70f0"),
+                            Id = new Guid("997dbdb2-67bf-4230-8ab6-df441647257a"),
+                            ColumnId = new Guid("a14943c0-143b-4a26-b016-d49cbc0e0cb9"),
                             Value = "Монография"
                         },
                         new
                         {
-                            Id = new Guid("26c9a4ad-4331-418a-9878-fe82e713875f"),
-                            ColumnId = new Guid("4d5a1ee6-1d8e-4ccd-ae31-19b18e7fb27e"),
+                            Id = new Guid("2fc60c81-8213-49ff-8af4-30fc2234175d"),
+                            ColumnId = new Guid("992795f8-24a4-483a-b653-8fd8cfca517f"),
                             Value = "Лекции"
                         },
                         new
                         {
-                            Id = new Guid("bce51400-9029-4c6c-bfd6-7534a6165344"),
-                            ColumnId = new Guid("4d5a1ee6-1d8e-4ccd-ae31-19b18e7fb27e"),
+                            Id = new Guid("2f58785f-6720-4758-a07e-3cb244723684"),
+                            ColumnId = new Guid("992795f8-24a4-483a-b653-8fd8cfca517f"),
                             Value = "Лабораторные"
                         },
                         new
                         {
-                            Id = new Guid("2dbe2414-04b2-42fa-890e-22fb7ba30b5c"),
-                            ColumnId = new Guid("6bb0bfcb-68c8-433a-84b5-787b88d7f3e3"),
+                            Id = new Guid("ab231df2-815f-4df6-9c62-c063651a98ce"),
+                            ColumnId = new Guid("f5cb45c0-0a4b-45f8-9c09-097e8728b11f"),
                             Value = "Руководитель"
                         },
                         new
                         {
-                            Id = new Guid("78778756-0229-40b8-a868-5584dfb3f2e9"),
-                            ColumnId = new Guid("6bb0bfcb-68c8-433a-84b5-787b88d7f3e3"),
+                            Id = new Guid("981cfba2-68d2-440d-9b46-0a028f92f6de"),
+                            ColumnId = new Guid("f5cb45c0-0a4b-45f8-9c09-097e8728b11f"),
                             Value = "Исполнитель"
                         },
                         new
                         {
-                            Id = new Guid("032b0c8e-572a-4b3e-9060-984c1d845f7a"),
-                            ColumnId = new Guid("3d6fddbb-d927-41b3-9a8d-da9adbc9485e"),
+                            Id = new Guid("3cf4b9a2-839e-4fbd-90bd-bae80d47ab49"),
+                            ColumnId = new Guid("04b8e9a5-ef53-4481-80da-da0d8fae6cc6"),
                             Value = "Изобретение"
                         },
                         new
                         {
-                            Id = new Guid("9231e843-4e41-456f-b2a2-f8fc25ccc3ff"),
-                            ColumnId = new Guid("3d6fddbb-d927-41b3-9a8d-da9adbc9485e"),
+                            Id = new Guid("b056f941-8b0f-4f09-9051-7fcb855ee381"),
+                            ColumnId = new Guid("04b8e9a5-ef53-4481-80da-da0d8fae6cc6"),
                             Value = "Полезная модель"
                         },
                         new
                         {
-                            Id = new Guid("6f7e1b16-748b-46f2-94d0-31c19cd2474e"),
-                            ColumnId = new Guid("3d6fddbb-d927-41b3-9a8d-da9adbc9485e"),
+                            Id = new Guid("8e6b696b-9243-462a-b782-2776d309b878"),
+                            ColumnId = new Guid("04b8e9a5-ef53-4481-80da-da0d8fae6cc6"),
                             Value = "База данных"
                         },
                         new
                         {
-                            Id = new Guid("88d31a88-576f-4d23-805f-b083e3746a83"),
-                            ColumnId = new Guid("cf55f509-4e78-4851-ae09-4537e15492b7"),
+                            Id = new Guid("9a7e3d84-e2e1-4131-82b5-09c6d1f38665"),
+                            ColumnId = new Guid("ac3f6654-e276-460f-8041-f469adfdacd7"),
                             Value = "Изобретение"
                         },
                         new
                         {
-                            Id = new Guid("bf3129b3-b3de-4e24-b007-824148dc5789"),
-                            ColumnId = new Guid("cf55f509-4e78-4851-ae09-4537e15492b7"),
+                            Id = new Guid("4f2d61a3-7d9e-45ae-b3d0-0455b08780a0"),
+                            ColumnId = new Guid("ac3f6654-e276-460f-8041-f469adfdacd7"),
                             Value = "Полезная модель"
                         },
                         new
                         {
-                            Id = new Guid("c336672d-1f14-43f7-9d01-ddd49f92ab4b"),
-                            ColumnId = new Guid("cf55f509-4e78-4851-ae09-4537e15492b7"),
+                            Id = new Guid("97f6675c-70ef-4f7f-8a43-c6e6f406e788"),
+                            ColumnId = new Guid("ac3f6654-e276-460f-8041-f469adfdacd7"),
                             Value = "База данных"
                         },
                         new
                         {
-                            Id = new Guid("cff66a2b-b90a-406d-9ab0-236df0468d19"),
-                            ColumnId = new Guid("a88d23ed-8218-462f-afda-9f63ba18309b"),
+                            Id = new Guid("a91ebddd-f383-4afc-9131-490228c233f8"),
+                            ColumnId = new Guid("b95d8c1e-4e59-47e7-ac2c-a3671fbc2982"),
                             Value = "Есть"
                         },
                         new
                         {
-                            Id = new Guid("5276f96b-d20b-4bef-bbd0-33527eea201c"),
-                            ColumnId = new Guid("a88d23ed-8218-462f-afda-9f63ba18309b"),
+                            Id = new Guid("cd2e388d-ad86-44a1-a7a5-ca37b994673d"),
+                            ColumnId = new Guid("b95d8c1e-4e59-47e7-ac2c-a3671fbc2982"),
                             Value = "Нет"
                         },
                         new
                         {
-                            Id = new Guid("9caf07e2-5f1e-49dc-9dea-eba0e909c234"),
-                            ColumnId = new Guid("ad4d8d8f-f352-44bd-a978-ff125f382e05"),
+                            Id = new Guid("fc570c34-1e1b-4863-813c-06a889fc8925"),
+                            ColumnId = new Guid("2ed3b8ec-4511-4365-8f17-077a01139d07"),
                             Value = "Русский"
                         },
                         new
                         {
-                            Id = new Guid("251415d7-752c-4371-aef8-b4ff248c2ea0"),
-                            ColumnId = new Guid("ad4d8d8f-f352-44bd-a978-ff125f382e05"),
+                            Id = new Guid("6a499123-640d-4682-bfca-8db3947858a6"),
+                            ColumnId = new Guid("2ed3b8ec-4511-4365-8f17-077a01139d07"),
                             Value = "Иностранный"
+                        },
+                        new
+                        {
+                            Id = new Guid("1faf2980-619c-4997-800d-45ffd81e2b86"),
+                            ColumnId = new Guid("d31b724c-f15a-4917-9338-a5fbf964e8cd"),
+                            Value = "Есть"
+                        },
+                        new
+                        {
+                            Id = new Guid("956f58f4-61c6-4c7c-949e-3b89cc8cbb8b"),
+                            ColumnId = new Guid("d31b724c-f15a-4917-9338-a5fbf964e8cd"),
+                            Value = "Нет"
+                        },
+                        new
+                        {
+                            Id = new Guid("a72fd8b6-b2df-4da7-9dc2-fcfde2672240"),
+                            FieldId = new Guid("2f00c35b-196e-4220-8e05-e41f470b1faa"),
+                            Value = "Кандидат наук"
+                        },
+                        new
+                        {
+                            Id = new Guid("602aa267-1836-4fd2-a34a-07f042a12990"),
+                            FieldId = new Guid("2f00c35b-196e-4220-8e05-e41f470b1faa"),
+                            Value = "Доктор наук"
                         });
                 });
 
@@ -2750,8 +2774,8 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fd988499-732b-4255-8f66-93fcef93c48d"),
-                            EditBlockId = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
+                            Id = new Guid("3d9ded89-cb5a-43fa-88ea-bf561c5bd0c0"),
+                            EditBlockId = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Награждение премиями, наградами в области научно-педагогической деятельности городского, всероссийского или международного уровня (в том числе зарубежными), победы в профессиональных конкурсах за весь период научно-педагогической деятельности",
@@ -2759,8 +2783,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c21c755f-bdad-4091-a5bc-3f5205e416a7"),
-                            EditBlockId = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
+                            Id = new Guid("cb4c120c-f010-4377-b1cf-09ce7154f04a"),
+                            EditBlockId = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Сведения о профессиональном развитии участника конкурса за последние 5 лет (курсы повышения квалификации/ стажировки)",
@@ -2768,8 +2792,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("77eb614a-c11a-47aa-b75e-5e7d9c3fb2ce"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("56eba3e8-2e73-47dd-b9d2-673e4bde0627"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Учебная нагрузка за предыдущий учебный год (за исключением методической)",
@@ -2777,8 +2801,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("106b5ae5-8850-495b-952e-205e1ca9090c"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("383f5eaf-7fbf-4971-85cf-e62bd37dee02"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список подготовленных под руководством участника конкурса студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание",
@@ -2786,8 +2810,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("af53b5bc-75a4-4187-b58f-09676075c5cf"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("d5a7193f-2d99-4116-bac2-8a1905c0765c"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Сведения о работе, выполняемой участником конкурса в области научно-педагогической деятельности по совместительству (не по основному месту работы) в высшем учебном заведении, академическом институте, отраслевом научно-исследовательском институте, профессиональной образовательной организации, общеобразовательной организации за предыдущий учебный год",
@@ -2795,8 +2819,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a501c362-4f48-4249-8267-096b76f2c610"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("18f5e8e8-0edf-48f7-92f3-56e41b1a6033"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список трудов участника конкурса. Количество монографий, учебников, учебных и учебно-методических пособий с грифами УМО, Министерств РФ или государственных академий наук, изданных типографскимспособом за весь период научно-педагогической деятельности, либо аналогичных работ на иностранномязыке без грифа УМО",
@@ -2804,8 +2828,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2b0a98e0-7704-485b-897e-fc6d44d8f392"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("9a259727-1e5a-4b2a-9d9f-a34ba39a3b02"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список лабораторных практикумов и курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет",
@@ -2813,8 +2837,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a398c8e1-fe9a-44ae-b231-1822a68a00a9"),
-                            EditBlockId = new Guid("bc171149-d853-46ab-bb9c-aea1409de2e8"),
+                            Id = new Guid("a3a6fe17-71c2-406d-9b51-0f6164c4279a"),
+                            EditBlockId = new Guid("912b46ce-2a54-4496-889c-92cf69749b39"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет",
@@ -2822,8 +2846,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9d8e029d-4e19-4240-918a-7bf33e1c1114"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("a6bdfdf4-fe5f-47b1-93b3-a40e738c454e"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список научных публикаций за последние 5 лет",
@@ -2831,8 +2855,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2cce40ae-a066-4c90-b72d-06d947900dd4"),
-                            EditBlockId = new Guid("e3601379-49ff-4ac7-ab2f-7aa5b61f67f2"),
+                            Id = new Guid("6970f8e4-c3b2-4fe5-b90b-e5b9e07f3db2"),
+                            EditBlockId = new Guid("75471bdc-c4f7-4c1a-bcfe-dcd552a66325"),
                             IsDisplayedOnVotingPage = true,
                             IsPrefilled = true,
                             Name = "Персональные идентификаторы",
@@ -2840,8 +2864,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fe0bcf0c-159a-4213-88d2-99cce9df0f4e"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("59308806-313b-4d9a-8e70-d99114b35bc6"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет",
@@ -2849,8 +2873,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4661b87f-6714-4861-85d8-00c252fa8a16"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("2029b074-fd67-43de-b5a9-59e6c2777022"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список объектов интеллектуальной собственности, созданных участником конкурса за весь период научно-педагогической деятельности (созданных самостоятельно / в соавторстве), официально зарегистрированных в установленном порядке (в России / за рубежом)",
@@ -2858,8 +2882,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e327245f-83d9-4d92-bc26-976e89787346"),
-                            EditBlockId = new Guid("0e80f5a3-de17-4a37-8f0c-7160a0778d9e"),
+                            Id = new Guid("47455c8e-ff7c-457f-a3d0-56713242210b"),
+                            EditBlockId = new Guid("2633d2f7-9d3e-42fc-997d-e102e0358ed7"),
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Перечень разработок, внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)",
@@ -2867,8 +2891,8 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
-                            Id = new Guid("420df18e-d092-4ae4-87f5-0cd26fe06cb8"),
-                            EditBlockId = new Guid("0e495b14-627a-4d15-97cd-ef4c1b9c2bdb"),
+                            Id = new Guid("50a2302d-6a17-46fc-b8d4-ece0df6381ef"),
+                            EditBlockId = new Guid("3261204d-6cee-47c7-8720-d0b1094ab99a"),
                             IsDisplayedOnVotingPage = true,
                             IsPrefilled = true,
                             Name = "Краткая аннотация конкурсной работы",
@@ -2902,13 +2926,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bcc7087-f4a2-41be-abf2-2d862a870269"),
+                            Id = new Guid("42490083-2b0a-4fb7-968e-783f3059e926"),
                             Name = "Научно-педагогическая деятельность",
                             Number = 1
                         },
                         new
                         {
-                            Id = new Guid("6ebbbbb7-c487-4c7f-84d3-2e7155362fc8"),
+                            Id = new Guid("87208b10-2eba-4975-978e-1a8a3e929876"),
                             Name = "Научно-исследовательская деятельность",
                             Number = 2
                         });
@@ -2956,27 +2980,27 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("65f857a3-5bc0-4204-aa6c-9fc07e8662cc"),
+                            Id = new Guid("a52aabd5-9950-4fa3-8d6b-aa2d1e3cddfa"),
                             Name = "int"
                         },
                         new
                         {
-                            Id = new Guid("b01ac1b2-814a-4e67-86d6-0f1d6288cc49"),
+                            Id = new Guid("13c5141f-1803-4281-b7cf-2e06f7131ba6"),
                             Name = "string"
                         },
                         new
                         {
-                            Id = new Guid("81080d62-7250-4988-b9ec-a11b725fbb87"),
+                            Id = new Guid("7a248a1e-1a44-4c90-b761-a2354275ec1d"),
                             Name = "bool"
                         },
                         new
                         {
-                            Id = new Guid("9a6b5e74-b4f1-42e1-8b86-195c4381d181"),
+                            Id = new Guid("a3d4d7de-5d4a-4e2f-b7b4-47c1b320b38a"),
                             Name = "DateTime"
                         },
                         new
                         {
-                            Id = new Guid("6b3b21b6-b770-4df0-be24-07617a3f5c4d"),
+                            Id = new Guid("a29c10b5-e74c-454c-b284-4bb03e023da7"),
                             Name = "TextArea"
                         });
                 });
