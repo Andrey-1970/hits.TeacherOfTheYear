@@ -1,6 +1,8 @@
 ﻿@page "/application-form"
 @using ServerApp.Data.Models.EditModel
 
+@attribute [Authorize]
+
 @inject IDataService data
 @inject IJSRuntime jsRuntime
 @inject NavigationManager nav
