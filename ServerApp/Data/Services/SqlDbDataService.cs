@@ -874,14 +874,16 @@ namespace ServerApp.Data.Services
             if (user != null && apps.Any(e => e.Votes.Any(v => v.VoterId == user.Id)))
             {
                 var currentApp = apps.FirstOrDefault(e => e.Votes.Any(v => v.VoterId == user.Id));
-                var curAppModel = new ListItemModel(currentApp!);
-                curAppModel.IsVoted = true;
+                var curAppModel = new ListItemModel(currentApp!)
+                {
+                    IsVoted = true
+                };
                 res.Add(curAppModel);
                 apps.Remove(currentApp!);
             }
 
             res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ListItemModel(e)));
-            return res.ToArray();
+            return [.. res];
         }
 
         public async Task<VoteModel> GetVoteModelAsync(Guid appId)
