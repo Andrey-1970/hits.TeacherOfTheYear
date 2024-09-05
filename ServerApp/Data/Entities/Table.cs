@@ -5,7 +5,7 @@ namespace ServerApp.Data.Entities
     public class Table : BaseEntity
     {
         public int Number { get; set; }
-        [MaxLength(255)] 
+        [MaxLength(512)] 
         public string? Name { get; set; }
 
         public bool IsPrefilled { get; set; } = false; //todo: сделать настройку строк в админ панели
