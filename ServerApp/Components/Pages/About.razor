@@ -2,6 +2,8 @@
 
 @using System.Timers;
 
+@inject NavigationManager navigate
+
 <PageTitle>О конкурсе</PageTitle>
 
 <div class="block-title">
@@ -82,13 +84,26 @@
                 To="/voting#">
             Проголосовать
         </Button>
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Primary"
-                To="/application-form#">
-            Подать заявку на участие
-        </Button>
+        <AuthorizeView>
+            <NotAuthorized>
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        @onclick="ShowConfirmationAsync">
+                    Подать заявку на участие
+                </Button>
+            </NotAuthorized>
+            <Authorized>
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/application-form#">
+                    Подать заявку на участие
+                </Button>
+            </Authorized>
+        </AuthorizeView>
     </div>
 </div>
+
+<ConfirmDialog @ref="dialog" />
 
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ПРИЗОВ -->
 <div class="block-title">
@@ -124,6 +139,8 @@
 
     private Timer? timer;
 
+    private ConfirmDialog? dialog;
+
     protected override void OnInitialized()
     {
 
@@ -135,6 +152,26 @@
 
         // Запуск таймера
         timer.Start();
+    }
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Для подачи заявки на участие необходима авторизация на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigate.NavigateTo("/application-form#");
+        }
     }
 
     private void UpdateCountdown(object sender, ElapsedEventArgs e)

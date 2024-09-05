@@ -77,7 +77,7 @@
                     <NotAuthorized>
                         <Button Color="ButtonColor.Primary"
                                 Class="w-100"
-                                @onclick="NavToLogin">
+                                @onclick="ShowConfirmationAsync">
                             Проголосовать за участника
                         </Button>
                     </NotAuthorized>
@@ -101,6 +101,8 @@ else
     </div>
 }
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     [Parameter]
     public string? TrackId { get; set; }
@@ -113,6 +115,8 @@ else
 
     VoteModel? participant;
 
+    private ConfirmDialog? dialog;
+
     protected override async Task OnInitializedAsync()
     {
         if (Guid.TryParse(ParticipantId, out var participantId))
@@ -120,6 +124,26 @@ else
             participant = await data.GetVoteModelAsync(participantId);
             participant.Fields = await data.GetFieldModelsForVotePageAsync(participantId);
             participant.Tables = await data.GetTableModelsForVotePageAsync(participantId);
+        }
+    }
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Чтобы проголосовать за участника необходимо авторизоваться на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
         }
     }
 
@@ -133,10 +157,5 @@ else
         await data.CastVoteAsync(participant!.Id);
         participant.IsVoteOfThisApplication = true;
         participant.TotalVotes += 1;
-    }
-
-    private void NavToLogin()
-    {
-        navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
     }
 }
