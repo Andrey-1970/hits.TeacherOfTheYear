@@ -887,7 +887,8 @@ namespace ServerApp.Data.Services
         public async Task<VoteModel> GetVoteModelAsync(Guid appId)
         {
             var user = await auth.GetUserAsync();
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
+                      throw new InvalidOperationException("App not found."); ;
             if (user == null)
             {
                 return new VoteModel()
