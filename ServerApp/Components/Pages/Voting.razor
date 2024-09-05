@@ -19,16 +19,19 @@
 
         <div class="block-content">
             <Accordion Class="w-100">
-                @foreach (var track in tracks)
+                @if (tracks != null && categories != null)
                 {
-                    <AccordionItem Title="@track.Name">
-                        <Content>
-                            @foreach (var category in categories)
-                            {
-                                <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category"/>
-                            }
-                        </Content>
-                    </AccordionItem>
+                    @foreach (var track in tracks)
+                    {
+                        <AccordionItem Title="@track.Name">
+                            <Content>
+                                @foreach (var category in categories)
+                                {
+                                    <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category"/>
+                                }
+                            </Content>
+                        </AccordionItem>
+                    }
                 }
             </Accordion>
 
@@ -37,8 +40,8 @@
 </div>
 
 @code {
-    IEnumerable<TrackModel> tracks = default!;
-    CategoryModel[] categories = default!;
+    TrackModel[]? tracks;
+    CategoryModel[]? categories;
 
     protected override async Task OnInitializedAsync()
     {

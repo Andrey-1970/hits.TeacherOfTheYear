@@ -10,7 +10,7 @@ public class CategoryModel
     }
     public CategoryModel(Category category)
     {
-        ArgumentNullException.ThrowIfNull(category);
+        //ArgumentNullException.ThrowIfNull(category);
         Id = category.Id;
         Number = category.Number;
         Name = category.Name;

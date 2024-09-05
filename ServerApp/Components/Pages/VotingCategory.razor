@@ -12,12 +12,12 @@
     <div class="block">
         <div class="block-title">
             <div class="title-direction">
-                <div class="block-title-text">@track.Name</div>
+                <div class="block-title-text">@track?.Name</div>
                 <div class="text-direction">
                     <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
                 </div>
             </div>
-            <div class="block-subtitle-text">@category.Name</div>
+            <div class="block-subtitle-text">@category?.Name</div>
             <div class="form-text">
                 Выберите кандидата для голосования
             </div>

@@ -39,7 +39,7 @@ namespace ServerApp.Tests
             mockOfAuthorization.Setup(p => p.GetUserAsync())
                 .Returns(Task.FromResult<UserInfo?>(userInfo));
 
-            service = new SqlDbDataService(context, mockOfAuthorization.Object);
+            //service = new SqlDbDataService(context, mockOfAuthorization.Object);
         }
 
         [TestMethod]

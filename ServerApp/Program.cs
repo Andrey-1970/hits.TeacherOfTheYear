@@ -35,6 +35,7 @@ namespace ServerApp
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                //options.UseSqlite("Data source=..\\Data\\SQLite\\data.db"));
                 options.UseNpgsql(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -47,7 +48,7 @@ namespace ServerApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddBlazorBootstrap();
-            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+            builder.Services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAuthorization, AppAuthorization>();
             builder.Services.AddScoped<IAdmin, AdminService>();
