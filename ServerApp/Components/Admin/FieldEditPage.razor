@@ -1,9 +1,6 @@
 ﻿@page "/admin/fields/{Id:guid}"
 @page "/admin/fields/new"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Field</PageTitle>
 
 <div class="block">
@@ -34,6 +31,11 @@
             <div class="form-text form-input mb-3 text-end">
                 Field обязательно для заполнения:
                 <InputCheckbox class="darker-border-checkbox form-check-input mt-0" @bind-Value="field.IsRequired" />
+            </div>
+
+            <div class="form-text form-input mb-3 text-end">
+                Field отображается на странице голосования:
+                <InputCheckbox class="darker-border-checkbox form-check-input mt-0" @bind-Value="field.IsDisplayedOnVotingPage" />
             </div>
 
             <div class="form-text">ValueType</div>

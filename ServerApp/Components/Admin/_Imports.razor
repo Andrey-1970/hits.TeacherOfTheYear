@@ -1,1 +1,6 @@
 ﻿@using ServerApp.Data.Entities
+
+@inject IAdmin data
+@inject NavigationManager navigation
+
+@attribute [Authorize(Roles = "Admin")]

@@ -1,4 +1,6 @@
 ﻿@page "/assessment/application/{Id}"
+@attribute [Authorize(Roles = "Admin, Expert")]
+
 @using ServerApp.Data.Models.MarkModel
 @using ServerApp.Data.Models.ReviewModel
 

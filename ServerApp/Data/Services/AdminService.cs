@@ -7,6 +7,8 @@ namespace ServerApp.Data.Services
     {
         public IAdminBase<Track> Track => new AdminBaseService<Track>(context);
 
+        public IAdminBase<Category> Category => new AdminBaseService<Category>(context);
+
         public IAdminBase<EditBlock> EditBlock => new AdminBaseService<EditBlock>(context);
 
         public IAdminBase<MarkBlock> MarkBlock => new AdminBaseService<MarkBlock>(context);

@@ -1,31 +1,31 @@
-﻿@page "/admin/editblocks"
+﻿@page "/admin/categories"
 
-<PageTitle>Настройка EditBlocks</PageTitle>
+<PageTitle>Настройка Categories</PageTitle>
 
 <div class="block">
     <div class="block-content">
-        @if (blocks != null)
+        @if (categories != null)
         {
             <Card class="w-100">
-                <CardHeader>EditBlocks</CardHeader>
+                <CardHeader>Categories</CardHeader>
                 <CardBody>
                     <div class="table-container">
                         <table class="table table-hover table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="p-2">Название EditBlock</th>
+                                    <th class="p-2">Название Category</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var block in blocks)
+                                @foreach (var category in categories)
                                 {
                                     <tr>
                                         <td class="p-2">
                                             <div class="d-flex justify-content-between">
-                                                @block.Name
+                                                @category.Name
                                                 <div>
-                                                    <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(block.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await RemoveBlock(block)" />
+                                                    <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(category.Id)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveCategory(category)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -37,32 +37,31 @@
                 </CardBody>
             </Card>
         }
-
         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-            <a type="button" class="btn btn-primary" href="/admin/editblocks/new">Добавить</a>
+            <a type="button" class="btn btn-primary" href="/admin/categories/new">Добавить</a>
             <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
         </div>
     </div>
 </div>
 
 @code {
-    IEnumerable<EditBlock> blocks = default!;
+    IEnumerable<Category> categories = default!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        blocks = await data.EditBlock.GetAllAsync();
+        categories = await data.Category.GetAllAsync();
     }
-    async Task RemoveBlock(EditBlock block)
+    async Task RemoveCategory(Category category)
     {
-        await data.EditBlock.RemoveAsync(block);
-        blocks = await data.EditBlock.GetAllAsync();
+        await data.Category.RemoveAsync(category);
+        categories = await data.Category.GetAllAsync();
 
         StateHasChanged();
     }
 
     void GoTo(Guid id)
     {
-        navigation.NavigateTo($"/admin/editblocks/{id}");
+        navigation.NavigateTo($"/admin/categories/{id}");
     }
 }
