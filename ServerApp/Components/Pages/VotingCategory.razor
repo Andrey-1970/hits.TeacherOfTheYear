@@ -24,12 +24,21 @@
             <input type="text" class="form-control" placeholder="Поиск по названию" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 
-        <div class="d-flex flex-wrap justify-content-center g-1 mt-1 mb-1">
-            @if (participants is not null)
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            @if (filtredParticipants is not null)
             {
-                @foreach (var participant in filtredParticipants)
+                @if (filtredParticipants.Any())
                 {
-                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
+                    @foreach (var participant in filtredParticipants)
+                    {
+                        <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center">
+                        Не найдены кандидаты
+                    </div>
                 }
             }
             else
@@ -51,10 +60,10 @@
 
     TrackModel track = default!;
     CategoryModel category = default!;
-    ListItemModel[] participants = [];
+    ListItemModel[]? participants;
 
     string searchQuery = string.Empty;
-    ListItemModel[] filtredParticipants = [];
+    ListItemModel[]? filtredParticipants;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -91,7 +100,7 @@
         }
         else
         {
-            filtredParticipants = participants.Where(p =>
+            filtredParticipants = participants!.Where(p =>
                 (p.FullName != null && p.FullName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
                 (p.WorkPlace != null && p.WorkPlace.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
                 (p.Faculty != null && p.Faculty.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))).ToArray();

@@ -2,7 +2,13 @@
 
 @inject IDataService data;
 
-<div class="category-card @GetCardClass()" type="button" @onclick="async () => await OnClickHandler()">
+<div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
+    @if (IsVoted)
+    {
+        <div class="d-flex position-absolute top-0 end-0">
+            <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
+        </div>
+    }
     <div class="category-description">
         <div class="category-title">@Title</div>
     </div>
@@ -12,16 +18,16 @@
 @code {
     [Parameter, EditorRequired]
     public string Title { get; set; } = default!;
-    
+
     [Parameter, EditorRequired]
     public TrackModel Track { get; set; } = default!;
-    
+
     [Parameter, EditorRequired]
     public CategoryModel Category { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
-    
+
     public bool IsVoted = false;
 
     protected override async Task OnInitializedAsync()
@@ -33,10 +39,4 @@
     {
         await OnClick.InvokeAsync();
     }
-    
-    private string GetCardClass()
-    {
-        return IsVoted ? "voted" : "";
-    }
-
 }

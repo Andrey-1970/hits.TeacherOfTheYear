@@ -2,8 +2,13 @@
 
 @inject NavigationManager navigate
 
-<div class="card-form @GetCardClass()" type="button" @onclick="async () => await OnClickHandler()">
-    <div class="professor-avatar"></div>
+<div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
+    <div class="d-flex professor-avatar justify-content-end align-items-start">
+        @if (Participant != null && Participant.IsVoted)
+        {
+            <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
+        }
+    </div>
     <div class="description">
         <div class="div">@Participant!.FullName</div>
         <div class="institution">
@@ -11,7 +16,7 @@
             <div class="div3">@Participant.WorkPlace</div>
         </div>
         <div class="degree">
-            <div class="div2">Ученая степень:</div>
+            <div class="div2">Институт, факультет, кафедра, лаборатория:</div>
             <div class="div3">@Participant.Faculty</div>
         </div>
     </div>
@@ -27,10 +32,5 @@
     async Task OnClickHandler()
     {
         await OnClick.InvokeAsync();
-    }
-
-    private string GetCardClass()
-    {
-        return Participant != null && Participant.IsVoted ? "voted" : "";
     }
 }
