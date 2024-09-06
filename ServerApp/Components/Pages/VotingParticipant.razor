@@ -4,6 +4,7 @@
 
 @inject IDataService data
 @inject NavigationManager navigate
+@inject ToastService toastService
 
 @if (participant is not null)
 {
@@ -147,6 +148,30 @@ else
         }
     }
 
+    private async Task ShowRevoteConfirmAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Вы уже голосовали в этой категории.",
+            message2: "Хотите изменить голос?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.CastVoteAsync(participant!.Id);
+            participant.IsVoteOfThisApplication = true;
+            participant.TotalVotes += 1;
+
+            toastService.Notify(new(ToastType.Success, "Ваш голос успешно изменен"));
+        }
+    }
+
     async Task Back()
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}#"));
@@ -154,8 +179,17 @@ else
 
     async Task Vote()
     {
-        await data.CastVoteAsync(participant!.Id);
-        participant.IsVoteOfThisApplication = true;
-        participant.TotalVotes += 1;
+        if (await data.VoteInThisCategory(Guid.Parse(TrackId!), Guid.Parse(CategoryId!)))
+        {
+            await ShowRevoteConfirmAsync();
+        }
+        else
+        {
+            await data.CastVoteAsync(participant!.Id);
+            participant.IsVoteOfThisApplication = true;
+            participant.TotalVotes += 1;
+
+            toastService.Notify(new(ToastType.Success, "Ваш голос учтен"));
+        }    
     }
 }
