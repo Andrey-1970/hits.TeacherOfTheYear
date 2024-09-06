@@ -21,15 +21,16 @@
             <div class="form-text">
                 Выберите кандидата для голосования
             </div>
+            <input type="text" class="form-control" placeholder="Поиск по названию" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 
         <div class="d-flex flex-wrap justify-content-center g-1 mt-1 mb-1">
             @if (participants is not null)
             {
-                @foreach (var participant in participants)
+                @foreach (var participant in filtredParticipants)
                 {
                     <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
-                }            
+                }
             }
             else
             {
@@ -50,7 +51,10 @@
 
     TrackModel track = default!;
     CategoryModel category = default!;
-    ListItemModel[]? participants;
+    ListItemModel[] participants = [];
+
+    string searchQuery = string.Empty;
+    ListItemModel[] filtredParticipants = [];
 
     protected override async Task OnParametersSetAsync()
     {
@@ -59,6 +63,7 @@
             track = await data.GetTrackAsync(trackId);
             category = await data.GetCategoryAsync(categoryId);
             participants = await data.GetListForVotingPageAsync(trackId, categoryId);
+            filtredParticipants = participants;
         }
     }
 
@@ -66,9 +71,30 @@
     {
         await Task.Run(() => navigate.NavigateTo("/voting#"));
     }
-    
+
     async Task ViewParticipant(Guid participantId)
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}/participant/{participantId}#"));
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterParticipant();
+    }
+
+    private void FilterParticipant()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filtredParticipants = participants;
+        }
+        else
+        {
+            filtredParticipants = participants.Where(p =>
+                (p.FullName != null && p.FullName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (p.WorkPlace != null && p.WorkPlace.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
+                (p.Faculty != null && p.Faculty.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))).ToArray();
+        }
     }
 }

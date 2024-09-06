@@ -15,7 +15,7 @@ public class ListItemModel
         Id = applicationForm.Id;
         FullName = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "ФИО")!.Value;
         WorkPlace = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Место работы/учебы")!.Value;
-        AcademicDegree = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Ученая степень")!.Value;
+        Faculty = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Институт, факультет, кафедра, лаборатория")!.Value;
     }
     
     public Guid Id { get; set; }
@@ -23,7 +23,6 @@ public class ListItemModel
     public string? FullName { get; set; }
     [MaxLength(255)]
     public string? WorkPlace { get; set; }
-    public string? AcademicDegree { get; set; }
-
+    public string? Faculty { get; set; }
     public bool IsVoted { get; set; } = false;
 }
