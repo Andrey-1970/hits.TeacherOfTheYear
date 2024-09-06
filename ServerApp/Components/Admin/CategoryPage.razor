@@ -25,7 +25,7 @@
                                                 @category.Name
                                                 <div>
                                                     <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(category.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveCategory(category)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(category)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -44,20 +44,40 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<Category> categories = default!;
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         categories = await data.Category.GetAllAsync();
     }
-    async Task RemoveCategory(Category category)
-    {
-        await data.Category.RemoveAsync(category);
-        categories = await data.Category.GetAllAsync();
 
-        StateHasChanged();
+    private async Task ShowConfirmationAsync(Category category)
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.Category.RemoveAsync(category);
+            // categories = await data.Category.GetAllAsync();
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

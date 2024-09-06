@@ -45,6 +45,8 @@
     async Task OnValidSumbit()
     {
         await data.Category.SaveAsync(category);
+
         navigation.NavigateTo("/admin/categories");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }

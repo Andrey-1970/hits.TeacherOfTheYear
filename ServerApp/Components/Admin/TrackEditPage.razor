@@ -107,6 +107,8 @@
     async Task OnValidSumbit()
     {
         await data.Track.SaveAsync(track);
+
         navigation.NavigateTo("/admin/tracks");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }

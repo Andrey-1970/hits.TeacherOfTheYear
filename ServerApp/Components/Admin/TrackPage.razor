@@ -25,7 +25,7 @@
                                                 @track.Name
                                                 <div>
                                                     <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(track.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveTrack(track)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(track)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -44,20 +44,39 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<Track> tracks = default!;
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         tracks = await data.Track.GetAllAsync();
     }
-    async Task RemoveTrack(Track track)
-    {
-        await data.Track.RemoveAsync(track);
-        tracks = await data.Track.GetAllAsync();
 
-        StateHasChanged();
+    private async Task ShowConfirmationAsync(Track track)
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.Track.RemoveAsync(track);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

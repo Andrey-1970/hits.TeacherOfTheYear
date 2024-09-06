@@ -27,7 +27,7 @@
                                                 @block.Name
                                                 <div>
                                                     <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(block.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await RemoveBlock(block)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await ShowConfirmationAsync(block)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -47,22 +47,42 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<MarkBlock> blocks = default!;
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         blocks = await data.MarkBlock.GetAllAsync();
     }
-    async Task RemoveBlock(MarkBlock block)
+
+    private async Task ShowConfirmationAsync(MarkBlock block)
     {
-        await data.MarkBlock.RemoveAsync(block);
-        StateHasChanged();
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.MarkBlock.RemoveAsync(block);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)
-
     {
         navigation.NavigateTo($"/admin/markblocks/{id}");
     }
