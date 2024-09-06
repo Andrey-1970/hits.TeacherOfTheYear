@@ -594,7 +594,7 @@ namespace ServerApp.Data.Services
 
             await AutoSetMarksWithDynamicMethods(app.Id);
 
-            await userManager.AddToRoleAsync((await userManager.FindByEmailAsync(user.Username!))!,
+            await userManager.AddToRoleAsync((await userManager.FindByEmailAsync(app.UserInfo!.Username!))!,
                 (context.Roles.FirstOrDefaultAsync(r => r.Name == "Participant").Result ??
                  throw new NullReferenceException("Not found role with name 'Participant'")).Name!);
         }
