@@ -27,7 +27,7 @@
                             <Content>
                                 @foreach (var category in categories)
                                 {
-                                    <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category"/>
+                                    <CategoryCard OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category" data="data"/>
                                 }
                             </Content>
                         </AccordionItem>

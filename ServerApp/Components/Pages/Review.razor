@@ -42,7 +42,7 @@
 </div>
 
 @code {
-    UserInfoModel[] participants = default!;
+    UserInfoModel[]? participants;
     protected override async void OnInitialized()
     {
         participants = await data.GetUserInfosModelsAsync();

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Reflection;
+using System.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
@@ -19,6 +20,11 @@ namespace ServerApp.Data.Services
         IAuthorization auth,
         UserManager<ApplicationUser> userManager) : IDataService
     {
+        private async Task<UserInfo?> GetUserAsync()
+        {
+            var username = await auth.GetCurrentUserUsername();
+            return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == username);
+        }
         public async Task CreateCurrentUserInfoAsync(string username)
         {
             context.UserInfos.Add(new UserInfo() { Id = Guid.NewGuid(), Username = username });
@@ -27,13 +33,13 @@ namespace ServerApp.Data.Services
 
         public async Task<string> GetApplicationStatusNameAsync()
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             return user.Applications.Count != 0 ? user.Applications.First().ApplicationStatus.Status : "Нет заявки";
         }
 
         public async Task<UserInfo?> GetCurrentUserInfoAsync()
         {
-            return await auth.GetUserAsync();
+            return await GetUserAsync();
         }
 
         public async Task<CategoryModel[]> GetCategoriesAsync()
@@ -43,7 +49,7 @@ namespace ServerApp.Data.Services
 
         public async Task<EditModel> GetCurrentUserEditModelAsync()
         {
-            var user = await auth.GetUserAsync();
+            var user = await GetUserAsync();
             var application = await context.ApplicationForms.FirstOrDefaultAsync(x => x.UserInfo == user) ?? new();
             return await Task.FromResult(new EditModel(application));
         }
@@ -55,8 +61,8 @@ namespace ServerApp.Data.Services
 
         public async Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
-            var track = await context.Tracks.Include(track => track.EditBlocks)
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var track = await context.Tracks
                 .FirstOrDefaultAsync(x => x.Id == trackId);
             var editBlocks = track?.EditBlocks.OrderBy(x => x.Number).Select(e => new EditBlockModel(e)).ToArray() ??
                              [];
@@ -71,24 +77,17 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldModel[]> GetFieldModelsForEditBlockAsync(Guid? editBlockId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var editBlock = await context.EditBlocks
-                //.Include(editBlock => editBlock.Fields).ThenInclude(field => field.FieldVals)
-                //.ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
-                //.Include(e => e.Fields).ThenInclude(e => e.ValueType)
-                //.Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == editBlockId);
             return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
 
         public async Task<TableModel[]> GetTableModelsForEditBlockAsync(Guid? editBlockId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             List<TableModel> res = [];
             var editBlock = await context.EditBlocks
-                //.Include(editBlock => editBlock.Tables)
-                                //.ThenInclude(table => table.Columns).Include(editBlock => editBlock.Tables)
-                                //.ThenInclude(table => table.Rows).ThenInclude(row => row.CellVals)
                                 .FirstOrDefaultAsync(e => e.Id == editBlockId) ??
                             throw new InvalidOperationException("EditBlock does not exist.");
             foreach (var table in editBlock.Tables.OrderBy(e => e.Number))
@@ -145,9 +144,6 @@ namespace ServerApp.Data.Services
         public async Task<RowModel> GetRowModelAsync(Guid? tableId)
         {
             var table = await context.Tables
-                //.Include(table => table.Columns)
-                //.ThenInclude(column => column.SelectValues)
-                //.Include(table => table.Columns).ThenInclude(column => column.ValueType!)
                 .FirstOrDefaultAsync(e => e.Id == tableId);
             return new RowModel()
             {
@@ -175,7 +171,7 @@ namespace ServerApp.Data.Services
 
         public async Task SaveApplicationFormFromEditModelAsync(EditModel model)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             if (model.SelectedTrackId == null)
             {
                 throw new ArgumentException("SelectedTrackId is required.");
@@ -188,7 +184,6 @@ namespace ServerApp.Data.Services
             }
 
             var app = await context.ApplicationForms
-                //.Include(a => a.UserInfo)
                 .FirstOrDefaultAsync(a => a.UserInfo.Id == user.Id);
 
             if (app == null)
@@ -246,7 +241,6 @@ namespace ServerApp.Data.Services
                     row.TableId = tbl.Id;
 
                     var existingRow = await context.Rows
-                        //.Include(r => r.CellVals)
                         .FirstOrDefaultAsync(r =>
                             r.Id == row.Id && r.TableId == row.TableId &&
                             r.CellVals.Any(c => c.ApplicationId == app.Id));
@@ -315,7 +309,7 @@ namespace ServerApp.Data.Services
 
         public async Task SetCurrentUserNameAsync()
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             user.Name = user.Applications.First().FieldVals.FirstOrDefault(e => e.Field!.Name == "ФИО")!.Value;
             context.Update(user);
             await context.SaveChangesAsync();
@@ -324,7 +318,7 @@ namespace ServerApp.Data.Services
 
         public async Task SetCurrentUserApplicationStatusWaitingForReviewedAsync()
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = user.Applications.FirstOrDefault() ??
                       throw new InvalidOperationException("No application found for the current user.");
             var track = app.Track ?? throw new InvalidOperationException("No track found for the application.");
@@ -376,13 +370,9 @@ namespace ServerApp.Data.Services
 
         public async Task SetApplicationStatusReviewProcessAsync(Guid userId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
 
             var participant = context.UserInfos
-                                  //.Include(userInfo => userInfo.Applications)
-                                  //.ThenInclude(applicationForm => applicationForm.Track)
-                                  //.ThenInclude(track => track.MarkBlocks).Include(userInfo => userInfo.Applications)
-                                  //.ThenInclude(applicationForm => applicationForm.ApplicationStatus)
                                   .FirstOrDefault(e => e.Id == userId) ??
                               throw new NullReferenceException("Current user not found.");
 
@@ -421,25 +411,23 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
         {
-            var user = await auth.GetUserAsync();
+            var username = await auth.GetCurrentUserUsername();
+            var user = await context.UserInfos.FirstOrDefaultAsync(x => x.Username == username);
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a =>
                     a.ApplicationStatus.Number == 2 || a.ApplicationStatus.Number == 3 && a.ReviewerId == user!.Id))
-                .Include(userInfo => userInfo.Applications)
-                .ThenInclude(applicationForm => applicationForm.ApplicationStatus)
                 .ToListAsync();
 
             var userInfoModels = userInfos
                 .Select(e => new UserInfoModel(e))
                 .ToArray();
 
-            return userInfoModels;
+            return userInfoModels; 
         }
 
         public async Task<ReviewMarkModel> GetUserMarkModelAsync(Guid userInfoId)
         {
-            var application = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
-                .ThenInclude(track => track.MarkBlocks).Include(applicationForm => applicationForm.BlockReviews)
+            var application = await context.ApplicationForms
                 .FirstOrDefaultAsync(x => x.UserInfoId == userInfoId) ?? new();
             var markModel = new ReviewMarkModel(application);
             var blockReviewModels = markModel.ReviewedBlocks.ToList();
@@ -455,21 +443,16 @@ namespace ServerApp.Data.Services
 
         public async Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId)
         {
-            var track = await context.Tracks.Include(track => track.MarkBlocks)
-                .FirstOrDefaultAsync(x => x.Id == trackId);
+            var track = await context.Tracks.FirstOrDefaultAsync(x => x.Id == trackId);
             return track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ?? [];
         }
 
         public async Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
-            var user = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
+            var user = context.ApplicationForms
                            .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo ??
                        throw new InvalidOperationException("User does not exist.");
             var markBlock = await context.MarkBlocks
-                .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
-                .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
-                .Include(e => e.Fields).ThenInclude(e => e.ValueType)
-                .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == markBlockId);
             return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
         }
@@ -477,11 +460,6 @@ namespace ServerApp.Data.Services
         public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
             var markBlock = await context.MarkBlocks
-                                .Include(mb => mb.Tables)
-                                .ThenInclude(t => t.Rows)
-                                .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
-                                .ThenInclude(cellVal => cellVal.Column!)
-                                .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
                                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ??
                             throw new InvalidOperationException("MarkBlock not found");
             var tables = markBlock.Tables
@@ -534,9 +512,6 @@ namespace ServerApp.Data.Services
         private async Task AutoSetMarksWithDynamicMethods(Guid appId)
         {
             var app = await context.ApplicationForms
-                          .Include(applicationForm => applicationForm.Track)
-                          .ThenInclude(track => track.MarkBlocks)
-                          .ThenInclude(markBlock => markBlock.Marks)
                           .FirstOrDefaultAsync(e => e.Id == appId)
                       ?? throw new NullReferenceException("Current application not found.");
 
@@ -578,10 +553,8 @@ namespace ServerApp.Data.Services
 
         public async Task ApproveApplicationFormAsync(Guid? applicationId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
-            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
-                          .ThenInclude(track => track.MarkBlocks)
-                          .Include(applicationForm => applicationForm.BlockReviews)
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = await context.ApplicationForms
                           .FirstOrDefaultAsync(e => e.Id == applicationId) ??
                       throw new NullReferenceException("Current application not found.");
             foreach (var markBlock in app.Track.MarkBlocks)
@@ -604,9 +577,7 @@ namespace ServerApp.Data.Services
 
         public async Task RejectApplicationFormAsync(Guid? applicationId)
         {
-            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.Track)
-                          .ThenInclude(track => track.MarkBlocks)
-                          .Include(applicationForm => applicationForm.BlockReviews)
+            var app = await context.ApplicationForms
                           .FirstOrDefaultAsync(e => e.Id == applicationId) ??
                       throw new NullReferenceException("Current application not found.");
             foreach (var markBlock in app.Track.MarkBlocks)
@@ -637,8 +608,6 @@ namespace ServerApp.Data.Services
         {
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4))
-                .Include(userInfo => userInfo.Applications)
-                .ThenInclude(applicationForm => applicationForm.ApplicationStatus)
                 .ToListAsync();
 
             var userInfoModels = userInfos
@@ -651,8 +620,6 @@ namespace ServerApp.Data.Services
         public async Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId)
         {
             var user = await context.UserInfos
-                           .Include(userInfo => userInfo.Applications)
-                           .ThenInclude(applicationForm => applicationForm.Track)
                            .FirstOrDefaultAsync(e => e.Id == userInfoId) ??
                        throw new UnauthorizedAccessException("User unauthorized.");
 
@@ -661,9 +628,6 @@ namespace ServerApp.Data.Services
 
             var assModel = new AssessmentModel(app);
             var markBlocks = context.Tracks
-                                 .Include(t => t.MarkBlocks)
-                                 .ThenInclude(mb => mb.Marks)
-                                 .ThenInclude(m => m.MarkVals)
                                  .FirstOrDefault(e => e.Id == app.Track.Id)?.MarkBlocks ??
                              throw new InvalidOperationException("Track not found");
 
@@ -694,8 +658,7 @@ namespace ServerApp.Data.Services
 
         public async Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId)
         {
-            var track = await context.Tracks.Include(track => track.MarkBlocks)
-                .ThenInclude(markBlock => markBlock.Marks).ThenInclude(mark => mark.MarkVals)
+            var track = await context.Tracks
                 .FirstOrDefaultAsync(x => x.Id == trackId);
             var markBlocks = track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ??
                              [];
@@ -736,14 +699,10 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
-            var user = context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
+            var user = context.ApplicationForms
                            .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo ??
                        throw new InvalidOperationException("User does not exist.");
             var markBlock = await context.MarkBlocks
-                .Include(markBlock => markBlock.Fields).ThenInclude(field => field.FieldVals)
-                .ThenInclude(fieldVal => fieldVal.Application).ThenInclude(applicationForm => applicationForm!.UserInfo)
-                .Include(e => e.Fields).ThenInclude(e => e.ValueType)
-                .Include(e => e.Fields).ThenInclude(e => e.SelectValues)
                 .FirstOrDefaultAsync(e => e.Id == markBlockId);
             var fields = markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldMarkModel(e, user)).ToArray();
 
@@ -769,13 +728,6 @@ namespace ServerApp.Data.Services
         public async Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
             var markBlock = await context.MarkBlocks
-                                .Include(mb => mb.Tables)
-                                .ThenInclude(t => t.Rows)
-                                .ThenInclude(r => r.CellVals.Where(cv => cv.ApplicationId == appId))
-                                .ThenInclude(cellVal => cellVal.Column!)
-                                .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Columns)
-                                .Include(markBlock => markBlock.Tables).ThenInclude(table => table.Marks)
-                                .ThenInclude(mark => mark.MarkVals)
                                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ??
                             throw new InvalidOperationException("MarkBlock not found");
             var tables = markBlock.Tables
@@ -818,7 +770,7 @@ namespace ServerApp.Data.Services
 
         public Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId)
         {
-            return Task.FromResult(context.Tables.Include(table => table.Marks).ThenInclude(mark => mark.MarkVals)
+            return Task.FromResult(context.Tables
                 .FirstOrDefault(e => e.Id == tableId)!.Marks.Select(m => new MarkModel()
                 {
                     Id = m.Id,
@@ -865,7 +817,7 @@ namespace ServerApp.Data.Services
 
         public async Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
         {
-            var user = await auth.GetUserAsync();
+            var user = await GetUserAsync();
             List<ListItemModel> res = [];
 
             var apps = context.ApplicationForms.Where(e =>
@@ -873,7 +825,7 @@ namespace ServerApp.Data.Services
                     e.CategoryId == categoryId &&
                     (e.ApplicationStatusId == context.ApplicationStatuses.FirstOrDefault(s => s.Number == 6)!.Id ||
                      e.ApplicationStatusId == context.ApplicationStatuses.FirstOrDefault(s => s.Number == 4)!.Id))
-                .Include(applicationForm => applicationForm.Votes).ToList();
+                .ToList();
             if (user != null && apps.Any(e => e.Votes.Any(v => v.VoterId == user.Id)))
             {
                 var currentApp = apps.FirstOrDefault(e => e.Votes.Any(v => v.VoterId == user.Id));
@@ -889,7 +841,7 @@ namespace ServerApp.Data.Services
 
         public async Task<VoteModel> GetVoteModelAsync(Guid appId)
         {
-            var user = await auth.GetUserAsync();
+            var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
             if (user == null)
             {
@@ -907,7 +859,7 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId)
         {
-            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
+            var app = await context.ApplicationForms
                 .FirstOrDefaultAsync(e => e.Id == appId);
             var user = app!.UserInfo;
             var listRes = context.Fields.OrderBy(f => f.Number).Where(e => e.IsDisplayedOnVotingPage)
@@ -917,7 +869,7 @@ namespace ServerApp.Data.Services
 
         public async Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId)
         {
-            var app = await context.ApplicationForms.Include(applicationForm => applicationForm.UserInfo)
+            var app = await context.ApplicationForms
                 .FirstOrDefaultAsync(e => e.Id == appId);
 
             var tables = context.Tables.Where(t => t.IsDisplayedOnVotingPage).OrderBy(t => t.Number).Select(t =>
@@ -948,7 +900,7 @@ namespace ServerApp.Data.Services
 
         public async Task CastVoteAsync(Guid appId)
         {
-            var user = await auth.GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
                       throw new InvalidOperationException("App not found.");
 
@@ -974,17 +926,17 @@ namespace ServerApp.Data.Services
 
         public async Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId)
         {
-            var user = await auth.GetUserAsync();
-            var res = false;
-
-            if (user != null)
+            try
             {
-                res = context.Votes.Any(e =>
+                var user = await GetUserAsync();
+                return context.Votes.Any(e =>
                     e.VoterId == user.Id && e.ApplicationForm.TrackId == trackId &&
                     e.ApplicationForm.CategoryId == categoryId);
             }
-
-            return res;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

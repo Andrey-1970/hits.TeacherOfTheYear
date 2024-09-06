@@ -4,7 +4,7 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IAuthorization
     {
-        Task<UserInfo?> GetUserAsync();
+        // Task<UserInfo?> GetUserAsync();
         Task<string> GetCurrentUserUsername();
     }
 }

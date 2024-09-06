@@ -1,18 +1,13 @@
 @using ServerApp.Data.Models.EditModel
 
-@inject IDataService data;
-
 <div class="category-card @GetCardClass()" type="button" @onclick="async () => await OnClickHandler()">
     <div class="category-description">
-        <div class="category-title">@Title</div>
+        <div class="category-title">@Category.Name</div>
     </div>
 </div>
 
 
 @code {
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
-    
     [Parameter, EditorRequired]
     public TrackModel Track { get; set; } = default!;
     
@@ -22,11 +17,14 @@
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
     
+    [Parameter, EditorRequired]
+    public IDataService data { get; set; }
+    
     public bool IsVoted = false;
 
     protected override async Task OnInitializedAsync()
     {
-        // IsVoted = await data.VoteInThisCategory(Track.Id, Category.Id);
+        IsVoted = await data.VoteInThisCategory(Track.Id, Category.Id);
     }
 
     async Task OnClickHandler()
