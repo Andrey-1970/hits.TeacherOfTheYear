@@ -5,9 +5,9 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>@participant.FullName</PageTitle>
 @if (participant is not null)
 {
+    <PageTitle>@participant.FullName</PageTitle>
     <div class="block">
         <div class="block-title">
             <div class="title-direction">
