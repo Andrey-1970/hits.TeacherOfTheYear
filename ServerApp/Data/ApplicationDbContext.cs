@@ -30,6 +30,7 @@ namespace ServerApp.Data
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<ValuesType> ValueTypes { get; set; }
         public DbSet<Vote> Votes { get; set; }
+        public DbSet<FeedBack> Feedbacks { get; set; }
 
         #endregion
 
@@ -1821,6 +1822,10 @@ namespace ServerApp.Data
             var role5 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" };
 
             #endregion
+
+            var feedback1 = new FeedBack() { Id = Guid.NewGuid(), Name = "SYSTEM", Email = "system@system.ru", Message="Test Message for System" };
+            builder.Entity<FeedBack>()
+                .HasData([feedback1]);
 
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);

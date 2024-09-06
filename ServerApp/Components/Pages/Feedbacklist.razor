@@ -1,0 +1,90 @@
+﻿@page "/feedbacklist"
+
+@inject IDataService data
+@inject NavigationManager NavigationManager
+@using ServerApp.Data.Entities
+
+<PageTitle>Список оставленных фидбеков</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Список оставленных фидбеков
+        </div>
+    </div>
+    <div style="align-items: flex-start; overflow: auto;">
+        <Grid TItem="FeedBack"
+              Class="table-filter"
+              FiltersRowCssClass="filters-row"
+              HeaderRowCssClass="header-row"
+              DataProvider="FeedbackDataProvider"
+              FiltersTranslationProvider="GridFiltersTranslationProvider"
+              AllowFiltering="true"
+              AllowPaging="true"
+              PageSize="8"
+              AllowSorting="true"
+              Responsive="true"
+              AllowRowClick="true"
+              OnRowClick="OnRowClick">
+
+            <GridColumn TItem="FeedBack" HeaderText="ФИО" PropertyName="FullName" SortKeySelector="item => item.Name">
+                @context.Name
+            </GridColumn>
+            <GridColumn TItem="FeedBack" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
+                @context.Email
+            </GridColumn>
+            <GridColumn TItem="FeedBack" HeaderText="Статус" PropertyName="Checked" SortKeySelector="item => item.Checked"
+                IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
+                @if (context.Checked)
+                {
+                    <div class="text-success">Да</div>
+                }
+                else
+                {
+                    <div class="text-danger">Нет</div>
+                }
+            </GridColumn>
+        </Grid>
+    </div>
+</div>
+
+@code {
+    FeedBack[] feedbacks = default!;
+    protected override async void OnInitialized()
+    {
+        feedbacks = await data.GetFeedbacksAsync();
+    }
+
+    private async Task<GridDataProviderResult<FeedBack>> FeedbackDataProvider(GridDataProviderRequest<FeedBack> request)
+    {
+        return await Task.FromResult(request.ApplyTo(feedbacks));
+    }
+
+    private async Task<IEnumerable<FilterOperatorInfo>> GridFiltersTranslationProvider()
+    {
+        var filtersTranslation = new List<FilterOperatorInfo>();
+
+        // number/date/boolean
+        filtersTranslation.Add(new("=", "Равно", FilterOperator.Equals));
+        filtersTranslation.Add(new("!=", "Не равно", FilterOperator.NotEquals));
+        // number/date
+        filtersTranslation.Add(new("<", "Меньше", FilterOperator.LessThan));
+        filtersTranslation.Add(new("<=", "Меньше или равно", FilterOperator.LessThanOrEquals));
+        filtersTranslation.Add(new(">", "Больше", FilterOperator.GreaterThan));
+        filtersTranslation.Add(new(">=", "Больше или равно", FilterOperator.GreaterThanOrEquals));
+        // string
+        filtersTranslation.Add(new("*a*", "Включает", FilterOperator.Contains));
+        filtersTranslation.Add(new("a**", "Начинается с", FilterOperator.StartsWith));
+        filtersTranslation.Add(new("**a", "Заканчивается на", FilterOperator.EndsWith));
+        filtersTranslation.Add(new("=", "Равно", FilterOperator.Equals));
+        // common
+        filtersTranslation.Add(new("x", "Очистить фильтр", FilterOperator.Clear));
+
+        return await Task.FromResult(filtersTranslation);
+    }
+
+    private async Task OnRowClick(GridRowEventArgs<FeedBack> row)
+    {
+        await Task.Run(() => NavigationManager.NavigateTo($"/feedback/application/{row.Item.Id.ToString()}"));
+    }
+}

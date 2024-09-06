@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
+using ServerApp.Components.Admin;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
@@ -897,5 +898,32 @@ namespace ServerApp.Data.Services
             
             await context.SaveChangesAsync();
         }
+        //FeedBacks
+        public async Task<FeedBack[]> GetFeedbacksAsync()
+        {
+            return await context.Feedbacks.Select(e => new FeedBack(e)).ToArrayAsync();
+        }
+        public async Task SaveFeedbackAsync(FeedBack feedback)
+        {
+            var existingFeedback = await context.Feedbacks.FirstOrDefaultAsync(f => f.Id == feedback.Id);
+            if (existingFeedback == null)
+            {
+                context.Feedbacks.Add(feedback);
+            }
+            else
+            {
+                context.Feedbacks.Update(feedback);
+            }
+            await context.SaveChangesAsync();
+        }
+        public async Task<FeedBack> GetFeedbackByIdAsync(Guid feedbackId)
+        {
+            return await context.Feedbacks.FirstOrDefaultAsync(e => e.Id == feedbackId) ??
+                       throw new UnauthorizedAccessException("Feedback not found");
+        }
+
+
+
+
     }
 }
