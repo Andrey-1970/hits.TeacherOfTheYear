@@ -3,7 +3,8 @@
     flex-wrap: wrap;
     gap: 10px;
     width: 100%;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 /* Стандартная таблица */
