@@ -24,7 +24,7 @@
 }
 else if (status == "В ожидании заполнения")
 {
-    <form @formname="AwaitingCompletion" @onsubmit="DeleteApplication" class="w-100" method="post">
+    <form @formname="AwaitingCompletion" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-secondary" role="alert">
@@ -35,22 +35,24 @@ else if (status == "В ожидании заполнения")
                 To="/application-form#">
             Продолжить заполнение
         </Button>
-        <Button Type="ButtonType.Submit"
-                Color="ButtonColor.Danger">
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Danger"
+                To="/account/manage/delete-application#">
             Удалить заявку
         </Button>
     </form>
 }
 else if (status == "В ожидании рассмотрения")
 {
-    <form @formname="AwaitingReview" @onsubmit="WithdrawApplication" class="w-100" method="post">
+    <form @formname="AwaitingReview" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-warning" role="alert">
             Ваша заявка <strong>ожидает рассмотрения экспертами</strong>. Пожалуйста, дождитесь решения.
         </div>
-        <Button Type="ButtonType.Submit"
-                Color="ButtonColor.Danger">
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Danger"
+                To="/account/manage/withdraw-application#">
             Отозвать заявку
         </Button>
     </form>
@@ -65,21 +67,22 @@ else if (status == "В процессе рассмотрения")
 }
 else if (status == "Одобрена")
 {
-    <form @formname="Approved" @onsubmit="WithdrawApplication" class="w-100" method="post">
+    <form @formname="Approved" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-success" role="alert">
             Поздравляем! Наши эксперты <strong>одобрили вашу заявку на участие</strong> в конкурсе. Вы получаете статус <strong>Участник</strong>.
         </div>
-        <Button Type="ButtonType.Submit"
-                Color="ButtonColor.Danger">
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Danger"
+                To="/account/manage/withdraw-application#">
             Отозвать заявку
         </Button>
     </form>
 }
 else if (status == "Отклонена")
 {
-    <form @formname="Denied" @onsubmit="DeleteApplication" class="w-100" method="post">
+    <form @formname="Denied" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-danger" role="alert">
@@ -91,8 +94,9 @@ else if (status == "Отклонена")
                 To="/application-form#">
             Редактировать заявку
         </Button>
-        <Button Type="ButtonType.Submit"
-                Color="ButtonColor.Danger">
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Danger"
+                To="/account/manage/delete-application#">
             Удалить заявку
         </Button>
         <Button Type="ButtonType.Link"
@@ -104,14 +108,15 @@ else if (status == "Отклонена")
 }
 else if (status == "Оценена")
 {
-    <form @formname="Assessed" @onsubmit="DeleteApplication" class="w-100" method="post">
+    <form @formname="Assessed" class="w-100" method="post">
         <AntiforgeryToken />
 
         <div class="alert alert-success" role="alert">
             Ваша анкета была оценена экспертом
         </div>
-        <Button Type="ButtonType.Submit"
-                Color="ButtonColor.Danger">
+        <Button Type="ButtonType.Link"
+                Color="ButtonColor.Danger"
+                To="/account/manage/delete-application#">
             Удалить заявку
         </Button>
     </form>
@@ -123,15 +128,5 @@ else if (status == "Оценена")
     protected override async Task OnInitializedAsync()
     {
         status = await data.GetApplicationStatusNameAsync();
-    }
-
-    void DeleteApplication()
-    {
-
-    }
-
-    void WithdrawApplication()
-    {
-
     }
 }
