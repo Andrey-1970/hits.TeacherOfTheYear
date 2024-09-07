@@ -21,7 +21,7 @@
             <div class="form-text">
                 Выберите кандидата для голосования
             </div>
-            <input type="text" class="form-control" placeholder="Поиск по названию" @bind="searchQuery" @oninput="OnSearchInput" />
+            <input type="text" class="form-control" placeholder="Поиск по ФИО, учебному заведению или институту" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
@@ -100,10 +100,13 @@
         }
         else
         {
+            var searchWords = searchQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
             filtredParticipants = participants!.Where(p =>
-                (p.FullName != null && p.FullName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                (p.WorkPlace != null && p.WorkPlace.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)) ||
-                (p.Faculty != null && p.Faculty.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))).ToArray();
+                searchWords.All(word =>
+                    (p.FullName != null && p.FullName.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.WorkPlace != null && p.WorkPlace.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.Faculty != null && p.Faculty.Contains(word, StringComparison.OrdinalIgnoreCase)))).ToArray();
         }
     }
 }
