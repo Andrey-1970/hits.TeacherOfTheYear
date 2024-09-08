@@ -86,8 +86,19 @@ else if (status == "Отклонена")
         <AntiforgeryToken />
 
         <div class="alert alert-danger" role="alert">
-            К сожалению, наши специалисты <strong>отклонили заявку</strong> на ваше участие. Однако мы предоставляем возможность повторной отправки,
-            поэтому внимательно изучите причину отказа. Если у вас возникнут вопросы, вы можете обратиться в службу поддержки через форму обратной связи.
+            <p>
+                К сожалению, наши специалисты <strong>отклонили заявку</strong> на ваше участие. Однако мы предоставляем возможность повторной отправки,
+                поэтому внимательно изучите причину отказа. Если у вас возникнут вопросы, вы можете обратиться в службу поддержки через форму обратной связи.
+            </p>
+            @if (comments.Any())
+            {
+                <ul class="m-0">
+                    @foreach (var comment in comments)
+                    {
+                        <li>@comment</li>
+                    }
+                </ul>
+            }
         </div>
         <Button Type="ButtonType.Link"
                 Color="ButtonColor.Primary"
@@ -124,9 +135,11 @@ else if (status == "Оценена")
 
 @code {
     string? status;
+    IEnumerable<string> comments = [];
 
     protected override async Task OnInitializedAsync()
     {
         status = await data.GetApplicationStatusNameAsync();
+        comments = ["Первый комментарий", "Второй комментарий", "Третий комментарий"];
     }
 }

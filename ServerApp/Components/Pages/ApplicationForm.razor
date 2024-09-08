@@ -26,6 +26,20 @@
                 </Button>
             </div>
             <div class="block-content">
+                @if (model.ApplicationStatus == "Отклонена" && model.Comments.Any())
+                {
+                    <div class="alert alert-danger w-100 m-0" role="alert">
+                        <p>
+                            Комментарии от проверяющего эксперта:
+                        </p>
+                        <ul class="m-0">
+                            @foreach (var comment in model.Comments)
+                            {
+                                <li>@comment</li>
+                            }
+                        </ul>
+                    </div>
+                }
                 <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
                     <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
                     @foreach (var track in model.Tracks)
