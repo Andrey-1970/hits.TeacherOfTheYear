@@ -1,11 +1,9 @@
 ﻿@page "/assessment/application/{Id}"
+
 @attribute [Authorize(Roles = "Admin, Expert")]
 
-@using ServerApp.Data.Models.MarkModel
-@using ServerApp.Data.Models.ReviewModel
-
 @inject IDataService data
-@inject NavigationManager nav
+@inject NavigationManager navigate
 
 <PageTitle>Оценка заявки</PageTitle>
 
@@ -262,7 +260,7 @@
         model.MarkBlocks = await data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId);
         var tables = model.Tables.ToList();
         var table = tables.FirstOrDefault(e => e.Marks.Any(m => m.Name == mark.Name));
-        var currentMarkModel = await data.GetMarkModelsForTable(model.ApplicationId, table!.Id);
+        var currentMarkModel = await data.GetMarkModelsForTableAsync(model.ApplicationId, table!.Id);
         foreach (var markModel in table.Marks)
         {
             markModel.ValId = currentMarkModel.FirstOrDefault(e => e.Id == markModel.Id)!.ValId;
@@ -279,6 +277,6 @@
     async Task Assessment()
     {
         await data.RatedApplicationAsync(model!.ApplicationId);
-        nav.NavigateTo("/assessment#");
+        navigate.NavigateTo("/assessment#");
     }
 }

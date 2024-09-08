@@ -1,12 +1,9 @@
 @page "/voting/category/{TrackId}/{CategoryId}"
 
-@using ServerApp.Data.Models.EditModel
-@using ServerApp.Data.Models.VoteModel
-
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>Голосование</PageTitle>
+<PageTitle>Кандидаты</PageTitle>
 
 <div class="block-group">
     <div class="block">
@@ -25,13 +22,13 @@
         </div>
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
-            @if (filtredParticipants is not null)
+            @if (filtredApplications is not null)
             {
-                @if (filtredParticipants.Any())
+                @if (filtredApplications.Any())
                 {
-                    @foreach (var participant in filtredParticipants)
+                    @foreach (var app in filtredApplications)
                     {
-                        <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
+                        <ApplicationCard Application="app" OnClick="async () => await ViewApplication(app.Id)" />
                     }
                 }
                 else
@@ -60,10 +57,10 @@
 
     TrackModel track = default!;
     CategoryModel category = default!;
-    ListItemModel[]? participants;
+    ApplicationCardModel[]? applications;
 
     string searchQuery = string.Empty;
-    ListItemModel[]? filtredParticipants;
+    ApplicationCardModel[]? filtredApplications;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -71,8 +68,8 @@
         {
             track = await data.GetTrackAsync(trackId);
             category = await data.GetCategoryAsync(categoryId);
-            participants = await data.GetListForVotingPageAsync(trackId, categoryId);
-            filtredParticipants = participants;
+            applications = await data.GetApplicationCardModelsAsync(trackId, categoryId);
+            filtredApplications = applications;
         }
     }
 
@@ -81,7 +78,7 @@
         await Task.Run(() => navigate.NavigateTo("/voting#"));
     }
 
-    async Task ViewParticipant(Guid participantId)
+    async Task ViewApplication(Guid appId)
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{participantId}#"));
     }
@@ -89,24 +86,24 @@
     private void OnSearchInput(ChangeEventArgs e)
     {
         searchQuery = e.Value?.ToString() ?? string.Empty;
-        FilterParticipant();
+        FilterApplications();
     }
 
-    private void FilterParticipant()
+    private void FilterApplications()
     {
         if (string.IsNullOrWhiteSpace(searchQuery))
         {
-            filtredParticipants = participants;
+            filtredApplications = applications;
         }
         else
         {
             var searchWords = searchQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            filtredParticipants = participants!.Where(p =>
+            filtredApplications = applications!.Where(app =>
                 searchWords.All(word =>
-                    (p.FullName != null && p.FullName.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
-                    (p.WorkPlace != null && p.WorkPlace.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
-                    (p.Faculty != null && p.Faculty.Contains(word, StringComparison.OrdinalIgnoreCase)))).ToArray();
+                    (app.FullName != null && app.FullName.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (app.WorkPlace != null && app.WorkPlace.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (app.Faculty != null && app.Faculty.Contains(word, StringComparison.OrdinalIgnoreCase)))).ToArray();
         }
     }
 }

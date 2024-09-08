@@ -1,106 +1,109 @@
-﻿@page "/voting/category/application/{ApplicationId:guid}"
+@page "/voting/category/application/{ApplicationId:guid}"
 
 @using ServerApp.Data.Entities
-@using ServerApp.Data.Models.VoteModel
 
 @inject IDataService data
 @inject NavigationManager navigate
+@inject ToastService toastService
 
-<PageTitle>@applicationFormVoteModel?.FullName</PageTitle>
 @if (applicationFormVoteModel is not null)
 {
-<div class="block">
-    <div class="block-title">
-        <div class="title-direction">
-            <div class="block-title-text">@applicationFormVoteModel.FullName</div>
-            <div class="text-direction">
-                <div class="brief-title">Количество голосов: @applicationFormVoteModel.TotalVotes</div>
-                <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="Back" type="button" />
+    <PageTitle>@applicationFormVoteModel?.FullName</PageTitle>
+    <div class="block">
+        <div class="block-title">
+            <div class="title-direction">
+                <div class="block-title-text">@applicationFormVoteModel.FullName</div>
+                <div class="text-direction">
+                    <div class="brief-title">Количество голосов: @applicationFormVoteModel.TotalVotes</div>
+                    <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="Back" type="button" />
+                </div>
             </div>
         </div>
-    </div>
-    <div class="block-content block-info">
-        <div class="leftside">
-            <div class="brief-info">
-                @for (int i = 0; i < applicationFormVoteModel.Fields.Count() / 2; i++)
-                {
-                <div class="row w-100 m-0">
-                    @for (int j = i * 2; j < i * 2 + 2; j++)
+        <div class="block-content block-info">
+            <div class="leftside">
+                <div class="brief-info">
+                    @for (int i = 0; i < applicationFormVoteModel.Fields.Count() / 2; i++)
                     {
-                    <div class="col-6">
-                        <div class="brief-title">@applicationFormVoteModel.Fields[j].Name</div>
-                        <div class="brief-text">@applicationFormVoteModel.Fields[j].Value</div>
+                    <div class="row w-100 m-0">
+                        @for (int j = i * 2; j < i * 2 + 2; j++)
+                        {
+                        <div class="col-6">
+                            <div class="brief-title">@applicationFormVoteModel.Fields[j].Name</div>
+                            <div class="brief-text">@applicationFormVoteModel.Fields[j].Value</div>
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+                @foreach (var table in applicationFormVoteModel.Tables)
+                {
+                <div class="table-container mb-2">
+                    <div class="block-subtitle-text">@table.Name</div>
+                    @if (table.Rows is not null && table.Rows.Any())
+                    {
+                    <table class="table-stand">
+                        <thead>
+                        <tr>
+                            @foreach (var column in table.Columns)
+                            {
+                            <th>@column.Name</th>
+                            }
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var row in table.Rows)
+                        {
+                        <tr>
+                            @foreach (var cell in row.Cells)
+                            {
+                            <td>@cell.Value</td>
+                            }
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+                    }
+                    else
+                    {
+                    <div class="d-flex justify-content-center w-100">
+                        <div class="text-danger">Информация отсутствует</div>
                     </div>
                     }
                 </div>
                 }
             </div>
-            @foreach (var table in applicationFormVoteModel.Tables)
-            {
-            <div class="table-container mb-2">
-                <div class="block-subtitle-text">@table.Name</div>
-                @if (table.Rows is not null && table.Rows.Any())
-                {
-                <table class="table-stand">
-                    <thead>
-                    <tr>
-                        @foreach (var column in table.Columns)
-                        {
-                        <th>@column.Name</th>
-                        }
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var row in table.Rows)
-                    {
-                    <tr>
-                        @foreach (var cell in row.Cells)
-                        {
-                        <td>@cell.Value</td>
-                        }
-                    </tr>
-                    }
-                    </tbody>
-                </table>
-                }
-                else
-                {
-                <div class="d-flex justify-content-center w-100">
-                    <div class="text-danger">Информация отсутствует</div>
-                </div>
-                }
+            <div class="rightside">
+            <div class="photo"></div>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <Button Color="ButtonColor.Primary"
+                            Class="w-100"
+                            @onclick="NavToLogin"
+                            @onclick="ShowConfirmationAsync">
+                        Проголосовать за участника
+                    </Button>
+                </NotAuthorized>
+                <Authorized>
+                    <Button Color="ButtonColor.Primary"
+                            Class="w-100"
+                            Disabled="applicationFormVoteModel.IsVoteOfThisApplication"
+                            @onclick="SetVote">
+                        Проголосовать за участника
+                    </Button>
+                </Authorized>
+            </AuthorizeView>
             </div>
-            }
-        </div>
-        <div class="rightside">
-        <div class="photo"></div>
-        <AuthorizeView>
-            <NotAuthorized>
-                <Button Color="ButtonColor.Primary"
-                        Class="w-100"
-                        @onclick="NavToLogin">
-                    Проголосовать за участника
-                </Button>
-            </NotAuthorized>
-            <Authorized>
-                <Button Color="ButtonColor.Primary"
-                        Class="w-100"
-                        Disabled="applicationFormVoteModel.IsVoteOfThisApplication"
-                        @onclick="SetVote">
-                    Проголосовать за участника
-                </Button>
-            </Authorized>
-        </AuthorizeView>
         </div>
     </div>
-</div>
 }
 else
 {
-<div class="d-flex justify-content-center">
-    <Spinner Color="SpinnerColor.Primary" />
-</div>
+    <div class="d-flex justify-content-center">
+        <Spinner Color="SpinnerColor.Primary" />
+    </div>
 }
+
+<ConfirmDialog @ref="dialog" />
 
 @code {
     [Parameter]
@@ -108,18 +111,72 @@ else
 
     ApplicationFormVoteModel applicationFormVoteModel = default!;
     UserInfo? userInfo;
+    
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
-        userInfo = await data.GetCurrentUserInfoAsync();
-        applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo?.Id ?? null);
+        if (Guid.TryParse(ApplicationId, out var appId))
+        {
+            userInfo = await data.GetCurrentUserInfoAsync();
+            applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo?.Id ?? null);
+        }
     }
 
     async Task SetVote()
     {
-        await data.CastVoteAsync(ApplicationId);
+        if (await data.VoteInThisCategoryAsync(Guid.Parse(TrackId!), Guid.Parse(CategoryId!)))
+        {
+            await ShowRevoteConfirmAsync();
+        }
+        else
+        {
+            await data.CastVoteAsync(ApplicationId);
+        }
     }
     
+    private async Task ShowRevoteConfirmAsync()
+    {
+        var options = new ConfirmDialogOptions
+        {
+            IsVerticallyCentered = true,
+            NoButtonText = "Нет",
+            YesButtonText = "Да",
+        };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Вы уже голосовали в этой категории.",
+            message2: "Хотите изменить голос?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.CastVoteAsync(applicationFormVoteModel!.Id);
+            toastService.Notify(new(ToastType.Success, "Ваш голос успешно изменен"));
+        }
+    }
+
+    
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+        {
+            IsVerticallyCentered = true,
+            NoButtonText = "Нет",
+            YesButtonText = "Да",
+        };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Чтобы проголосовать за участника необходимо авторизоваться на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
+        }
+    }
+
     async Task Back()
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/{applicationFormVoteModel.TrackId}/{applicationFormVoteModel.CategoryId}#"));

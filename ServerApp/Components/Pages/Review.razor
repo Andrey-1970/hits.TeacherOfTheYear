@@ -1,10 +1,9 @@
 ﻿@page "/review"
+
 @attribute [Authorize(Roles = "Admin, Organiser")]
 
-@using ServerApp.Data.Models.ReviewModel
-
 @inject IDataService data
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigate
 
 <PageTitle>Список заявок</PageTitle>
 
@@ -108,7 +107,7 @@
     private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
     {
         await data.SetApplicationStatusReviewProcessAsync(row.Item.Id);
-        await Task.Run(() => NavigationManager.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
+        await Task.Run(() => navigate.NavigateTo($"/review/application/{row.Item.Id.ToString()}"));
     }
 }
 

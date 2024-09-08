@@ -1,12 +1,13 @@
 ﻿@page "/application-form"
-@using ServerApp.Data.Models.EditModel
 
 @attribute [Authorize]
 
 @inject IDataService data
 @inject IJSRuntime jsRuntime
-@inject NavigationManager nav
+@inject NavigationManager navigate
 @inject ToastService toastService
+
+<PageTitle>Заполнение заявки</PageTitle>
 
 @if (model is not null)
 {
@@ -49,7 +50,7 @@
                 </InputSelect>
                 <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?" ValueExpression="() => model.SelectedCategoryId" ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
                     <option value="@Guid.Empty" disabled selected hidden>Выберите направление</option>
-                    @foreach (var category in categories)
+                    @foreach (var category in model.Categories)
                     {
                         <option value="@category!.Id">@category.Name</option>
                     }
@@ -203,15 +204,14 @@ else
     EditModel? model;
     EditContext? editContext;
     ValidationMessageStore? messageStore;
-    CategoryModel[] categories = [];
 
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
-        categories = await data.GetCategoriesAsync();
         if (model != null)
         {
             model.Tracks = await data.GetTrackModelsAsync();
+            model.Categories = await data.GetCategoryModelsAsync();
             await OnTrackIdChanged(model.SelectedTrackId);
         }
     }
@@ -375,6 +375,6 @@ else
         await data.SaveApplicationFormFromEditModelAsync(newModel);
         await data.SetCurrentUserNameAsync();
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
-        nav.NavigateTo("/account/manage/participation-status");
+        navigate.NavigateTo("/account/manage/participation-status");
     }
 }

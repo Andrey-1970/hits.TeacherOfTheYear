@@ -64,7 +64,7 @@ namespace ServerApp.Data.Services
             return await GetUserAsync();
         }
 
-        public async Task<CategoryModel[]> GetCategoriesAsync()
+        public async Task<IEnumerable<CategoryModel>> GetCategoryModelsAsync()
         {
             return await context.Categories.Select(e => new CategoryModel(e)).ToArrayAsync();
         }
@@ -510,7 +510,7 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
-        public async Task ChangeBlockReviewStatus(Guid? markBlockId, Guid? appId)
+        public async Task ChangeBlockReviewStatusAsync(Guid? markBlockId, Guid? appId)
         {
             var blockReview =
                 context.BlockReviews.FirstOrDefault(e => e.MarkBlockId == markBlockId && e.ApplicationId == appId) ??
@@ -789,7 +789,7 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
-        public Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId)
+        public Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId)
         {
             return Task.FromResult(context.Tables
                 .FirstOrDefault(e => e.Id == tableId)!.Marks.Select(m => new MarkModel()
@@ -836,10 +836,10 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
+        public async Task<ApplicationCardModel[]> GetApplicationCardModelsAsync(Guid trackId, Guid categoryId)
         {
             var user = await GetUserAsync();
-            List<ListItemModel> res = [];
+            List<ApplicationCardModel> res = [];
 
             var apps = context.ApplicationForms.Where(e =>
                     e.TrackId == trackId &&
@@ -850,7 +850,7 @@ namespace ServerApp.Data.Services
             if (user != null && apps.Any(e => e.Votes.Any(v => v.VoterId == user.Id)))
             {
                 var currentApp = apps.FirstOrDefault(e => e.Votes.Any(v => v.VoterId == user.Id));
-                var curAppModel = new ListItemModel(currentApp!)
+                var curAppModel = new ApplicationCardModel(currentApp!)
                 {
                     IsVoted = true
                 };
@@ -858,7 +858,7 @@ namespace ServerApp.Data.Services
                 apps.Remove(currentApp!);
             }
 
-            res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ListItemModel(e)));
+            res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ApplicationCardModel(e)));
             return [.. res];
         }
 
@@ -948,7 +948,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId, Guid userId)
+        public async Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
         {
                 return context.Votes.Any(e =>
                     e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&

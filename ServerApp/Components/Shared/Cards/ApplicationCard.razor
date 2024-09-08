@@ -4,27 +4,27 @@
 
 <div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
     <div class="d-flex professor-avatar justify-content-end align-items-start">
-        @if (Participant != null && Participant.IsVoted)
+        @if (Application != null && Application.IsVoted)
         {
             <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
         }
     </div>
     <div class="description">
-        <div class="div">@Participant!.FullName</div>
+        <div class="div">@Application!.FullName</div>
         <div class="institution">
             <div class="div2">Учебное заведение:</div>
-            <div class="div3">@Participant.WorkPlace</div>
+            <div class="div3">@Application.WorkPlace</div>
         </div>
         <div class="degree">
             <div class="div2">Институт, факультет, кафедра, лаборатория:</div>
-            <div class="div3">@Participant.Faculty</div>
+            <div class="div3">@Application.Faculty</div>
         </div>
     </div>
 </div>
 
 @code {
     [Parameter, EditorRequired]
-    public ListItemModel? Participant { get; set; }
+    public ApplicationCardModel? Application { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }

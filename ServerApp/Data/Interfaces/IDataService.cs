@@ -12,7 +12,7 @@ namespace ServerApp.Data.Interfaces
         Task CreateCurrentUserInfoAsync(string username);
         Task<string> GetApplicationStatusNameAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
-        Task<CategoryModel[]> GetCategoriesAsync();
+        Task<IEnumerable<CategoryModel>> GetCategoryModelsAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();
         Task<TrackModel[]> GetTrackModelsAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
@@ -29,7 +29,7 @@ namespace ServerApp.Data.Interfaces
         Task<MarkBlockModel[]> GetMarkBlockModelsAsync(Guid? trackId);
         Task<FieldModel[]> GetFieldModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
-        Task ChangeBlockReviewStatus(Guid? blockReviewId, Guid? appId);
+        Task ChangeBlockReviewStatusAsync(Guid? blockReviewId, Guid? appId);
         Task SaveCommentReviewBlockAsync(Guid? markBlockId, Guid? appId, string? comment);
         Task ApproveApplicationFormAsync(Guid? applicationId);
         Task RejectApplicationFormAsync(Guid? applicationId);
@@ -42,7 +42,7 @@ namespace ServerApp.Data.Interfaces
         Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId);
         Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
-        Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId);
+        Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
         Task RatedApplicationAsync(Guid? appId);
         Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
@@ -50,6 +50,6 @@ namespace ServerApp.Data.Interfaces
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
-        Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId, Guid userId);
+        Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
     }
 }

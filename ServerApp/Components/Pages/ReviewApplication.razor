@@ -1,10 +1,9 @@
 ﻿@page "/review/application/{Id}"
+
 @attribute [Authorize(Roles = "Admin, Organiser")]
 
-@using ServerApp.Data.Models.ReviewModel
-
 @inject IDataService data
-@inject NavigationManager nav
+@inject NavigationManager navigate
 
 <PageTitle>Проверка заявки</PageTitle>
 
@@ -193,18 +192,18 @@
     async Task ApproveApplication()
     {
         await data.ApproveApplicationFormAsync(model!.ApplicationId);
-        nav.NavigateTo("/review#");
+        navigate.NavigateTo("/review#");
     }
 
     async Task RejectApplication()
     {
         await data.RejectApplicationFormAsync(model!.ApplicationId);
-        nav.NavigateTo("/review#");
+        navigate.NavigateTo("/review#");
     }
 
     async Task ChangeBlockStatus()
     {
-        await data.ChangeBlockReviewStatus(model!.SelectedMarkBlockId, model.ApplicationId);
+        await data.ChangeBlockReviewStatusAsync(model!.SelectedMarkBlockId, model.ApplicationId);
         model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status = !model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status;
     }
 

@@ -7,6 +7,7 @@
 @inject NavigationManager navigate
 
 <PageTitle>Голосование</PageTitle>
+
 <div class="block-group">
     <div class="block">
         <div class="block-title">
@@ -17,7 +18,6 @@
                 Выберите категорию, в которой хотели бы проголосовать
             </div>
         </div>
-
         <div class="block-content">
             <Accordion Class="w-100">
                 @if (tracks != null && categories != null)
@@ -35,7 +35,6 @@
                     }
                 }
             </Accordion>
-
         </div>
     </div>
 </div>
@@ -48,7 +47,7 @@
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
-        categories = await data.GetCategoriesAsync();
+        categories = await data.GetCategoryModelsAsync();
         userInfo = await data.GetCurrentUserInfoAsync();
     }
 
