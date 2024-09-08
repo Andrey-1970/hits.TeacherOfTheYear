@@ -8,6 +8,7 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid userId);
         Task CreateCurrentUserInfoAsync(string username);
         Task<string> GetApplicationStatusNameAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
@@ -45,7 +46,7 @@ namespace ServerApp.Data.Interfaces
         Task SaveMarkAsync(MarkModel mark, Guid appId);
         Task RatedApplicationAsync(Guid? appId);
         Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
-        Task<VoteModel> GetVoteModelAsync(Guid appId);
+        Task<ApplicationFormVoteModel> GetVoteModelAsync(Guid appId);
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);

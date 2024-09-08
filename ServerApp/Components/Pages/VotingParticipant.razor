@@ -5,7 +5,7 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>@participant.FullName</PageTitle>
+<PageTitle>@participant?.FullName</PageTitle>
 @if (participant is not null)
 {
     <div class="block">
@@ -111,7 +111,7 @@ else
     [Parameter]
     public string? ParticipantId { get; set; }
 
-    VoteModel? participant;
+    ApplicationFormVoteModel? participant;
 
     protected override async Task OnInitializedAsync()
     {
@@ -131,8 +131,8 @@ else
     async Task Vote()
     {
         await data.CastVoteAsync(participant!.Id);
-        participant.IsVoteOfThisApplication = true;
-        participant.TotalVotes += 1;
+        // participant.IsVoteOfThisApplication = true;
+        // participant.TotalVotes += 1;
     }
 
     private void NavToLogin()

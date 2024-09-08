@@ -1,0 +1,30 @@
+﻿@page "/voting/category/application/{ApplicationId:guid}"
+@using ServerApp.Data.Entities
+@using ServerApp.Data.Models.VoteModel
+@inject IDataService data
+
+<h3>@applicationFormVoteModel?.FullName</h3>
+<h3>@applicationFormVoteModel?.IsVoteOfThisApplication</h3>
+
+<h3>@userInfo?.Id</h3>
+<Button @onclick="SetVote">Проголосовать</Button>
+
+
+@code {
+    [Parameter]
+    public Guid ApplicationId { get; set; }
+
+    ApplicationFormVoteModel applicationFormVoteModel = default!;
+    UserInfo? userInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userInfo = await data.GetCurrentUserInfoAsync();
+        applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo!.Id);
+    }
+
+    async Task SetVote()
+    {
+        await data.CastVoteAsync(ApplicationId);
+    }
+}

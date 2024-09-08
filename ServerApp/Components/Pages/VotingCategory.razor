@@ -69,6 +69,6 @@
     
     async Task ViewParticipant(Guid participantId)
     {
-        await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}/participant/{participantId}#"));
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{participantId}#"));
     }
 }

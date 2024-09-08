@@ -31,6 +31,11 @@ namespace ServerApp.Data.Services
             userStateProvider = _userStateProvider;
             userManager = _userManager;
         }
+        public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid userId)
+        {
+            var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
+            return await Task.FromResult(new ApplicationFormVoteModel(model, userId));
+        }
 
         private async Task<UserInfo?> GetUserAsync()
         {
@@ -855,21 +860,21 @@ namespace ServerApp.Data.Services
             return res.ToArray();
         }
 
-        public async Task<VoteModel> GetVoteModelAsync(Guid appId)
+        public async Task<ApplicationFormVoteModel> GetVoteModelAsync(Guid appId)
         {
             var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
             if (user == null)
             {
-                return new VoteModel()
+                return new ApplicationFormVoteModel()
                 {
-                    Id = app.Id, FullName = app.UserInfo.Name, IsVoteOfThisApplication = false,
-                    TotalVotes = app.Votes.Count
+                    //Id = app.Id, FullName = app.UserInfo.Name, IsVoteOfThisApplication = false,
+                    //TotalVotes = app.Votes.Count
                 };
             }
             else
             {
-                return new VoteModel(app, user.Id);
+                return new ApplicationFormVoteModel(app, user.Id);
             }
         }
 
@@ -920,21 +925,21 @@ namespace ServerApp.Data.Services
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
                       throw new InvalidOperationException("App not found.");
 
-            if (context.Votes
-                .Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
-                .Any(e => e.VoterId == user.Id))
+            if (context.Votes.Any(e => e.VoterId == user.Id && e.ApplicationForm.CategoryId == app.CategoryId && e.ApplicationForm.TrackId == app.TrackId))
+            //.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
+            //.Any(e => e.VoterId == user.Id))
             {
                 var vote = context.Votes
                     .Where(v => v.ApplicationForm.CategoryId == app.CategoryId &&
                                 v.ApplicationForm.TrackId == app.TrackId).First(e => e.VoterId == user.Id);
                 vote.ApplicationFormId = appId;
-                vote.VoteTime = DateTime.Now;
+                vote.VoteTime = DateTime.UtcNow;
                 context.Votes.Update(vote);
             }
             else
             {
                 context.Votes.Add(new Vote()
-                    { Id = Guid.NewGuid(), VoteTime = DateTime.Now, VoterId = user.Id, ApplicationFormId = app.Id });
+                    { Id = Guid.NewGuid(), VoteTime = DateTime.UtcNow, VoterId = user.Id, ApplicationFormId = app.Id });
             }
 
             await context.SaveChangesAsync();
