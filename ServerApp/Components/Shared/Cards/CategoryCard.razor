@@ -32,7 +32,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        IsVoted = await data.VoteInThisCategory(Track.Id, Category.Id);
+        IsVoted = await data.VoteInThisCategoryAsync(Track.Id, Category.Id);
     }
 
     async Task OnClickHandler()

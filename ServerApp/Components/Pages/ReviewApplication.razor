@@ -200,7 +200,7 @@
 
     async Task ChangeBlockStatus()
     {
-        await data.ChangeBlockReviewStatus(model!.SelectedMarkBlockId, model.ApplicationId);
+        await data.ChangeBlockReviewStatusAsync(model!.SelectedMarkBlockId, model.ApplicationId);
         model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status = !model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status;
     }
 

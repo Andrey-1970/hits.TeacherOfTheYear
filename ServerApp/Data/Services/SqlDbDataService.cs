@@ -508,7 +508,7 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
-        public async Task ChangeBlockReviewStatus(Guid? markBlockId, Guid? appId)
+        public async Task ChangeBlockReviewStatusAsync(Guid? markBlockId, Guid? appId)
         {
             var blockReview =
                 context.BlockReviews.FirstOrDefault(e => e.MarkBlockId == markBlockId && e.ApplicationId == appId) ??
@@ -813,7 +813,7 @@ namespace ServerApp.Data.Services
             return tables;
         }
 
-        public Task<MarkModel[]> GetMarkModelsForTable(Guid appId, Guid tableId)
+        public Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId)
         {
             return Task.FromResult(context.Tables.Include(table => table.Marks).ThenInclude(mark => mark.MarkVals)
                 .FirstOrDefault(e => e.Id == tableId)!.Marks.Select(m => new MarkModel()
@@ -860,7 +860,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<ApplicationCardModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
+        public async Task<ApplicationCardModel[]> GetApplicationCardModelsAsync(Guid trackId, Guid categoryId)
         {
             var user = await auth.GetUserAsync();
             List<ApplicationCardModel> res = [];
@@ -886,7 +886,7 @@ namespace ServerApp.Data.Services
             return [.. res];
         }
 
-        public async Task<ApplicationVoteModel> GetVoteModelAsync(Guid appId)
+        public async Task<ApplicationVoteModel> GetApplicationVoteModelAsync(Guid appId)
         {
             var user = await auth.GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
@@ -972,7 +972,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId)
+        public async Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId)
         {
             var user = await auth.GetUserAsync();
             var res = false;

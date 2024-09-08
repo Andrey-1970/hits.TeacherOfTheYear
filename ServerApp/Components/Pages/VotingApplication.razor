@@ -120,11 +120,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (Guid.TryParse(ApplicationId, out var participantId))
+        if (Guid.TryParse(ApplicationId, out var appId))
         {
-            model = await data.GetVoteModelAsync(participantId);
-            model.Fields = await data.GetFieldModelsForVotePageAsync(participantId);
-            model.Tables = await data.GetTableModelsForVotePageAsync(participantId);
+            model = await data.GetApplicationVoteModelAsync(appId);
+            model.Fields = await data.GetFieldModelsForVotePageAsync(appId);
+            model.Tables = await data.GetTableModelsForVotePageAsync(appId);
         }
     }
 
@@ -179,7 +179,7 @@ else
 
     async Task Vote()
     {
-        if (await data.VoteInThisCategory(Guid.Parse(TrackId!), Guid.Parse(CategoryId!)))
+        if (await data.VoteInThisCategoryAsync(Guid.Parse(TrackId!), Guid.Parse(CategoryId!)))
         {
             await ShowRevoteConfirmAsync();
         }

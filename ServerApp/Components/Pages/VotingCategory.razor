@@ -71,7 +71,7 @@
         {
             track = await data.GetTrackAsync(trackId);
             category = await data.GetCategoryAsync(categoryId);
-            applications = await data.GetListForVotingPageAsync(trackId, categoryId);
+            applications = await data.GetApplicationCardModelsAsync(trackId, categoryId);
             filtredApplications = applications;
         }
     }
