@@ -1,8 +1,5 @@
 ﻿@page "/admin/marks"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Marks</PageTitle>
 
 <div class="block">
@@ -35,7 +32,7 @@
                                                         </div>
                                                         <div>
                                                             <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(mark.Id)" />
-                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveMark(mark)" />
+                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(mark)" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -62,9 +59,13 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<Mark> marks = default!;
     IEnumerable<Mark> filteredMarks = new List<Mark>();
+
+    private ConfirmDialog? dialog;
 
     string searchQuery = string.Empty;
 
@@ -94,12 +95,27 @@
         }
     }
 
-    async Task RemoveMark(Mark mark)
+    private async Task ShowConfirmationAsync(Mark mark)
     {
-        await data.Mark.RemoveAsync(mark);
-        marks = await data.Mark.GetAllAsync();
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
 
-        StateHasChanged();
+        if (confirmation)
+        {
+            await data.Mark.RemoveAsync(mark);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

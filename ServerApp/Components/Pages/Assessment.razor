@@ -1,4 +1,5 @@
 ﻿@page "/assessment"
+@attribute [Authorize(Roles = "Admin, Expert")]
 
 @using ServerApp.Data.Models.ReviewModel
 

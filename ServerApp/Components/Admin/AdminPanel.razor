@@ -1,10 +1,5 @@
 ﻿@page "/admin"
 
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Identity
-
-@* @attribute [Authorize(Roles = "ADMIN, PARTICIPANT")] *@
-
 <PageTitle>Административная панель</PageTitle>
 
 <div class="block">
@@ -18,6 +13,7 @@
 	        <a type="button" class="btn btn-primary" href="/admin/users">Пользователи</a>
 	        <a type="button" class="btn btn-primary" href="/admin/roles">Роли</a>
             <a type="button" class="btn btn-primary" href="/admin/tracks">Tracks</a>
+            <a type="button" class="btn btn-primary" href="/admin/categories">Categories</a>
 	        <a type="button" class="btn btn-primary" href="/admin/editblocks">EditBlocks</a>
 	        <a type="button" class="btn btn-primary" href="/admin/markblocks">MarkBlocks</a>
         </div>

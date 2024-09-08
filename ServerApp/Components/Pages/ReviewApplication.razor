@@ -1,4 +1,6 @@
 ﻿@page "/review/application/{Id}"
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
 @using ServerApp.Data.Models.ReviewModel
 
 @inject IDataService data

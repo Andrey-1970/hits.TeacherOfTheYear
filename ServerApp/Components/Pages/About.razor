@@ -2,95 +2,112 @@
 
 @using System.Timers;
 
+@inject NavigationManager navigate
+
 <PageTitle>О конкурсе</PageTitle>
-
-<div class="block-title">
-    <div class="block-title-text">
-        О конкурсе
-    </div>
-</div>
-
-<div class="d-flex p-3">
-    <div class="w-50" style="margin-right: 1.5vw;">
-        <div class="block-content-text">
-            <p>На конкурс может быть представлена наиболее значимая работа участника конкурса по выбранному направлению: учебник или учебное пособие; онлайн (электронный) курс, практический курс (практикум); учебно-методическое пособие (комплект), методическое указание (руководство) или иной учебно-методический труд, в соответствии со структурой учебно-методического комплекса; цикл научных, научно-практических или исследовательских разработок; монография или цикл монографических исследований или иной результат научно-исследовательской деятельности.</p>
-            <p>Материалы, представленные в наиболее значимой работе, должны быть оригинальными. Использование участниками конкурса материалов, полученных другими исследователями, без соответствующей ссылки на источник (плагиат), а также повторное представление материалов, ранее подававшихся на конкурсы, проводимые ТИУ, в составе заявок на участие в конкурсах, вошедших в число победителей таких конкурсов, не допускается.</p>
-            <p>Не допускается представление на конкурс материалов, составляющих основу заявки, направляемой для участия в любом ином конкурсе, проводимом ТИУ.</p>
-            <p>Достоверность данных, представленных в заявках, верифицируется по победителям конкурса.</p>
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            О конкурсе
         </div>
     </div>
-    <div class="w-50" style="background-color: #D0D0D0;"></div>
-</div>
 
-<div class="row">
-    <div class="col-md-4 mb-3">
-        <div class="d-flex justify-content-center pb-4">
-            <div class="circle-stage">
-                <div class="circle-stage-number">1</div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage">
+                    <div class="circle-stage-number">1</div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">Первый этап</div>
+
+            <div class="form-text text-center">Прием заявок</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage">
+                    <div class="circle-stage-number">2</div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">Второй этап</div>
+
+            <div class="form-text text-center">Экспертиза заявок и документов</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage">
+                    <div class="circle-stage-number">3</div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">Третий этап</div>
+
+            <div class="form-text text-center">Оценка заявок и присуждение премий Советом конкурса</div>
+        </div>
+    </div>
+
+    <div>
+        <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
+        <div class="countdown mb-3">
+            <div class="countdown-item">
+                <span id="days">@days</span>
+                <span class="label">Дней</span>
+            </div>
+            <div class="countdown-item">
+                <span id="hours">@hours</span>
+                <span class="label">Часов</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes">@minutes</span>
+                <span class="label">Минут</span>
             </div>
         </div>
-
-        <div class="block-subtitle-text text-center pb-2">Первый этап</div>
-
-        <div class="form-text text-center">Прием заявок</div>
+        <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Primary"
+                    To="/voting#">
+                Проголосовать
+            </Button>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <Button Type="ButtonType.Link"
+                            Color="ButtonColor.Primary"
+                            @onclick="ShowConfirmationAsync">
+                        Подать заявку на участие
+                    </Button>
+                </NotAuthorized>
+                <Authorized>
+                    <Button Type="ButtonType.Link"
+                            Color="ButtonColor.Primary"
+                            To="/application-form#">
+                        Подать заявку на участие
+                    </Button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
     </div>
-    
-    <div class="col-md-4 mb-3">
-        <div class="d-flex justify-content-center pb-4">
-            <div class="circle-stage">
-                <div class="circle-stage-number">2</div>
+
+    <ConfirmDialog @ref="dialog" />
+
+    <div class="d-flex p-3">
+        <div class="w-50" style="margin-right: 1.5vw;">
+            <div class="block-content-text">
+                <p>На конкурс может быть представлена наиболее значимая работа участника конкурса по выбранному направлению: учебник или учебное пособие; онлайн (электронный) курс, практический курс (практикум); учебно-методическое пособие (комплект), методическое указание (руководство) или иной учебно-методический труд, в соответствии со структурой учебно-методического комплекса; цикл научных, научно-практических или исследовательских разработок; монография или цикл монографических исследований или иной результат научно-исследовательской деятельности.</p>
+                <p>Материалы, представленные в наиболее значимой работе, должны быть оригинальными. Использование участниками конкурса материалов, полученных другими исследователями, без соответствующей ссылки на источник (плагиат), а также повторное представление материалов, ранее подававшихся на конкурсы, проводимые ТИУ, в составе заявок на участие в конкурсах, вошедших в число победителей таких конкурсов, не допускается.</p>
+                <p>Не допускается представление на конкурс материалов, составляющих основу заявки, направляемой для участия в любом ином конкурсе, проводимом ТИУ.</p>
+                <p>Достоверность данных, представленных в заявках, верифицируется по победителям конкурса.</p>
             </div>
         </div>
-
-        <div class="block-subtitle-text text-center pb-2">Второй этап</div>
-
-        <div class="form-text text-center">Экспертиза заявок и документов</div>
-    </div>
-
-    <div class="col-md-4 mb-3">
-        <div class="d-flex justify-content-center pb-4">
-            <div class="circle-stage">
-                <div class="circle-stage-number">3</div>
-            </div>
-        </div>
-
-        <div class="block-subtitle-text text-center pb-2">Третий этап</div>
-
-        <div class="form-text text-center">Оценка заявок и присуждение премий Советом конкурса</div>
-    </div>
-</div>
-
-<div>
-    <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
-    <div class="countdown mb-3">
-        <div class="countdown-item">
-            <span id="days">@days</span>
-            <span class="label">Дней</span>
-        </div>
-        <div class="countdown-item">
-            <span id="hours">@hours</span>
-            <span class="label">Часов</span>
-        </div>
-        <div class="countdown-item">
-            <span id="minutes">@minutes</span>
-            <span class="label">Минут</span>
-        </div>
-    </div>
-    <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Primary"
-                To="/voting#">
-            Проголосовать
-        </Button>
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Primary"
-                To="/application-form#">
-            Подать заявку на участие
-        </Button>
+        <div class="w-50" style="background-color: #D0D0D0;"></div>
     </div>
 </div>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!  БЛОК ПРИЗОВ -->
+
 <div class="block-title">
     <div class="block-title-text">
         Призы
@@ -124,6 +141,8 @@
 
     private Timer? timer;
 
+    private ConfirmDialog? dialog;
+
     protected override void OnInitialized()
     {
 
@@ -135,6 +154,26 @@
 
         // Запуск таймера
         timer.Start();
+    }
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Для подачи заявки на участие необходима авторизация на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigate.NavigateTo("/application-form#");
+        }
     }
 
     private void UpdateCountdown(object sender, ElapsedEventArgs e)
@@ -149,7 +188,7 @@
             minutes = remainingTime.Minutes.ToString("D2");
 
             // Обновление UI
-            InvokeAsync(StateHasChanged); 
+            InvokeAsync(StateHasChanged);
         }
         else
         {

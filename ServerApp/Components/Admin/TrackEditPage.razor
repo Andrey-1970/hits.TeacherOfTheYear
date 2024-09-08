@@ -1,9 +1,6 @@
 ﻿@page "/admin/tracks/{Id:guid}"
 @page "/admin/tracks/new"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Track</PageTitle>
 
 <div class="block">
@@ -110,6 +107,8 @@
     async Task OnValidSumbit()
     {
         await data.Track.SaveAsync(track);
+
         navigation.NavigateTo("/admin/tracks");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }

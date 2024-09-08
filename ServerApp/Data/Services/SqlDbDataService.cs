@@ -591,7 +591,7 @@ namespace ServerApp.Data.Services
 
             await AutoSetMarksWithDynamicMethods(app.Id);
 
-            await userManager.AddToRoleAsync((await userManager.FindByEmailAsync(user.Username!))!,
+            await userManager.AddToRoleAsync((await userManager.FindByEmailAsync(app.UserInfo!.Username!))!,
                 (context.Roles.FirstOrDefaultAsync(r => r.Name == "Participant").Result ??
                  throw new NullReferenceException("Not found role with name 'Participant'")).Name!);
         }
@@ -850,20 +850,23 @@ namespace ServerApp.Data.Services
             if (user != null && apps.Any(e => e.Votes.Any(v => v.VoterId == user.Id)))
             {
                 var currentApp = apps.FirstOrDefault(e => e.Votes.Any(v => v.VoterId == user.Id));
-                var curAppModel = new ListItemModel(currentApp!);
-                curAppModel.IsVoted = true;
+                var curAppModel = new ListItemModel(currentApp!)
+                {
+                    IsVoted = true
+                };
                 res.Add(curAppModel);
                 apps.Remove(currentApp!);
             }
 
             res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ListItemModel(e)));
-            return res.ToArray();
+            return [.. res];
         }
 
         public async Task<ApplicationFormVoteModel> GetVoteModelAsync(Guid appId)
         {
             var user = await GetUserAsync();
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
+                      throw new InvalidOperationException("App not found."); ;
             if (user == null)
             {
                 return new ApplicationFormVoteModel()

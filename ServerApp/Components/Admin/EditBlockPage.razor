@@ -1,8 +1,5 @@
 ﻿@page "/admin/editblocks"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка EditBlocks</PageTitle>
 
 <div class="block">
@@ -28,7 +25,7 @@
                                                 @block.Name
                                                 <div>
                                                     <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(block.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await RemoveBlock(block)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await ShowConfirmationAsync(block)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -48,20 +45,40 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<EditBlock> blocks = default!;
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         blocks = await data.EditBlock.GetAllAsync();
     }
-    async Task RemoveBlock(EditBlock block)
-    {
-        await data.EditBlock.RemoveAsync(block);
-        blocks = await data.EditBlock.GetAllAsync();
 
-        StateHasChanged();
+    private async Task ShowConfirmationAsync(EditBlock block)
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.EditBlock.RemoveAsync(block);
+            blocks = await data.EditBlock.GetAllAsync();
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

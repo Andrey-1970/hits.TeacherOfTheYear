@@ -1,4 +1,5 @@
 ﻿@page "/review"
+@attribute [Authorize(Roles = "Admin, Organiser")]
 
 @using ServerApp.Data.Models.ReviewModel
 

@@ -1,9 +1,6 @@
 ﻿@page "/admin/markblocks/{Id:guid}"
 @page "/admin/markblocks/new"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка MarkBlock</PageTitle>
 
 <div class="block">
@@ -189,6 +186,7 @@
         }
 
         navigation.NavigateTo("/admin/markblocks");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }
 

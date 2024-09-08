@@ -1,31 +1,31 @@
-﻿@page "/admin/tracks"
+﻿@page "/admin/categories"
 
-<PageTitle>Настройка Tracks</PageTitle>
+<PageTitle>Настройка Categories</PageTitle>
 
 <div class="block">
     <div class="block-content">
-        @if (tracks != null)
+        @if (categories != null)
         {
             <Card class="w-100">
-                <CardHeader>Tracks</CardHeader>
+                <CardHeader>Categories</CardHeader>
                 <CardBody>
                     <div class="table-container">
                         <table class="table table-hover table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th class="p-2">Название Track</th>
+                                    <th class="p-2">Название Category</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var track in tracks)
+                                @foreach (var category in categories)
                                 {
                                     <tr>
                                         <td class="p-2">
                                             <div class="d-flex justify-content-between">
-                                                @track.Name
+                                                @category.Name
                                                 <div>
-                                                    <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(track.Id)" />
-                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(track)" />
+                                                    <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(category.Id)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(category)" />
                                                 </div>
                                             </div>
                                         </td>
@@ -38,7 +38,7 @@
             </Card>
         }
         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
-            <a type="button" class="btn btn-primary" href="/admin/tracks/new">Добавить</a>
+            <a type="button" class="btn btn-primary" href="/admin/categories/new">Добавить</a>
             <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
         </div>
     </div>
@@ -47,16 +47,16 @@
 <ConfirmDialog @ref="dialog" />
 
 @code {
-    IEnumerable<Track> tracks = default!;
+    IEnumerable<Category> categories = default!;
     private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        tracks = await data.Track.GetAllAsync();
+        categories = await data.Category.GetAllAsync();
     }
 
-    private async Task ShowConfirmationAsync(Track track)
+    private async Task ShowConfirmationAsync(Category category)
     {
         var options = new ConfirmDialogOptions
             {
@@ -73,7 +73,8 @@
 
         if (confirmation)
         {
-            await data.Track.RemoveAsync(track);
+            await data.Category.RemoveAsync(category);
+            // categories = await data.Category.GetAllAsync();
 
             toastService.Notify(new(ToastType.Warning, "Запись удалена"));
         }
@@ -81,6 +82,6 @@
 
     void GoTo(Guid id)
     {
-        navigation.NavigateTo($"/admin/tracks/{id}");
+        navigation.NavigateTo($"/admin/categories/{id}");
     }
 }

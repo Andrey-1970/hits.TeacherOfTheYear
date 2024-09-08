@@ -21,15 +21,25 @@
             <div class="form-text">
                 Выберите кандидата для голосования
             </div>
+            <input type="text" class="form-control" placeholder="Поиск по ФИО, учебному заведению или институту" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 
-        <div class="d-flex flex-wrap justify-content-center g-1 mt-1 mb-1">
-            @if (participants is not null)
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            @if (filtredParticipants is not null)
             {
-                @foreach (var participant in participants)
+                @if (filtredParticipants.Any())
                 {
-                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
-                }            
+                    @foreach (var participant in filtredParticipants)
+                    {
+                        <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center">
+                        Не найдены кандидаты
+                    </div>
+                }
             }
             else
             {
@@ -52,6 +62,9 @@
     CategoryModel category = default!;
     ListItemModel[]? participants;
 
+    string searchQuery = string.Empty;
+    ListItemModel[]? filtredParticipants;
+
     protected override async Task OnParametersSetAsync()
     {
         if (Guid.TryParse(TrackId, out var trackId) && Guid.TryParse(CategoryId, out var categoryId))
@@ -59,6 +72,7 @@
             track = await data.GetTrackAsync(trackId);
             category = await data.GetCategoryAsync(categoryId);
             participants = await data.GetListForVotingPageAsync(trackId, categoryId);
+            filtredParticipants = participants;
         }
     }
 
@@ -66,9 +80,33 @@
     {
         await Task.Run(() => navigate.NavigateTo("/voting#"));
     }
-    
+
     async Task ViewParticipant(Guid participantId)
     {
         await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{participantId}#"));
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterParticipant();
+    }
+
+    private void FilterParticipant()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filtredParticipants = participants;
+        }
+        else
+        {
+            var searchWords = searchQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            filtredParticipants = participants!.Where(p =>
+                searchWords.All(word =>
+                    (p.FullName != null && p.FullName.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.WorkPlace != null && p.WorkPlace.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (p.Faculty != null && p.Faculty.Contains(word, StringComparison.OrdinalIgnoreCase)))).ToArray();
+        }
     }
 }

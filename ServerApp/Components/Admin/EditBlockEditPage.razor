@@ -1,9 +1,6 @@
 ﻿@page "/admin/editblocks/{Id:guid}"
 @page "/admin/editblocks/new"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка EditBlock</PageTitle>
 
 <div class="block">
@@ -158,5 +155,6 @@
         }
 
         navigation.NavigateTo("/admin/editblocks");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }

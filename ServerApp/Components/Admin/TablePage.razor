@@ -1,8 +1,5 @@
 ﻿@page "/admin/tables"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Tables</PageTitle>
 
 <div class="block">
@@ -35,7 +32,7 @@
                                                         </div>
                                                         <div>
                                                             <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(table.Id)" />
-                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveTable(table)" />
+                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(table)" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -62,9 +59,13 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<Table> tables = default!;
     IEnumerable<Table> filteredTables = new List<Table>();
+
+    private ConfirmDialog? dialog;
 
     string searchQuery = string.Empty;
 
@@ -94,12 +95,27 @@
         }
     }
 
-    async Task RemoveTable(Table mark)
+    private async Task ShowConfirmationAsync(Table table)
     {
-        await data.Table.RemoveAsync(mark);
-        tables = await data.Table.GetAllAsync();
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
 
-        StateHasChanged();
+        if (confirmation)
+        {
+            await data.Table.RemoveAsync(table);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

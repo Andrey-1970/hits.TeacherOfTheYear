@@ -21,7 +21,7 @@
                                 <tr>
                                     <td class="d-flex justify-content-between p-2">
                                         @role.Name
-                                        <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveRole(role)" />
+                                        <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(role)" />
                                     </td>
                                 </tr>
                             }
@@ -38,9 +38,13 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<IdentityRole> roles = [];
     private string newRole = String.Empty;
+
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,11 +58,31 @@
         {
             await roleManager.CreateAsync(new(newRole));
             newRole = String.Empty;
+
+            toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
         }
     }
-    
-    async Task RemoveRole(IdentityRole role)
+
+    private async Task ShowConfirmationAsync(IdentityRole role)
     {
-        await roleManager.DeleteAsync(role);
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await roleManager.DeleteAsync(role);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 }

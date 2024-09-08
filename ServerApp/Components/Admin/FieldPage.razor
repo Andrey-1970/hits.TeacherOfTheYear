@@ -1,8 +1,5 @@
 ﻿@page "/admin/fields"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Fields</PageTitle>
 
 <div class="block">
@@ -35,7 +32,7 @@
                                                         </div>
                                                         <div>
                                                             <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(field.Id)" />
-                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => RemoveField(field)" />
+                                                            <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="() => ShowConfirmationAsync(field)" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -62,9 +59,13 @@
     </div>
 </div>
 
+<ConfirmDialog @ref="dialog" />
+
 @code {
     IEnumerable<Field> fields = default!;
     IEnumerable<Field> filteredFields = new List<Field>();
+
+    private ConfirmDialog? dialog;
 
     string searchQuery = string.Empty;
 
@@ -94,12 +95,27 @@
         }
     }
 
-    async Task RemoveField(Field field)
+    private async Task ShowConfirmationAsync(Field field)
     {
-        await data.Field.RemoveAsync(field);
-        fields = await data.Field.GetAllAsync();
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
 
-        StateHasChanged();
+        if (confirmation)
+        {
+            await data.Field.RemoveAsync(field);
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
     }
 
     void GoTo(Guid id)

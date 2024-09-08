@@ -1,1 +1,7 @@
 ﻿@using ServerApp.Data.Entities
+
+@inject IAdmin data
+@inject NavigationManager navigation
+@inject ToastService toastService
+
+@attribute [Authorize(Roles = "Admin")]

@@ -1,9 +1,6 @@
 ﻿@page "/admin/tables/{Id:guid}"
 @page "/admin/tables/new"
 
-@inject IAdmin data
-@inject NavigationManager navigation
-
 <PageTitle>Настройка Table</PageTitle>
 
 <div class="block">
@@ -237,5 +234,6 @@
         }
 
         navigation.NavigateTo("/admin/tables");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
 }
