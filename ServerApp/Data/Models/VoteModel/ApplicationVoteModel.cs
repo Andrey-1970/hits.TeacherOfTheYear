@@ -3,14 +3,14 @@ using ServerApp.Data.Models.EditModel;
 
 namespace ServerApp.Data.Models.VoteModel;
 
-public class VoteModel
+public class ApplicationVoteModel
 {
-    public VoteModel()
+    public ApplicationVoteModel()
     {
         
     }
 
-    public VoteModel(ApplicationForm applicationForm, Guid userId)
+    public ApplicationVoteModel(ApplicationForm applicationForm, Guid userId)
     {
         Id = applicationForm.Id;
         FullName = applicationForm.UserInfo.Name!;

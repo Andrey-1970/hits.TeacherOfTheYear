@@ -3,14 +3,14 @@ using ServerApp.Data.Entities;
 
 namespace ServerApp.Data.Models.VoteModel;
 
-public class ListItemModel
+public class ApplicationCardModel
 {
-    public ListItemModel()
+    public ApplicationCardModel()
     {
         
     }
 
-    public ListItemModel(ApplicationForm applicationForm)
+    public ApplicationCardModel(ApplicationForm applicationForm)
     {
         Id = applicationForm.Id;
         FullName = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "ФИО")!.Value;

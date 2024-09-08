@@ -36,7 +36,7 @@ namespace ServerApp.Data.Services
             return await auth.GetUserAsync();
         }
 
-        public async Task<CategoryModel[]> GetCategoriesAsync()
+        public async Task<IEnumerable<CategoryModel>> GetCategoryModelsAsync()
         {
             return await context.Categories.Select(e => new CategoryModel(e)).ToArrayAsync();
         }
@@ -860,10 +860,10 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
+        public async Task<ApplicationCardModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId)
         {
             var user = await auth.GetUserAsync();
-            List<ListItemModel> res = [];
+            List<ApplicationCardModel> res = [];
 
             var apps = context.ApplicationForms.Where(e =>
                     e.TrackId == trackId &&
@@ -874,7 +874,7 @@ namespace ServerApp.Data.Services
             if (user != null && apps.Any(e => e.Votes.Any(v => v.VoterId == user.Id)))
             {
                 var currentApp = apps.FirstOrDefault(e => e.Votes.Any(v => v.VoterId == user.Id));
-                var curAppModel = new ListItemModel(currentApp!)
+                var curAppModel = new ApplicationCardModel(currentApp!)
                 {
                     IsVoted = true
                 };
@@ -882,18 +882,18 @@ namespace ServerApp.Data.Services
                 apps.Remove(currentApp!);
             }
 
-            res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ListItemModel(e)));
+            res.AddRange(apps.OrderBy(r => Guid.NewGuid()).Select(e => new ApplicationCardModel(e)));
             return [.. res];
         }
 
-        public async Task<VoteModel> GetVoteModelAsync(Guid appId)
+        public async Task<ApplicationVoteModel> GetVoteModelAsync(Guid appId)
         {
             var user = await auth.GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
                       throw new InvalidOperationException("App not found."); ;
             if (user == null)
             {
-                return new VoteModel()
+                return new ApplicationVoteModel()
                 {
                     Id = app.Id, FullName = app.UserInfo.Name, IsVoteOfThisApplication = false,
                     TotalVotes = app.Votes.Count
@@ -901,7 +901,7 @@ namespace ServerApp.Data.Services
             }
             else
             {
-                return new VoteModel(app, user.Id);
+                return new ApplicationVoteModel(app, user.Id);
             }
         }
 

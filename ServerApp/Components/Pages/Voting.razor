@@ -16,7 +16,6 @@
                 Выберите категорию, в которой хотели бы проголосовать
             </div>
         </div>
-
         <div class="block-content">
             <Accordion Class="w-100">
                 @foreach (var track in tracks)
@@ -25,25 +24,24 @@
                         <Content>
                             @foreach (var category in categories)
                             {
-                                <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category"/>
+                                <CategoryCard Title="@category.Name" Track="track" Category="category" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" />
                             }
                         </Content>
                     </AccordionItem>
                 }
             </Accordion>
-
         </div>
     </div>
 </div>
 
 @code {
     IEnumerable<TrackModel> tracks = default!;
-    CategoryModel[] categories = default!;
+    IEnumerable<CategoryModel> categories = default!;
 
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
-        categories = await data.GetCategoriesAsync();
+        categories = await data.GetCategoryModelsAsync();
     }
 
     async Task ViewParticipantsHandler(Guid trackId, Guid categoryId)
