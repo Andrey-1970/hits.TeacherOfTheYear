@@ -12,7 +12,7 @@ namespace ServerApp.Data.Interfaces
         Task CreateCurrentUserInfoAsync(string username);
         Task<string> GetApplicationStatusNameAsync();
         Task<UserInfo?> GetCurrentUserInfoAsync();
-        Task<IEnumerable<CategoryModel>> GetCategoryModelsAsync();
+        Task<CategoryModel[]> GetCategoryModelsAsync();
         Task<EditModel> GetCurrentUserEditModelAsync();
         Task<TrackModel[]> GetTrackModelsAsync();
         Task<IEnumerable<EditBlockModel>> GetEditBlockModelsAsync(Guid? trackId);
@@ -45,7 +45,7 @@ namespace ServerApp.Data.Interfaces
         Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
         Task RatedApplicationAsync(Guid? appId);
-        Task<ListItemModel[]> GetListForVotingPageAsync(Guid trackId, Guid categoryId);
+        Task<ApplicationCardModel[]> GetApplicationCardModelsAsync(Guid trackId, Guid categoryId);
         Task<ApplicationFormVoteModel> GetVoteModelAsync(Guid appId);
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);

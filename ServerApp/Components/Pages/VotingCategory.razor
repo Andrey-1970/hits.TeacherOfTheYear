@@ -80,7 +80,7 @@
 
     async Task ViewApplication(Guid appId)
     {
-        await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{participantId}#"));
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{appId}#"));
     }
 
     private void OnSearchInput(ChangeEventArgs e)

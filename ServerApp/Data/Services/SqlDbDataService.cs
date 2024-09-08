@@ -64,7 +64,7 @@ namespace ServerApp.Data.Services
             return await GetUserAsync();
         }
 
-        public async Task<IEnumerable<CategoryModel>> GetCategoryModelsAsync()
+        public async Task<CategoryModel[]> GetCategoryModelsAsync()
         {
             return await context.Categories.Select(e => new CategoryModel(e)).ToArrayAsync();
         }

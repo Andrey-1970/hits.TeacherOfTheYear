@@ -78,7 +78,6 @@
                 <NotAuthorized>
                     <Button Color="ButtonColor.Primary"
                             Class="w-100"
-                            @onclick="NavToLogin"
                             @onclick="ShowConfirmationAsync">
                         Проголосовать за участника
                     </Button>
@@ -116,16 +115,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (Guid.TryParse(ApplicationId, out var appId))
-        {
-            userInfo = await data.GetCurrentUserInfoAsync();
-            applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo?.Id ?? null);
-        }
+        userInfo = await data.GetCurrentUserInfoAsync();
+        applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo?.Id ?? null);
+        
     }
 
     async Task SetVote()
     {
-        if (await data.VoteInThisCategoryAsync(Guid.Parse(TrackId!), Guid.Parse(CategoryId!)))
+        if (await data.VoteInThisCategoryAsync(applicationFormVoteModel.TrackId, applicationFormVoteModel.CategoryId, userInfo.Id))
         {
             await ShowRevoteConfirmAsync();
         }
