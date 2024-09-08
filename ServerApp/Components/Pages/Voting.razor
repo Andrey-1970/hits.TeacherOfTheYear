@@ -1,5 +1,6 @@
 @page "/voting"
 
+@using ServerApp.Data.Entities
 @using ServerApp.Data.Models.EditModel
 
 @inject IDataService data
@@ -27,7 +28,7 @@
                             <Content>
                                 @foreach (var category in categories)
                                 {
-                                    <CategoryCard OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category" data="data"/>
+                                    <CategoryCard OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category" data="data" userInfo="userInfo"/>
                                 }
                             </Content>
                         </AccordionItem>
@@ -42,11 +43,13 @@
 @code {
     TrackModel[]? tracks;
     CategoryModel[]? categories;
+    UserInfo? userInfo;
 
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
         categories = await data.GetCategoriesAsync();
+        userInfo = await data.GetCurrentUserInfoAsync();
     }
 
     async Task ViewParticipantsHandler(Guid trackId, Guid categoryId)

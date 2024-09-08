@@ -31,7 +31,7 @@ namespace ServerApp.Data.Services
             userStateProvider = _userStateProvider;
             userManager = _userManager;
         }
-        public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid userId)
+        public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId)
         {
             var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
             return await Task.FromResult(new ApplicationFormVoteModel(model, userId));
@@ -948,19 +948,11 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId)
+        public async Task<bool> VoteInThisCategory(Guid trackId, Guid categoryId, Guid userId)
         {
-            try
-            {
-                var user = await GetUserAsync();
                 return context.Votes.Any(e =>
-                    e.VoterId == user.Id && e.ApplicationForm.TrackId == trackId &&
+                    e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&
                     e.ApplicationForm.CategoryId == categoryId);
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
         }
     }
 }

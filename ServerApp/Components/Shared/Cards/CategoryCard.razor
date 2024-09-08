@@ -1,3 +1,4 @@
+@using ServerApp.Data.Entities
 @using ServerApp.Data.Models.EditModel
 
 <div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
@@ -26,11 +27,14 @@
     [Parameter, EditorRequired]
     public IDataService data { get; set; }
     
+    [Parameter, EditorRequired]
+    public UserInfo? userInfo { get; set; }
+    
     public bool IsVoted = false;
 
     protected override async Task OnInitializedAsync()
     {
-        IsVoted = await data.VoteInThisCategory(Track.Id, Category.Id);
+        IsVoted = userInfo != null ? await data.VoteInThisCategory(Track.Id, Category.Id, userInfo.Id) : false;
     }
 
     async Task OnClickHandler()

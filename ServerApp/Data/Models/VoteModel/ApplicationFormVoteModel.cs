@@ -6,11 +6,11 @@ namespace ServerApp.Data.Models.VoteModel;
 public class ApplicationFormVoteModel
 {
     readonly ApplicationForm applicationForm;
-    readonly Guid userId;
+    readonly Guid? userId;
 
     public ApplicationFormVoteModel() { }
 
-    public ApplicationFormVoteModel(ApplicationForm applicationForm, Guid userId)
+    public ApplicationFormVoteModel(ApplicationForm applicationForm, Guid? userId)
     {
         this.applicationForm = applicationForm;
         this.userId = userId;
@@ -22,7 +22,7 @@ public class ApplicationFormVoteModel
     public Guid TrackId => applicationForm.TrackId;
     public Guid CategoryId => (Guid)applicationForm.CategoryId!;
 
-    public bool IsVoteOfThisApplication => applicationForm.Votes.Any(x => x.VoterId == userId);
+    public bool IsVoteOfThisApplication => userId != null ? applicationForm.Votes.Any(x => x.VoterId == userId) : false;
 
     public FieldModel[] Fields => applicationForm.FieldVals
         .Where(e => e.Field!.IsDisplayedOnVotingPage)

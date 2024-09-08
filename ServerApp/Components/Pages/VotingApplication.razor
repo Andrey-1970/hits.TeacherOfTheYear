@@ -112,7 +112,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         userInfo = await data.GetCurrentUserInfoAsync();
-        applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo!.Id);
+        applicationFormVoteModel = await data.GetApplicationAsync(ApplicationId, userInfo?.Id ?? null);
     }
 
     async Task SetVote()
