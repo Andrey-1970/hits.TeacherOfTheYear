@@ -19,8 +19,37 @@ public class ApplicationFormVoteModel
     public Guid Id => applicationForm.Id;
     public string? FullName => applicationForm.UserInfo.Name;
     public int? TotalVotes => applicationForm.Votes.Count;
+    public Guid TrackId => applicationForm.TrackId;
+    public Guid CategoryId => (Guid)applicationForm.CategoryId!;
 
     public bool IsVoteOfThisApplication => applicationForm.Votes.Any(x => x.VoterId == userId);
-    public FieldModel[] Fields { get; set; } = [];
-    public TableModel[] Tables { get; set; } = [];
+
+    public FieldModel[] Fields => applicationForm.FieldVals
+        .Where(e => e.Field!.IsDisplayedOnVotingPage)
+        .Select(e => new FieldModel(e.Field, applicationForm.UserInfoId))
+        .ToArray();
+    public TableModel[] Tables => applicationForm.Track.EditBlocks
+        .SelectMany(eb => eb.Tables)
+    .Where(t => t.IsDisplayedOnVotingPage).OrderBy(t => t.Number).Select(t =>
+    new TableModel
+    {
+        Id = t.Id,
+        Name = t.Name,
+        Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+        Rows = t.Rows
+            .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == applicationForm.Id))
+            .Select(r => new RowModel
+            {
+                Id = r.Id,
+                Cells = r.CellVals
+                    .OrderBy(c => c.Column!.Number)
+                    .Where(cv => cv.ApplicationId == applicationForm.Id)
+                    .Select(cv => new CellModel
+                    {
+                        Id = cv.Id,
+                        Value = cv.Value,
+                        ColumnId = cv.ColumnId
+                    }).ToList()
+            }).ToList()
+    }).ToArray();
 }

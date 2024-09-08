@@ -8,11 +8,11 @@ namespace ServerApp.Data.Models.EditModel
         {
             
         }
-        public FieldModel(Field field, UserInfo user)
+        public FieldModel(Field field,Guid userId)
         {
             ArgumentNullException.ThrowIfNull(field);
             Id = field.Id;
-            ValId = (field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id) ?? new FieldVal()).Id;
+            ValId = (field.FieldVals.FirstOrDefault(e => e.Application.UserInfoId == userId) ?? new FieldVal()).Id;
             IsRequired = field.IsRequired;
             Number = field.Number;
             Name = field.Name;
@@ -20,7 +20,7 @@ namespace ServerApp.Data.Models.EditModel
             Placeholder = field.Placeholder;
             ValueType = field.ValueType!.Name;
             SelectValues = field.SelectValues.Select(s => s.Value).ToArray();
-            Value = field.FieldVals.FirstOrDefault(e => e.ApplicationId == user.Applications.FirstOrDefault()?.Id)?.Value;
+            Value = field.FieldVals.FirstOrDefault(e => e.Application.UserInfoId == userId)?.Value;
         }
 
         public FieldVal ToEntity()

@@ -1,14 +1,106 @@
 ﻿@page "/voting/category/application/{ApplicationId:guid}"
+
 @using ServerApp.Data.Entities
 @using ServerApp.Data.Models.VoteModel
+
 @inject IDataService data
+@inject NavigationManager navigate
 
-<h3>@applicationFormVoteModel?.FullName</h3>
-<h3>@applicationFormVoteModel?.IsVoteOfThisApplication</h3>
-
-<h3>@userInfo?.Id</h3>
-<Button @onclick="SetVote">Проголосовать</Button>
-
+<PageTitle>@applicationFormVoteModel?.FullName</PageTitle>
+@if (applicationFormVoteModel is not null)
+{
+<div class="block">
+    <div class="block-title">
+        <div class="title-direction">
+            <div class="block-title-text">@applicationFormVoteModel.FullName</div>
+            <div class="text-direction">
+                <div class="brief-title">Количество голосов: @applicationFormVoteModel.TotalVotes</div>
+                <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="Back" type="button" />
+            </div>
+        </div>
+    </div>
+    <div class="block-content block-info">
+        <div class="leftside">
+            <div class="brief-info">
+                @for (int i = 0; i < applicationFormVoteModel.Fields.Count() / 2; i++)
+                {
+                <div class="row w-100 m-0">
+                    @for (int j = i * 2; j < i * 2 + 2; j++)
+                    {
+                    <div class="col-6">
+                        <div class="brief-title">@applicationFormVoteModel.Fields[j].Name</div>
+                        <div class="brief-text">@applicationFormVoteModel.Fields[j].Value</div>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            @foreach (var table in applicationFormVoteModel.Tables)
+            {
+            <div class="table-container mb-2">
+                <div class="block-subtitle-text">@table.Name</div>
+                @if (table.Rows is not null && table.Rows.Any())
+                {
+                <table class="table-stand">
+                    <thead>
+                    <tr>
+                        @foreach (var column in table.Columns)
+                        {
+                        <th>@column.Name</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var row in table.Rows)
+                    {
+                    <tr>
+                        @foreach (var cell in row.Cells)
+                        {
+                        <td>@cell.Value</td>
+                        }
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+                }
+                else
+                {
+                <div class="d-flex justify-content-center w-100">
+                    <div class="text-danger">Информация отсутствует</div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+        <div class="rightside">
+        <div class="photo"></div>
+        <AuthorizeView>
+            <NotAuthorized>
+                <Button Color="ButtonColor.Primary"
+                        Class="w-100"
+                        @onclick="NavToLogin">
+                    Проголосовать за участника
+                </Button>
+            </NotAuthorized>
+            <Authorized>
+                <Button Color="ButtonColor.Primary"
+                        Class="w-100"
+                        Disabled="applicationFormVoteModel.IsVoteOfThisApplication"
+                        @onclick="SetVote">
+                    Проголосовать за участника
+                </Button>
+            </Authorized>
+        </AuthorizeView>
+        </div>
+    </div>
+</div>
+}
+else
+{
+<div class="d-flex justify-content-center">
+    <Spinner Color="SpinnerColor.Primary" />
+</div>
+}
 
 @code {
     [Parameter]
@@ -26,5 +118,15 @@
     async Task SetVote()
     {
         await data.CastVoteAsync(ApplicationId);
+    }
+    
+    async Task Back()
+    {
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/{applicationFormVoteModel.TrackId}/{applicationFormVoteModel.CategoryId}#"));
+    }
+    
+    private void NavToLogin()
+    {
+        navigate.NavigateTo($"account/login?returnUrl={Uri.EscapeDataString(navigate.Uri)}", forceLoad: true);
     }
 }

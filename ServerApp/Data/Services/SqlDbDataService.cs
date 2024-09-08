@@ -102,7 +102,7 @@ namespace ServerApp.Data.Services
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var editBlock = await context.EditBlocks
                 .FirstOrDefaultAsync(e => e.Id == editBlockId);
-            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
+            return editBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user.Id)).ToArray();
         }
 
         public async Task<TableModel[]> GetTableModelsForEditBlockAsync(Guid? editBlockId)
@@ -475,7 +475,7 @@ namespace ServerApp.Data.Services
                        throw new InvalidOperationException("User does not exist.");
             var markBlock = await context.MarkBlocks
                 .FirstOrDefaultAsync(e => e.Id == markBlockId);
-            return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user)).ToArray();
+            return markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldModel(e, user.Id)).ToArray();
         }
 
         public async Task<TableModel[]> GetTableModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
@@ -884,7 +884,7 @@ namespace ServerApp.Data.Services
                 .FirstOrDefaultAsync(e => e.Id == appId);
             var user = app!.UserInfo;
             var listRes = context.Fields.OrderBy(f => f.Number).Where(e => e.IsDisplayedOnVotingPage)
-                .Select(e => new FieldModel(e, user));
+                .Select(e => new FieldModel(e, user.Id));
             return await listRes.ToArrayAsync();
         }
 
