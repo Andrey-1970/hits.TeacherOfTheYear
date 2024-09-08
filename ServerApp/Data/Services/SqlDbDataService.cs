@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Reflection;
 using System.Security;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
@@ -15,16 +16,32 @@ using YourProject.Data.Services;
 
 namespace ServerApp.Data.Services
 {
-    public class SqlDbDataService(
-        ApplicationDbContext context,
-        IAuthorization auth,
-        UserManager<ApplicationUser> userManager) : IDataService
+    public class SqlDbDataService : IDataService
     {
+        private readonly ApplicationDbContext context;
+        private readonly AuthenticationStateProvider userStateProvider;
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public SqlDbDataService(
+            ApplicationDbContext _context, 
+            AuthenticationStateProvider _userStateProvider, 
+            UserManager<ApplicationUser> _userManager)
+        {
+            context = _context;
+            userStateProvider = _userStateProvider;
+            userManager = _userManager;
+        }
+
         private async Task<UserInfo?> GetUserAsync()
         {
-            var username = await auth.GetCurrentUserUsername();
-            return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == username);
+            var userState = await userStateProvider.GetAuthenticationStateAsync();
+            if (userState == null || userState.User == null || userState.User.Identity == null)
+            {
+                throw new SecurityException("User is not authorizred to this action.");
+            }
+            return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == userState.User.Identity!.Name!);
         }
+        
         public async Task CreateCurrentUserInfoAsync(string username)
         {
             context.UserInfos.Add(new UserInfo() { Id = Guid.NewGuid(), Username = username });
@@ -411,8 +428,7 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
         {
-            var username = await auth.GetCurrentUserUsername();
-            var user = await context.UserInfos.FirstOrDefaultAsync(x => x.Username == username);
+            var user = await GetUserAsync();
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a =>
                     a.ApplicationStatus.Number == 2 || a.ApplicationStatus.Number == 3 && a.ReviewerId == user!.Id))

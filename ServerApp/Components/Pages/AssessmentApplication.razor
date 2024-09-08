@@ -18,7 +18,7 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @data.GetTrackAsync(model.SelectedTrackId).Result.Name</div>
+                <div class="form-text">Выбранный трек: @trackName</div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
@@ -181,6 +181,7 @@
     EditContext? editContext;
     ValidationMessageStore? messageStore;
     MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
+    string? trackName;
 
     protected override async Task OnInitializedAsync()
     {
@@ -206,6 +207,9 @@
 
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
+
+        var track = await data.GetTrackAsync(model.SelectedTrackId);
+        trackName = track.Name;
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
@@ -246,17 +250,17 @@
         }
         else
         {
-            SaveMark(mark);
-        };
+            _ = SaveMarkAsync(mark); // Asynchronous fire-and-forget
+        }
     }
 
-    void SaveMark(MarkModel mark)
+    async Task SaveMarkAsync(MarkModel mark)
     {
-        data.SaveMarkAsync(mark, model!.ApplicationId);
-        model.MarkBlocks = data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId).Result;
-        var tables =model.Tables.ToList();
+        await data.SaveMarkAsync(mark, model!.ApplicationId);
+        model.MarkBlocks = await data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId);
+        var tables = model.Tables.ToList();
         var table = tables.FirstOrDefault(e => e.Marks.Any(m => m.Name == mark.Name));
-        var currentMarkModel = data.GetMarkModelsForTable(model.ApplicationId, table.Id).Result;
+        var currentMarkModel = await data.GetMarkModelsForTable(model.ApplicationId, table!.Id);
         foreach (var markModel in table.Marks)
         {
             markModel.ValId = currentMarkModel.FirstOrDefault(e => e.Id == markModel.Id)!.ValId;
@@ -275,5 +279,4 @@
         await data.RatedApplicationAsync(model!.ApplicationId);
         nav.NavigateTo("/assessment#");
     }
-
 }
