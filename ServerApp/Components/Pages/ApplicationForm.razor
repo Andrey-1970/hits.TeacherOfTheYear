@@ -22,7 +22,7 @@
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
                         Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
-                        @onclick="ChangeStatus">
+                        @onclick="ShowConfirmationAsync">
                     Отправить заявку
                 </Button>
             </div>
@@ -199,11 +199,14 @@ else
     </div>
 }
 
+<ConfirmDialog @ref="dialog" />
 
 @code {
     EditModel? model;
     EditContext? editContext;
     ValidationMessageStore? messageStore;
+
+    private ConfirmDialog? dialog;
 
     protected override async Task OnInitializedAsync()
     {
@@ -361,6 +364,26 @@ else
             model.Tables = await data.GetTableModelsForEditBlockAsync(model.SelectedEditBlockId);
             await jsRuntime.InvokeVoidAsync("scrollToTop");
             toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
+        }
+    }
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отмена",
+                YesButtonText = "Продолжить",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Необходимо подтверждение",
+            message1: "Подавая заявку на участие, Вы подтверждаете достоверность указанных в анкете данных.",
+            message2: "Я ознакомлен и согласен с условиями участия в конкурсе.",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await ChangeStatus();
         }
     }
 
