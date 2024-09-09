@@ -42,14 +42,14 @@
                     </div>
                 }
                 <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
-                    <option value="@Guid.Empty" disabled selected hidden>Выберите трек</option>
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
                     @foreach (var track in model.Tracks)
                     {
                         <option value="@track!.Id">@track.Name</option>
                     }
                 </InputSelect>
                 <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?" ValueExpression="() => model.SelectedCategoryId" ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
-                    <option value="@Guid.Empty" disabled selected hidden>Выберите направление</option>
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите научное направление конкурса</option>
                     @foreach (var category in model.Categories)
                     {
                         <option value="@category!.Id">@category.Name</option>
