@@ -24,8 +24,8 @@ namespace ServerApp.Services
 
             using (var smtp = new MailKit.Net.Smtp.SmtpClient())
             {
-                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.StartTls);
-               await smtp.AuthenticateAsync(_mailConfig.Username, _mailConfig.Password);
+                Console.Write(email.From);
+                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.None);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
             }
@@ -38,7 +38,4 @@ public class MailSettings
     public int Port { get; set; }
     public string? FromEmail { get; set; }
     public string? Host { get; set; }
-    public string? Username { get; set; }
-
-    public string? Password { get; set; }
 }

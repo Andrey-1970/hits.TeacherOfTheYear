@@ -9,11 +9,13 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Host=db;Database=aspnet-ProfessorOfTheYear;Username=postgres;Password=postgres
+    env_file:
+      - ./ServerApp/.env
     ports:
       - "80:80"
     depends_on:
       - db
-    
+  
   db:
     image: postgres:latest
     environment:
@@ -24,6 +26,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-        
+
 volumes:
   postgres_data:

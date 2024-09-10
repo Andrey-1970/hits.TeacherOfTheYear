@@ -178,7 +178,7 @@
 
     private void UpdateCountdown(object sender, ElapsedEventArgs e)
     {
-        TimeSpan remainingTime = targetDate - DateTime.Now;
+        TimeSpan remainingTime = targetDate - DateTime.UtcNow;
 
         // Проверка завершения отсчета
         if (remainingTime.TotalSeconds >= 0)
