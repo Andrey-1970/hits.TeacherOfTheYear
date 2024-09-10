@@ -8,6 +8,8 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task DeleteApplicationAsync(Guid appId);
+        Task WithdrawApplicationAsync(Guid appId);
         Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId);
         Task CreateCurrentUserInfoAsync(string username);
         Task<string> GetApplicationStatusNameAsync();

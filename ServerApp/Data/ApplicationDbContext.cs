@@ -43,9 +43,88 @@ namespace ServerApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            ConfigureModelRelationships(builder);
             OnConfiguringConstraction(builder);
             OnConfiguringData(builder);
         }
+
+        private void ConfigureModelRelationships(ModelBuilder builder)
+        {
+            // Конфигурация для ApplicationForm и других связанных сущностей
+            builder.Entity<ApplicationForm>(entity =>
+            {
+                entity.HasMany(af => af.BlockReviews)
+                    .WithOne(br => br.Application)
+                    .HasForeignKey(br => br.ApplicationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.MarkVals)
+                    .WithOne(mv => mv.Application)
+                    .HasForeignKey(mv => mv.ApplicationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.FieldVals)
+                    .WithOne(fv => fv.Application)
+                    .HasForeignKey(fv => fv.ApplicationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.CellVals)
+                    .WithOne(cv => cv.Application)
+                    .HasForeignKey(cv => cv.ApplicationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.EditBlockStatusList)
+                    .WithOne(ebs => ebs.Application)
+                    .HasForeignKey(ebs => ebs.ApplicationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.Votes)
+                    .WithOne(v => v.ApplicationForm)
+                    .HasForeignKey(v => v.ApplicationFormId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(af => af.ApplicationFormExperts)
+                    .WithOne(afe => afe.ApplicationForm)
+                    .HasForeignKey(afe => afe.ApplicationFormId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<CellVal>(entity =>
+            {
+                entity.HasOne(cv => cv.Row)
+                    .WithMany(r => r.CellVals)
+                    .HasForeignKey(cv => cv.RowId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+    
+            builder.Entity<Row>(entity =>
+            {
+                entity.HasMany(r => r.CellVals)
+                    .WithOne(cv => cv.Row)
+                    .HasForeignKey(cv => cv.RowId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+
+            // Конфигурация для ApplicationFormExpert
+            builder.Entity<ApplicationFormExpert>(entity =>
+            {
+                // Composite Key
+                entity.HasKey(afe => new { afe.ApplicationFormId, afe.UserInfoId });
+
+                entity.HasOne(afe => afe.ApplicationForm)
+                    .WithMany(af => af.ApplicationFormExperts)
+                    .HasForeignKey(afe => afe.ApplicationFormId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(afe => afe.UserInfo)
+                    .WithMany(ui => ui.ApplicationFormExperts)
+                    .HasForeignKey(afe => afe.UserInfoId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+        }
+
 
         private static void OnConfiguringConstraction(ModelBuilder builder)
         {
@@ -101,14 +180,16 @@ namespace ServerApp.Data
             #region Tracks
 
             var track1 = new Track() { Id = Guid.NewGuid(), Number = 1, Name = "Научно-педагогическая деятельность" };
-            var track2 = new Track() { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
+            var track2 = new Track()
+                { Id = Guid.NewGuid(), Number = 2, Name = "Научно-исследовательская деятельность" };
 
             #endregion
 
             #region Categories
 
             var category1 = new Category() { Id = Guid.NewGuid(), Number = 1, Name = "Строительство и архитектура" };
-            var category2 = new Category() { Id = Guid.NewGuid(), Number = 2, Name = "Энергетика и нефтегазовая индустрия" };
+            var category2 = new Category()
+                { Id = Guid.NewGuid(), Number = 2, Name = "Энергетика и нефтегазовая индустрия" };
 
             #endregion
 
@@ -118,8 +199,10 @@ namespace ServerApp.Data
             var editBlk2 = new EditBlock() { Id = Guid.NewGuid(), Number = 2, Name = "Категория участников" };
             var editBlk3 = new EditBlock() { Id = Guid.NewGuid(), Number = 3, Name = "Конкурсная работа" };
             var editBlk4 = new EditBlock() { Id = Guid.NewGuid(), Number = 4, Name = "Профессиональное развитие" };
-            var editBlk5 = new EditBlock() { Id = Guid.NewGuid(), Number = 5, Name = "Научно-педагогическая деятельность" };
-            var editBlk6 = new EditBlock() { Id = Guid.NewGuid(), Number = 6, Name = "Научно-исследовательская деятельность" };
+            var editBlk5 = new EditBlock()
+                { Id = Guid.NewGuid(), Number = 5, Name = "Научно-педагогическая деятельность" };
+            var editBlk6 = new EditBlock()
+                { Id = Guid.NewGuid(), Number = 6, Name = "Научно-исследовательская деятельность" };
 
             #endregion
 
@@ -337,7 +420,8 @@ namespace ServerApp.Data
                 RowId = row0105.Id,
                 Disable = true,
                 IsPrefilled = true,
-                Value = "Возможность практического применения (Внедрено ли в практику? В какому курсе/программе подготовки используется/ на кого рассчитано)"
+                Value =
+                    "Возможность практического применения (Внедрено ли в практику? В какому курсе/программе подготовки используется/ на кого рассчитано)"
             };
 
             var cell010502 = new CellVal()
@@ -788,8 +872,8 @@ namespace ServerApp.Data
                     "Список подготовленных под руководством участника конкурса студентов, бакалавров, " +
                     "магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, " +
                     "получивших самостоятельное признание (победители и призеры всероссийских и" +
-                    "международных соревнований, конкурсов, олимпиад; лауреаты международных премий, "+
-                    "премий Российской Федерации, региональных премий (за исключением внутривузовских конкурсов), "+
+                    "международных соревнований, конкурсов, олимпиад; лауреаты международных премий, " +
+                    "премий Российской Федерации, региональных премий (за исключением внутривузовских конкурсов), " +
                     "за весь период научно-педагогической деятельности",
                 EditBlockId = editBlk5.Id
             };
@@ -850,7 +934,7 @@ namespace ServerApp.Data
                 Name =
                     "Список трудов участника конкурса. Монографии, учебники, учебные и учебно-методические " +
                     "пособия с грифами и без грифов УМО, Министерств РФ или государственных академий наук, " +
-                    "либо аналогичных работы на иностранном языке без грифов УМО, "+
+                    "либо аналогичных работы на иностранном языке без грифов УМО, " +
                     "изданные типографским способом за последние 5 лет",
                 EditBlockId = editBlk5.Id
             };
@@ -934,7 +1018,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 8,
                 Name = "Список лабораторных практикумов и курсов лекций" +
-                " (разработанных самостоятельно участником конкурса) за последние 5 лет",
+                       " (разработанных самостоятельно участником конкурса) за последние 5 лет",
                 EditBlockId = editBlk5.Id
             };
 
@@ -961,7 +1045,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 3,
                 Name = "Ссылка на подтверждающий документ (в качестве подтверждения может быть выписка" +
-                " из учебной нагрузки по форме организации или ссылка на онлайн платформу с курсом лекций, например, «Открытое образование»)",
+                       " из учебной нагрузки по форме организации или ссылка на онлайн платформу с курсом лекций, например, «Открытое образование»)",
                 ValueTypeId = valType2.Id,
                 TableId = tbl08.Id
             };
@@ -1402,7 +1486,7 @@ namespace ServerApp.Data
             #endregion
 
             #region SelectValues
-            
+
             var slctVall1 = new SelectValue()
             {
                 Id = Guid.NewGuid(),
@@ -1670,7 +1754,7 @@ namespace ServerApp.Data
             var mark3 = new Mark()
             {
                 Id = Guid.NewGuid(),
-                Number = 5,
+                Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
                 FieldId = fld16.Id,
@@ -1804,7 +1888,7 @@ namespace ServerApp.Data
                 MaxValue = 8,
                 EvaluationMethodName = "EvaluateMark19"
             };
-            var mark20 = new Mark() 
+            var mark20 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 20,
@@ -1813,7 +1897,7 @@ namespace ServerApp.Data
                 MaxValue = 12,
                 EvaluationMethodName = "EvaluateMark20"
             };
-            var mark21 = new Mark() 
+            var mark21 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 21,
@@ -1822,7 +1906,7 @@ namespace ServerApp.Data
                 MaxValue = 8,
                 EvaluationMethodName = "EvaluateMark21"
             };
-            var mark22 = new Mark() 
+            var mark22 = new Mark()
             {
                 Id = Guid.NewGuid(),
                 Number = 22,
@@ -1875,9 +1959,12 @@ namespace ServerApp.Data
             #region Roles
 
             var role1 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Voter", NormalizedName = "VOTER" };
-            var role2 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Participant", NormalizedName = "PARTICIPANT" };
-            var role3 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Expert", NormalizedName = "EXPERT" };
-            var role4 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Organiser", NormalizedName = "ORGANISER" };
+            var role2 = new IdentityRole()
+                { Id = Guid.NewGuid().ToString(), Name = "Participant", NormalizedName = "PARTICIPANT" };
+            var role3 = new IdentityRole()
+                { Id = Guid.NewGuid().ToString(), Name = "Expert", NormalizedName = "EXPERT" };
+            var role4 = new IdentityRole()
+                { Id = Guid.NewGuid().ToString(), Name = "Organiser", NormalizedName = "ORGANISER" };
             var role5 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" };
 
             #endregion
@@ -1889,7 +1976,9 @@ namespace ServerApp.Data
             builder.Entity<Track>().HasData([track1, track2]);
             builder.Entity<EditBlock>().HasData([editBlk1, editBlk2, editBlk3, editBlk4, editBlk5, editBlk6]);
             builder.Entity<MarkBlock>().HasData([markBlk1, markBlk2, markBlk3, markBlk4, markBlk5, markBlk6, markBlk7]);
-            builder.Entity<Table>().HasData([tbl01, tbl02, tbl03, tbl04, tbl05, tbl06, tbl07, tbl08, tbl9, tbl10, tbl11, tbl12, tbl13]);
+            builder.Entity<Table>().HasData([
+                tbl01, tbl02, tbl03, tbl04, tbl05, tbl06, tbl07, tbl08, tbl9, tbl10, tbl11, tbl12, tbl13
+            ]);
             builder.Entity<Column>().HasData([
                 col0101, col0102,
                 col0201, col0202, col0203, col0204, col0205,
@@ -1926,14 +2015,20 @@ namespace ServerApp.Data
                 cell040401, cell040402,
                 cell040501, cell040502
             ]);
-            builder.Entity<SelectValue>().HasData([slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
-                slctVall8, slctVall9, slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15, slctVall16, 
-                slctVall17, slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24, slctVall25, 
-                slctVall26, slctVall27, slctVall28, slctVall29, slctVall30, slctVall31, slctVall32, slctVall33, slctVall34, 
+            builder.Entity<SelectValue>().HasData([
+                slctVall1, slctVall2, slctVall3, slctVall4, slctVall5, slctVall6, slctVall7,
+                slctVall8, slctVall9, slctVall10, slctVall11, slctVall12, slctVall13, slctVall14, slctVall15,
+                slctVall16,
+                slctVall17, slctVall18, slctVall19, slctVall20, slctVall21, slctVall22, slctVall23, slctVall24,
+                slctVall25,
+                slctVall26, slctVall27, slctVall28, slctVall29, slctVall30, slctVall31, slctVall32, slctVall33,
+                slctVall34,
                 slctVall35, slctVall36, slctVall37, slctVall38, slctVall39, slctVall40
             ]);
-            builder.Entity<Field>().HasData([fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10, 
-                fld11, fld12, fld13, fld14, fld15, fld16, fld17, fld18]);
+            builder.Entity<Field>().HasData([
+                fld1, fld2, fld3, fld4, fld5, fld6, fld7, fld8, fld9, fld10,
+                fld11, fld12, fld13, fld14, fld15, fld16, fld17, fld18
+            ]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
                 mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,

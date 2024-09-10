@@ -2,6 +2,7 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityUserAccessor UserAccessor
+@inject IDataService data
 
 <PageTitle>Отозвать анкету участника</PageTitle>
 
@@ -54,7 +55,8 @@
             return;
         }
 
-        //логика отзыва анкеты
+        var userInfo = await data.GetCurrentUserInfoAsync();
+        await data.WithdrawApplicationAsync(userInfo.Applications.First().Id);
     }
 
     private sealed class InputModel

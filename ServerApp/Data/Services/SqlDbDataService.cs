@@ -32,6 +32,39 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
+        public async Task DeleteApplicationAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+            foreach (var cellGroup in app.CellVals.GroupBy(cv => cv.RowId))
+            {
+                context.Rows.Remove(cellGroup.First().Row);
+            }
+            context.Remove(app);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task WithdrawApplicationAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+
+            var inProcessingStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 1);
+            app.ApplicationStatusId = inProcessingStatus.Id;
+
+            context.Update(app);
+
+            foreach (var markVal in app.MarkVals)
+            {
+                context.Remove(markVal);
+            }
+
+            foreach (var blockReview in app.BlockReviews)
+            {
+                context.Remove(blockReview);
+            }
+
+            await context.SaveChangesAsync();
+        }
+        
         public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId)
         {
             var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
