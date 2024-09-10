@@ -56,6 +56,6 @@ namespace ServerApp.Data.Interfaces
         Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
         Task<FeedBack[]> GetFeedbacksAsync();
         Task SaveFeedbackAsync(FeedBack feedback);
-        Task<FeedBack> GetFeedbackByIdAsync(Guid feedbackId);
+        Task<FeedBack> GetFeedbackAsync(Guid feedbackId);
     }
 }

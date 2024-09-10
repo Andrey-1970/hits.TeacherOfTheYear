@@ -24,7 +24,7 @@
                 </div>
                 @if (model.MarkBlocks.SingleOrDefault(e => e.Id == model.SelectedMarkBlockId)?.Id != ResultBlock.Id)
                 {
-                    <EditForm EditContext="editContext">
+                    <EditForm EditContext="editContext" class="w-100">
                         @if (model.Fields is not null && model.Fields.Any())
                         {
                             @foreach (var fld in model.Fields)

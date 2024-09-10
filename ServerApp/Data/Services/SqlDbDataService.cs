@@ -1179,7 +1179,7 @@ namespace ServerApp.Data.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task<FeedBack> GetFeedbackByIdAsync(Guid feedbackId)
+        public async Task<FeedBack> GetFeedbackAsync(Guid feedbackId)
         {
             return await context.Feedbacks.FirstOrDefaultAsync(e => e.Id == feedbackId) ??
                        throw new UnauthorizedAccessException("Feedback not found");

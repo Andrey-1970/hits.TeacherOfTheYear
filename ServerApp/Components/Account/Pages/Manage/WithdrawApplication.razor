@@ -2,6 +2,7 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityUserAccessor UserAccessor
+@inject NavigationManager navigate
 @inject IDataService data
 
 <PageTitle>Отозвать анкету участника</PageTitle>
@@ -57,6 +58,8 @@
 
         var userInfo = await data.GetCurrentUserInfoAsync();
         await data.WithdrawApplicationAsync(userInfo.Applications.First().Id);
+        navigate.NavigateTo("/account/manage/participation-status");
+
     }
 
     private sealed class InputModel
