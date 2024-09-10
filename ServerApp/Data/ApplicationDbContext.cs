@@ -1670,7 +1670,7 @@ namespace ServerApp.Data
             var mark3 = new Mark()
             {
                 Id = Guid.NewGuid(),
-                Number = 5,
+                Number = 3,
                 Name = "Баллы за количество квалификационных работ, " +
                        "выполненных под руководством претендента:",
                 FieldId = fld16.Id,
