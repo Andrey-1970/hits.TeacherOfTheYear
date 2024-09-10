@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrate
+
+WORKDIR /app
+
+COPY . /app
+
+# Устанавливаем EF CLI
+RUN dotnet tool install --global dotnet-ef
+
+# Добавляем .NET tools в PATH
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+WORKDIR "/app/ServerApp"
+
+# Копируем и делаем исполняемым скрипт ожидания
+COPY ./ServerApp/wait-for-it.sh /app/ServerApp/wait-for-it.sh
+RUN chmod +x /app/ServerApp/wait-for-it.sh
+
+ENTRYPOINT ["/app/ServerApp/wait-for-it.sh", "db:5432", "--", "dotnet", "ef", "database", "update"]

@@ -15,6 +15,7 @@ services:
       - "80:80"
     depends_on:
       - db
+      - migrate
   
   db:
     image: postgres:latest
@@ -26,6 +27,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+        
+  migrate:
+    build:
+      context: .
+      dockerfile: ./ServerApp/Dockerfile.migrate
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=aspnet-ProfessorOfTheYear;Username=postgres;Password=postgres
+    depends_on:
+      - db
 
 volumes:
   postgres_data:
+
