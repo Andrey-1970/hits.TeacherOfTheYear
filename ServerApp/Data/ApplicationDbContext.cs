@@ -635,7 +635,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Персональные идентификаторы",
-                EditBlockId = editBlk4.Id,
+                EditBlockId = editBlk1.Id,
                 IsPrefilled = true,
                 IsDisplayedOnVotingPage = true
             };
@@ -1816,7 +1816,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 8,
-                Name = "Баллы за труды с грифом и без соавторства:",
+                Name = "Баллы за труды с грифом или на иностранном языке и без соавторства:",
                 TableId = tbl07.Id,
                 MaxValue = 4,
                 EvaluationMethodName = "EvaluateMark8"
@@ -1825,7 +1825,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 Number = 9,
-                Name = "Баллы за труды с грифом в соавторстве:",
+                Name = "Баллы за труды с грифом или на иностранном языке в соавторстве:",
                 TableId = tbl07.Id,
                 MaxValue = 3,
                 EvaluationMethodName = "EvaluateMark9"

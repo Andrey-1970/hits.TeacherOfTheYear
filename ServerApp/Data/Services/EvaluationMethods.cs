@@ -27,7 +27,9 @@ namespace YourProject.Data.Services
 
         public static int EvaluateMark2(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
-            var vals = context.Rows.Where(r => r.TableId == tableId && r.CellVals.Any(c => c.ApplicationId == appId)); //todo:где указан не русский язык преподавания
+            var vals = context.Rows.Where(r => r.TableId == tableId && r.CellVals.Any(c =>
+                c.ApplicationId == appId && c.Column.Name == "Язык преподавания" &&
+                (c.Value == "Другой" || c.Value == "Английский")));
             var count = vals.Count();
             return count switch
             {
@@ -40,14 +42,10 @@ namespace YourProject.Data.Services
         public static int EvaluateMark3(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var fld = context.FieldVals.FirstOrDefault(e => e.ApplicationId == appId && e.Field.Marks.Any(m => m.Id == markId));
-            var fld2 = context.FieldVals.FirstOrDefault(e =>
-                e.ApplicationId == appId && e.Field.Name == "Защитившиеся бакалавры");
-            var fld3 = context.FieldVals.FirstOrDefault(e =>
-                e.ApplicationId == appId && e.Field.Name == "Защитившиеся специалисты");
             
-            if (fld == null || fld2 == null || fld3 == null) return 0; 
+            if (fld == null) return 0; 
 
-            var val = int.Parse(fld.Value ?? "0") + int.Parse(fld2.Value ?? "0") + int.Parse(fld3.Value ?? "0");
+            var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
                 1 => 1,
@@ -117,9 +115,9 @@ namespace YourProject.Data.Services
         public static int EvaluateMark8(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") ||
+                (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "Есть") ||
                 r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Язык публикации" && c.Value == "Иностранный")) &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && string.IsNullOrEmpty(c.Value)))
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && c.Value == "Нет"))
                 .ToList();
             var count = rows.Count;
             return count switch
@@ -133,9 +131,9 @@ namespace YourProject.Data.Services
         public static int EvaluateMark9(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-               (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") ||
+               (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "Есть") ||
                 r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Язык публикации" && c.Value == "Иностранный")) &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && !string.IsNullOrEmpty(c.Value)))
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && c.Value == "Есть"))
                 .ToList();
             var count = rows.Count;
             return count switch
@@ -149,8 +147,8 @@ namespace YourProject.Data.Services
         public static int EvaluateMark10(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "0") &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && string.IsNullOrEmpty(c.Value)))
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "Нет") &&
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && c.Value == "Нет"))
                 .ToList();
             var count = rows.Count;
             return count switch
@@ -164,8 +162,8 @@ namespace YourProject.Data.Services
         public static int EvaluateMark11(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "0") &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && !string.IsNullOrEmpty(c.Value)))
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "Нет") &&
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && c.Value == "Есть"))
                 .ToList();
             var count = rows.Count;
             return count switch
@@ -223,17 +221,42 @@ namespace YourProject.Data.Services
 
         public static int EvaluateMark16(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
+            var uniqueValues = new HashSet<string>();
+            int totalScore = 0;
+
             var rows = context.Rows.Where(r => r.TableId == tableId && r.CellVals.Any(c => c.ApplicationId == appId));
-            var count = rows.Count();
-            return count switch
+    
+            foreach (var row in rows)
             {
-                1 => 1,
-                2 => 2,
-                3 => 3,
-                4 => 4,
-                >= 5 => 5,
-                _ => 0
-            }; //todo
+                foreach (var cell in row.CellVals.Where(c => c.Column.Name == "Тип публикации (категория ВАК/квартиль МБД)"))
+                {
+                        // Если значение уже встречалось, пропускаем его
+                        if (uniqueValues.Contains(cell.Value))
+                            continue;
+
+                        // Добавляем значение в HashSet
+                        uniqueValues.Add(cell.Value);
+
+                        // Прибавляем баллы в зависимости от значения
+                        switch (cell.Value)
+                        {
+                            case "РИНЦ":
+                                totalScore += 1;
+                                break;
+                            case "ВАК (К2-К3)" or "МБД (Q3-Q4)":
+                                totalScore += 2;
+                                break;
+                            case "ВАК (К1), МБД (Q1-Q2)":
+                                totalScore += 3;
+                                break;
+                            default:
+                                break;
+                        }
+                    
+                }
+            }
+
+            return totalScore;
         }
 
         public static int EvaluateMark19(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
@@ -267,7 +290,7 @@ namespace YourProject.Data.Services
         public static int EvaluateMark21(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Статус (руководитель/исполнитель)" && c.Value == "Руководитель"))
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Статус" && c.Value == "Руководитель"))
                 .ToList();
             var count = rows.Count;
             return count switch
@@ -281,7 +304,7 @@ namespace YourProject.Data.Services
         public static int EvaluateMark22(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                                               r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Статус (руководитель/исполнитель)" && c.Value == "Исполнитель"))
+                                               r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Статус" && c.Value == "Исполнитель"))
                 .ToList();
             var count = rows.Count;
             return count switch
