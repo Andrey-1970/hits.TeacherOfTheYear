@@ -15,6 +15,7 @@ namespace ServerApp.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
         {
+
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_mailConfig.FromEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
@@ -23,8 +24,8 @@ namespace ServerApp.Services
 
             using (var smtp = new MailKit.Net.Smtp.SmtpClient())
             {
-                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.None);
-               // await smtp.AuthenticateAsync(_mailConfig.Username, _mailConfig.Password);
+                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.StartTls);
+               await smtp.AuthenticateAsync(_mailConfig.Username, _mailConfig.Password);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
             }
@@ -34,9 +35,10 @@ namespace ServerApp.Services
 }
 public class MailSettings
 {
-    //public string? Username { get; set; }
-    //public string? Password { get; set; }
     public int Port { get; set; }
     public string? FromEmail { get; set; }
     public string? Host { get; set; }
+    public string? Username { get; set; }
+
+    public string? Password { get; set; }
 }

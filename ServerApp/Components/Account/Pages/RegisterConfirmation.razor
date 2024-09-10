@@ -42,15 +42,40 @@
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
             statusMessage = "Отсутствует пользователь с данным адресом электронной почты";
         }
+        else if (await UserManager.IsEmailConfirmedAsync(user))
+        {
+            NavigationManager.NavigateTo(ReturnUrl ?? "/");
+        }
         else if (EmailSender is IdentityNoOpEmailSender)
         {
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
+            await SendRegistrationEmail(user.Email);
+        }
+    }
+
+    private async Task SendRegistrationEmail(string email)
+    {
+        var user = await UserManager.FindByEmailAsync(email);
+        if (user is null)
+        {
+            throw new Exception("Пользователь не найден");
+        }
+
+        DateTimeOffset lastSendDate = user.LastEmailSentDate;
+
+        var timeSinceLastSend = DateTimeOffset.Now - lastSendDate;
+        Console.WriteLine(timeSinceLastSend);
+        if (timeSinceLastSend >= TimeSpan.FromHours(24))
+        {
+            //save parametrs
+            user.LastEmailSentDate = DateTimeOffset.Now;
+            await UserManager.UpdateAsync(user);
             var userId = await UserManager.GetUserIdAsync(user);
             var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             emailConfirmationLink = NavigationManager.GetUriWithQueryParameters(
                 NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
                 new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
             string htmlBody = $@"
             <div class='text-left' style='font-family: Arial, sans-serif; padding: 20px;'>
                 Здравствуйте, уважаемый участник всеросийского конкурса Педагог Года!<br><br>
@@ -67,8 +92,13 @@
                 В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.<br
             </div>";
 
+            await MailService.SendEmailAsync(email, "Подтверждение регистрации на Педагог Года", htmlBody);
 
-                await MailService.SendEmailAsync(Email, "Подтверждение регистрации на Педагог Года", htmlBody);
+            
+        }
+        else
+        {
+            statusMessage = $"Последнее письмо было отправлено менее чем за 24 часа назад. Пожалуйста, попробуйте позже.";
         }
     }
 }

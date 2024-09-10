@@ -34,6 +34,14 @@ namespace ServerApp
                     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
                 })
                 .AddIdentityCookies();
+            //authorization time
+            builder.Services.ConfigureApplicationCookie(options => {
+                options.ExpireTimeSpan = TimeSpan.FromDays(5);
+                options.SlidingExpiration = true;
+            });
+            //token time
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+                options.TokenLifespan = TimeSpan.FromHours(3));
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -53,10 +61,7 @@ namespace ServerApp
             builder.Services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAdmin, AdminService>();
-            // �������� ������������ �� ����� appsettings.Development.json, ���� �� ����������
-            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            // Configure MailSettings from appsettings
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
             builder.Services.AddSingleton<IMailService, MailService>();
