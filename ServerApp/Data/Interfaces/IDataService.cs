@@ -8,6 +8,10 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task SetDatetimeNowForApplicationAync(Guid? appId);
+        Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId);
+        Task DeleteApplicationAsync(Guid appId);
+        Task WithdrawApplicationAsync(Guid appId);
         Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId);
         Task CreateCurrentUserInfoAsync(string username);
         Task<string> GetApplicationStatusNameAsync();
@@ -51,5 +55,8 @@ namespace ServerApp.Data.Interfaces
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
         Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
+        Task<FeedBack[]> GetFeedbacksAsync();
+        Task SaveFeedbackAsync(FeedBack feedback);
+        Task<FeedBack> GetFeedbackAsync(Guid feedbackId);
     }
 }

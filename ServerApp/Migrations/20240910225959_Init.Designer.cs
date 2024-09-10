@@ -12,7 +12,11 @@ using ServerApp.Data;
 namespace ServerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
     [Migration("20240910042251_Init")]
+========
+    [Migration("20240910225959_Init")]
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
     partial class Init
     {
         /// <inheritdoc />
@@ -27,6 +31,60 @@ namespace ServerApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationForm", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationStatusId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ReviewerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TrackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserInfoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationStatusId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.HasIndex("TrackId");
+
+                    b.HasIndex("UserInfoId");
+
+                    b.ToTable("ApplicationForms");
+                });
+
+            modelBuilder.Entity("ApplicationFormExpert", b =>
+                {
+                    b.Property<Guid>("ApplicationFormId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserInfoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ApplicationFormId", "UserInfoId");
+
+                    b.HasIndex("UserInfoId");
+
+                    b.ToTable("ApplicationFormExperts");
+                });
 
             modelBuilder.Entity("EditBlockTrack", b =>
                 {
@@ -45,6 +103,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             EditBlocksId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
                             TracksId = new Guid("24e2503e-4776-4373-85c7-abacc3aba665")
                         },
@@ -92,6 +151,55 @@ namespace ServerApp.Migrations
                         {
                             EditBlocksId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
                             TracksId = new Guid("6d1858f1-6238-4767-97c0-9ae21b66ba59")
+========
+                            EditBlocksId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("d26e96a1-7240-4b9a-a3f7-ae41e46d4de4"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("d26e96a1-7240-4b9a-a3f7-ae41e46d4de4"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            EditBlocksId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -112,6 +220,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             FieldsId = new Guid("7eeb8b8b-5072-4703-872b-629a9c62959d"),
                             MarkBlocksId = new Guid("046bd92c-e6ca-4753-b8fa-9826b218723a")
                         },
@@ -209,6 +318,105 @@ namespace ServerApp.Migrations
                         {
                             FieldsId = new Guid("3e5dd45f-d781-466f-90ec-3543b1610df9"),
                             MarkBlocksId = new Guid("6c3ad112-3041-4c70-89fb-3d4f4332df3b")
+========
+                            FieldsId = new Guid("3be36319-913a-4811-bbd1-a80cc827d8ff"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("406f1feb-3ee0-4faa-a9c5-2c27616fd3ab"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("815d7569-db76-459d-9ec6-f710394a9850"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("5550cbd5-8666-431a-ac64-9ad0d02637cf"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("9afb914a-bfe2-4949-a33c-b3b449e57063"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("0d16c3af-3d39-4359-8b6e-4921b19d583e"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("3d02a5ad-07b6-46cf-b255-a3eba36fac81"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("b1105017-6764-4c89-82ae-39e55721ed15"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("b0d1f39c-9621-4896-8495-d6c479697256"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("49f2b53f-a843-4f2b-8b08-9d92897c1a6d"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("57a1953c-aa17-4f07-9e60-4d671ca883fa"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("a78f1d7c-0658-4be6-9fe0-007f7cc5b735"),
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("56b8b971-c96f-41f3-acbb-dd55a8d6747b"),
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("2b96aa3d-d9f7-4d27-b6aa-6db2e7a7e694"),
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("fa16d661-a3a6-49c2-8e7b-a064ad1bb8fd"),
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("02c6bb6e-1c1f-4e33-a0db-2ca3af27343e"),
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58")
+                        },
+                        new
+                        {
+                            FieldsId = new Guid("73f6a5cf-a4f2-4559-b2d6-1a4689105f9b"),
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -229,6 +437,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             MarkBlocksId = new Guid("dbdc02fe-6af9-4c7e-852a-5e0aec7ad07e"),
                             TablesId = new Guid("1bbcbc5b-b337-45bd-87e5-2e19fd5092c8")
                         },
@@ -301,6 +510,80 @@ namespace ServerApp.Migrations
                         {
                             MarkBlocksId = new Guid("c761a92e-2268-4057-a880-1917e1325c41"),
                             TablesId = new Guid("9a90dbec-31aa-418a-a1f3-031b78829673")
+========
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            TablesId = new Guid("a664c290-78bc-4a89-917f-4503f7523052")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            TablesId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            TablesId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            TablesId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            TablesId = new Guid("35a6b994-c057-4213-8f68-93edf54d786b")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            TablesId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            TablesId = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            TablesId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            TablesId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            TablesId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02"),
+                            TablesId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            TablesId = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            TablesId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            TablesId = new Guid("4bf9c880-345c-48b5-b431-9fc241126381")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+                            TablesId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -321,6 +604,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             MarkBlocksId = new Guid("046bd92c-e6ca-4753-b8fa-9826b218723a"),
                             TracksId = new Guid("24e2503e-4776-4373-85c7-abacc3aba665")
                         },
@@ -363,6 +647,50 @@ namespace ServerApp.Migrations
                         {
                             MarkBlocksId = new Guid("c761a92e-2268-4057-a880-1917e1325c41"),
                             TracksId = new Guid("6d1858f1-6238-4767-97c0-9ae21b66ba59")
+========
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+                            TracksId = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+                            TracksId = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -383,6 +711,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             MarkBlocksId = new Guid("dbdc02fe-6af9-4c7e-852a-5e0aec7ad07e"),
                             MarksId = new Guid("9250ad25-788c-492f-b829-3b98d4460175")
                         },
@@ -515,6 +844,140 @@ namespace ServerApp.Migrations
                         {
                             MarkBlocksId = new Guid("c761a92e-2268-4057-a880-1917e1325c41"),
                             MarksId = new Guid("e45a5816-5d7f-439e-a754-82ff0f8d1d3f")
+========
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("5cc2563b-277a-47cd-ba49-3e166a8d1b90")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("a1575a4d-7f4f-440c-9886-14325b8d2628")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("64d0122c-4248-435e-a876-9ae1ee1a662d")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("7af78210-b52c-4f69-8f16-c0db4f137ff6")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("a00c36c5-c429-444a-8ffa-2dbaf5d7a141")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("a9482233-c2d6-474f-85e2-3a0b8ad930d5")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+                            MarksId = new Guid("4d5410fd-6b0e-4730-8ed8-88b77564cb4f")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            MarksId = new Guid("f749dab0-3254-4537-809c-7b941736c080")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            MarksId = new Guid("4d6056eb-b30e-4f06-9536-36909f7d9900")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            MarksId = new Guid("2f8e8bad-02a4-407b-9cd4-fbc3d395fc17")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            MarksId = new Guid("6275471d-6f30-4abb-a1c4-14516ac1625e")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+                            MarksId = new Guid("d7b9a373-e697-4c30-ace2-7a0b4b4afe18")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            MarksId = new Guid("9d24ede2-0dce-46f5-8696-c4b47ca6ee11")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            MarksId = new Guid("b33d1a5c-0281-4473-8561-1b10872f9b94")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+                            MarksId = new Guid("0e31347b-02d1-4f68-97c4-6ecce5e6c2fd")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("9d24ede2-0dce-46f5-8696-c4b47ca6ee11")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("b33d1a5c-0281-4473-8561-1b10872f9b94")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("7c3bdb72-3086-4d50-8589-a2c315cf8f41")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("b2b6ed9f-a23d-4792-b470-19d267cf7422")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("2a1fc3ec-11ef-4223-bc5d-3f68b9845139")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("76606667-6603-435d-b2c4-340d2c0e62c2")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+                            MarksId = new Guid("2f761cfc-3beb-4b14-97fe-b55bf77f4d65")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            MarksId = new Guid("0e31347b-02d1-4f68-97c4-6ecce5e6c2fd")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            MarksId = new Guid("dbc3898b-8013-472c-9f83-c344c3d70daf")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+                            MarksId = new Guid("50f999a9-b4d5-430c-b4f6-34307f271ed2")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+                            MarksId = new Guid("c5c1c0aa-ad0a-4ffb-8546-f8a0fed87a89")
+                        },
+                        new
+                        {
+                            MarkBlocksId = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+                            MarksId = new Guid("b304b218-0b09-4490-90e9-7ca253640044")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -546,31 +1009,51 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = "86148448-664f-4cb6-8c2f-23954893243b",
+========
+                            Id = "b92c51ee-f4c7-48e6-acde-cc720660ccd2",
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Voter",
                             NormalizedName = "VOTER"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = "638c43b2-6f67-4d89-825c-d7f82fd18ce8",
+========
+                            Id = "982db910-7726-4fd1-82ba-92c74b1f8dc7",
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Participant",
                             NormalizedName = "PARTICIPANT"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = "ccb0b6b5-cada-46c4-8203-c2fe33926803",
+========
+                            Id = "9343c7c9-f47d-4474-b6ab-06a7c0b878c7",
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Expert",
                             NormalizedName = "EXPERT"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = "50786817-3f9b-4244-bd05-3cd80f0e32d6",
+========
+                            Id = "0fd12a8f-62a1-401e-a956-4dc5e494ed5c",
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Organiser",
                             NormalizedName = "ORGANISER"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = "03638c46-2c07-4478-aa96-d79ed015cd9e",
+========
+                            Id = "05463486-141f-429c-adde-19cd5f2fd77d",
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -749,63 +1232,6 @@ namespace ServerApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ServerApp.Data.Entities.ApplicationForm", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationStatusId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ReviewerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TrackId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserInfoId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationStatusId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ReviewerId");
-
-                    b.HasIndex("TrackId");
-
-                    b.HasIndex("UserInfoId");
-
-                    b.ToTable("ApplicationForms");
-                });
-
-            modelBuilder.Entity("ServerApp.Data.Entities.ApplicationFormExpert", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationFormId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserInfoId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationFormId");
-
-                    b.HasIndex("UserInfoId");
-
-                    b.ToTable("ApplicationFormExperts");
-                });
-
             modelBuilder.Entity("ServerApp.Data.Entities.ApplicationStatus", b =>
                 {
                     b.Property<Guid>("Id")
@@ -830,37 +1256,61 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("63620115-1ba1-43e5-a071-af8fcf616fea"),
+========
+                            Id = new Guid("5891a0a8-1bb6-4553-a383-8c751bfa2b3b"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 1,
                             Status = "В ожидании заполнения"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("b5bea991-81cf-4209-9bc6-552fb6ed7c83"),
+========
+                            Id = new Guid("0a594e7a-323e-400a-926e-d7757d060c08"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 2,
                             Status = "В ожидании рассмотрения"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("59e4b44f-00ab-4266-bb2a-816eadd9eda0"),
+========
+                            Id = new Guid("fe5cb1b7-d6a1-418b-996e-71308c7ad4f1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 3,
                             Status = "В процессе рассмотрения"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9667cb70-9c42-41a7-a45f-267b15cacc01"),
+========
+                            Id = new Guid("fc50830d-1552-46b1-8974-b06de848a9c5"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 4,
                             Status = "Одобрена"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("3a236626-7d44-4741-bff9-2ce213ffa2a4"),
+========
+                            Id = new Guid("889e79aa-a4f0-43e2-9dc3-6a3d401a7ed2"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 5,
                             Status = "Отклонена"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("838c6543-c663-4a77-b5c0-64bfa805b525"),
+========
+                            Id = new Guid("27d0bd9f-3bd6-4bd7-987a-666b50d11c37"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Number = 6,
                             Status = "Оценена"
                         });
@@ -920,13 +1370,21 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("ffe043e0-d1a9-4e51-a287-1baf34b919b3"),
+========
+                            Id = new Guid("f6cc7cb6-c93a-436c-80f0-0bee296a5de8"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Строительство и архитектура",
                             Number = 1
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("97481e99-56e0-4c21-bfbe-28d045e17873"),
+========
+                            Id = new Guid("7a97a2e4-2085-423f-8bb6-4f074191407d"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Энергетика и нефтегазовая индустрия",
                             Number = 2
                         });
@@ -971,15 +1429,24 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("51fc55aa-9d31-46b5-aa03-03f1cb75e008"),
                             ColumnId = new Guid("008a843e-06e2-4b6a-b728-82886fd45348"),
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("6334b814-77b5-4acd-8b7b-763a9c0ed6f8"),
+========
+                            Id = new Guid("3f1a440b-98aa-4784-b225-e1081f560d17"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("3b523239-4327-45f7-896a-1cbfedabf754"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Название работы"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("e5a59e42-0b64-4d84-9f3c-3e6f97f17d9d"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -993,10 +1460,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("594efcca-ebaa-4257-b558-2c1df76d4241"),
+========
+                            Id = new Guid("c1b0d973-a4b1-47a5-b151-1e7a59d507e0"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("3b523239-4327-45f7-896a-1cbfedabf754")
+                        },
+                        new
+                        {
+                            Id = new Guid("83e0dd2c-445e-4f30-83fe-1ad14248274c"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("ec856a5a-be37-4d12-ac06-7512d67c29bf"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Актуальность конкурсной работы"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("aa298d52-74bf-42e6-a39a-06cd5171c504"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1010,10 +1493,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("1b644301-664e-444e-99a0-756058df5c92"),
+========
+                            Id = new Guid("9df97d59-34e1-4c0f-8da5-b372314e6f26"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("ec856a5a-be37-4d12-ac06-7512d67c29bf")
+                        },
+                        new
+                        {
+                            Id = new Guid("3932be8e-abe2-4ac0-8462-8070f57804a8"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("c6f71f42-b8b3-4e90-a154-f7fe558ecc33"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Методология и методы, используемые в работе"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("031d6bb9-f630-4119-9cf2-18a7cc8d193a"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1027,10 +1526,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("1c00ee0e-4c64-4831-9d92-d83dd75e34fa"),
+========
+                            Id = new Guid("21afb3a5-2257-4aa1-8248-5a90ff95b080"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("c6f71f42-b8b3-4e90-a154-f7fe558ecc33")
+                        },
+                        new
+                        {
+                            Id = new Guid("c8b0c5ef-3831-4823-844f-5bcc5d15cf1c"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("ccf13caa-c96d-4ff7-9dcf-df56b350b37d"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Инновационность"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("726a460d-3ae9-422e-86c9-4903ed24ab56"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1061,10 +1576,43 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("78515378-d696-45ac-9313-bba38ba54f5c"),
+========
+                            Id = new Guid("9484d667-989c-4e81-9f05-c3d552854320"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("ccf13caa-c96d-4ff7-9dcf-df56b350b37d")
+                        },
+                        new
+                        {
+                            Id = new Guid("edcd7cb8-f2f2-46db-8402-4c52aa7e1de5"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("09aece0a-d825-4215-a88a-c7dd6944ec74"),
+                            Value = "Апробация"
+                        },
+                        new
+                        {
+                            Id = new Guid("50f7aad8-fa27-4307-8fe4-03dad66bcbd6"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("09aece0a-d825-4215-a88a-c7dd6944ec74")
+                        },
+                        new
+                        {
+                            Id = new Guid("79114761-8738-4192-a99b-530678294a70"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("21b3d800-76c9-4843-9413-cb682f43ae30"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Результаты и выводы"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("5f8df5ee-7ec0-46d6-994e-730729a08c1b"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1078,10 +1626,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("7292bcde-590a-4daf-ade6-9865e588a806"),
+========
+                            Id = new Guid("f37b96f6-1c1a-47ce-94fa-940bf08e06c4"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("21b3d800-76c9-4843-9413-cb682f43ae30")
+                        },
+                        new
+                        {
+                            Id = new Guid("93c24406-f9c0-4f2f-a28b-c026fa7f0d81"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("2ff32d4b-1358-44a8-9308-b010c6bb0185"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Рекомендации и перспективы дальнейшей разработки темы"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2f36545e-422f-4176-b150-d840a540d8f6"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1095,10 +1659,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("9bc1c644-a026-41fd-9eb6-1702883e1708"),
+========
+                            Id = new Guid("2365ba8a-4155-4e8e-a9e3-20ddf203b4d0"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("2ff32d4b-1358-44a8-9308-b010c6bb0185")
+                        },
+                        new
+                        {
+                            Id = new Guid("ded7ab19-bad4-4624-ac64-c81f11386bf4"),
+                            ColumnId = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("a5034236-ddb9-4323-84c3-046d21971632"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Ссылка на конкурсную работу"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("501c01d4-8b55-4f41-a635-46a9dd2b9a2d"),
                             ColumnId = new Guid("6bae0479-4c84-4e22-9908-4ed60d92bd52"),
                             Disable = false,
@@ -1112,10 +1692,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("c9f7a253-9919-4616-bd8e-140d09d4974e"),
+========
+                            Id = new Guid("2c926bdc-8645-4058-ac39-97615938a34a"),
+                            ColumnId = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("a5034236-ddb9-4323-84c3-046d21971632")
+                        },
+                        new
+                        {
+                            Id = new Guid("470b0e45-2880-48eb-8cb2-39da68bacdd9"),
+                            ColumnId = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("f53e2c17-c9a7-4245-8df2-b32ddda4a8c4"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "ScopusID"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("d5a230c2-6b05-4b3a-8bdb-435c89576dfb"),
                             ColumnId = new Guid("c477f924-3796-4d3b-bdf3-b845e71267c1"),
                             Disable = false,
@@ -1129,10 +1725,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("85b6ff62-748f-4fe9-82ff-789d2c3e8c36"),
+========
+                            Id = new Guid("341d1ce1-3df2-48c0-83c5-1ee6fc2d2c58"),
+                            ColumnId = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("f53e2c17-c9a7-4245-8df2-b32ddda4a8c4")
+                        },
+                        new
+                        {
+                            Id = new Guid("8526abb4-abf4-4fb8-95ed-781ebc5281a2"),
+                            ColumnId = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("dff35b0f-aaf3-4894-bd99-762ed891fe45"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "ORCiD"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2892e8f4-07d5-4f66-a128-be678dea40e9"),
                             ColumnId = new Guid("c477f924-3796-4d3b-bdf3-b845e71267c1"),
                             Disable = false,
@@ -1146,10 +1758,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("4ef2789b-c092-4099-8673-0de7671ecffc"),
+========
+                            Id = new Guid("6c3f3163-6a77-4787-b251-5906d17fa904"),
+                            ColumnId = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("dff35b0f-aaf3-4894-bd99-762ed891fe45")
+                        },
+                        new
+                        {
+                            Id = new Guid("a03bc889-037c-429c-9c00-2ac71915ce2c"),
+                            ColumnId = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("512ccad5-1ef6-4e6a-8722-72f13f33dfcd"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "ResearcherID"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("94c7a24f-6e8b-4e36-8c57-27465c07058c"),
                             ColumnId = new Guid("c477f924-3796-4d3b-bdf3-b845e71267c1"),
                             Disable = false,
@@ -1163,10 +1791,26 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("2c0dd453-a779-4892-99e4-9d886af7ad9b"),
+========
+                            Id = new Guid("ccbc6071-2a1b-44a9-83c7-884a3dd879a6"),
+                            ColumnId = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("512ccad5-1ef6-4e6a-8722-72f13f33dfcd")
+                        },
+                        new
+                        {
+                            Id = new Guid("acacd5c4-8395-4218-834e-25fcc8ed4b21"),
+                            ColumnId = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("7d3fe3fc-7d81-4a9f-9793-405e49c0e0dc"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "РИНЦ AuthorID"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2f6f9660-cb87-423c-80fc-99a9db228f33"),
                             ColumnId = new Guid("c477f924-3796-4d3b-bdf3-b845e71267c1"),
                             Disable = false,
@@ -1180,15 +1824,38 @@ namespace ServerApp.Migrations
                             Disable = true,
                             IsPrefilled = true,
                             RowId = new Guid("9047498b-e427-4b33-b6cb-79b129e377b0"),
+========
+                            Id = new Guid("6f9d53db-0f20-4390-84c0-6b8b49bd8e22"),
+                            ColumnId = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("7d3fe3fc-7d81-4a9f-9793-405e49c0e0dc")
+                        },
+                        new
+                        {
+                            Id = new Guid("3293e273-d009-4e6e-87e6-fe660fb90261"),
+                            ColumnId = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            Disable = true,
+                            IsPrefilled = true,
+                            RowId = new Guid("a2f3159d-887a-46c3-8bf2-a58de8d79e97"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Google Scholar ID"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("ef6b4f6e-ebaf-4fa8-a2c6-38004370abb0"),
                             ColumnId = new Guid("c477f924-3796-4d3b-bdf3-b845e71267c1"),
                             Disable = false,
                             IsPrefilled = true,
                             RowId = new Guid("9047498b-e427-4b33-b6cb-79b129e377b0")
+========
+                            Id = new Guid("ca3a2e4a-0932-45e6-8521-3cc559e8409a"),
+                            ColumnId = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            Disable = false,
+                            IsPrefilled = true,
+                            RowId = new Guid("a2f3159d-887a-46c3-8bf2-a58de8d79e97")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -1229,6 +1896,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("008a843e-06e2-4b6a-b728-82886fd45348"),
                             IsRequired = true,
                             Name = "Название",
@@ -1694,6 +2362,473 @@ namespace ServerApp.Migrations
                             Number = 3,
                             TableId = new Guid("775495e2-d608-4ccf-9924-e8161a715d60"),
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
+========
+                            Id = new Guid("d8097bd5-e5c2-4160-809e-6d222f17fb70"),
+                            IsRequired = true,
+                            Name = "Название",
+                            Number = 1,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("f2580839-3049-4a05-b044-afda2d2e0b5d"),
+                            IsRequired = true,
+                            Name = "Значение",
+                            Number = 2,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e"),
+                            ValueTypeId = new Guid("1d751442-b53d-418d-b332-17966e54a79f")
+                        },
+                        new
+                        {
+                            Id = new Guid("795ce64a-ad12-4a65-9f6d-fbe18189c1aa"),
+                            IsRequired = true,
+                            Name = "Год",
+                            Number = 1,
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("91833b5e-37a2-4bfa-9380-ee6b9e7d0839"),
+                            IsRequired = true,
+                            Name = "Название конкурса",
+                            Number = 2,
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("785e7f56-2928-44ad-9664-a8d3019e9e07"),
+                            IsRequired = true,
+                            Name = "Статус конкурса",
+                            Number = 3,
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("0d948442-9df8-4340-aa11-4f5de5ae4aac"),
+                            IsRequired = true,
+                            Name = "Награда (медаль, диплом с указанием степени)",
+                            Number = 4,
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("40a8b1c7-dcad-45c5-8c3d-0a5e6ad177cf"),
+                            IsRequired = true,
+                            Name = "Ссылка",
+                            Number = 5,
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("58ce34cb-e804-4155-9786-300ea84c9af6"),
+                            IsRequired = true,
+                            Name = "Название документа, реквизиты",
+                            Number = 1,
+                            TableId = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("8a943c30-74c8-4faa-a183-050b8f0fb0e3"),
+                            IsRequired = true,
+                            Name = "Год получения документа",
+                            Number = 2,
+                            TableId = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("a738975d-7066-4264-b224-5e7108fcbbc2"),
+                            IsRequired = false,
+                            Name = "Тип идентификатора",
+                            Number = 1,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("3d25f35b-3204-4281-bf61-bdfa17b16700"),
+                            IsRequired = false,
+                            Name = "Идентификатор",
+                            Number = 2,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("aa14eafc-c082-444f-8be9-8595624c5786"),
+                            IsRequired = true,
+                            Name = "Наименование курса",
+                            Number = 1,
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("8dc5578f-36b2-4c7b-9027-5b7219c4cd1f"),
+                            IsRequired = true,
+                            Name = "Язык преподавания",
+                            Number = 2,
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("e55b716d-2a49-4e81-a690-5697d1a64989"),
+                            IsRequired = true,
+                            Name = "Лекции (час.)",
+                            Number = 3,
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("a7502d54-d593-4d34-b1bf-32873332cdeb"),
+                            IsRequired = true,
+                            Name = "Практические занятия (час.)",
+                            Number = 4,
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("cf36e284-cc09-4890-aa37-61fb0b380a80"),
+                            IsRequired = true,
+                            Name = "Итого (час.)",
+                            Number = 5,
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("6334b422-029e-4e2b-953a-7a8f30c5c1ee"),
+                            IsRequired = true,
+                            Name = "ФИО",
+                            Number = 1,
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("2212e641-ce5a-4359-9b00-acad6bd41b4d"),
+                            IsRequired = true,
+                            Name = "Название конкурса/премии",
+                            Number = 2,
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("c9cad5de-7b34-48bc-a271-97aa76491958"),
+                            IsRequired = true,
+                            Name = "Год",
+                            Number = 3,
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("ccae35c7-dfa2-42a8-81cc-4e599cfbd263"),
+                            IsRequired = true,
+                            Name = "Статус конкурса (международный, всероссийский), статус награды (РФ, субъект РФ)",
+                            Number = 4,
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("3264dc2c-73ff-461e-a7a3-cdebc6bee46d"),
+                            IsRequired = true,
+                            Name = "Награда/премия (медаль, диплом с указанием степени)",
+                            Number = 5,
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("59f8c244-1982-4cd8-94e2-b0c2474a7381"),
+                            IsRequired = true,
+                            Name = "Вид публикации",
+                            Number = 1,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("02a1fbf7-6a95-4305-a17d-4724917030c5"),
+                            IsRequired = true,
+                            Name = "Название",
+                            Number = 2,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("d240e381-0ed2-4b5f-94a1-e289e7a0fd16"),
+                            IsRequired = false,
+                            Name = "Соавторы",
+                            Number = 3,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("a8ed0f32-940e-4b47-b542-95391ddaa5a2"),
+                            IsRequired = true,
+                            Name = "Количество печатных листов",
+                            Number = 4,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("ea1e4629-804e-439a-84bf-2631699ff7a3"),
+                            IsRequired = true,
+                            Name = "Наличие грифа",
+                            Number = 5,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("977dc65d-1eef-4844-afbf-8c93a46a9c51")
+                        },
+                        new
+                        {
+                            Id = new Guid("9e76806f-1b32-4781-b679-72907fed60d0"),
+                            IsRequired = true,
+                            Name = "Издательство, год",
+                            Number = 6,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("e0d1aaaa-d5ca-4896-b934-5bf673ef75d8"),
+                            IsRequired = true,
+                            Name = "Язык публикации",
+                            Number = 7,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("12523a94-a14e-4504-9aa7-c8a8982cfc8b"),
+                            IsRequired = true,
+                            Name = "Ссылка на открытый доступ",
+                            Number = 8,
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("d40c7a6a-513f-40cd-8ef5-062016c3bd47"),
+                            IsRequired = true,
+                            Name = "Название дисциплины",
+                            Number = 1,
+                            TableId = new Guid("35a6b994-c057-4213-8f68-93edf54d786b"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("51f2195d-0889-42c0-ad52-1a39e03dd06f"),
+                            IsRequired = true,
+                            Name = "Вид",
+                            Number = 2,
+                            TableId = new Guid("35a6b994-c057-4213-8f68-93edf54d786b"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("425db34e-482d-432d-bb66-780ab618a16c"),
+                            IsRequired = true,
+                            Name = "Ссылка на подтверждающий документ (в качестве подтверждения может быть выписка из учебной нагрузки по форме организации или ссылка на онлайн платформу с курсом лекций, например, «Открытое образование»)",
+                            Number = 3,
+                            TableId = new Guid("35a6b994-c057-4213-8f68-93edf54d786b"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("a62d4587-98d2-47ab-8333-e13b4ac40b68"),
+                            IsRequired = true,
+                            Name = "Название курса",
+                            Number = 1,
+                            TableId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("83b9e279-6b4f-49cc-a647-7563853d214f"),
+                            IsRequired = true,
+                            Name = "Соавторы",
+                            Number = 2,
+                            TableId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("6635a4e5-c9b1-43c0-ab64-cac12c4a9886"),
+                            IsRequired = true,
+                            Name = "Ссылка на платформу",
+                            Number = 3,
+                            TableId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("0a9d6476-c1d3-4a61-aab3-4db4b187e738"),
+                            IsRequired = true,
+                            Name = "Год",
+                            Number = 4,
+                            TableId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("39ff59d0-2977-4abc-8e3b-d557ef53d6c9"),
+                            IsRequired = true,
+                            Name = "Название статьи",
+                            Number = 1,
+                            TableId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("b6665b63-c5fd-41e8-8fe6-4152657d5669"),
+                            IsRequired = true,
+                            Name = "Соавторы",
+                            Number = 2,
+                            TableId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("2335f7fd-4b11-465f-bef6-3d916eccaeb9"),
+                            IsRequired = true,
+                            Name = "Тип публикации (категория ВАК/квартиль МБД)",
+                            Number = 3,
+                            TableId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("7777e2c3-6df9-4c22-8060-0d1a37b9d855"),
+                            IsRequired = true,
+                            Name = "Издание, год",
+                            Number = 4,
+                            TableId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("ce53c974-0b10-4513-88b1-5b5bc29675e5"),
+                            IsRequired = true,
+                            Name = "Название НИР/НИОКР",
+                            Number = 1,
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("28a5b8b8-1cfa-4348-92bd-b2b4e857fc21"),
+                            IsRequired = true,
+                            Name = "Сумма финансирования (тыс. руб.)",
+                            Number = 2,
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("98961a51-4e1e-4d32-b3f1-dd58b1b2172e"),
+                            IsRequired = true,
+                            Name = "Период выполнения",
+                            Number = 3,
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("638ae3eb-4841-4c53-9a0d-b5c63734e549"),
+                            IsRequired = true,
+                            Name = "Статус",
+                            Number = 4,
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("b0d7937f-ddc2-4eae-b196-0b1e1250dd71"),
+                            IsRequired = true,
+                            Name = "Регистрационный номер карты в системе ЕГИСУ (https://www.rosrid.ru/)",
+                            Number = 5,
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("8a8dffab-3e6a-4d0a-b6a4-38e794bd32f6"),
+                            IsRequired = true,
+                            Name = "Вид",
+                            Number = 1,
+                            TableId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("ea8d1456-edc2-43cd-b0ad-a3d4c8f1d216"),
+                            IsRequired = true,
+                            Name = "Название",
+                            Number = 2,
+                            TableId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("6e3b077f-8a67-4874-9694-b5d39ef805d9"),
+                            IsRequired = true,
+                            Name = "ФИО соавторов",
+                            Number = 3,
+                            TableId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("3fc97860-dc56-494e-91af-ec7e5e03ce9a"),
+                            IsRequired = true,
+                            Name = "Номер РИД",
+                            Number = 4,
+                            TableId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("9d11c1d0-c23a-403f-9a37-09bb18d1e242"),
+                            IsRequired = true,
+                            Name = "Вид",
+                            Number = 1,
+                            TableId = new Guid("4bf9c880-345c-48b5-b431-9fc241126381"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("065f1372-859d-47b5-9749-02d6a0d90f36"),
+                            IsRequired = true,
+                            Name = "Название разработки",
+                            Number = 2,
+                            TableId = new Guid("4bf9c880-345c-48b5-b431-9fc241126381"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("bef76f6b-f11a-49c9-af1a-937efe948e34"),
+                            IsRequired = true,
+                            Name = "Название организации в которую внедрена разработка",
+                            Number = 3,
+                            TableId = new Guid("4bf9c880-345c-48b5-b431-9fc241126381"),
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -1720,37 +2855,61 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            Id = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Общая информация",
                             Number = 1
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("eb8357c4-a96e-4ecd-9c4d-4ea2a9effc50"),
+========
+                            Id = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Категория участников",
                             Number = 2
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("a39ab3ef-84af-46d1-b28f-e07b54e17a5a"),
+========
+                            Id = new Guid("d26e96a1-7240-4b9a-a3f7-ae41e46d4de4"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Конкурсная работа",
                             Number = 3
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("ea9da32e-4ab7-4e7d-9677-576252138b26"),
+========
+                            Id = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Профессиональное развитие",
                             Number = 4
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Научно-педагогическая деятельность",
                             Number = 5
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            Id = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Научно-исследовательская деятельность",
                             Number = 6
                         });
@@ -1778,6 +2937,39 @@ namespace ServerApp.Migrations
                     b.HasIndex("EditBlockId");
 
                     b.ToTable("EditBlockStatuses");
+                });
+
+            modelBuilder.Entity("ServerApp.Data.Entities.FeedBack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Checked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feedbacks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0f311045-c4a3-4d13-8b42-959c993b6dee"),
+                            Checked = false,
+                            Email = "system@system.ru",
+                            Message = "Test Message for System",
+                            Name = "SYSTEM"
+                        });
                 });
 
             modelBuilder.Entity("ServerApp.Data.Entities.Field", b =>
@@ -1828,204 +3020,366 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("7eeb8b8b-5072-4703-872b-629a9c62959d"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            Id = new Guid("3be36319-913a-4811-bbd1-a80cc827d8ff"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "ФИО",
                             Number = 1,
                             Placeholder = "Иванов Иван Иванович",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("41ba9b21-4f7c-4db9-a7db-b5f7af80c8f8"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("406f1feb-3ee0-4faa-a9c5-2c27616fd3ab"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Дата рождения",
                             Number = 2,
                             Placeholder = "01.01.2000",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("52681f66-4c73-4a07-a98e-417cc6a367fd")
                         },
                         new
                         {
                             Id = new Guid("82a2df51-8b93-496e-a8d3-f9334c44bdc8"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("ba18eee0-5b0d-4ef9-b1bb-7d3f2d6f4e61")
+                        },
+                        new
+                        {
+                            Id = new Guid("815d7569-db76-459d-9ec6-f710394a9850"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Домашний адрес",
                             Number = 3,
                             Placeholder = "Регион, город, улица, дом, квартира",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("b8069c39-16f4-4b9e-a795-8b5b9048b7ce"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("5550cbd5-8666-431a-ac64-9ad0d02637cf"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Контактный телефон",
                             Number = 4,
                             Placeholder = "89007005050",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("11040ad1-06fc-48e8-aaa9-c777b6cd5789"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("9afb914a-bfe2-4949-a33c-b3b449e57063"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Электронная почта",
                             Number = 5,
                             Placeholder = "user@example.com",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("8d52aa9b-f9fe-4725-99d6-7728422aa376"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("0d16c3af-3d39-4359-8b6e-4921b19d583e"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Место работы",
                             Number = 6,
                             Placeholder = "Название организации",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("c1c42a41-4717-45ad-b7b3-d7ccb98c08fa"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("3d02a5ad-07b6-46cf-b255-a3eba36fac81"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Адрес работы",
                             Number = 7,
                             Placeholder = "Регион, город, улица, дом",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("f3d127ba-70ab-4eca-9d5f-0218c1cf74c8"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("b1105017-6764-4c89-82ae-39e55721ed15"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Институт, факультет, кафедра, лаборатория",
                             Number = 8,
                             Placeholder = "Введите институт, факультет, кафедру, лабораторию",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("295d0cce-037d-4aee-b532-394b0d2805ea"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("b0d1f39c-9621-4896-8495-d6c479697256"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Должность",
                             Number = 9,
                             Placeholder = "Введите свою должность в организации",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("822dd4d6-34c9-4617-9f96-4745570d4c3a"),
                             EditBlockId = new Guid("8b5a6559-a7bb-43ba-9d5d-d1b139922c37"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("49f2b53f-a843-4f2b-8b08-9d92897c1a6d"),
+                            EditBlockId = new Guid("88e554fc-fe72-407c-9e00-a9e12ef69c42"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Стаж научно-педагогической/научно-исследовательской деятельности по трудовой книжке",
                             Number = 10,
                             Placeholder = "Введите свой стаж",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("7c662cfa-811c-40fe-98ef-8f246c24dc10"),
                             EditBlockId = new Guid("eb8357c4-a96e-4ecd-9c4d-4ea2a9effc50"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+                            EditBlockId = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Ученое звание",
                             Number = 11,
                             Placeholder = "Выберите ученое звание",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("3fca78b3-b712-43f2-b488-fd0e28358d48"),
                             EditBlockId = new Guid("eb8357c4-a96e-4ecd-9c4d-4ea2a9effc50"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("57a1953c-aa17-4f07-9e60-4d671ca883fa"),
+                            EditBlockId = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsRequired = true,
                             Name = "Ученая степень",
                             Number = 12,
                             Placeholder = "Выберите ученую степень",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("268aa40e-d144-41e0-a8a1-2c3a10c8b851"),
                             EditBlockId = new Guid("eb8357c4-a96e-4ecd-9c4d-4ea2a9effc50"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("a78f1d7c-0658-4be6-9fe0-007f7cc5b735"),
+                            EditBlockId = new Guid("d6bbb9f8-eaa0-4864-a63e-537e768d0de1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Научная специальность (по классификации ВАК)",
                             Number = 13,
                             Placeholder = "Введите научную специальность (по классификации ВАК)",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("909032a2-1136-4d26-8727-5f97f54abf43")
                         },
                         new
                         {
                             Id = new Guid("56278d07-eba2-44dd-ba78-1c423387d32f"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            ValueTypeId = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80")
+                        },
+                        new
+                        {
+                            Id = new Guid("56b8b971-c96f-41f3-acbb-dd55a8d6747b"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-педагогической деятельности",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся кадидаты наук",
                             Number = 14,
                             Placeholder = "Введите количество",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("b7b2c736-4ef9-498f-9563-e977609b89e7"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("2b96aa3d-d9f7-4d27-b6aa-6db2e7a7e694"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся доктора наук",
                             Number = 15,
                             Placeholder = "Введите количество",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("1e521770-e605-47d0-8ac5-06dba254dbf9"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("fa16d661-a3a6-49c2-8e7b-a064ad1bb8fd"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EditGroup = "Руководство дипломными проектами за предыдущий учебный год",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся бакалавры, специалисты, магистры",
                             Number = 16,
                             Placeholder = "Введите количество",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("59c0f7ba-5952-4484-ade4-10dff9a71a5c"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("02c6bb6e-1c1f-4e33-a0db-2ca3af27343e"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EditGroup = "Список подготовленных под руководством участника конкурса аспирантов (докторантов) за последние 5 лет научно-исследовательской деятельности",
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся кандидаты наук",
                             Number = 17,
                             Placeholder = "Введите количество",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
                         },
                         new
                         {
                             Id = new Guid("3e5dd45f-d781-466f-90ec-3543b1610df9"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+                        },
+                        new
+                        {
+                            Id = new Guid("73f6a5cf-a4f2-4559-b2d6-1a4689105f9b"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsRequired = true,
                             Name = "Защитившиеся доктора наук",
                             Number = 18,
                             Placeholder = "Введите количество",
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             ValueTypeId = new Guid("14af8ae1-6786-45ea-8325-873875b167ce")
+========
+                            ValueTypeId = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -2098,22 +3452,35 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9250ad25-788c-492f-b829-3b98d4460175"),
+========
+                            Id = new Guid("5cc2563b-277a-47cd-ba49-3e166a8d1b90"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark1",
                             IsAuto = true,
                             MaxValue = 3,
                             Name = "Баллы за объем учебной нагрузки:",
                             Number = 1,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("1bbcbc5b-b337-45bd-87e5-2e19fd5092c8")
                         },
                         new
                         {
                             Id = new Guid("071c84dd-2c67-4859-82b5-ff1d660d2db6"),
+========
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052")
+                        },
+                        new
+                        {
+                            Id = new Guid("a1575a4d-7f4f-440c-9886-14325b8d2628"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark2",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за количество дисциплин на иностранном языке, которые вел претендент, в предыдущем учебном году:",
                             Number = 2,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("1bbcbc5b-b337-45bd-87e5-2e19fd5092c8")
                         },
                         new
@@ -2121,6 +3488,15 @@ namespace ServerApp.Migrations
                             Id = new Guid("3a298f75-94a5-4c14-ab06-ebe6063c88fc"),
                             EvaluationMethodName = "EvaluateMark3",
                             FieldId = new Guid("1e521770-e605-47d0-8ac5-06dba254dbf9"),
+========
+                            TableId = new Guid("a664c290-78bc-4a89-917f-4503f7523052")
+                        },
+                        new
+                        {
+                            Id = new Guid("64d0122c-4248-435e-a876-9ae1ee1a662d"),
+                            EvaluationMethodName = "EvaluateMark3",
+                            FieldId = new Guid("fa16d661-a3a6-49c2-8e7b-a064ad1bb8fd"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество квалификационных работ, выполненных под руководством претендента:",
@@ -2128,9 +3504,15 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c9f363db-5ee6-4e8c-b408-0fe176cb1361"),
                             EvaluationMethodName = "EvaluateMark4",
                             FieldId = new Guid("56278d07-eba2-44dd-ba78-1c423387d32f"),
+========
+                            Id = new Guid("7af78210-b52c-4f69-8f16-c0db4f137ff6"),
+                            EvaluationMethodName = "EvaluateMark4",
+                            FieldId = new Guid("56b8b971-c96f-41f3-acbb-dd55a8d6747b"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 6,
                             Name = "Баллы за количество защитившихся кандидатов наук:",
@@ -2138,9 +3520,15 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("24699f9b-f5ed-40cd-82f9-8e686348e99e"),
                             EvaluationMethodName = "EvaluateMark5",
                             FieldId = new Guid("b7b2c736-4ef9-498f-9563-e977609b89e7"),
+========
+                            Id = new Guid("a00c36c5-c429-444a-8ffa-2dbaf5d7a141"),
+                            EvaluationMethodName = "EvaluateMark5",
+                            FieldId = new Guid("2b96aa3d-d9f7-4d27-b6aa-6db2e7a7e694"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 10,
                             Name = "Баллы за количество защитившихся докторов наук:",
@@ -2148,72 +3536,125 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("7cf274e9-7cbc-414c-beb6-859fbbbcfe72"),
+========
+                            Id = new Guid("a9482233-c2d6-474f-85e2-3a0b8ad930d5"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark6",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество подготовленных студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание:",
                             Number = 6,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("33b0124e-85c9-4527-9403-dfc57fe9654f")
                         },
                         new
                         {
                             Id = new Guid("d056dffa-6061-4b99-83ee-70abed7312d6"),
+========
+                            TableId = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064")
+                        },
+                        new
+                        {
+                            Id = new Guid("4d5410fd-6b0e-4730-8ed8-88b77564cb4f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark7",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество онлайн курсов на открытых площадках:",
                             Number = 7,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("4f04d524-8c6d-420f-869b-d0d704f6c1f2")
                         },
                         new
                         {
                             Id = new Guid("182255b2-da2b-4150-85b0-ff0346f72448"),
+========
+                            TableId = new Guid("f6976088-34e8-4254-a347-908d3934dbc9")
+                        },
+                        new
+                        {
+                            Id = new Guid("f749dab0-3254-4537-809c-7b941736c080"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark8",
                             IsAuto = true,
                             MaxValue = 4,
-                            Name = "Баллы за труды с грифом и без соавторства:",
+                            Name = "Баллы за труды с грифом или на иностранном языке и без соавторства:",
                             Number = 8,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("806b8266-770b-4a2d-9d02-252cd52bb218")
                         },
                         new
                         {
                             Id = new Guid("b5f076b1-3de4-4d99-b8ae-0104712bf357"),
+========
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81")
+                        },
+                        new
+                        {
+                            Id = new Guid("4d6056eb-b30e-4f06-9536-36909f7d9900"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark9",
                             IsAuto = true,
                             MaxValue = 3,
-                            Name = "Баллы за труды с грифом в соавторстве:",
+                            Name = "Баллы за труды с грифом или на иностранном языке в соавторстве:",
                             Number = 9,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("806b8266-770b-4a2d-9d02-252cd52bb218")
                         },
                         new
                         {
                             Id = new Guid("e688f59f-6e7f-4658-90ed-ada4879fb9bd"),
+========
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81")
+                        },
+                        new
+                        {
+                            Id = new Guid("2f8e8bad-02a4-407b-9cd4-fbc3d395fc17"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark10",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за труды без грифа и без соавторства:",
                             Number = 10,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("806b8266-770b-4a2d-9d02-252cd52bb218")
                         },
                         new
                         {
                             Id = new Guid("4ee162d2-4b00-4a5c-87c2-122222ac35b2"),
+========
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81")
+                        },
+                        new
+                        {
+                            Id = new Guid("6275471d-6f30-4abb-a1c4-14516ac1625e"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark11",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за труды без грифа в соавторстве:",
                             Number = 11,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("806b8266-770b-4a2d-9d02-252cd52bb218")
                         },
                         new
                         {
                             Id = new Guid("14e01340-4341-4d83-aa34-30bf441b8414"),
+========
+                            TableId = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81")
+                        },
+                        new
+                        {
+                            Id = new Guid("d7b9a373-e697-4c30-ace2-7a0b4b4afe18"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark12",
                             IsAuto = true,
                             MaxValue = 4,
                             Name = "Баллы за количество практикумов и курсов лекций:",
                             Number = 12,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("594a6fc2-3bf1-4d0e-913d-8dc57ea1a260")
                         },
                         new
@@ -2221,6 +3662,15 @@ namespace ServerApp.Migrations
                             Id = new Guid("05670b43-87ab-4656-8d80-09646c3df98a"),
                             EvaluationMethodName = "EvaluateMark13",
                             FieldId = new Guid("7c662cfa-811c-40fe-98ef-8f246c24dc10"),
+========
+                            TableId = new Guid("35a6b994-c057-4213-8f68-93edf54d786b")
+                        },
+                        new
+                        {
+                            Id = new Guid("9d24ede2-0dce-46f5-8696-c4b47ca6ee11"),
+                            EvaluationMethodName = "EvaluateMark13",
+                            FieldId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за ученое звание:",
@@ -2228,32 +3678,53 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("85deb1ae-e8e1-4189-ba0b-e5d611e2b532"),
+========
+                            Id = new Guid("b33d1a5c-0281-4473-8561-1b10872f9b94"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark14",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за награды:",
                             Number = 14,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("24931e37-1efa-468f-9169-b00e961eec55")
                         },
                         new
                         {
                             Id = new Guid("a5b18cc1-91d5-466d-81f1-faacfcd940ec"),
+========
+                            TableId = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6")
+                        },
+                        new
+                        {
+                            Id = new Guid("0e31347b-02d1-4f68-97c4-6ecce5e6c2fd"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark15",
                             IsAuto = true,
                             MaxValue = 2,
                             Name = "Баллы за профессиональное развитие:",
                             Number = 15,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("4d1dfc00-c9a9-4f65-ae13-0d8dbcab2fec")
                         },
                         new
                         {
                             Id = new Guid("886bb636-ecbb-4e36-962c-11f7bff104b6"),
+========
+                            TableId = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba")
+                        },
+                        new
+                        {
+                            Id = new Guid("7c3bdb72-3086-4d50-8589-a2c315cf8f41"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark16",
                             IsAuto = true,
                             MaxValue = 8,
                             Name = "Баллы за научные публикации:",
                             Number = 16,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("b3c9e804-7c50-4433-978a-492ce05db224")
                         },
                         new
@@ -2261,6 +3732,15 @@ namespace ServerApp.Migrations
                             Id = new Guid("6c3d4ed8-7617-441b-81c0-2a1a1acda9e0"),
                             EvaluationMethodName = "EvaluateMark19",
                             FieldId = new Guid("59c0f7ba-5952-4484-ade4-10dff9a71a5c"),
+========
+                            TableId = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7")
+                        },
+                        new
+                        {
+                            Id = new Guid("b2b6ed9f-a23d-4792-b470-19d267cf7422"),
+                            EvaluationMethodName = "EvaluateMark19",
+                            FieldId = new Guid("02c6bb6e-1c1f-4e33-a0db-2ca3af27343e"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 8,
                             Name = "Баллы за количество защитившихся кандидатов наук:",
@@ -2268,9 +3748,15 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("5eaf9733-e011-433a-9cd3-18648efb010d"),
                             EvaluationMethodName = "EvaluateMark20",
                             FieldId = new Guid("3e5dd45f-d781-466f-90ec-3543b1610df9"),
+========
+                            Id = new Guid("2a1fc3ec-11ef-4223-bc5d-3f68b9845139"),
+                            EvaluationMethodName = "EvaluateMark20",
+                            FieldId = new Guid("73f6a5cf-a4f2-4559-b2d6-1a4689105f9b"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = true,
                             MaxValue = 12,
                             Name = "Баллы за количество защитившихся докторов наук:",
@@ -2278,61 +3764,109 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("ca04ea5d-88ea-4785-8f62-a8e9b0cb06b2"),
+========
+                            Id = new Guid("76606667-6603-435d-b2c4-340d2c0e62c2"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark21",
                             IsAuto = true,
                             MaxValue = 8,
                             Name = "Баллы за выполненные НИР/НИОКР в качестве руководителя:",
                             Number = 21,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("9501cc09-1a05-44c7-9dbb-9983efd2d810")
                         },
                         new
                         {
                             Id = new Guid("8aaa680b-692f-485d-97c3-39f3122a7174"),
+========
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9")
+                        },
+                        new
+                        {
+                            Id = new Guid("2f761cfc-3beb-4b14-97fe-b55bf77f4d65"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark22",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за выполненные НИР/НИОКР в качестве исполнителя:",
                             Number = 22,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("9501cc09-1a05-44c7-9dbb-9983efd2d810")
                         },
                         new
                         {
                             Id = new Guid("8c65b718-9a94-427e-bae5-8d08691b1b1f"),
+========
+                            TableId = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9")
+                        },
+                        new
+                        {
+                            Id = new Guid("dbc3898b-8013-472c-9f83-c344c3d70daf"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark23",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество объектов интеллектуальной собственности:",
                             Number = 23,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("aa6b9511-d35a-4eb0-8d0e-6cdc2d3388de")
                         },
                         new
                         {
                             Id = new Guid("3b523069-e3ba-4c62-8cda-d2f4138f6ac1"),
+========
+                            TableId = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242")
+                        },
+                        new
+                        {
+                            Id = new Guid("50f999a9-b4d5-430c-b4f6-34307f271ed2"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             EvaluationMethodName = "EvaluateMark24",
                             IsAuto = true,
                             MaxValue = 5,
                             Name = "Баллы за количество разработок:",
                             Number = 24,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("775495e2-d608-4ccf-9924-e8161a715d60")
                         },
                         new
                         {
                             Id = new Guid("0e1034b0-f523-4b4c-abe6-b398826650ae"),
+========
+                            TableId = new Guid("4bf9c880-345c-48b5-b431-9fc241126381")
+                        },
+                        new
+                        {
+                            Id = new Guid("c5c1c0aa-ad0a-4ffb-8546-f8a0fed87a89"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = false,
                             MaxValue = 15,
                             Name = "Оценка уровня предоставленной работы:",
                             Number = 25,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("9a90dbec-31aa-418a-a1f3-031b78829673")
                         },
                         new
                         {
                             Id = new Guid("e45a5816-5d7f-439e-a754-82ff0f8d1d3f"),
+========
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("b304b218-0b09-4490-90e9-7ca253640044"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsAuto = false,
                             MaxValue = 15,
                             Name = "Использование в представленной работе инновационных методов (проблемного и проективного обучения, тренинговых форм, модульно-кредитных, модульно-рейтинговых систем обучения и контроля знаний):",
                             Number = 26,
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             TableId = new Guid("9a90dbec-31aa-418a-a1f3-031b78829673")
+========
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -2362,43 +3896,71 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("046bd92c-e6ca-4753-b8fa-9826b218723a"),
+========
+                            Id = new Guid("4087db9a-2bb0-4521-bc26-6f594391bf02"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Основной",
                             Number = 1
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("dbdc02fe-6af9-4c7e-852a-5e0aec7ad07e"),
+========
+                            Id = new Guid("445372c0-ecfa-40d8-8b8c-7a25d1d7dab5"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Образовательная деятельность",
                             Number = 2
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4fff241c-0574-4184-ae1f-31c00fada8c0"),
+========
+                            Id = new Guid("66a0c11e-c5e8-40cc-b949-42318c941a48"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Методическая деятельность",
                             Number = 3
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("08cddbff-ae00-46f0-8f22-8fd3151e25e8"),
+========
+                            Id = new Guid("b838beca-82bb-4f44-bdb4-4b1dee5d0889"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Профессиональные показатели",
                             Number = 4
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("6c3ad112-3041-4c70-89fb-3d4f4332df3b"),
+========
+                            Id = new Guid("ad6cd501-1984-44da-85e4-b7b7646aea58"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Научно-исследовательская деятельность",
                             Number = 5
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c0bbc94d-9e63-403f-9d60-b3755975531b"),
+========
+                            Id = new Guid("b5501e38-02f1-42b6-b08d-77de067b62f1"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Инновационная и иная деятельность",
                             Number = 6
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c761a92e-2268-4057-a880-1917e1325c41"),
+========
+                            Id = new Guid("25d776b7-c234-47b0-b6f0-4be21cbb9090"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Конкурсная работа",
                             Number = 7
                         });
@@ -2447,6 +4009,9 @@ namespace ServerApp.Migrations
                     b.Property<bool>("IsPrefilled")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("Number")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("TableId")
                         .HasColumnType("uuid");
 
@@ -2459,6 +4024,7 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("6334b814-77b5-4acd-8b7b-763a9c0ed6f8"),
                             IsPrefilled = true,
                             TableId = new Guid("9a90dbec-31aa-418a-a1f3-031b78829673")
@@ -2534,6 +4100,96 @@ namespace ServerApp.Migrations
                             Id = new Guid("9047498b-e427-4b33-b6cb-79b129e377b0"),
                             IsPrefilled = true,
                             TableId = new Guid("2dfe1efd-361f-48e1-84c0-3079114de32d")
+========
+                            Id = new Guid("3b523239-4327-45f7-896a-1cbfedabf754"),
+                            IsPrefilled = true,
+                            Number = 1,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("ec856a5a-be37-4d12-ac06-7512d67c29bf"),
+                            IsPrefilled = true,
+                            Number = 2,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("c6f71f42-b8b3-4e90-a154-f7fe558ecc33"),
+                            IsPrefilled = true,
+                            Number = 4,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("ccf13caa-c96d-4ff7-9dcf-df56b350b37d"),
+                            IsPrefilled = true,
+                            Number = 3,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("09aece0a-d825-4215-a88a-c7dd6944ec74"),
+                            IsPrefilled = true,
+                            Number = 6,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("21b3d800-76c9-4843-9413-cb682f43ae30"),
+                            IsPrefilled = true,
+                            Number = 8,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("2ff32d4b-1358-44a8-9308-b010c6bb0185"),
+                            IsPrefilled = true,
+                            Number = 7,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("a5034236-ddb9-4323-84c3-046d21971632"),
+                            IsPrefilled = true,
+                            Number = 5,
+                            TableId = new Guid("62da8c12-4843-4869-9a80-b55cee49785e")
+                        },
+                        new
+                        {
+                            Id = new Guid("f53e2c17-c9a7-4245-8df2-b32ddda4a8c4"),
+                            IsPrefilled = true,
+                            Number = 1,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+                        },
+                        new
+                        {
+                            Id = new Guid("dff35b0f-aaf3-4894-bd99-762ed891fe45"),
+                            IsPrefilled = true,
+                            Number = 2,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+                        },
+                        new
+                        {
+                            Id = new Guid("512ccad5-1ef6-4e6a-8722-72f13f33dfcd"),
+                            IsPrefilled = true,
+                            Number = 3,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+                        },
+                        new
+                        {
+                            Id = new Guid("7d3fe3fc-7d81-4a9f-9793-405e49c0e0dc"),
+                            IsPrefilled = true,
+                            Number = 4,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+                        },
+                        new
+                        {
+                            Id = new Guid("a2f3159d-887a-46c3-8bf2-a58de8d79e97"),
+                            IsPrefilled = true,
+                            Number = 5,
+                            TableId = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8")
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                         });
                 });
 
@@ -2564,242 +4220,442 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("01571add-cbe2-4c55-885e-d64a1d97cb0c"),
                             FieldId = new Guid("7c662cfa-811c-40fe-98ef-8f246c24dc10"),
+========
+                            Id = new Guid("60577f02-ada9-47e9-9218-d6d27e269079"),
+                            FieldId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Нет"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("6c2e4097-a810-4639-9876-8fd52d3f8f8b"),
                             FieldId = new Guid("7c662cfa-811c-40fe-98ef-8f246c24dc10"),
+========
+                            Id = new Guid("1b31a67e-a1d2-4012-a576-8e6375db189e"),
+                            FieldId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Доцент"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("7b0c39ef-3fa6-49ed-8b9e-583308a6edd1"),
                             FieldId = new Guid("7c662cfa-811c-40fe-98ef-8f246c24dc10"),
+========
+                            Id = new Guid("366ff9ea-1b88-4ea2-8ac3-11d68d1c4acb"),
+                            FieldId = new Guid("00c065db-2298-4290-a3ff-518a7f2f7664"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Профессор"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("5e708ec1-b260-4989-b692-85c268972eea"),
                             FieldId = new Guid("3fca78b3-b712-43f2-b488-fd0e28358d48"),
+========
+                            Id = new Guid("f02b0a3d-c8be-4d59-9ec0-58afe5d8b6dd"),
+                            FieldId = new Guid("57a1953c-aa17-4f07-9e60-4d671ca883fa"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Кандидат наук"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("70f759c7-8edd-48e4-ad6e-e4b47f2869e0"),
                             FieldId = new Guid("3fca78b3-b712-43f2-b488-fd0e28358d48"),
+========
+                            Id = new Guid("c38379c6-3395-4dc1-94a2-86ac915e6ce3"),
+                            FieldId = new Guid("57a1953c-aa17-4f07-9e60-4d671ca883fa"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Доктор наук"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("0ce5b79b-d522-4f3d-9005-ee8c199d22fd"),
                             ColumnId = new Guid("4f1c9e92-3b66-4bb3-b671-4a870e931ea4"),
+========
+                            Id = new Guid("b94a2bd4-2a77-4ca9-9605-4dbc1b2c10c2"),
+                            ColumnId = new Guid("785e7f56-2928-44ad-9664-a8d3019e9e07"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Региональный"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("b45cd871-cd53-4bdd-92ba-e698bd701dcb"),
                             ColumnId = new Guid("4f1c9e92-3b66-4bb3-b671-4a870e931ea4"),
+========
+                            Id = new Guid("442f3d7e-fb99-4f0b-ba6f-ecf24b316b11"),
+                            ColumnId = new Guid("785e7f56-2928-44ad-9664-a8d3019e9e07"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Всероссийский"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("fa02d596-2cb7-420d-86d6-772fa73c71a5"),
                             ColumnId = new Guid("4f1c9e92-3b66-4bb3-b671-4a870e931ea4"),
+========
+                            Id = new Guid("efb238e4-bc85-440a-92b6-b4d77e490971"),
+                            ColumnId = new Guid("785e7f56-2928-44ad-9664-a8d3019e9e07"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Международный"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("47a0a5d7-f1b8-4b5e-bd0a-a5f6a5350f40"),
                             ColumnId = new Guid("f29e802e-40b5-44a1-b6be-8fec0fb804ab"),
+========
+                            Id = new Guid("1adbfd32-8693-47dd-be02-b7b081e50ec5"),
+                            ColumnId = new Guid("59f8c244-1982-4cd8-94e2-b0c2474a7381"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Учебное и/или учебно-методическое пособие"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("3abeb7d5-b025-493b-b282-77730d2fb13e"),
                             ColumnId = new Guid("f29e802e-40b5-44a1-b6be-8fec0fb804ab"),
+========
+                            Id = new Guid("87ed2fba-8359-417a-8e96-c1bd891ef6a5"),
+                            ColumnId = new Guid("59f8c244-1982-4cd8-94e2-b0c2474a7381"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Учебник"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("33832c39-4e59-4859-874c-ba1d236958a4"),
                             ColumnId = new Guid("f29e802e-40b5-44a1-b6be-8fec0fb804ab"),
+========
+                            Id = new Guid("df6a7f37-c86a-4ba1-903e-5aaf1b90a1bd"),
+                            ColumnId = new Guid("59f8c244-1982-4cd8-94e2-b0c2474a7381"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Монография"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("beb86e2d-9bd8-4404-971b-6ff0464ccbce"),
                             ColumnId = new Guid("f448bd7e-0cd9-4bf8-ad74-23e91f8c5965"),
+========
+                            Id = new Guid("6d1bb098-65e8-4495-8af3-b9ef9dbe2720"),
+                            ColumnId = new Guid("51f2195d-0889-42c0-ad52-1a39e03dd06f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Лекции"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9b1f1412-5d5d-4f50-8188-51762fb3b976"),
                             ColumnId = new Guid("f448bd7e-0cd9-4bf8-ad74-23e91f8c5965"),
+========
+                            Id = new Guid("49ecfd85-3e09-4845-98d3-535f26cd9e1a"),
+                            ColumnId = new Guid("51f2195d-0889-42c0-ad52-1a39e03dd06f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Лабораторные"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2b3d7572-782b-450b-86db-7037201dbf0a"),
                             ColumnId = new Guid("15d29aed-84fd-41e6-9377-b63c61b6aa9f"),
+========
+                            Id = new Guid("eefc63aa-baff-47cf-977c-842c36d4232a"),
+                            ColumnId = new Guid("638ae3eb-4841-4c53-9a0d-b5c63734e549"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Руководитель"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("a7e91099-5989-4244-afa0-a0c66fdf1135"),
                             ColumnId = new Guid("15d29aed-84fd-41e6-9377-b63c61b6aa9f"),
+========
+                            Id = new Guid("14dc52be-3afb-4e65-906c-e713f315be4f"),
+                            ColumnId = new Guid("638ae3eb-4841-4c53-9a0d-b5c63734e549"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Исполнитель"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("1de0d575-bfe6-44d7-99a8-320144dcfedb"),
                             ColumnId = new Guid("781f1c17-82b3-4914-a14c-455faa693cc0"),
+========
+                            Id = new Guid("9adb7846-0b26-4658-aa84-ddbf7d40a76d"),
+                            ColumnId = new Guid("8a8dffab-3e6a-4d0a-b6a4-38e794bd32f6"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Изобретение"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2e9f107c-112e-4811-b0a0-b337228223ba"),
                             ColumnId = new Guid("781f1c17-82b3-4914-a14c-455faa693cc0"),
+========
+                            Id = new Guid("2504a608-391f-4fe5-b2ec-2fa979b58822"),
+                            ColumnId = new Guid("8a8dffab-3e6a-4d0a-b6a4-38e794bd32f6"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Полезная модель"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("fd299de6-7b76-4a39-8345-89ad67919f35"),
                             ColumnId = new Guid("781f1c17-82b3-4914-a14c-455faa693cc0"),
+========
+                            Id = new Guid("87b8263b-46da-4588-b002-7ed9588d1455"),
+                            ColumnId = new Guid("8a8dffab-3e6a-4d0a-b6a4-38e794bd32f6"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Программы для ЭВМ и базы данных"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c03975e4-30a8-4e4e-86a8-9fab4b55e8b7"),
                             ColumnId = new Guid("781f1c17-82b3-4914-a14c-455faa693cc0"),
+========
+                            Id = new Guid("dba509c0-7a36-487b-a502-4dd0ecf73249"),
+                            ColumnId = new Guid("8a8dffab-3e6a-4d0a-b6a4-38e794bd32f6"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Промышленный образец"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4fb0fd5b-91aa-4648-9c03-54196b79975e"),
                             ColumnId = new Guid("32a01d96-d55c-4672-aa24-4158e6752caf"),
+========
+                            Id = new Guid("d799ac24-0c9a-4b8a-9660-642a79b7c219"),
+                            ColumnId = new Guid("9d11c1d0-c23a-403f-9a37-09bb18d1e242"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Изобретение"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("dfde9d52-294a-4eab-a454-4e16b39709a2"),
                             ColumnId = new Guid("32a01d96-d55c-4672-aa24-4158e6752caf"),
+========
+                            Id = new Guid("8152b058-cd35-4a6c-a174-06d33fc641d4"),
+                            ColumnId = new Guid("9d11c1d0-c23a-403f-9a37-09bb18d1e242"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Полезная модель"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("7a697820-d839-46c8-8bad-3e020b3927fd"),
                             ColumnId = new Guid("32a01d96-d55c-4672-aa24-4158e6752caf"),
+========
+                            Id = new Guid("b7836c0e-95c2-420a-8e49-177937b302a1"),
+                            ColumnId = new Guid("9d11c1d0-c23a-403f-9a37-09bb18d1e242"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Программы для ЭВМ и базы данных"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9ea95207-d421-4286-99b9-44cd37be9ace"),
                             ColumnId = new Guid("32a01d96-d55c-4672-aa24-4158e6752caf"),
+========
+                            Id = new Guid("5de3c1e7-30f7-46ea-9138-480bb6936cfd"),
+                            ColumnId = new Guid("9d11c1d0-c23a-403f-9a37-09bb18d1e242"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Промышленный образец"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("30f87ed4-efdb-4c38-b6a0-3cc0af793874"),
                             ColumnId = new Guid("988c9678-b13d-4aa3-bc5c-c0d69ea09703"),
+========
+                            Id = new Guid("2f0f5ce8-eb47-449c-8829-489f6129a21b"),
+                            ColumnId = new Guid("d240e381-0ed2-4b5f-94a1-e289e7a0fd16"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Есть"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("e43a98de-1d2b-46dc-8f20-a63fe32c9865"),
                             ColumnId = new Guid("988c9678-b13d-4aa3-bc5c-c0d69ea09703"),
+========
+                            Id = new Guid("e5fc7ccf-c666-46b6-b956-7db25890c415"),
+                            ColumnId = new Guid("d240e381-0ed2-4b5f-94a1-e289e7a0fd16"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Нет"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("79816a01-4550-4847-ab8e-71887271e440"),
                             ColumnId = new Guid("c631a458-58e3-4bae-b8ae-2dc2009fbfa5"),
+========
+                            Id = new Guid("c66e5b1b-693f-4fdf-8533-4253391acff7"),
+                            ColumnId = new Guid("e0d1aaaa-d5ca-4896-b934-5bf673ef75d8"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Русский"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9134954d-2002-4d87-a7aa-10d491d9cff0"),
                             ColumnId = new Guid("c631a458-58e3-4bae-b8ae-2dc2009fbfa5"),
+========
+                            Id = new Guid("d44d6266-f71a-404a-bfb0-95d11f8375e2"),
+                            ColumnId = new Guid("e0d1aaaa-d5ca-4896-b934-5bf673ef75d8"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Иностранный"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c558dbca-e48f-4d74-b062-3cb16d6472fc"),
                             ColumnId = new Guid("902ccb43-f5d4-4de3-85e9-9939099a032a"),
+========
+                            Id = new Guid("754965fd-382a-4fbc-b0c9-cc56a8c182f8"),
+                            ColumnId = new Guid("b6665b63-c5fd-41e8-8fe6-4152657d5669"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Есть"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("f2c3c3ed-1582-4711-928d-ab1816b512b3"),
                             ColumnId = new Guid("902ccb43-f5d4-4de3-85e9-9939099a032a"),
+========
+                            Id = new Guid("88ae7a13-ee4d-4571-82a6-8f24d5504c1e"),
+                            ColumnId = new Guid("b6665b63-c5fd-41e8-8fe6-4152657d5669"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Нет"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("db32655f-f77c-414c-aef1-c596b6fa994e"),
                             ColumnId = new Guid("2275154a-236e-4b6c-9289-72ec88debe17"),
+========
+                            Id = new Guid("098874a4-f16f-4560-8975-25b069543d85"),
+                            ColumnId = new Guid("2335f7fd-4b11-465f-bef6-3d916eccaeb9"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "РИНЦ"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("3e7e6e17-603e-4f37-86dc-f807191ef6f0"),
                             ColumnId = new Guid("2275154a-236e-4b6c-9289-72ec88debe17"),
+========
+                            Id = new Guid("e0fe8617-e67d-4118-8a8a-5129da4a223a"),
+                            ColumnId = new Guid("2335f7fd-4b11-465f-bef6-3d916eccaeb9"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "ВАК (К2-К3)"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("fd8e6b92-3a51-4d38-83c5-d0931e78ab2c"),
                             ColumnId = new Guid("2275154a-236e-4b6c-9289-72ec88debe17"),
+========
+                            Id = new Guid("372c45af-cd46-42b0-a364-3709079bb719"),
+                            ColumnId = new Guid("2335f7fd-4b11-465f-bef6-3d916eccaeb9"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "МБД (Q3-Q4)"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("fce0d72b-cd33-4261-a17b-a14eab59a9ed"),
                             ColumnId = new Guid("2275154a-236e-4b6c-9289-72ec88debe17"),
+========
+                            Id = new Guid("c001406f-c403-4076-a69a-9b2d7a442ee9"),
+                            ColumnId = new Guid("2335f7fd-4b11-465f-bef6-3d916eccaeb9"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "ВАК (К1), МБД (Q1-Q2)"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("c0ccbf8c-bab4-4ef3-b64a-4baeda514b0e"),
                             ColumnId = new Guid("f3cb36fd-166b-4367-8ac0-4b64931816a3"),
+========
+                            Id = new Guid("77bac38c-44bf-4f9a-ad39-d2895ef45079"),
+                            ColumnId = new Guid("8dc5578f-36b2-4c7b-9027-5b7219c4cd1f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Русский"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("d01eec62-50c6-466d-a71b-2f568f04fbc5"),
                             ColumnId = new Guid("f3cb36fd-166b-4367-8ac0-4b64931816a3"),
+========
+                            Id = new Guid("764cc13a-a1fd-4b36-a86d-1267bcbfc5a5"),
+                            ColumnId = new Guid("8dc5578f-36b2-4c7b-9027-5b7219c4cd1f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Английский"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("a417dbf5-ae68-4ca7-94af-5733f0bff198"),
                             ColumnId = new Guid("f3cb36fd-166b-4367-8ac0-4b64931816a3"),
+========
+                            Id = new Guid("3391c2fd-f92f-4805-a728-d5b5a19328ae"),
+                            ColumnId = new Guid("8dc5578f-36b2-4c7b-9027-5b7219c4cd1f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Другой"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("8dffe43a-b997-4bba-b003-12ddd7e2c328"),
                             ColumnId = new Guid("0040f722-bc93-4383-8e16-94524dd018ee"),
+========
+                            Id = new Guid("f56b99cd-0aa5-4efc-be91-7bc4e2ace955"),
+                            ColumnId = new Guid("ea1e4629-804e-439a-84bf-2631699ff7a3"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Есть"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("d1ccc318-8738-4d92-9fbb-0a1245c1aa68"),
                             ColumnId = new Guid("0040f722-bc93-4383-8e16-94524dd018ee"),
+========
+                            Id = new Guid("d549a5b5-c6e2-4b65-8f49-3ceecc021859"),
+                            ColumnId = new Guid("ea1e4629-804e-439a-84bf-2631699ff7a3"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Нет"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("365eb2fe-c983-4bae-965a-f4c5b8dbbd97"),
                             ColumnId = new Guid("b50cfab0-1039-4031-913e-54173cecec39"),
+========
+                            Id = new Guid("f112e277-ec4e-460f-bed6-76907807f34e"),
+                            ColumnId = new Guid("83b9e279-6b4f-49cc-a647-7563853d214f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Есть"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("710b4e46-b909-445c-bc51-bf03ffeb7b27"),
                             ColumnId = new Guid("b50cfab0-1039-4031-913e-54173cecec39"),
+========
+                            Id = new Guid("7cc986e5-7a44-4ac6-827d-0209bf445019"),
+                            ColumnId = new Guid("83b9e279-6b4f-49cc-a647-7563853d214f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Value = "Нет"
                         });
                 });
@@ -2839,8 +4695,13 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9a90dbec-31aa-418a-a1f3-031b78829673"),
                             EditBlockId = new Guid("a39ab3ef-84af-46d1-b28f-e07b54e17a5a"),
+========
+                            Id = new Guid("62da8c12-4843-4869-9a80-b55cee49785e"),
+                            EditBlockId = new Guid("d26e96a1-7240-4b9a-a3f7-ae41e46d4de4"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsPrefilled = true,
                             Name = "Краткая аннотация конкурсной работы",
@@ -2848,8 +4709,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("24931e37-1efa-468f-9169-b00e961eec55"),
                             EditBlockId = new Guid("ea9da32e-4ab7-4e7d-9677-576252138b26"),
+========
+                            Id = new Guid("7b820576-4b39-4ea2-b83e-10fdb7a272a6"),
+                            EditBlockId = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Награждение премиями, наградами в области научно-педагогической/научно-исследовательской деятельности городского, всероссийского или международного уровня (в том числе зарубежными), победы в профессиональных конкурсах за весь период деятельности",
@@ -2857,8 +4723,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4d1dfc00-c9a9-4f65-ae13-0d8dbcab2fec"),
                             EditBlockId = new Guid("ea9da32e-4ab7-4e7d-9677-576252138b26"),
+========
+                            Id = new Guid("5999e323-16e7-4ef5-9735-c95535fd43ba"),
+                            EditBlockId = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Сведения о профессиональном развитии участника конкурса за последние 5 лет (курсы повышения квалификации/ стажировки)",
@@ -2866,8 +4737,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("2dfe1efd-361f-48e1-84c0-3079114de32d"),
                             EditBlockId = new Guid("ea9da32e-4ab7-4e7d-9677-576252138b26"),
+========
+                            Id = new Guid("a01be511-409e-4ea0-91cd-b74ee07032b8"),
+                            EditBlockId = new Guid("1dd2f109-23fe-485d-82fc-a00eabf6cddc"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = true,
                             IsPrefilled = true,
                             Name = "Персональные идентификаторы",
@@ -2875,8 +4751,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("1bbcbc5b-b337-45bd-87e5-2e19fd5092c8"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("a664c290-78bc-4a89-917f-4503f7523052"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Учебная нагрузка за предыдущий учебный год (за исключением методической)",
@@ -2884,8 +4765,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("33b0124e-85c9-4527-9403-dfc57fe9654f"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("b555ff0b-11ba-4d36-89db-b17389bc3064"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список подготовленных под руководством участника конкурса студентов, бакалавров, магистров/специалистов, аспирантов, адъюнктов, ординаторов, докторантов, получивших самостоятельное признание (победители и призеры всероссийских имеждународных соревнований, конкурсов, олимпиад; лауреаты международных премий, премий Российской Федерации, региональных премий (за исключением внутривузовских конкурсов), за весь период научно-педагогической деятельности",
@@ -2893,8 +4779,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("806b8266-770b-4a2d-9d02-252cd52bb218"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("8ecfe285-fd56-4724-8217-0fb39583db81"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список трудов участника конкурса. Монографии, учебники, учебные и учебно-методические пособия с грифами и без грифов УМО, Министерств РФ или государственных академий наук, либо аналогичных работы на иностранном языке без грифов УМО, изданные типографским способом за последние 5 лет",
@@ -2902,8 +4793,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("594a6fc2-3bf1-4d0e-913d-8dc57ea1a260"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("35a6b994-c057-4213-8f68-93edf54d786b"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список лабораторных практикумов и курсов лекций (разработанных самостоятельно участником конкурса) за последние 5 лет",
@@ -2911,8 +4807,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4f04d524-8c6d-420f-869b-d0d704f6c1f2"),
                             EditBlockId = new Guid("43e5b1fe-fa32-4c5e-a60c-d9b6570c3308"),
+========
+                            Id = new Guid("f6976088-34e8-4254-a347-908d3934dbc9"),
+                            EditBlockId = new Guid("0373365f-4c9c-4ec4-af74-30f2f3f21352"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список разработанных онлайн-курсов на открытых платформах за последние 5 лет",
@@ -2920,8 +4821,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("b3c9e804-7c50-4433-978a-492ce05db224"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            Id = new Guid("f8e7b62e-5588-45e6-8510-3dbbd3cb85d7"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список научных публикаций за последние 5 лет",
@@ -2929,8 +4835,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("9501cc09-1a05-44c7-9dbb-9983efd2d810"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            Id = new Guid("ca73ac87-a862-4aea-9e7c-4f07b6f77bc9"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список выполненных НИР / НИОКР с финансированием в размере от 200 тыс. руб. и выше за последние 5 лет",
@@ -2938,8 +4849,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("aa6b9511-d35a-4eb0-8d0e-6cdc2d3388de"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            Id = new Guid("9d593bee-5c5c-4338-9f2c-6c13ee10e242"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Список объектов интеллектуальной собственности, созданных участником конкурса за весь период научно-педагогической деятельности (созданных самостоятельно / в соавторстве), официально зарегистрированных в установленном порядке (в России / за рубежом)",
@@ -2947,8 +4863,13 @@ namespace ServerApp.Migrations
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("775495e2-d608-4ccf-9924-e8161a715d60"),
                             EditBlockId = new Guid("4b9a9bb8-9bdd-47e5-a969-14a375f1e20e"),
+========
+                            Id = new Guid("4bf9c880-345c-48b5-b431-9fc241126381"),
+                            EditBlockId = new Guid("4d3d5db6-8a9d-41a0-8a5f-443692887c20"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             IsDisplayedOnVotingPage = false,
                             IsPrefilled = false,
                             Name = "Перечень разработок, внедренных на предприятиях и организациях реального сектора экономики (в России / за рубежом)",
@@ -2982,38 +4903,24 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("24e2503e-4776-4373-85c7-abacc3aba665"),
+========
+                            Id = new Guid("45139b37-9ccc-45e8-b716-1a88ace5b738"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Научно-педагогическая деятельность",
                             Number = 1
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("6d1858f1-6238-4767-97c0-9ae21b66ba59"),
+========
+                            Id = new Guid("75d8269a-2b42-427e-96c5-6e2841ed333b"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "Научно-исследовательская деятельность",
                             Number = 2
                         });
-                });
-
-            modelBuilder.Entity("ServerApp.Data.Entities.UserInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Username")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("UserInfos");
                 });
 
             modelBuilder.Entity("ServerApp.Data.Entities.ValuesType", b =>
@@ -3036,27 +4943,47 @@ namespace ServerApp.Migrations
                     b.HasData(
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("14af8ae1-6786-45ea-8325-873875b167ce"),
+========
+                            Id = new Guid("03b3e58e-8275-4877-9ba3-494e07f0a052"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "int"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("909032a2-1136-4d26-8727-5f97f54abf43"),
+========
+                            Id = new Guid("fec31d8a-1857-40bc-b548-f0341398fe80"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "string"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("4ff2d227-7bcc-417a-8f04-0768d6d491bf"),
+========
+                            Id = new Guid("977dc65d-1eef-4844-afbf-8c93a46a9c51"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "bool"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("52681f66-4c73-4a07-a98e-417cc6a367fd"),
+========
+                            Id = new Guid("ba18eee0-5b0d-4ef9-b1bb-7d3f2d6f4e61"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "DateTime"
                         },
                         new
                         {
+<<<<<<<< HEAD:ServerApp/Migrations/20240910042251_Init.Designer.cs
                             Id = new Guid("dd408d1a-bbb0-4856-b47d-b017c7a7d095"),
+========
+                            Id = new Guid("1d751442-b53d-418d-b332-17966e54a79f"),
+>>>>>>>> refs/heads/FinallyConnectingPostgre-09-09-2024:ServerApp/Migrations/20240910225959_Init.Designer.cs
                             Name = "TextArea"
                         });
                 });
@@ -3083,6 +5010,86 @@ namespace ServerApp.Migrations
                     b.HasIndex("VoterId");
 
                     b.ToTable("Votes");
+                });
+
+            modelBuilder.Entity("UserInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Username")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("UserInfos");
+                });
+
+            modelBuilder.Entity("ApplicationForm", b =>
+                {
+                    b.HasOne("ServerApp.Data.Entities.ApplicationStatus", "ApplicationStatus")
+                        .WithMany("ApplicationForms")
+                        .HasForeignKey("ApplicationStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ServerApp.Data.Entities.Category", "Category")
+                        .WithMany("ApplicationForms")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("UserInfo", "Reviewer")
+                        .WithMany("ReviewedApplications")
+                        .HasForeignKey("ReviewerId");
+
+                    b.HasOne("ServerApp.Data.Entities.Track", "Track")
+                        .WithMany("Applications")
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UserInfo", "UserInfo")
+                        .WithMany("Applications")
+                        .HasForeignKey("UserInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationStatus");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Reviewer");
+
+                    b.Navigation("Track");
+
+                    b.Navigation("UserInfo");
+                });
+
+            modelBuilder.Entity("ApplicationFormExpert", b =>
+                {
+                    b.HasOne("ApplicationForm", "ApplicationForm")
+                        .WithMany("ApplicationFormExperts")
+                        .HasForeignKey("ApplicationFormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UserInfo", "UserInfo")
+                        .WithMany("ApplicationFormExperts")
+                        .HasForeignKey("UserInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationForm");
+
+                    b.Navigation("UserInfo");
                 });
 
             modelBuilder.Entity("EditBlockTrack", b =>
@@ -3211,67 +5218,9 @@ namespace ServerApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ServerApp.Data.Entities.ApplicationForm", b =>
-                {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationStatus", "ApplicationStatus")
-                        .WithMany("ApplicationForms")
-                        .HasForeignKey("ApplicationStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ServerApp.Data.Entities.Category", "Category")
-                        .WithMany("ApplicationForms")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("ServerApp.Data.Entities.UserInfo", "Reviewer")
-                        .WithMany("ReviewedApplications")
-                        .HasForeignKey("ReviewerId");
-
-                    b.HasOne("ServerApp.Data.Entities.Track", "Track")
-                        .WithMany("Applications")
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ServerApp.Data.Entities.UserInfo", "UserInfo")
-                        .WithMany("Applications")
-                        .HasForeignKey("UserInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationStatus");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Reviewer");
-
-                    b.Navigation("Track");
-
-                    b.Navigation("UserInfo");
-                });
-
-            modelBuilder.Entity("ServerApp.Data.Entities.ApplicationFormExpert", b =>
-                {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "ApplicationForm")
-                        .WithMany("ApplicationFormExperts")
-                        .HasForeignKey("ApplicationFormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ServerApp.Data.Entities.UserInfo", "UserInfo")
-                        .WithMany("ApplicationFormExperts")
-                        .HasForeignKey("UserInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationForm");
-
-                    b.Navigation("UserInfo");
-                });
-
             modelBuilder.Entity("ServerApp.Data.Entities.BlockReview", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "Application")
+                    b.HasOne("ApplicationForm", "Application")
                         .WithMany("BlockReviews")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3290,9 +5239,10 @@ namespace ServerApp.Migrations
 
             modelBuilder.Entity("ServerApp.Data.Entities.CellVal", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "Application")
+                    b.HasOne("ApplicationForm", "Application")
                         .WithMany("CellVals")
-                        .HasForeignKey("ApplicationId");
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ServerApp.Data.Entities.Column", "Column")
                         .WithMany("CellVals")
@@ -3334,7 +5284,7 @@ namespace ServerApp.Migrations
 
             modelBuilder.Entity("ServerApp.Data.Entities.EditBlockStatus", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "Application")
+                    b.HasOne("ApplicationForm", "Application")
                         .WithMany("EditBlockStatusList")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3372,7 +5322,7 @@ namespace ServerApp.Migrations
 
             modelBuilder.Entity("ServerApp.Data.Entities.FieldVal", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "Application")
+                    b.HasOne("ApplicationForm", "Application")
                         .WithMany("FieldVals")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3406,13 +5356,13 @@ namespace ServerApp.Migrations
 
             modelBuilder.Entity("ServerApp.Data.Entities.MarkVal", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "Application")
+                    b.HasOne("ApplicationForm", "Application")
                         .WithMany("MarkVals")
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ServerApp.Data.Entities.UserInfo", "Expert")
+                    b.HasOne("UserInfo", "Expert")
                         .WithMany("Marks")
                         .HasForeignKey("ExpertId");
 
@@ -3468,13 +5418,13 @@ namespace ServerApp.Migrations
 
             modelBuilder.Entity("ServerApp.Data.Entities.Vote", b =>
                 {
-                    b.HasOne("ServerApp.Data.Entities.ApplicationForm", "ApplicationForm")
+                    b.HasOne("ApplicationForm", "ApplicationForm")
                         .WithMany("Votes")
                         .HasForeignKey("ApplicationFormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ServerApp.Data.Entities.UserInfo", "Voter")
+                    b.HasOne("UserInfo", "Voter")
                         .WithMany("Votes")
                         .HasForeignKey("VoterId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3485,7 +5435,7 @@ namespace ServerApp.Migrations
                     b.Navigation("Voter");
                 });
 
-            modelBuilder.Entity("ServerApp.Data.Entities.ApplicationForm", b =>
+            modelBuilder.Entity("ApplicationForm", b =>
                 {
                     b.Navigation("ApplicationFormExperts");
 
@@ -3566,7 +5516,14 @@ namespace ServerApp.Migrations
                     b.Navigation("Applications");
                 });
 
-            modelBuilder.Entity("ServerApp.Data.Entities.UserInfo", b =>
+            modelBuilder.Entity("ServerApp.Data.Entities.ValuesType", b =>
+                {
+                    b.Navigation("Columns");
+
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("UserInfo", b =>
                 {
                     b.Navigation("ApplicationFormExperts");
 
@@ -3577,13 +5534,6 @@ namespace ServerApp.Migrations
                     b.Navigation("ReviewedApplications");
 
                     b.Navigation("Votes");
-                });
-
-            modelBuilder.Entity("ServerApp.Data.Entities.ValuesType", b =>
-                {
-                    b.Navigation("Columns");
-
-                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }

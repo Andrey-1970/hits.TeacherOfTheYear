@@ -12,10 +12,16 @@
  
 .countdown-item span {
   display: block;
-  font-size: 2em;
+  font-size: 40px;
 }
  
 .label {
   font-size: 0.8em;
   color: #999;
+}
+
+@media (max-width: 768px) {
+    .countdown-item span {
+        font-size: 30px;
+    }
 }

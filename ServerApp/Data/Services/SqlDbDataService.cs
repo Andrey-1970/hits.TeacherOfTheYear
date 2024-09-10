@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
+using ServerApp.Components.Admin;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
@@ -32,6 +33,68 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
+        public async Task SetDatetimeNowForApplicationAync(Guid? appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            
+            app.DateTime = DateTime.UtcNow;
+            context.Update(app);
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+
+            List<string>? res = null;
+            
+            if (app != null && app.BlockReviews.Any(e => e.Commentary is not null))
+            {
+                var currentBlocks = app.BlockReviews.Where(e => e.Commentary is not null);
+                res = [];
+                foreach (var block in currentBlocks)
+                {
+                    res.Add(block.Commentary);
+                }
+            }
+
+            return res;
+        }
+
+        public async Task DeleteApplicationAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+            foreach (var cellGroup in app.CellVals.GroupBy(cv => cv.RowId))
+            {
+                context.Rows.Remove(cellGroup.First().Row);
+            }
+            context.Remove(app);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task WithdrawApplicationAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+
+            var inProcessingStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 1);
+            app.ApplicationStatusId = inProcessingStatus.Id;
+
+            context.Update(app);
+
+            foreach (var markVal in app.MarkVals)
+            {
+                context.Remove(markVal);
+            }
+
+            foreach (var blockReview in app.BlockReviews)
+            {
+                context.Remove(blockReview);
+            }
+
+            await context.SaveChangesAsync();
+        }
+        
         public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId)
         {
             var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
@@ -131,6 +194,7 @@ namespace ServerApp.Data.Services
                             Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                             Rows = table.Rows
                                 .Where(r => r.CellVals.Any(c => c.ApplicationId == user.Applications.First().Id))
+                                .OrderBy(r => r.Number)
                                 .Select(r => new RowModel(r)).ToList()
                         });
                     }
@@ -142,7 +206,7 @@ namespace ServerApp.Data.Services
                             Name = table.Name,
                             IsPrefilled = table.IsPrefilled,
                             Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
-                            Rows = table.Rows.Where(r => r.IsPrefilled).Select(r => new RowModel(r)).ToList()
+                            Rows = table.Rows.Where(r => r.IsPrefilled).OrderBy(r => r.Number).Select(r => new RowModel(r)).ToList()
                         });
                     }
                 }
@@ -263,6 +327,7 @@ namespace ServerApp.Data.Services
                 foreach (var row in tbl.Rows)
                 {
                     row.TableId = tbl.Id;
+                    row.Number = row.Number;
 
                     var existingRow = await context.Rows
                         .FirstOrDefaultAsync(r =>
@@ -494,6 +559,7 @@ namespace ServerApp.Data.Services
                     Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                     Rows = t.Rows
                         .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                        .OrderBy(r => r.Number)
                         .Select(r => new RowModel
                         {
                             Id = r.Id,
@@ -805,7 +871,7 @@ namespace ServerApp.Data.Services
                 Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                 Rows = t.Rows
                     .Where(r => r.CellVals.Any(cv => cv.ApplicationId == appId))
-                    .OrderBy(r => r.Id)
+                    .OrderBy(r => r.Number)
                     .Select(r => new RowModel
                     {
                         Id = r.Id,
@@ -1052,6 +1118,7 @@ namespace ServerApp.Data.Services
                     Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                     Rows = t.Rows
                         .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                        .OrderBy(r => r.Number)
                         .Select(r => new RowModel
                         {
                             Id = r.Id,
@@ -1104,5 +1171,32 @@ namespace ServerApp.Data.Services
                 e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&
                 e.ApplicationForm.CategoryId == categoryId);
         }
+        //FeedBacks
+        public async Task<FeedBack[]> GetFeedbacksAsync()
+        {
+            return await context.Feedbacks.Select(e => new FeedBack(e)).ToArrayAsync();
+        }
+        public async Task SaveFeedbackAsync(FeedBack feedback)
+        {
+            var existingFeedback = await context.Feedbacks.FirstOrDefaultAsync(f => f.Id == feedback.Id);
+            if (existingFeedback == null)
+            {
+                context.Feedbacks.Add(feedback);
+            }
+            else
+            {
+                context.Feedbacks.Update(feedback);
+            }
+            await context.SaveChangesAsync();
+        }
+        public async Task<FeedBack> GetFeedbackAsync(Guid feedbackId)
+        {
+            return await context.Feedbacks.FirstOrDefaultAsync(e => e.Id == feedbackId) ??
+                       throw new UnauthorizedAccessException("Feedback not found");
+        }
+
+
+
+
     }
 }

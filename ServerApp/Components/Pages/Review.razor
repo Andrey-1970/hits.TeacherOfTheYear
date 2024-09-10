@@ -63,7 +63,7 @@
 </div>
 
 @code {
-    private UserInfoModel[] participants;
+    private UserInfoModel[]? participants;
     private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
@@ -75,7 +75,6 @@
 
     private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)
     {
-        // Проверяем, что participants не null
         var data = participants ?? Array.Empty<UserInfoModel>();
         return await Task.FromResult(request.ApplyTo(data));
     }

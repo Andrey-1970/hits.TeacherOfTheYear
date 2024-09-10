@@ -14,7 +14,7 @@ public class ApplicationCardModel
     {
         Id = applicationForm.Id;
         FullName = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "ФИО")!.Value;
-        WorkPlace = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Место работы/учебы")!.Value;
+        WorkPlace = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Место работы")!.Value;
         Faculty = applicationForm.FieldVals.FirstOrDefault(e => e.Field!.Name == "Институт, факультет, кафедра, лаборатория")!.Value;
     }
     

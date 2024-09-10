@@ -1,31 +1,37 @@
 ﻿@page "/feedback"
 
-<PageTitle>Обратная связь </PageTitle>
+@using ServerApp.Data.Entities
+
+@inject IDataService data
+@inject NavigationManager NavigationManager
+@inject ToastService toastService
+
+<PageTitle>Обратная связь</PageTitle>
 
 <div class="block-group">
     <div class="block-title">
         <div class="block-title-text">Обратная связь</div>
         <div class="form-text">Здесь вы можете оставить нам сообщение</div>
     </div>
-    <EditForm Model="customer" OnValidSubmit="HandleOnValidSubmit" class="block-content-text">
+    <EditForm Model="feedback" OnValidSubmit="HandleOnValidSubmit" class="block-content-text">
         <DataAnnotationsValidator />
 
         <div class="form-text">Ваше имя</div>
         <div class="form-input w-100 mb-3">
-            <ValidationMessage For="@(() => customer.Name)" />
-            <InputText class="form-control" @bind-Value="customer.Name" />
+            <ValidationMessage For="@(() => feedback.Name)" />
+            <InputText class="form-control" @bind-Value="feedback.Name" />
         </div>
 
         <div class="form-text">Электронная почта</div>
         <div class="form-input w-100 mb-3">
-            <ValidationMessage For="@(() => customer.Address)" />
-            <InputText class="form-control" @bind-Value="customer.Address" />
+            <ValidationMessage For="@(() => feedback.Email)" />
+            <InputText class="form-control" @bind-Value="feedback.Email" />
         </div>
 
         <div class="form-text">Ваше сообщение</div>
         <div class="form-input w-100 mb-3">
-            <ValidationMessage For="@(() => customer.Message)" />
-            <InputTextArea class="form-control" @bind-Value="customer.Message" />
+            <ValidationMessage For="@(() => feedback.Message)" />
+            <InputTextArea class="form-control" @bind-Value="feedback.Message" />
         </div>
 
         <div class="d-flex justify-content-center">
@@ -38,24 +44,12 @@
 </div>
 
 @code {
-    private Customer customer = new();
+    private FeedBack feedback = new();
 
-    public void HandleOnValidSubmit()
+    private async Task HandleOnValidSubmit()
     {
-        Console.WriteLine($"Пользователь {customer.Name}, с электронной почтой {customer.Address} отправил сообщение: \"{customer.Message}\"");
-    }
-
-    public class Customer
-    {
-        [Required(ErrorMessage = "Укажите Ваше имя")]
-        public string? Name { get; set; } = default;
-
-        [Required(ErrorMessage = "Укажите Ваш E-mail")]
-        [EmailAddress(ErrorMessage = "Указаан некорректный адрес электронной почты")]
-        public string? Address { get; set; } = default;
-
-        [Required(ErrorMessage = "Напишите сообщение поддержке сайта")]
-        [StringLength(1000, ErrorMessage = "Длина сообщения должна составлять не менее {2} и не более {1} символов.", MinimumLength = 20)]
-        public string? Message { get; set; } = default; 
+        await data.SaveFeedbackAsync(feedback);
+        toastService.Notify(new(ToastType.Success, "Ваше сообщение успешно отправлено"));
+        feedback = new();
     }
 }

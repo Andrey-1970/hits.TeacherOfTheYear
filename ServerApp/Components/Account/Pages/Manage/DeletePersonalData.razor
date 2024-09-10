@@ -60,6 +60,7 @@
         }
 
         var result = await UserManager.DeleteAsync(user);
+        
         if (!result.Succeeded)
         {
             throw new InvalidOperationException("Произошла непредвиденная ошибка при удалении пользователя.");

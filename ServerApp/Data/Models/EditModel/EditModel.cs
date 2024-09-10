@@ -15,7 +15,7 @@ namespace ServerApp.Data.Models.EditModel
             SelectedTrackId = applicationForm.TrackId;
             SelectedCategoryId = applicationForm.CategoryId;
             ApplicationStatus = applicationForm.ApplicationStatus?.Status;
-            Comments = ["Первый комментарий", "Второй комментарий", "Третий комментарий"];
+            Comments = applicationForm.BlockReviews.Where(e => e.Commentary is not null).Select(e => e.Commentary);
         }
 
         public ApplicationForm ToEntity()
@@ -36,7 +36,7 @@ namespace ServerApp.Data.Models.EditModel
         public Guid? SelectedCategoryId { get; set; }
         public Guid? SelectedEditBlockId { get; set; }
         public string? ApplicationStatus { get; set; }
-        public IEnumerable<string> Comments { get; set; } = [];
+        public IEnumerable<string?> Comments { get; set; } = [];
         public IEnumerable<TrackModel> Tracks { get; set; } = [];
         public IEnumerable<CategoryModel> Categories { get; set; } = [];
         public IEnumerable<EditBlockModel> EditBlocks { get; set; } = [];

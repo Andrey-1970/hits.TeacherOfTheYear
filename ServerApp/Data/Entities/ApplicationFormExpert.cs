@@ -1,15 +1,10 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using ServerApp.Data.Entities;
 
-namespace ServerApp.Data.Entities
+public class ApplicationFormExpert
 {
-    public class ApplicationFormExpert
-    {
-        public Guid Id { get; set; }
-        
-        public virtual Guid ApplicationFormId { get; set; }
-        public virtual ApplicationForm ApplicationForm { get; set; }
-        
-        public virtual Guid UserInfoId { get; set; }
-        public virtual UserInfo UserInfo { get; set; }
-    }
+    public Guid ApplicationFormId { get; set; }
+    public virtual ApplicationForm ApplicationForm { get; set; }
+    
+    public Guid UserInfoId { get; set; }
+    public virtual UserInfo UserInfo { get; set; }
 }

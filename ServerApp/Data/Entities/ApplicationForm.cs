@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ServerApp.Data.Entities;
+using ServerApp.Data.Entities;
 
 public class ApplicationForm
 {
     public Guid Id { get; set; }
     public Guid ApplicationStatusId { get; set; }
-    public virtual ApplicationStatus ApplicationStatus { get; set; } = default!;
+    public virtual ApplicationStatus ApplicationStatus { get; set; }
     public Guid UserInfoId { get; set; }
+    public DateTime? DateTime { get; set; }
     public virtual UserInfo UserInfo { get; set; }
     public Guid TrackId { get; set; }
     public virtual Track Track { get; set; }
@@ -22,6 +22,5 @@ public class ApplicationForm
     public virtual List<CellVal> CellVals { get; set; } = new();
     public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new();
     public virtual List<Vote> Votes { get; set; } = new();
-
-    public virtual List<ApplicationFormExpert> ApplicationFormExperts { get; set; } = new(); // Связь многие ко многим
+    public virtual List<ApplicationFormExpert> ApplicationFormExperts { get; set; } = new();
 }

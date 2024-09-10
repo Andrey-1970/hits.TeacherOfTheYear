@@ -55,3 +55,10 @@
     width: 100%;
     margin-bottom: 5px;
 }
+
+@media (max-width: 768px) {
+    .form-text {
+        font-size: 20px;
+        text-align: center;
+    }
+}
