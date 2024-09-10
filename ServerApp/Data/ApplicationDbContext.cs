@@ -635,7 +635,7 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 4,
                 Name = "Персональные идентификаторы",
-                EditBlockId = editBlk1.Id,
+                EditBlockId = editBlk4.Id,
                 IsPrefilled = true,
                 IsDisplayedOnVotingPage = true
             };
@@ -2092,7 +2092,7 @@ namespace ServerApp.Data
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl02.Id },
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl10.Id },
                     new { MarkBlocksId = markBlk5.Id, TablesId = tbl11.Id },
-                    new { MarkBlocksId = markBlk5.Id, TablesId = tbl04.Id },
+                    new { MarkBlocksId = markBlk1.Id, TablesId = tbl04.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl03.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl12.Id },
                     new { MarkBlocksId = markBlk6.Id, TablesId = tbl13.Id },

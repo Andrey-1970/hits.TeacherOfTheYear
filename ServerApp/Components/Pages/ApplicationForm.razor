@@ -398,6 +398,9 @@ else
         await data.SaveApplicationFormFromEditModelAsync(newModel);
         await data.SetCurrentUserNameAsync();
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
+
+        var userInfo = await data.GetCurrentUserInfoAsync();
+        await data.SetDatetimeNowForApplicationAync(userInfo.Applications.First().Id);
         navigate.NavigateTo("/account/manage/participation-status");
     }
 }

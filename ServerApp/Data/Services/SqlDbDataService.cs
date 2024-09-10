@@ -33,6 +33,16 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
+        public async Task SetDatetimeNowForApplicationAync(Guid? appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            
+            app.DateTime = DateTime.UtcNow;
+            context.Update(app);
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);

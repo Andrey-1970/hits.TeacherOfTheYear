@@ -8,6 +8,7 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task SetDatetimeNowForApplicationAync(Guid? appId);
         Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId);
         Task DeleteApplicationAsync(Guid appId);
         Task WithdrawApplicationAsync(Guid appId);

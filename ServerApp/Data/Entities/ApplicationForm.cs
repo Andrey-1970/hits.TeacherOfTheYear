@@ -7,6 +7,7 @@ public class ApplicationForm
     public Guid ApplicationStatusId { get; set; }
     public virtual ApplicationStatus ApplicationStatus { get; set; }
     public Guid UserInfoId { get; set; }
+    public DateTime? DateTime { get; set; }
     public virtual UserInfo UserInfo { get; set; }
     public Guid TrackId { get; set; }
     public virtual Track Track { get; set; }
