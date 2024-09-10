@@ -135,11 +135,13 @@ else if (status == "Оценена")
 
 @code {
     string? status;
-    IEnumerable<string> comments = [];
+    IEnumerable<string>? comments = [];
 
     protected override async Task OnInitializedAsync()
     {
         status = await data.GetApplicationStatusNameAsync();
-        comments = ["Первый комментарий", "Второй комментарий", "Третий комментарий"];
+
+        var userInfo = await data.GetCurrentUserInfoAsync();
+        comments = await data.GetCommentsForApplicationAsync(userInfo!.Applications.FirstOrDefault()?.Id);
     }
 }

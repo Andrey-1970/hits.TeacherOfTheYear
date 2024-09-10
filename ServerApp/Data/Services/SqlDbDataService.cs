@@ -33,6 +33,25 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
+        public async Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+
+            List<string>? res = null;
+            
+            if (app != null && app.BlockReviews.Any(e => e.Commentary is not null))
+            {
+                var currentBlocks = app.BlockReviews.Where(e => e.Commentary is not null);
+                res = [];
+                foreach (var block in currentBlocks)
+                {
+                    res.Add(block.Commentary);
+                }
+            }
+
+            return res;
+        }
+
         public async Task DeleteApplicationAsync(Guid appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
