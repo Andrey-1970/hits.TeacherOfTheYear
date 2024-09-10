@@ -40,14 +40,26 @@
             message = "Письмо с подтверждением отправлено. Пожалуйста, проверьте свой адрес электронной почты.";
             return;
         }
+        else if (await UserManager.IsEmailConfirmedAsync(user))
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        DateTimeOffset lastSendDate = user.LastEmailSentDate;
 
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
-        string htmlBody = $@"
+        var timeSinceLastSend = DateTimeOffset.Now - lastSendDate;
+        Console.WriteLine(timeSinceLastSend);
+        if (timeSinceLastSend >= TimeSpan.FromHours(3))
+        {
+            //save parametrs
+            user.LastEmailSentDate = DateTimeOffset.Now;
+            await UserManager.UpdateAsync(user);
+            var userId = await UserManager.GetUserIdAsync(user);
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+                NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
+                new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
+            string htmlBody = $@"
             <div class='text-left' style='font-family: Arial, sans-serif; padding: 20px;'>
                 Здравствуйте, уважаемый участник всеросийского конкурса Педагог Года!<br><br>
 
@@ -64,9 +76,13 @@
             </div>";
 
 
-        await MailService.SendEmailAsync(Input.Email, "Подтверждение регистрации на Педагог Года", htmlBody);
-        message = "Письмо с подтверждением отправлено. Пожалуйста, проверьте свой адрес электронной почты.";
-
+            await MailService.SendEmailAsync(Input.Email, "Подтверждение регистрации на Педагог Года", htmlBody);
+            message = "Письмо с подтверждением отправлено. Пожалуйста, проверьте свой адрес электронной почты.";
+        }
+        else
+        {
+            message = $"Последнее письмо было отправлено менее чем за 3 часа назад. Пожалуйста, попробуйте позже.";
+        }
     }
 
     private sealed class InputModel
