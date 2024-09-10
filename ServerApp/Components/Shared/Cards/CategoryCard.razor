@@ -8,7 +8,7 @@
             <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
         </div>
     }
-    <div class="category-description">
+    <div class="block-title-text text-white">
         <div class="category-title">@Category.Name</div>
     </div>
 </div>
@@ -25,7 +25,7 @@
     public EventCallback OnClick { get; set; }
     
     [Parameter, EditorRequired]
-    public IDataService data { get; set; }
+    public IDataService Data { get; set; }
     
     [Parameter, EditorRequired]
     public UserInfo? userInfo { get; set; }
@@ -34,7 +34,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        IsVoted = userInfo != null ? await data.VoteInThisCategoryAsync(Track.Id, Category.Id, userInfo.Id) : false;
+        IsVoted = userInfo != null ? await Data.VoteInThisCategoryAsync(Track.Id, Category.Id, userInfo.Id) : false;
     }
 
     async Task OnClickHandler()
