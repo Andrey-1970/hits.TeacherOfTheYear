@@ -1,8 +1,9 @@
 ﻿@page "/review/application/{Id}"
-@using ServerApp.Data.Models.ReviewModel
+
+@attribute [Authorize(Roles = "Admin, Organiser")]
 
 @inject IDataService data
-@inject NavigationManager nav
+@inject NavigationManager navigate
 
 <PageTitle>Проверка заявки</PageTitle>
 
@@ -17,7 +18,7 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @data.GetTrackAsync(model.SelectedTrackId).Result.Name</div>
+                <div class="form-text">Выбранный трек: @trackName</div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
@@ -154,6 +155,7 @@
     ReviewMarkModel? model;
     string? Comment;
     MarkBlockModel ResultBlock = new MarkBlockModel() {Id = Guid.NewGuid(), Name = "Итог"};
+    string trackName;
 
     protected override async Task OnInitializedAsync()
     {
@@ -170,6 +172,9 @@
             model.MarkBlocks = newMarkBlocks.ToArray();
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
+
+        var track = await data.GetTrackAsync(model.SelectedTrackId);
+        trackName = track.Name;
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
@@ -187,18 +192,18 @@
     async Task ApproveApplication()
     {
         await data.ApproveApplicationFormAsync(model!.ApplicationId);
-        nav.NavigateTo("/review#");
+        navigate.NavigateTo("/review#");
     }
 
     async Task RejectApplication()
     {
         await data.RejectApplicationFormAsync(model!.ApplicationId);
-        nav.NavigateTo("/review#");
+        navigate.NavigateTo("/review#");
     }
 
     async Task ChangeBlockStatus()
     {
-        await data.ChangeBlockReviewStatus(model!.SelectedMarkBlockId, model.ApplicationId);
+        await data.ChangeBlockReviewStatusAsync(model!.SelectedMarkBlockId, model.ApplicationId);
         model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status = !model.ReviewedBlocks.FirstOrDefault(e => e.MarkBlockId == model.SelectedMarkBlockId)!.Status;
     }
 

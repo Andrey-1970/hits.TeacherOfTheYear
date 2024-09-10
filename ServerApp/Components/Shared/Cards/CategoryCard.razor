@@ -1,17 +1,41 @@
+@using ServerApp.Data.Entities
 @using ServerApp.Data.Models.EditModel
 
 <div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
-  <div class="category-description">
-        <div class="category-title">@Title</div>
-  </div>
+    @if (IsVoted)
+    {
+        <div class="d-flex position-absolute top-0 end-0">
+            <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
+        </div>
+    }
+    <div class="category-description">
+        <div class="category-title">@Category.Name</div>
+    </div>
 </div>
+
 
 @code {
     [Parameter, EditorRequired]
-    public string Title { get; set; } = default!;
+    public TrackModel Track { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public CategoryModel Category { get; set; } = default!;
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
+    
+    [Parameter, EditorRequired]
+    public IDataService data { get; set; }
+    
+    [Parameter, EditorRequired]
+    public UserInfo? userInfo { get; set; }
+    
+    public bool IsVoted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsVoted = userInfo != null ? await data.VoteInThisCategoryAsync(Track.Id, Category.Id, userInfo.Id) : false;
+    }
 
     async Task OnClickHandler()
     {

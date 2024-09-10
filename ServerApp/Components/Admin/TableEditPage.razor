@@ -1,0 +1,239 @@
+﻿@page "/admin/tables/{Id:guid}"
+@page "/admin/tables/new"
+
+<PageTitle>Настройка Table</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Редактирование Table
+        </div>
+    </div>
+    <div class="block-content">
+        <EditForm Class="w-100" Model="table" OnValidSubmit="OnValidSumbit">
+            <div class="form-text">Номер Table</div>
+            <div class="form-input w-100 mb-3">
+                <InputNumber class="form-control" placeholder="Введите номер Table" @bind-Value="table.Number" disabled="@(table.Id != Guid.Empty)" />
+            </div>
+            <div class="form-text">Название Table</div>
+            <div class="form-input w-100 mb-3">
+                <InputText class="form-control mb-3" placeholder="Введите название Table" @bind-Value="table.Name" />
+            </div>
+
+            @* <div class="form-text form-input mb-3 text-end">
+                Table предварительно заполнена:
+                <InputCheckbox class="darker-border-checkbox form-check-input mt-0" @bind-Value="table.IsPrefilled" />
+            </div> *@
+
+            <div class="form-text">EditBlock</div>
+            <div class="form-input w-100 mb-3">
+                <InputSelect class="form-control" @bind-Value="table.EditBlockId">
+                    <option value="@Guid.Empty" disabled selected hidden>Выберите EditBlock</option>
+                    @foreach (var editBlock in editBlocks)
+                    {
+                        <option value="@editBlock.Id">@editBlock.Name</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">MarkBlocks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var markBlock in markBlocks)
+                        {
+                            <tr>
+                                <td class="p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-check-label" for="@markBlock.Id-@table.Id">
+                                            @markBlock.Name
+                                        </label>
+                                        <div>
+                                            <input class="form-check-input" type="checkbox" id="@markBlock.Id-@table.Id"
+                                                   @bind="markBlockSelections[table.Id][markBlock.Id!]" />
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="p-2">Marks</th>     
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <input type="text" class="form-control" placeholder="Поиск по названию Mark" @bind="searchQuery" @oninput="OnSearchInput" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (filteredMarks.Any())
+                        {
+                            @foreach (var mark in filteredMarks)
+                            {
+                                <tr>
+                                    <td class="p-2">
+                                        <div class="d-flex justify-content-between">
+                                            <label class="form-check-label" for="@mark.Id-@table.Id">
+                                                @mark.Name
+                                            </label>
+                                            <div>
+                                                <input class="form-check-input" type="checkbox" id="@mark.Id-@table.Id"
+                                                       @bind="marksSelections[table.Id][mark.Id!]" />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="text-center">Не найдено</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (columns.Count != 0)
+            {
+                <div class="table-container">
+                    <table class="table table-hover table-bordered opacity-50">
+                        <thead>
+                            <tr>
+                                <th class="p-2">Columns, содержащиеся в этой Table</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var column in columns)
+                            {
+                                <tr @onclick="() => GoToColumn(column.Id)" style="cursor: pointer;">
+                                    <td class="p-2">
+                                        @column.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
+                <a type="button" class="btn btn-secondary" href="/admin/tables">Назад</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { set; get; }
+    Table table = new();
+
+    IEnumerable<EditBlock> editBlocks = Enumerable.Empty<EditBlock>();
+
+    IEnumerable<MarkBlock> markBlocks = Enumerable.Empty<MarkBlock>();
+    Dictionary<Guid, Dictionary<Guid, bool>> markBlockSelections = new();
+
+    IEnumerable<Mark> marks = Enumerable.Empty<Mark>();
+    Dictionary<Guid, Dictionary<Guid, bool>> marksSelections = new();
+
+    List<Column> columns = new();
+
+    IEnumerable<Mark> filteredMarks = new List<Mark>();
+    string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Id != Guid.Empty)
+        {
+            table = await data.Table.GetByIdAsync(Id);
+        }
+
+        editBlocks = await data.EditBlock.GetAllAsync();
+
+        markBlocks = await data.MarkBlock.GetAllAsync();
+        if (!markBlockSelections.ContainsKey(table.Id))
+        {
+            markBlockSelections[table.Id] = markBlocks.ToDictionary(block => block.Id!, block => table.MarkBlocks!.Any(b => b.Id == block.Id));
+        }
+
+        marks = await data.Mark.GetAllAsync();
+        if (!marksSelections.ContainsKey(table.Id))
+        {
+            marksSelections[table.Id] = marks.ToDictionary(mark => mark.Id!, mark => table.Marks!.Any(m => m.Id == mark.Id));
+        }
+        columns = table.Columns;
+
+        filteredMarks = marks;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterMarks();
+    }
+
+    private void FilterMarks()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredMarks = marks;
+        }
+        else
+        {
+            filteredMarks = marks.Where(m => m.Name != null && m.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+
+    void GoToColumn(Guid id)
+    {
+        navigation.NavigateTo($"/admin/columns/{id}");
+    }
+
+    async Task OnValidSumbit()
+    {
+        if (markBlockSelections.TryGetValue(table.Id, out var markBlockSelection))
+        {
+            table.MarkBlocks = markBlocks.Where(b => markBlockSelection.TryGetValue(b.Id!, out bool selected) && selected).ToList();
+        }
+
+        if (marksSelections.TryGetValue(table.Id, out var markSelection))
+        {
+            table.Marks = marks.Where(m => markSelection.TryGetValue(m.Id!, out bool selected) && selected).ToList();
+        }
+
+        if (table.EditBlockId != Guid.Empty)
+        {
+            table.EditBlock = editBlocks.Single(b => b.Id == table.EditBlockId);
+        }
+
+        await data.Table.SaveAsync(table);
+
+        if (!markBlockSelections.ContainsKey(table.Id))
+        {
+            markBlockSelections[table.Id] = markBlocks.ToDictionary(block => block.Id!, block => table.MarkBlocks!.Any(b => b.Id == block.Id));
+        }
+
+        if (!marksSelections.ContainsKey(table.Id))
+        {
+            marksSelections[table.Id] = marks.ToDictionary(mark => mark.Id!, mark => table.Marks!.Any(m => m.Id == mark.Id));
+        }
+
+        navigation.NavigateTo("/admin/tables");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
+    }
+}

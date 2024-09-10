@@ -19,5 +19,7 @@ namespace ServerApp.Data.Entities
         [InverseProperty("Reviewer")]
         public virtual List<ApplicationForm> ReviewedApplications { get; set; } = new();
         public virtual List<Vote> Votes { get; set; } = new();
+        public virtual List<MarkVal> Marks { get; set; } = new();
+        public virtual List<ApplicationFormExpert> ApplicationFormExperts { get; set; } = new(); // Связь многие ко многим
     }
 }

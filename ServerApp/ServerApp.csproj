@@ -22,14 +22,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Data\SQLite\data.db" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\SQLite\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +39,10 @@
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\ApplicationDbContextModelSnapshot.cs" />
   </ItemGroup>
 
 </Project>

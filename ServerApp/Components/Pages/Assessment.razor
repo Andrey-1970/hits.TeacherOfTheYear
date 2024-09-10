@@ -1,9 +1,9 @@
 ﻿@page "/assessment"
 
-@using ServerApp.Data.Models.ReviewModel
+@attribute [Authorize(Roles = "Admin, Expert")]
 
 @inject IDataService data
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigate
 
 <PageTitle>Список кандидатов</PageTitle>
 
@@ -89,6 +89,6 @@
 
     private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
     {
-        await Task.Run(() => NavigationManager.NavigateTo($"/assessment/application/{row.Item.Id.ToString()}"));
+        await Task.Run(() => navigate.NavigateTo($"/assessment/application/{row.Item.Id.ToString()}"));
     }
 }

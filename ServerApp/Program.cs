@@ -5,9 +5,11 @@ using Microsoft.JSInterop;
 using ServerApp.Components;
 using ServerApp.Components.Account;
 using ServerApp.Data;
+using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Services;
 using ServerApp.Services;
+
 
 namespace ServerApp
 {
@@ -35,7 +37,8 @@ namespace ServerApp
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(connectionString));
+                // options.UseSqlite("Data source=./Data/SQLite/data.db"));
+                options.UseNpgsql(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -47,17 +50,16 @@ namespace ServerApp
                 .AddDefaultTokenProviders();
 
             builder.Services.AddBlazorBootstrap();
-            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+            builder.Services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
-            builder.Services.AddScoped<IAuthorization, AppAuthorization>();
-            // Загрузка конфигурации из файла appsettings.Development.json, если он существует
+            builder.Services.AddScoped<IAdmin, AdminService>();
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ appsettings.Development.json, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             // Configure MailSettings from appsettings
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
             builder.Services.AddSingleton<IMailService, MailService>();
-
 
             var app = builder.Build();
 

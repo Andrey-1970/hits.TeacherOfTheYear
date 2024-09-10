@@ -12,7 +12,7 @@ namespace ServerApp.Tests
     {
         private IDataService service = default!;
         private Mock<ApplicationDbContext> mockContext = default!;
-        private Mock<IAuthorization> mockOfAuthorization = default!;
+        //private Mock<IAuthorization> mockOfAuthorization = default!;
 
 
         [TestInitialize]
@@ -35,11 +35,11 @@ namespace ServerApp.Tests
 
             var userInfo = context.UserInfos.First(x => x.Username == "user@mail.ru");
 
-            mockOfAuthorization = new Mock<IAuthorization>();
-            mockOfAuthorization.Setup(p => p.GetUserAsync())
-                .Returns(Task.FromResult<UserInfo?>(userInfo));
+            //mockOfAuthorization = new Mock<IAuthorization>();
+            //mockOfAuthorization.Setup(p => p.GetUserAsync())
+            //    .Returns(Task.FromResult<UserInfo?>(userInfo));
 
-            service = new SqlDbDataService(context, mockOfAuthorization.Object);
+            //service = new SqlDbDataService(context, mockOfAuthorization.Object);
         }
 
         [TestMethod]

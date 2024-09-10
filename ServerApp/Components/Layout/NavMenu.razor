@@ -23,13 +23,24 @@
                 <li class="nav-item">
                     <NavLink class="nav-link" href="/feedback#">Обратная связь</NavLink>
                 </li>
-                <AuthorizeView>
+                <AuthorizeView Roles="Admin, Expert">
                     <Authorized>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="/assessment#">Оценка</NavLink>
                         </li>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView Roles="Admin, Organiser">
+                    <Authorized>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="/review#">Заявки</NavLink>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+                <AuthorizeView Roles="Admin">
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/admin#">Админ</NavLink>
                         </li>
                     </Authorized>
                 </AuthorizeView>

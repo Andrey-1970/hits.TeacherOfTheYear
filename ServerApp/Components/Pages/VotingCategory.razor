@@ -1,35 +1,42 @@
 @page "/voting/category/{TrackId}/{CategoryId}"
 
-@using ServerApp.Data.Models.EditModel
-@using ServerApp.Data.Models.VoteModel
-
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>Голосование</PageTitle>
+<PageTitle>Кандидаты</PageTitle>
 
 <div class="block-group">
     <div class="block">
         <div class="block-title">
             <div class="title-direction">
-                <div class="block-title-text">@track.Name</div>
+                <div class="block-title-text">@track?.Name</div>
                 <div class="text-direction">
                     <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
                 </div>
             </div>
-            <div class="block-subtitle-text">@category.Name</div>
+            <div class="block-subtitle-text">@category?.Name</div>
             <div class="form-text">
                 Выберите кандидата для голосования
             </div>
+            <input type="text" class="form-control" placeholder="Поиск по ФИО, учебному заведению или институту" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 
-        <div class="d-flex flex-wrap justify-content-center g-1 mt-1 mb-1">
-            @if (participants is not null)
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            @if (filtredApplications is not null)
             {
-                @foreach (var participant in participants)
+                @if (filtredApplications.Any())
                 {
-                    <ParticipantCard Participant="participant" OnClick="async () => await ViewParticipant(participant.Id)" />
-                }            
+                    @foreach (var app in filtredApplications)
+                    {
+                        <ApplicationCard Application="app" OnClick="async () => await ViewApplication(app.Id)" />
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center">
+                        Не найдены кандидаты
+                    </div>
+                }
             }
             else
             {
@@ -50,7 +57,10 @@
 
     TrackModel track = default!;
     CategoryModel category = default!;
-    ListItemModel[]? participants;
+    ApplicationCardModel[]? applications;
+
+    string searchQuery = string.Empty;
+    ApplicationCardModel[]? filtredApplications;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -58,7 +68,8 @@
         {
             track = await data.GetTrackAsync(trackId);
             category = await data.GetCategoryAsync(categoryId);
-            participants = await data.GetListForVotingPageAsync(trackId, categoryId);
+            applications = await data.GetApplicationCardModelsAsync(trackId, categoryId);
+            filtredApplications = applications;
         }
     }
 
@@ -66,9 +77,33 @@
     {
         await Task.Run(() => navigate.NavigateTo("/voting#"));
     }
-    
-    async Task ViewParticipant(Guid participantId)
+
+    async Task ViewApplication(Guid appId)
     {
-        await Task.Run(() => navigate.NavigateTo($"/voting/category/{TrackId}/{CategoryId}/participant/{participantId}#"));
+        await Task.Run(() => navigate.NavigateTo($"/voting/category/application/{appId}#"));
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterApplications();
+    }
+
+    private void FilterApplications()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filtredApplications = applications;
+        }
+        else
+        {
+            var searchWords = searchQuery.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            filtredApplications = applications!.Where(app =>
+                searchWords.All(word =>
+                    (app.FullName != null && app.FullName.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (app.WorkPlace != null && app.WorkPlace.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+                    (app.Faculty != null && app.Faculty.Contains(word, StringComparison.OrdinalIgnoreCase)))).ToArray();
+        }
     }
 }

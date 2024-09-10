@@ -67,8 +67,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 6,
-                >= 2 => 8,
+                1 => 3,
+                >= 2 => 6,
                 _ => 0
             };
         }
@@ -81,8 +81,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 8,
-                >= 2 => 12,
+                1 => 5,
+                >= 2 => 10,
                 _ => 0
             };
         }
@@ -96,7 +96,7 @@ namespace YourProject.Data.Services
                 >= 1 and <= 2 => 1,
                 >= 3 and <= 4 => 2,
                 >= 5 and <= 6 => 3,
-                >= 7 => 4,
+                >= 7 => 5,
                 _ => 0
             };
         }
@@ -117,14 +117,15 @@ namespace YourProject.Data.Services
         public static int EvaluateMark8(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") &&
+                (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") ||
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Язык публикации" && c.Value == "Иностранный")) &&
                 r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && string.IsNullOrEmpty(c.Value)))
                 .ToList();
             var count = rows.Count;
             return count switch
             {
-                1 => 4,
-                >= 2 => 5,
+                1 => 2,
+                >= 2 => 4,
                 _ => 0
             };
         }
@@ -132,13 +133,14 @@ namespace YourProject.Data.Services
         public static int EvaluateMark9(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
         {
             var rows = context.Rows.Where(r => r.TableId == tableId &&
-                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") &&
+               (r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Наличие грифа" && c.Value == "1") ||
+                r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Язык публикации" && c.Value == "Иностранный")) &&
                 r.CellVals.Any(c => c.ApplicationId == appId && c.Column!.Name == "Соавторы" && !string.IsNullOrEmpty(c.Value)))
                 .ToList();
             var count = rows.Count;
             return count switch
             {
-                1 => 2,
+                1 => 1,
                 >= 2 => 3,
                 _ => 0
             };
@@ -231,7 +233,7 @@ namespace YourProject.Data.Services
                 4 => 4,
                 >= 5 => 5,
                 _ => 0
-            };
+            }; //todo
         }
 
         public static int EvaluateMark19(Guid appId, Guid markId, Guid? tableId, ApplicationDbContext context)
@@ -242,8 +244,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 1,
-                >= 2 => 2,
+                1 => 6,
+                >= 2 => 8,
                 _ => 0
             };
         }
@@ -256,8 +258,8 @@ namespace YourProject.Data.Services
             var val = int.Parse(fld.Value ?? "0");
             return val switch
             {
-                1 => 2,
-                >= 2 => 4,
+                1 => 8,
+                >= 2 => 12,
                 _ => 0
             };
         }
@@ -270,8 +272,8 @@ namespace YourProject.Data.Services
             var count = rows.Count;
             return count switch
             {
-                >= 1 and <= 2 => 2,
-                >= 3 => 4,
+                >= 1 and <= 2 => 4,
+                >= 3 => 8,
                 _ => 0
             };
         }
@@ -284,8 +286,8 @@ namespace YourProject.Data.Services
             var count = rows.Count;
             return count switch
             {
-                >= 1 and <= 2 => 1,
-                >= 3 => 2,
+                >= 1 and <= 2 => 2,
+                >= 3 => 5,
                 _ => 0
             };
         }

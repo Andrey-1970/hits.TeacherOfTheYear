@@ -40,3 +40,6 @@
     align-self: stretch;
     text-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
 }
+.category-card.voted {
+    background-color: green;
+}

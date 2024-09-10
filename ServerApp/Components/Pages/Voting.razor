@@ -1,11 +1,13 @@
 @page "/voting"
 
+@using ServerApp.Data.Entities
 @using ServerApp.Data.Models.EditModel
 
 @inject IDataService data
 @inject NavigationManager navigate
 
 <PageTitle>Голосование</PageTitle>
+
 <div class="block-group">
     <div class="block">
         <div class="block-title">
@@ -16,34 +18,37 @@
                 Выберите категорию, в которой хотели бы проголосовать
             </div>
         </div>
-
         <div class="block-content">
             <Accordion Class="w-100">
-                @foreach (var track in tracks)
+                @if (tracks != null && categories != null)
                 {
-                    <AccordionItem Title="@track.Name">
-                        <Content>
-                            @foreach (var category in categories)
-                            {
-                                <CategoryCard Title="@category.Name" OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" />
-                            }
-                        </Content>
-                    </AccordionItem>
+                    @foreach (var track in tracks)
+                    {
+                        <AccordionItem Title="@track.Name">
+                            <Content>
+                                @foreach (var category in categories)
+                                {
+                                    <CategoryCard OnClick="async () => await ViewParticipantsHandler(track.Id, category.Id)" Track="track" Category="category" data="data" userInfo="userInfo"/>
+                                }
+                            </Content>
+                        </AccordionItem>
+                    }
                 }
             </Accordion>
-
         </div>
     </div>
 </div>
 
 @code {
-    IEnumerable<TrackModel> tracks = default!;
-    CategoryModel[] categories = default!;
+    TrackModel[]? tracks;
+    CategoryModel[]? categories;
+    UserInfo? userInfo;
 
     protected override async Task OnInitializedAsync()
     {
         tracks = await data.GetTrackModelsAsync();
-        categories = await data.GetCategoriesAsync();
+        categories = await data.GetCategoryModelsAsync();
+        userInfo = await data.GetCurrentUserInfoAsync();
     }
 
     async Task ViewParticipantsHandler(Guid trackId, Guid categoryId)

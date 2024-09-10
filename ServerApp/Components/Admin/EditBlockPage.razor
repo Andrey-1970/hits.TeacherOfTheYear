@@ -1,0 +1,88 @@
+﻿@page "/admin/editblocks"
+
+<PageTitle>Настройка EditBlocks</PageTitle>
+
+<div class="block">
+    <div class="block-content">
+        @if (blocks != null)
+        {
+            <Card class="w-100">
+                <CardHeader>EditBlocks</CardHeader>
+                <CardBody>
+                    <div class="table-container">
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="p-2">Название EditBlock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var block in blocks)
+                                {
+                                    <tr>
+                                        <td class="p-2">
+                                            <div class="d-flex justify-content-between">
+                                                @block.Name
+                                                <div>
+                                                    <Icon Color="IconColor.Secondary" Name="IconName.PencilFill" type="button" @onclick="() => GoTo(block.Id)" />
+                                                    <Icon Color="IconColor.Danger" Name="IconName.X" type="button" @onclick="async () => await ShowConfirmationAsync(block)" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </CardBody>
+            </Card>
+        }
+
+        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+            <a type="button" class="btn btn-primary" href="/admin/editblocks/new">Добавить</a>
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+    </div>
+</div>
+
+<ConfirmDialog @ref="dialog" />
+
+@code {
+    IEnumerable<EditBlock> blocks = default!;
+    private ConfirmDialog? dialog;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        blocks = await data.EditBlock.GetAllAsync();
+    }
+
+    private async Task ShowConfirmationAsync(EditBlock block)
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Отменить",
+                YesButtonText = "Удалить",
+                YesButtonColor = ButtonColor.Danger,
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Это действие нельзя будет отменить.",
+            message2: "Хотите удалить запись из базы данных?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            await data.EditBlock.RemoveAsync(block);
+            blocks = await data.EditBlock.GetAllAsync();
+
+            toastService.Notify(new(ToastType.Warning, "Запись удалена"));
+        }
+    }
+
+    void GoTo(Guid id)
+    {
+        navigation.NavigateTo($"/admin/editblocks/{id}");
+    }
+}

@@ -85,3 +85,7 @@
   flex-shrink: 0;
   position: relative;
 }
+
+.card-form.voted {
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}

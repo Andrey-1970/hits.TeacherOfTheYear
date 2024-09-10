@@ -1,4 +1,6 @@
-﻿<div class="block">
+﻿@inject NavigationManager navigation
+
+<div class="block">
     <div class="block-title">
         <div class="block-title-text">
             Для участников
@@ -20,16 +22,49 @@
             </p>
         </div>
     </div>
-    <Button Type="ButtonType.Link"
-            Color="ButtonColor.Primary"
-            To="/application-form#">
-        Подать заявку на участие
-    </Button>
+    <AuthorizeView>
+        <NotAuthorized>
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Primary"
+                    @onclick="ShowConfirmationAsync">
+                Подать заявку на участие
+            </Button>
+        </NotAuthorized>
+        <Authorized>
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Primary"
+                    To="/application-form#">
+                Подать заявку на участие
+            </Button>
+        </Authorized>
+    </AuthorizeView>
     <div class="block-content">
         <div class="block-content-photo" style="background-image: url('img/Send.jpg');"></div>
     </div>
 </div>
 
-@code {
+<ConfirmDialog @ref="dialog" />
 
+@code {
+    private ConfirmDialog? dialog;
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Для подачи заявки на участие необходима авторизация на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigation.NavigateTo("/application-form#");
+        }
+    }
 }
