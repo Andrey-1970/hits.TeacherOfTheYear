@@ -115,6 +115,11 @@
         font-size: 32px;
         text-align: center;
     }
+    
+    .block-subtitle-text {
+        font-size: 24px;
+        text-align: center;
+    }
 
     .block-content-text {
         text-align: center;
