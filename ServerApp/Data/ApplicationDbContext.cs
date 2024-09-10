@@ -11,6 +11,7 @@ namespace ServerApp.Data
         #region Init DBSets
 
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
+        public DbSet<ApplicationFormExpert> ApplicationFormExperts { get; set; }
         public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
         public DbSet<BlockReview> BlockReviews { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -66,7 +67,7 @@ namespace ServerApp.Data
             builder.Entity<Mark>().HasIndex(m => m.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Number).IsUnique();
             builder.Entity<MarkBlock>().HasIndex(mb => mb.Name).IsUnique();
-            builder.Entity<MarkVal>().HasIndex(mv => new { mv.ApplicationId, mv.MarkId }).IsUnique();
+            builder.Entity<MarkVal>().HasIndex(mv => new { mv.ApplicationId, mv.MarkId, mv.ExpertId }).IsUnique();
 
             // Должно быть одинаково с Field
             //builder.Entity<Table>().HasIndex(t => t.Name).IsUnique();

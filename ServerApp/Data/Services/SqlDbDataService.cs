@@ -23,14 +23,15 @@ namespace ServerApp.Data.Services
         private readonly UserManager<ApplicationUser> userManager;
 
         public SqlDbDataService(
-            ApplicationDbContext _context, 
-            AuthenticationStateProvider _userStateProvider, 
+            ApplicationDbContext _context,
+            AuthenticationStateProvider _userStateProvider,
             UserManager<ApplicationUser> _userManager)
         {
             context = _context;
             userStateProvider = _userStateProvider;
             userManager = _userManager;
         }
+
         public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId)
         {
             var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
@@ -44,9 +45,10 @@ namespace ServerApp.Data.Services
             {
                 throw new SecurityException("User is not authorizred to this action.");
             }
+
             return await context.UserInfos.FirstOrDefaultAsync(x => x.Username == userState.User.Identity!.Name!);
         }
-        
+
         public async Task CreateCurrentUserInfoAsync(string username)
         {
             context.UserInfos.Add(new UserInfo() { Id = Guid.NewGuid(), Username = username });
@@ -443,7 +445,7 @@ namespace ServerApp.Data.Services
                 .Select(e => new UserInfoModel(e))
                 .ToArray();
 
-            return userInfoModels; 
+            return userInfoModels;
         }
 
         public async Task<ReviewMarkModel> GetUserMarkModelAsync(Guid userInfoId)
@@ -653,40 +655,57 @@ namespace ServerApp.Data.Services
                              throw new InvalidOperationException("Track not found");
 
             var resMarks = assModel.Marks.ToList();
+
+
+            var authorizedUser = await GetUserAsync();
+            var authorizedUserId = authorizedUser.Id;
+
             foreach (var markBlock in markBlocks)
             {
                 var markModels = markBlock.Marks.Select(e =>
                 {
-                    var markVal = e.MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id);
+                    var markVal = context.Marks.FirstOrDefault(m => m.Id == e.Id).MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id && (mv.IsAuto || mv.ExpertId == authorizedUserId));
+
+                    if (markVal == null)
+                    {
+                        markVal = new MarkVal()
+                        {
+                            Value = 0
+                        };
+                    }
+
                     return new MarkModel()
                     {
                         Id = e.Id,
                         Name = e.Name,
-                        Value = markVal?.Value ?? 0,
+                        Value = markVal.Value,
                         MaxValue = e.MaxValue,
                         IsAuto = e.IsAuto,
-                        ValId = markVal?.Id ?? Guid.NewGuid()
+                        ValId = markVal.Id
                     };
                 }).ToList();
 
                 resMarks.AddRange(markModels);
             }
 
-            assModel.Marks = [.. resMarks];
+            assModel.Marks = resMarks.ToArray();
 
             return assModel;
         }
 
         public async Task<MarkBlockModel[]> GetAssessmentMarkBlockModelsAsync(Guid? trackId, Guid? appId)
         {
-            var track = await context.Tracks
-                .FirstOrDefaultAsync(x => x.Id == trackId);
+            var track = await context.Tracks.FirstOrDefaultAsync(x => x.Id == trackId);
             var markBlocks = track?.MarkBlocks.OrderBy(x => x.Number).Select(e => new MarkBlockModel(e)).ToArray() ??
                              [];
 
             var maxSum = track!.MarkBlocks
                 .SelectMany(mb => mb.Marks)
                 .Sum(e => e.MaxValue) + 10; //todo: добавить поле оценки зрительских симпатий
+
+            var authorizedUser = await GetUserAsync();
+            var authorizedUserId = authorizedUser.Id;
+
             foreach (var markBlock in markBlocks)
             {
                 var currentMarkBlock = track.MarkBlocks.FirstOrDefault(mb => mb.Id == markBlock.Id);
@@ -694,10 +713,12 @@ namespace ServerApp.Data.Services
                 if (currentMarkBlock != null)
                 {
                     var sum = currentMarkBlock.Marks
-                        .SelectMany(e => e.MarkVals.Where(mv => mv.ApplicationId == appId))
+                        .SelectMany(e => e.MarkVals.Where(mv =>
+                            mv.ApplicationId == appId &&
+                            (mv.IsAuto || (!mv.IsAuto && mv.ExpertId == authorizedUserId))))
                         .Sum(mv => mv.Value) ?? 0;
 
-                    markBlock.SummaryMarksBlock = sum!;
+                    markBlock.SummaryMarksBlock = sum;
 
                     if (maxSum > 0)
                     {
@@ -720,27 +741,45 @@ namespace ServerApp.Data.Services
 
         public async Task<FieldMarkModel[]> GetFieldMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId)
         {
-            var user = context.ApplicationForms
-                           .FirstOrDefaultAsync(e => e.Id == appId).Result!.UserInfo ??
-                       throw new InvalidOperationException("User does not exist.");
+            var applicationForm = await context.ApplicationForms
+                                      .FirstOrDefaultAsync(e => e.Id == appId) ??
+                                  throw new InvalidOperationException("User does not exist.");
+
+            var user = applicationForm.UserInfo;
+
             var markBlock = await context.MarkBlocks
-                .FirstOrDefaultAsync(e => e.Id == markBlockId);
-            var fields = markBlock!.Fields.OrderBy(x => x.Number).Select(e => new FieldMarkModel(e, user)).ToArray();
+                                .FirstOrDefaultAsync(e => e.Id == markBlockId) ??
+                            throw new InvalidOperationException("MarkBlock not found");
+
+            var fields = markBlock.Fields.OrderBy(x => x.Number).Select(e => new FieldMarkModel(e, user)).ToArray();
+
+            var authorizedUser = await GetUserAsync();
+            var authorizedUserId = authorizedUser.Id;
 
             foreach (var field in fields)
             {
-                field.Marks =
-                [
-                    .. context.Marks.Where(m => m.FieldId == field.Id).Select(m => new MarkModel()
+                // Загружаем маркеры в память
+                var marks = context.Marks
+                    .Where(m => m.FieldId == field.Id)
+                    .ToList();
+
+                field.Marks = marks.Select(m =>
+                {
+                    var markVal = m.MarkVals
+                        .FirstOrDefault(mv =>
+                            mv.ApplicationId == appId &&
+                            (mv.IsAuto || (!mv.IsAuto && mv.ExpertId == authorizedUserId)));
+
+                    return new MarkModel
                     {
                         Id = m.Id,
                         Name = m.Name,
-                        Value = m.MarkVals.FirstOrDefault()!.Value ?? 0,
+                        Value = markVal?.Value ?? 0,
                         MaxValue = m.MaxValue,
                         IsAuto = m.IsAuto,
-                        ValId = (m.MarkVals.FirstOrDefault() ?? new MarkVal()).Id
-                    })
-                ];
+                        ValId = markVal?.Id ?? Guid.NewGuid()
+                    };
+                }).ToArray();
             }
 
             return fields;
@@ -751,71 +790,109 @@ namespace ServerApp.Data.Services
             var markBlock = await context.MarkBlocks
                                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ??
                             throw new InvalidOperationException("MarkBlock not found");
+
+            var authorizedUser = await GetUserAsync();
+            var authorizedUserId = authorizedUser.Id;
+
             var tables = markBlock.Tables
                 .OrderBy(t => t.Number)
-                .Select(t => new TableMarkModel()
+                .ToList();
+
+            var tableMarkModels = tables.Select(t => new TableMarkModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
+                Rows = t.Rows
+                    .Where(r => r.CellVals.Any(cv => cv.ApplicationId == appId))
+                    .OrderBy(r => r.Id)
+                    .Select(r => new RowModel
+                    {
+                        Id = r.Id,
+                        Cells = r.CellVals
+                            .Where(cv => cv.ApplicationId == appId)
+                            .OrderBy(cv => cv.Column!.Number)
+                            .Select(cv => new CellModel
+                            {
+                                Id = cv.Id,
+                                Value = cv.Value,
+                                ColumnId = cv.ColumnId
+                            }).ToList()
+                    }).ToList(),
+                Marks = t.Marks.Select(m =>
                 {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
-                    Rows = t.Rows
-                        .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
-                        .Select(r => new RowModel
-                        {
-                            Id = r.Id,
-                            Cells = r.CellVals
-                                .OrderBy(c => c.Column!.Number)
-                                .Where(cv => cv.ApplicationId == appId)
-                                .Select(cv => new CellModel
-                                {
-                                    Id = cv.Id,
-                                    Value = cv.Value,
-                                    ColumnId = cv.ColumnId
-                                }).ToList()
-                        }).ToList(),
-                    Marks = t.Marks.Select(m => new MarkModel()
+                    var markVal = m.MarkVals
+                        .FirstOrDefault(mv =>
+                            mv.ApplicationId == appId &&
+                            (mv.IsAuto || (!mv.IsAuto && mv.ExpertId == authorizedUserId)));
+
+                    return new MarkModel
                     {
                         Id = m.Id,
                         Name = m.Name,
-                        Value = m.MarkVals.Any(e => e.ApplicationId == appId)
-                            ? m.MarkVals.First(e => e.ApplicationId == appId).Value
-                            : 0,
+                        Value = markVal?.Value ?? 0,
                         MaxValue = m.MaxValue,
                         IsAuto = m.IsAuto,
-                        ValId = (m.MarkVals.FirstOrDefault(e => e.ApplicationId == appId) ?? new MarkVal()).Id
-                    }).ToArray()
-                }).ToArray();
+                        ValId = markVal?.Id ?? Guid.NewGuid()
+                    };
+                }).ToArray()
+            }).ToArray();
 
-            return tables;
+            return tableMarkModels;
         }
 
-        public Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId)
+        public async Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId)
         {
-            return Task.FromResult(context.Tables
-                .FirstOrDefault(e => e.Id == tableId)!.Marks.Select(m => new MarkModel()
+            var table = await context.Tables
+                            .FirstOrDefaultAsync(e => e.Id == tableId) ??
+                        throw new InvalidOperationException("Table not found");
+
+            var authorizedUser = await GetUserAsync();
+            var authorizedUserId = authorizedUser.Id;
+
+            var markModels = table.Marks.Select(m =>
+            {
+                var markVal = m.MarkVals
+                    .FirstOrDefault(mv => mv.ApplicationId == appId && (mv.IsAuto || (!mv.IsAuto && mv.ExpertId == authorizedUserId)));
+
+                return new MarkModel
                 {
                     Id = m.Id,
                     Name = m.Name,
+                    Value = markVal?.Value ?? 0,
                     MaxValue = m.MaxValue,
                     IsAuto = m.IsAuto,
-                    ValId = m.MarkVals.Any(mv => mv.ApplicationId == appId)
-                        ? m.MarkVals.First(mv => mv.ApplicationId == appId).Id
-                        : Guid.Empty,
-                    Value = m.MarkVals.Any(mv => mv.ApplicationId == appId)
-                        ? m.MarkVals.First(mv => mv.ApplicationId == appId).Value
-                        : 0
-                }).ToArray());
+                    ValId = markVal?.Id ?? Guid.NewGuid()
+                };
+            }).ToArray();
+
+            return markModels;
         }
 
         public async Task SaveMarkAsync(MarkModel mark, Guid appId)
         {
-            //todo: отслеживание того, кто поставил оценку
+            var expert = await GetUserAsync();
             var existingMarkVal = context.MarkVals.FirstOrDefault(mv => mv.Id == mark.ValId);
+
             if (existingMarkVal == null)
             {
-                var markRes = mark.ToEntity();
-                markRes.ApplicationId = appId;
-                context.MarkVals.Add(markRes);
+                var newMarkVal = mark.ToEntity();
+                newMarkVal.ApplicationId = appId;
+                newMarkVal.ExpertId = expert.Id;
+                newMarkVal.IsAuto = mark.IsAuto;
+                context.MarkVals.Add(newMarkVal);
+
+                var app = await context.ApplicationForms.Include(af => af.ApplicationFormExperts)
+                    .FirstOrDefaultAsync(e => e.Id == appId);
+                if (app != null && expert != null &&
+                    !app.ApplicationFormExperts.Any(afe => afe.UserInfoId == expert.Id))
+                {
+                    app.ApplicationFormExperts.Add(new ApplicationFormExpert
+                    {
+                        ApplicationFormId = app.Id,
+                        UserInfoId = expert.Id
+                    });
+                }
             }
             else
             {
@@ -828,11 +905,81 @@ namespace ServerApp.Data.Services
 
         public async Task RatedApplicationAsync(Guid? appId)
         {
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
-                      throw new InvalidOperationException("App not found.");
-            app.ApplicationStatus = (await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 6))!;
+            var app = await context.ApplicationForms
+                          .Include(af => af.ApplicationFormExperts)
+                          .FirstOrDefaultAsync(e => e.Id == appId)
+                      ?? throw new InvalidOperationException("App not found.");
+            
+            var user = await GetUserAsync();
 
-            context.Update(app);
+            var userMarksExist = await context.MarkVals
+                .AnyAsync(mv => mv.ApplicationId == appId && mv.ExpertId == user.Id && !mv.IsAuto);
+
+            if (!userMarksExist)
+            {
+                var markIds = context.Marks.Where(m => !m.IsAuto && m.MarkBlocks.Any(mb => mb.Tracks.Any(t => t.Id == app.TrackId))); // Допустим, есть таблица типов оценок
+                foreach (var mark in markIds)
+                {
+                    var newMark = new MarkVal
+                    {
+                        ApplicationId = appId.Value,
+                        ExpertId = user.Id,
+                        Value = 0,
+                        MarkId = mark.Id, 
+                        IsAuto = false
+                    };
+                    context.MarkVals.Add(newMark);
+                }
+                await context.SaveChangesAsync();
+            }
+
+            var markGroups = await context.MarkVals
+                .Where(mv => mv.ApplicationId == appId && !mv.IsAuto)
+                .GroupBy(mv => mv.MarkId)
+                .ToListAsync();
+
+            foreach (var markGroup in markGroups)
+            {
+                if (markGroup.Count() < 2 || markGroup.Count() == 3)
+                {
+                    continue;
+                }
+
+                var expertMarks = markGroup.ToList();
+                var maxMark = expertMarks.Max(mv => mv.Value ?? 0);
+                var minMark = expertMarks.Min(mv => mv.Value ?? 0);
+                var difference = (maxMark - minMark) / (double)maxMark;
+
+                if (difference > 0.30)
+                {
+                    return;
+                }
+            }
+
+            
+
+            if (!app.ApplicationFormExperts.Any(afe => afe.UserInfoId == user.Id))
+            {
+                app.ApplicationFormExperts.Add(new ApplicationFormExpert
+                {
+                    ApplicationFormId = app.Id,
+                    UserInfoId = user.Id
+                });
+
+                context.ApplicationForms.Update(app);
+                await context.SaveChangesAsync();
+            }
+
+            var expertCount = app.ApplicationFormExperts.Count();
+            if (expertCount < 2)
+            {
+                return;
+            }
+
+            app.ApplicationStatusId = (await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 6))?.Id
+                                      ?? throw new InvalidOperationException("Status not found.");
+            context.ApplicationForms.Update(app);
+
             await context.SaveChangesAsync();
         }
 
@@ -866,7 +1013,8 @@ namespace ServerApp.Data.Services
         {
             var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
-                      throw new InvalidOperationException("App not found."); ;
+                      throw new InvalidOperationException("App not found.");
+            ;
             if (user == null)
             {
                 return new ApplicationFormVoteModel()
@@ -928,9 +1076,11 @@ namespace ServerApp.Data.Services
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
                       throw new InvalidOperationException("App not found.");
 
-            if (context.Votes.Any(e => e.VoterId == user.Id && e.ApplicationForm.CategoryId == app.CategoryId && e.ApplicationForm.TrackId == app.TrackId))
-            //.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
-            //.Any(e => e.VoterId == user.Id))
+            if (context.Votes.Any(e =>
+                    e.VoterId == user.Id && e.ApplicationForm.CategoryId == app.CategoryId &&
+                    e.ApplicationForm.TrackId == app.TrackId))
+                //.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
+                //.Any(e => e.VoterId == user.Id))
             {
                 var vote = context.Votes
                     .Where(v => v.ApplicationForm.CategoryId == app.CategoryId &&
@@ -950,9 +1100,9 @@ namespace ServerApp.Data.Services
 
         public async Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
         {
-                return context.Votes.Any(e =>
-                    e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&
-                    e.ApplicationForm.CategoryId == categoryId);
+            return context.Votes.Any(e =>
+                e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&
+                e.ApplicationForm.CategoryId == categoryId);
         }
     }
 }

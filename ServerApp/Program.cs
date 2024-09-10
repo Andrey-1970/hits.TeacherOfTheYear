@@ -35,7 +35,7 @@ namespace ServerApp
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                //options.UseSqlite("Data source=..\\Data\\SQLite\\data.db"));
+                // options.UseSqlite("Data source=./Data/SQLite/data.db"));
                 options.UseNpgsql(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
