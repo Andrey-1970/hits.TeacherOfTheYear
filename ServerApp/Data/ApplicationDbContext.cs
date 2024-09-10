@@ -293,6 +293,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 1,
                 TableId = tbl01.Id
             };
 
@@ -322,6 +323,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 2,
                 TableId = tbl01.Id
             };
 
@@ -351,6 +353,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 4,
                 TableId = tbl01.Id
             };
 
@@ -380,6 +383,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 3,
                 TableId = tbl01.Id
             };
 
@@ -409,6 +413,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 6,
                 TableId = tbl01.Id
             };
 
@@ -422,7 +427,7 @@ namespace ServerApp.Data
                 Disable = true,
                 IsPrefilled = true,
                 Value =
-                    "Возможность практического применения (Внедрено ли в практику? В какому курсе/программе подготовки используется/ на кого рассчитано)"
+                    "Апробация"
             };
 
             var cell010502 = new CellVal()
@@ -439,6 +444,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 8,
                 TableId = tbl01.Id
             };
 
@@ -468,6 +474,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 7,
                 TableId = tbl01.Id
             };
 
@@ -497,6 +504,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 5,
                 TableId = tbl01.Id
             };
 
@@ -661,6 +669,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 1,
                 TableId = tbl04.Id
             };
 
@@ -690,6 +699,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 2,
                 TableId = tbl04.Id
             };
 
@@ -719,6 +729,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 3,
                 TableId = tbl04.Id
             };
 
@@ -748,6 +759,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 4,
                 TableId = tbl04.Id
             };
 
@@ -777,6 +789,7 @@ namespace ServerApp.Data
             {
                 Id = Guid.NewGuid(),
                 IsPrefilled = true,
+                Number = 5,
                 TableId = tbl04.Id
             };
 

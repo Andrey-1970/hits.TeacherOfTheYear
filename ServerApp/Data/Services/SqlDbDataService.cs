@@ -165,6 +165,7 @@ namespace ServerApp.Data.Services
                             Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                             Rows = table.Rows
                                 .Where(r => r.CellVals.Any(c => c.ApplicationId == user.Applications.First().Id))
+                                .OrderBy(r => r.Number)
                                 .Select(r => new RowModel(r)).ToList()
                         });
                     }
@@ -176,7 +177,7 @@ namespace ServerApp.Data.Services
                             Name = table.Name,
                             IsPrefilled = table.IsPrefilled,
                             Columns = table.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
-                            Rows = table.Rows.Where(r => r.IsPrefilled).Select(r => new RowModel(r)).ToList()
+                            Rows = table.Rows.Where(r => r.IsPrefilled).OrderBy(r => r.Number).Select(r => new RowModel(r)).ToList()
                         });
                     }
                 }
@@ -297,6 +298,7 @@ namespace ServerApp.Data.Services
                 foreach (var row in tbl.Rows)
                 {
                     row.TableId = tbl.Id;
+                    row.Number = row.Number;
 
                     var existingRow = await context.Rows
                         .FirstOrDefaultAsync(r =>
@@ -528,6 +530,7 @@ namespace ServerApp.Data.Services
                     Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                     Rows = t.Rows
                         .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                        .OrderBy(r => r.Number)
                         .Select(r => new RowModel
                         {
                             Id = r.Id,
@@ -839,7 +842,7 @@ namespace ServerApp.Data.Services
                 Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                 Rows = t.Rows
                     .Where(r => r.CellVals.Any(cv => cv.ApplicationId == appId))
-                    .OrderBy(r => r.Id)
+                    .OrderBy(r => r.Number)
                     .Select(r => new RowModel
                     {
                         Id = r.Id,
@@ -1086,6 +1089,7 @@ namespace ServerApp.Data.Services
                     Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                     Rows = t.Rows
                         .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == appId))
+                        .OrderBy(r => r.Number)
                         .Select(r => new RowModel
                         {
                             Id = r.Id,

@@ -38,6 +38,7 @@ public class ApplicationFormVoteModel
         Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
         Rows = t.Rows
             .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == applicationForm.Id))
+            .OrderBy(r => r.Number)
             .Select(r => new RowModel
             {
                 Id = r.Id,

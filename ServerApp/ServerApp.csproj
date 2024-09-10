@@ -43,7 +43,6 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\ApplicationDbContextModelSnapshot.cs" />
-    <Folder Include="Data\SQLite\" />
   </ItemGroup>
 
   <ItemGroup>
