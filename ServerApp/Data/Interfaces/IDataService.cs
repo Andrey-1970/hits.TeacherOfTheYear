@@ -53,5 +53,8 @@ namespace ServerApp.Data.Interfaces
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
         Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
+        Task<FeedBack[]> GetFeedbacksAsync();
+        Task SaveFeedbackAsync(FeedBack feedback);
+        Task<FeedBack> GetFeedbackByIdAsync(Guid feedbackId);
     }
 }
