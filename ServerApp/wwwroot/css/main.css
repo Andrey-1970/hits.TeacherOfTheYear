@@ -78,6 +78,7 @@
     text-align: left;
     position: relative;
     align-self: stretch;
+    line-height: 1.5;
 }
 
 .block-content-photo {
