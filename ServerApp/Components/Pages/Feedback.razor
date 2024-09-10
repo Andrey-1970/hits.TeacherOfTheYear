@@ -1,8 +1,11 @@
 ﻿@page "/feedback"
 
+@using ServerApp.Data.Entities
+
 @inject IDataService data
 @inject NavigationManager NavigationManager
-@using ServerApp.Data.Entities
+@inject ToastService toastService
+
 <PageTitle>Обратная связь</PageTitle>
 
 <div class="block-group">
@@ -46,6 +49,7 @@
     private async Task HandleOnValidSubmit()
     {
         await data.SaveFeedbackAsync(feedback);
-        NavigationManager.NavigateTo("/feedbacksuccess");
+        toastService.Notify(new(ToastType.Success, "Ваше сообщение успешно отправлено"));
+        feedback = new();
     }
 }

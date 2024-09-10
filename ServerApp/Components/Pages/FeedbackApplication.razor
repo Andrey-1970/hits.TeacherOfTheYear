@@ -1,8 +1,9 @@
 ﻿@page "/feedback/application/{Id}"
 
+@using ServerApp.Data.Entities
+
 @inject IDataService data
 @inject NavigationManager NavigationManager
-@using ServerApp.Data.Entities
 
 <PageTitle>Просмотр фидбека</PageTitle>
 
@@ -22,13 +23,12 @@
         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
             Фидбек просмотрен?
             <InputCheckbox @bind-Value="@feedback.Checked" Style="width: 1.5rem; height: 1.5rem;" />
-            
         </div>
     </div>
     <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
         <Button Type="ButtonType.Button"
                 Color="ButtonColor.Success"
-               @onclick="async () => await SaveApplication()">
+                @onclick="async () => await SaveApplication()">
             Сохранить
         </Button>
     </div>
@@ -37,21 +37,23 @@
 @code {
     [Parameter]
     public string? Id { get; set; }
+
     FeedBack feedback = default!;
+
     protected override async Task OnInitializedAsync()
     {
         if (Id == null || !Guid.TryParse(Id, out Guid feedbackId))
         {
             return;
         }
-        feedback = await data.GetFeedbackByIdAsync(feedbackId);
+        feedback = await data.GetFeedbackAsync(feedbackId);
     }
+
     private async Task SaveApplication()
-        {
-            Console.WriteLine(feedback.Checked);
-            await data.SaveFeedbackAsync(feedback);
-            NavigationManager.NavigateTo("/feedbacklist#");
-        }
-    //<Switch Style="scale: 1.2; margin-right: 7px;" Value="feedback.Checked" />
+    {
+        Console.WriteLine(feedback.Checked);
+        await data.SaveFeedbackAsync(feedback);
+        NavigationManager.NavigateTo("/feedbacklist#");
+    }
 }
 
