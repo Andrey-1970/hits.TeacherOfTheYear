@@ -13,32 +13,41 @@
             Просмотр фидбека
         </div>
     </div>
-    <div class="block-content">
-        <div class="form-text">Имя: @feedback.Name</div>
-        <div class="form-text">Почта: @feedback.Email</div>
-        <pr></pr>
-        <div class="form-text">@feedback.Message</div>
-    </div>
-    <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
-        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
-            Фидбек просмотрен?
-            <InputCheckbox @bind-Value="@feedback.Checked" Style="width: 1.5rem; height: 1.5rem;" />
+    @if (feedback is not null)
+    {
+        <div class="block-content">
+            <div class="form-text">Имя: @feedback.Name</div>
+            <div class="form-text">Почта: @feedback.Email</div>
+            <pr></pr>
+            <div class="form-text">@feedback.Message</div>
         </div>
-    </div>
-    <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
-        <Button Type="ButtonType.Button"
-                Color="ButtonColor.Success"
-                @onclick="async () => await SaveApplication()">
-            Сохранить
-        </Button>
-    </div>
+        <div class="form-text bg-primary p-2 text-dark bg-opacity-25 rounded">
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-between align-items-center">
+                Фидбек просмотрен?
+                <InputCheckbox @bind-Value="@feedback.Checked" Style="width: 1.5rem; height: 1.5rem;"/>
+            </div>
+        </div>
+        <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
+            <Button Type="ButtonType.Button"
+                    Color="ButtonColor.Success"
+                    @onclick="async () => await SaveApplication()">
+                Сохранить
+            </Button>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
 </div>
 
 @code {
     [Parameter]
     public string? Id { get; set; }
 
-    FeedBack feedback = default!;
+    FeedBack? feedback;
 
     protected override async Task OnInitializedAsync()
     {
