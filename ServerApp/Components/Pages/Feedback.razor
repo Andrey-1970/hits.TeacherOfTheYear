@@ -46,6 +46,6 @@
     private async Task HandleOnValidSubmit()
     {
         await data.SaveFeedbackAsync(feedback);
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/feedbacksuccess");
     }
 }

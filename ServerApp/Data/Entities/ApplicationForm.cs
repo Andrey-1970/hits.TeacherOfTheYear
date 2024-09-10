@@ -30,6 +30,5 @@ namespace ServerApp.Data.Entities
         public virtual List<CellVal> CellVals { get; set; } = new();
         public virtual List<EditBlockStatus> EditBlockStatusList { get; set; } = new();
         public virtual List<Vote> Votes { get; set; } = new();
-        public virtual List<FeedBack> Feedbacks { get; set; } = new();
     }
 }
