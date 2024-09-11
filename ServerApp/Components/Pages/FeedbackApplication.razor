@@ -2,6 +2,8 @@
 
 @using ServerApp.Data.Entities
 
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
 @inject IDataService data
 @inject NavigationManager NavigationManager
 
