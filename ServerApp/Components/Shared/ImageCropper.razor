@@ -1,0 +1,53 @@
+﻿@inject IJSRuntime JsRuntime
+
+<style>
+    #crop-area {
+        resize: both;
+        overflow: hidden;
+        aspect-ratio: 3 / 4;
+    }
+
+        #crop-area::before {
+            content: '';
+            display: block;
+            padding-bottom: 133.33%; /* 4 / 3 = 1.3333 */
+        }
+</style>
+
+<InputFile OnChange="LoadImage" class="form-control mb-3" />
+@if (!string.IsNullOrEmpty(UploadedImage))
+{
+    <div style="position: relative; display: inline-block;">
+        <img id="uploadedImage" src="@UploadedImage" alt="Image" style="max-width: 100%;" />
+        @* <div id="crop-area" style="position: absolute; top: 10%; left: 10%; width: 30%; height: 40%; border: 2px dashed black;"></div> *@
+    </div>
+    <button @onclick="SaveCrop" class="btn btn-primary mt-3">Сохранить</button>
+}
+
+@code {
+    private string? UploadedImage;
+
+    private async Task LoadImage(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var buffer = new byte[file.Size];
+        using var stream = file.OpenReadStream();
+        await stream.ReadAsync(buffer);
+        UploadedImage = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+    }
+
+    private async Task SaveCrop()
+    {
+        // Получение координат и размеров из JavaScript
+        var cropData = await JsRuntime.InvokeAsync<CropData>("getCropData");
+    }
+
+    public class CropData
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+    }
+}
+

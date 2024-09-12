@@ -27,6 +27,7 @@
                 </Button>
             </div>
             <div class="block-content">
+                <ImageCropper />
                 @if (model.ApplicationStatus == "Отклонена" && model.Comments.Any())
                 {
                     <div class="alert alert-danger w-100 m-0" role="alert">
