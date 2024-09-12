@@ -5,6 +5,7 @@
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<DeletePersonalData> Logger
+@inject IDataService data
 
 <PageTitle>Удаление персональных данных</PageTitle>
 
@@ -59,6 +60,19 @@
             return;
         }
 
+        var userInfo = await data.GetCurrentUserInfoAsync();
+        
+        try
+        {
+            await data.DeleteApplicationAsync(userInfo.Applications.First().Id);
+        }
+        catch (Exception e)
+        {
+            //ignore
+        }
+        
+        await data.DeleteUserInfoAsync(userInfo.Id);
+        
         var result = await UserManager.DeleteAsync(user);
         
         if (!result.Succeeded)
