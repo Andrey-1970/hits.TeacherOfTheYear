@@ -57,6 +57,19 @@
                             SortKeySelector="item => item.Email">
                     @context.Email
                 </GridColumn>
+                <GridColumn TItem="UserInfoModel"
+                            HeaderText="Статус проверки"
+                            PropertyName="ReviewStatus"
+                            SortKeySelector="item => item.ReviewStatus">
+                    @if (context.ReviewStatus)
+                    {
+                    <div class="text-danger">На проверке</div>
+                    }
+                    else
+                    {
+                    <div>Ожидает</div>
+                    }
+                </GridColumn>
             </Grid>
         }
     </div>

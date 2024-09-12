@@ -4,6 +4,7 @@
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject UserManager<ApplicationUser> UserManager
 
 <PageTitle>Вход</PageTitle>
 
@@ -99,6 +100,17 @@
         {
             Logger.LogWarning("Аккаунт пользователя заблокирован.");
             RedirectManager.RedirectTo("account/lockout");
+        } 
+        else if (await UserManager.FindByEmailAsync(email: Input.Email) is not null)
+        {
+            if (!await UserManager.IsEmailConfirmedAsync(await UserManager.FindByEmailAsync(email: Input.Email)))
+            {
+                errorMessage = "Ошибка: Подтвердите адрес электронной почты.";
+            }
+            else
+            {
+                errorMessage = "Ошибка: Неудачная попытка входа в систему.";
+            }
         }
         else
         {

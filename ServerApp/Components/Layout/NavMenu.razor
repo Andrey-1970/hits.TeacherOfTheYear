@@ -1,6 +1,5 @@
 ﻿@implements IDisposable
 
-@rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 
 <nav class="navbar navbar-expand-md fixed-top">
@@ -35,13 +34,13 @@
                         <li class="nav-item">
                             <NavLink class="nav-link" href="/review#">Заявки</NavLink>
                         </li>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/feedbacklist#">Просмотр фидбеков</NavLink>
+                        </li>
                     </Authorized>
                 </AuthorizeView>
                 <AuthorizeView Roles="Admin">
                     <Authorized>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="/feedbacklist#">Просмотр фидбеков</NavLink>
-                        </li>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="/admin#">Админ</NavLink>
                         </li>

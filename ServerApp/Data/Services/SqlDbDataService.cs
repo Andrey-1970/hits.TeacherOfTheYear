@@ -33,6 +33,15 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
+        public async Task DeleteUserInfoAsync(Guid userId)
+        {
+            var userInfo = await context.UserInfos.FirstOrDefaultAsync(e => e.Id == userId);
+
+            context.Remove(userInfo);
+            
+            await context.SaveChangesAsync();
+        }
+
         public async Task SetDatetimeNowForApplicationAync(Guid? appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
@@ -64,17 +73,22 @@ namespace ServerApp.Data.Services
 
         public async Task DeleteApplicationAsync(Guid appId)
         {
+            var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
             foreach (var cellGroup in app.CellVals.GroupBy(cv => cv.RowId))
             {
                 context.Rows.Remove(cellGroup.First().Row);
             }
             context.Remove(app);
+
+            await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user!.Username!), "Participant");
+            
             await context.SaveChangesAsync();
         }
 
         public async Task WithdrawApplicationAsync(Guid appId)
         {
+            var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
 
             var inProcessingStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 1);
@@ -90,6 +104,20 @@ namespace ServerApp.Data.Services
             foreach (var blockReview in app.BlockReviews)
             {
                 context.Remove(blockReview);
+            }
+
+            foreach (var variableFormExpert in app.ApplicationFormExperts)
+            {
+                context.Remove(variableFormExpert);
+            }
+
+            try
+            {
+                await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user!.Username!), "Participant");
+            }
+            catch (Exception e)
+            {
+                // ignored
             }
 
             await context.SaveChangesAsync();
@@ -510,7 +538,13 @@ namespace ServerApp.Data.Services
                 .Select(e => new UserInfoModel(e))
                 .ToArray();
 
-            return userInfoModels;
+            foreach (var userInfoModel in userInfoModels)
+            {
+                userInfoModel.ReviewStatus =
+                    userInfos.First(e => e.Id == userInfoModel.Id).Applications.First().ReviewerId == user.Id;
+            }
+
+            return userInfoModels.OrderByDescending(e => e.ReviewStatus).ToArray();
         }
 
         public async Task<ReviewMarkModel> GetUserMarkModelAsync(Guid userInfoId)
@@ -695,15 +729,24 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
+            var user = await GetUserAsync();
             var userInfos = await context.UserInfos
-                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4))
+                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 || 
+                                                    (a.ApplicationStatus.Number == 6 && 
+                                                     a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))))
                 .ToListAsync();
 
             var userInfoModels = userInfos
                 .Select(e => new UserInfoModel(e))
                 .ToArray();
 
-            return userInfoModels;
+            foreach (var userInfoModel in userInfoModels)
+            {
+                userInfoModel.ReviewStatus =
+                    user.ApplicationFormExperts.Any(e => e.ApplicationFormId == userInfos.First(e => e.Id == userInfoModel.Id).Applications.First().Id);
+            }
+
+            return userInfoModels.OrderBy(e => e.ReviewStatus).ToArray();
         }
 
         public async Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId)

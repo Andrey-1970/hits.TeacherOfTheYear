@@ -26,6 +26,7 @@ public class ApplicationFormVoteModel
 
     public FieldModel[] Fields => applicationForm.FieldVals
         .Where(e => e.Field!.IsDisplayedOnVotingPage)
+        .OrderBy(e => e.Field.Number)
         .Select(e => new FieldModel(e.Field, applicationForm.UserInfoId))
         .ToArray();
     public TableModel[] Tables => applicationForm.Track.EditBlocks
