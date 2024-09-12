@@ -139,7 +139,7 @@
                                                                     }
                                                                     else if (cell.ValueType == "TextArea")
                                                                     {
-                                                                        <InputTextArea class="form-control" style="min-width: 800px" @bind-Value="cell.Value" />
+                                                                        <InputTextArea class="form-control" style="font-size: 14px; min-width: 800px" @bind-Value="cell.Value" />
                                                                     }
                                                                     else
                                                                     {
@@ -328,8 +328,12 @@ else
         {
             messageStore?.Add(() => fld.Value, $"Поле '{fld.Name}' должно содержать число.");
         }
+        else if (fld.Value.Length >= 255)
+        {
+            messageStore?.Add(() => fld.Value, $"Поле '{fld.Name}' превышает допустимое количество символов.");
+        }
     }
-
+    
     void CheckCell(CellModel cell)
     {
         if (cell.Disable)
@@ -347,6 +351,10 @@ else
         else if (cell.ValueType == "int" && !Int64.TryParse(cell.Value, out _))
         {
             messageStore?.Add(() => cell.Value, $"Поле таблицы должно содержать число.");
+        }
+        else if (cell.Value.Length >= 8000)
+        {
+            messageStore?.Add(() => cell.Value, $"Поле таблицы превышает допустимое количество символов.");
         }
     }
 
