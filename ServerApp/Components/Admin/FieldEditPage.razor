@@ -93,21 +93,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var markBlock in markBlocks)
+                        @if (markBlockSelections.Any())
                         {
-                            <tr>
-                                <td class="p-2">
-                                    <div class="d-flex justify-content-between">
-                                        <label class="form-check-label" for="@markBlock.Id-@field.Id">
-                                            @markBlock.Name
-                                        </label>
-                                        <div>
-                                            <input class="form-check-input" type="checkbox" id="@markBlock.Id-@field.Id"
-                                                   @bind="markBlockSelections[field.Id][markBlock.Id!]" />
+                            @foreach (var markBlock in markBlocks)
+                            {
+                                <tr>
+                                    <td class="p-2">
+                                        <div class="d-flex justify-content-between">
+                                            <label class="form-check-label" for="@markBlock.Id-@field.Id">
+                                                @markBlock.Name
+                                            </label>
+                                            <div>
+                                                <input class="form-check-input" type="checkbox" id="@markBlock.Id-@field.Id"
+                                                       @bind="markBlockSelections[field.Id][markBlock.Id!]" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -189,18 +192,26 @@
         if (Id != Guid.Empty)
         {
             field = await data.Field.GetByIdAsync(Id);
+            field.MarkBlocks = field.MarkBlocks;
+            field.Marks = field.Marks;
         }
 
         markBlocks = await data.MarkBlock.GetAllAsync();
         if (!markBlockSelections.ContainsKey(field.Id))
         {
-            markBlockSelections[field.Id] = markBlocks.ToDictionary(block => block.Id!, block => field.MarkBlocks!.Any(b => b.Id == block.Id));
+            markBlockSelections[field.Id] = markBlocks.ToDictionary(
+                block => block.Id!,
+                block => field.MarkBlocks.Contains(block)
+            );
         }
 
         marks = await data.Mark.GetAllAsync();
         if (!marksSelections.ContainsKey(field.Id))
         {
-            marksSelections[field.Id] = marks.ToDictionary(mark => mark.Id!, mark => field.Marks!.Any(m => m.Id == mark.Id));
+            marksSelections[field.Id] = marks.ToDictionary(
+                mark => mark.Id!,
+                mark => field.Marks.Contains(mark)
+            );
         }
 
         editBlocks = await data.EditBlock.GetAllAsync();

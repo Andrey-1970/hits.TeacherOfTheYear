@@ -121,6 +121,7 @@
         if (Id != Guid.Empty)
         {
             block = await data.EditBlock.GetByIdAsync(Id);
+            block.Tracks = block.Tracks;
         }
 
         tracks = await data.Track.GetAllAsync();
