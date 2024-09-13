@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using ServerApp.Components;
 using ServerApp.Components.Admin;
 using ServerApp.Data.Entities;
@@ -35,7 +36,7 @@ namespace ServerApp.Data.Services
 
         public async Task DeleteUserInfoAsync(Guid userId)
         {
-            var userInfo = await context.UserInfos.FirstOrDefaultAsync(e => e.Id == userId);
+            var userInfo = await context.UserInfos.FirstAsync(e => e.Id == userId);
 
             context.Remove(userInfo);
             
@@ -44,8 +45,8 @@ namespace ServerApp.Data.Services
 
         public async Task SetDatetimeNowForApplicationAync(Guid? appId)
         {
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId) ??
+                      throw new InvalidOperationException("No application found");
             app.DateTime = DateTime.UtcNow;
             context.Update(app);
 
@@ -64,7 +65,7 @@ namespace ServerApp.Data.Services
                 res = [];
                 foreach (var block in currentBlocks)
                 {
-                    res.Add(block.Commentary);
+                    if (block.Commentary is not null) res.Add(block.Commentary);
                 }
             }
 
@@ -73,25 +74,29 @@ namespace ServerApp.Data.Services
 
         public async Task DeleteApplicationAsync(Guid appId)
         {
-            var user = await GetUserAsync();
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId) ??
+                      throw new InvalidOperationException("No application found");
             foreach (var cellGroup in app.CellVals.GroupBy(cv => cv.RowId))
             {
-                context.Rows.Remove(cellGroup.First().Row);
+                context.Rows.Remove(cellGroup.First().Row!);
             }
             context.Remove(app);
 
-            await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user!.Username!), "Participant");
+            await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user.Username!) ??
+                      throw new InvalidOperationException("Not found user by email"), "Participant");
             
             await context.SaveChangesAsync();
         }
 
         public async Task WithdrawApplicationAsync(Guid appId)
         {
-            var user = await GetUserAsync();
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId);
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(a => a.Id == appId) ??
+                      throw new InvalidOperationException("No application found");
 
-            var inProcessingStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 1);
+            var inProcessingStatus = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Number == 1) ??
+                      throw new InvalidOperationException("Not \"inProcessing\" status");
             app.ApplicationStatusId = inProcessingStatus.Id;
 
             context.Update(app);
@@ -113,11 +118,12 @@ namespace ServerApp.Data.Services
 
             try
             {
-                await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user!.Username!), "Participant");
+                await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user.Username!) ??
+                      throw new InvalidOperationException("Not found user by email"), "Participant");
             }
             catch (Exception e)
             {
-                // ignored
+                Console.WriteLine(e.Message);
             }
 
             await context.SaveChangesAsync();
@@ -528,7 +534,7 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfosModelsAsync()
         {
-            var user = await GetUserAsync();
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a =>
                     a.ApplicationStatus.Number == 2 || a.ApplicationStatus.Number == 3 && a.ReviewerId == user!.Id))
@@ -544,7 +550,7 @@ namespace ServerApp.Data.Services
                     userInfos.First(e => e.Id == userInfoModel.Id).Applications.First().ReviewerId == user.Id;
             }
 
-            return userInfoModels.OrderByDescending(e => e.ReviewStatus).ToArray();
+            return [.. userInfoModels.OrderByDescending(e => e.ReviewStatus)];
         }
 
         public async Task<ReviewMarkModel> GetUserMarkModelAsync(Guid userInfoId)
@@ -729,7 +735,7 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
-            var user = await GetUserAsync();
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 || 
                                                     (a.ApplicationStatus.Number == 6 && 
@@ -746,7 +752,7 @@ namespace ServerApp.Data.Services
                     user.ApplicationFormExperts.Any(e => e.ApplicationFormId == userInfos.First(e => e.Id == userInfoModel.Id).Applications.First().Id);
             }
 
-            return userInfoModels.OrderBy(e => e.ReviewStatus).ToArray();
+            return [.. userInfoModels.OrderBy(e => e.ReviewStatus)];
         }
 
         public async Task<AssessmentModel> GetUserAssessmentModelAsync(Guid? userInfoId)
@@ -767,22 +773,16 @@ namespace ServerApp.Data.Services
 
 
             var authorizedUser = await GetUserAsync();
-            var authorizedUserId = authorizedUser.Id;
+            var authorizedUserId = authorizedUser!.Id;
 
             foreach (var markBlock in markBlocks)
             {
                 var markModels = markBlock.Marks.Select(e =>
                 {
-                    var markVal = context.Marks.FirstOrDefault(m => m.Id == e.Id).MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id && (mv.IsAuto || mv.ExpertId == authorizedUserId));
-
-                    if (markVal == null)
-                    {
-                        markVal = new MarkVal()
+                    var markVal = context.Marks.FirstOrDefault(m => m.Id == e.Id)?.MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id && (mv.IsAuto || mv.ExpertId == authorizedUserId)) ?? new MarkVal()
                         {
                             Value = 0
                         };
-                    }
-
                     return new MarkModel()
                     {
                         Id = e.Id,
@@ -797,7 +797,7 @@ namespace ServerApp.Data.Services
                 resMarks.AddRange(markModels);
             }
 
-            assModel.Marks = resMarks.ToArray();
+            assModel.Marks = [.. resMarks];
 
             return assModel;
         }
@@ -812,7 +812,7 @@ namespace ServerApp.Data.Services
                 .SelectMany(mb => mb.Marks)
                 .Sum(e => e.MaxValue) + 10; //todo: добавить поле оценки зрительских симпатий
 
-            var authorizedUser = await GetUserAsync();
+            var authorizedUser = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var authorizedUserId = authorizedUser.Id;
 
             foreach (var markBlock in markBlocks)
@@ -862,7 +862,7 @@ namespace ServerApp.Data.Services
 
             var fields = markBlock.Fields.OrderBy(x => x.Number).Select(e => new FieldMarkModel(e, user)).ToArray();
 
-            var authorizedUser = await GetUserAsync();
+            var authorizedUser = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var authorizedUserId = authorizedUser.Id;
 
             foreach (var field in fields)
@@ -900,7 +900,7 @@ namespace ServerApp.Data.Services
                                 .FirstOrDefaultAsync(mb => mb.Id == markBlockId) ??
                             throw new InvalidOperationException("MarkBlock not found");
 
-            var authorizedUser = await GetUserAsync();
+            var authorizedUser = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var authorizedUserId = authorizedUser.Id;
 
             var tables = markBlock.Tables
@@ -956,7 +956,7 @@ namespace ServerApp.Data.Services
                             .FirstOrDefaultAsync(e => e.Id == tableId) ??
                         throw new InvalidOperationException("Table not found");
 
-            var authorizedUser = await GetUserAsync();
+            var authorizedUser = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized."); ;
             var authorizedUserId = authorizedUser.Id;
 
             var markModels = table.Marks.Select(m =>
@@ -980,7 +980,7 @@ namespace ServerApp.Data.Services
 
         public async Task SaveMarkAsync(MarkModel mark, Guid appId)
         {
-            var expert = await GetUserAsync();
+            var expert = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var existingMarkVal = context.MarkVals.FirstOrDefault(mv => mv.Id == mark.ValId);
 
             if (existingMarkVal == null)
@@ -1012,26 +1012,26 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task RatedApplicationAsync(Guid? appId)
+        public async Task RatedApplicationAsync(Guid appId)
         {
             var app = await context.ApplicationForms
                           .Include(af => af.ApplicationFormExperts)
                           .FirstOrDefaultAsync(e => e.Id == appId)
                       ?? throw new InvalidOperationException("App not found.");
-            
-            var user = await GetUserAsync();
+
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
 
             var userMarksExist = await context.MarkVals
                 .AnyAsync(mv => mv.ApplicationId == appId && mv.ExpertId == user.Id && !mv.IsAuto);
 
             if (!userMarksExist)
             {
-                var markIds = context.Marks.Where(m => !m.IsAuto && m.MarkBlocks.Any(mb => mb.Tracks.Any(t => t.Id == app.TrackId))); // Допустим, есть таблица типов оценок
+                var markIds = context.Marks.Where(m => !m.IsAuto && m.MarkBlocks.Any(mb => mb.Tracks!.Any(t => t.Id == app.TrackId))); // Допустим, есть таблица типов оценок
                 foreach (var mark in markIds)
                 {
                     var newMark = new MarkVal
                     {
-                        ApplicationId = appId.Value,
+                        ApplicationId = appId,
                         ExpertId = user.Id,
                         Value = 0,
                         MarkId = mark.Id, 
@@ -1079,7 +1079,7 @@ namespace ServerApp.Data.Services
                 await context.SaveChangesAsync();
             }
 
-            var expertCount = app.ApplicationFormExperts.Count();
+            var expertCount = app.ApplicationFormExperts.Count;
             if (expertCount < 2)
             {
                 return;
@@ -1208,7 +1208,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
+        public bool VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
         {
             return context.Votes.Any(e =>
                 e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&

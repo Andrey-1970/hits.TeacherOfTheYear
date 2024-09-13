@@ -49,13 +49,13 @@ namespace ServerApp.Data.Interfaces
         Task<TableMarkModel[]> GetTableMarkModelsForMarkBlockAsync(Guid? markBlockId, Guid appId);
         Task<MarkModel[]> GetMarkModelsForTableAsync(Guid appId, Guid tableId);
         Task SaveMarkAsync(MarkModel mark, Guid appId);
-        Task RatedApplicationAsync(Guid? appId);
+        Task RatedApplicationAsync(Guid appId);
         Task<ApplicationCardModel[]> GetApplicationCardModelsAsync(Guid trackId, Guid categoryId);
         Task<ApplicationFormVoteModel> GetVoteModelAsync(Guid appId);
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
-        Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
+        bool VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
         Task<FeedBack[]> GetFeedbacksAsync();
         Task SaveFeedbackAsync(FeedBack feedback);
         Task<FeedBack> GetFeedbackAsync(Guid feedbackId);

@@ -64,14 +64,14 @@
         
         try
         {
-            await data.DeleteApplicationAsync(userInfo.Applications.First().Id);
+            await data.DeleteApplicationAsync(userInfo!.Applications.First().Id);
         }
         catch (Exception e)
         {
-            //ignore
+            Console.WriteLine(e.Message);
         }
         
-        await data.DeleteUserInfoAsync(userInfo.Id);
+        await data.DeleteUserInfoAsync(userInfo!.Id);
         
         var result = await UserManager.DeleteAsync(user);
         
