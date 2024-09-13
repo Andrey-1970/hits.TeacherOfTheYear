@@ -2,23 +2,17 @@
 
 @inject IdentityUserAccessor UserAccessor
 
-<PageTitle>Персональные данные</PageTitle>
+<PageTitle>Удаление аккаунта</PageTitle>
 
-<h3>Персональные данные</h3>
+<h3>Удаление аккаунта</h3>
 <StatusMessage />
 
-<p>Ваша учетная запись содержит персональные данные, которые вы нам предоставили. На этой странице вы можете скачать или удалить эти данные.</p>
+<p>Ваша учетная запись содержит персональные данные, которые вы нам предоставили. На этой странице вы можете удалить эти данные.</p>
 <p>
     <strong>Удаление этих данных приведет к необратимому удалению вашей учетной записи, и восстановить ее будет невозможно.</strong>
 </p>
 <form action="account/manage/download-personal-data" method="post">
     <AntiforgeryToken />
-
-    <Button Type="ButtonType.Submit"
-            Color="ButtonColor.Primary">
-        Скачать
-    </Button>
-
     <Button Type="ButtonType.Link"
             Color="ButtonColor.Danger"
             To="account/manage/delete-personal-data">

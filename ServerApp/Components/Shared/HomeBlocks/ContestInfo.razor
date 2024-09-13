@@ -1,9 +1,115 @@
-﻿<div class="block">
+﻿@using System.Timers;
+
+@inject NavigationManager navigate
+
+
+<div class="block">
     <div class="block-title">
         <div class="block-title-text">
             О конкурсе
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage-1">
+                    <div class="circle-stage-title">
+                        <div class="circle-stage-number">1</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">
+                Первый этап
+                <Tooltip Title="с 9:00 МСК 16.09.2024 до 24:00 МСК 15.10.2024 (включительно)"
+                         Placement="TooltipPlacement.Bottom">
+                    <Icon Name="IconName.InfoCircle" />
+                </Tooltip>
+            </div>
+
+            <div class="form-text text-center">Прием заявок</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage-2">
+                    <div class="circle-stage-title">
+                        <div class="circle-stage-number">2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">
+                Второй этап
+                <Tooltip Title="с 16.10.2024 по 19.11.2024"
+                         Placement="TooltipPlacement.Bottom">
+                    <Icon Name="IconName.InfoCircle" />
+                </Tooltip>
+            </div>
+
+            <div class="form-text text-center">Экспертиза заявок и документов</div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="d-flex justify-content-center pb-4">
+                <div class="circle-stage-3">
+                    <div class="circle-stage-title">
+                        <div class="circle-stage-number">3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-subtitle-text text-center pb-2">
+                Третий этап
+                <Tooltip Title="не позднее 30.11.2024. Награждение победителей – 5.12.2024"
+                         Placement="TooltipPlacement.Bottom">
+                    <Icon Name="IconName.InfoCircle" />
+                </Tooltip>
+            </div>
+
+            <div class="form-text text-center">Оценка заявок и присуждение премий Советом конкурса</div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column">
+        <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
+        <div class="countdown mb-3">
+            <div class="countdown-item">
+                <span id="days">@days</span>
+                <span class="label">Дней</span>
+            </div>
+            <div class="countdown-item">
+                <span id="hours">@hours</span>
+                <span class="label">Часов</span>
+            </div>
+            <div class="countdown-item">
+                <span id="minutes">@minutes</span>
+                <span class="label">Минут</span>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+            <AuthorizeView>
+                <NotAuthorized>
+                    <Button Type="ButtonType.Link"
+                            Color="ButtonColor.Primary"
+                            @onclick="ShowConfirmationAsync">
+                        Подать заявку на участие
+                    </Button>
+                </NotAuthorized>
+                <Authorized>
+                    <Button Type="ButtonType.Link"
+                            Color="ButtonColor.Primary"
+                            To="/application-form#">
+                        Подать заявку на участие
+                    </Button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
+
+    <ConfirmDialog @ref="dialog" />
+
     <div class="block-content">
         <div class="block-content-text">
             <p>
@@ -49,5 +155,67 @@
 </div>
 
 @code {
+    private DateTime targetDate = new DateTime(2024, 10, 16); // Целевая дата
 
+    private string? days;
+    private string? hours;
+    private string? minutes;
+
+    private Timer? timer;
+
+    private ConfirmDialog? dialog;
+
+    protected override void OnInitialized()
+    {
+
+        // Timer с интервалом 1 секунда
+        timer = new Timer(1000);
+
+        // событие Elapsed
+        timer.Elapsed += UpdateCountdown!;
+
+        // Запуск таймера
+        timer.Start();
+    }
+
+    private async Task ShowConfirmationAsync()
+    {
+        var options = new ConfirmDialogOptions
+            {
+                IsVerticallyCentered = true,
+                NoButtonText = "Нет",
+                YesButtonText = "Да",
+            };
+        var confirmation = await dialog!.ShowAsync(
+            title: "Подтвердите действие",
+            message1: "Для подачи заявки на участие необходима авторизация на сайте.",
+            message2: "Перейти на страницу авторизации?",
+            confirmDialogOptions: options);
+
+        if (confirmation)
+        {
+            navigate.NavigateTo("/application-form#");
+        }
+    }
+
+    private void UpdateCountdown(object sender, ElapsedEventArgs e)
+    {
+        TimeSpan remainingTime = targetDate - DateTime.Now;
+
+        // Проверка завершения отсчета
+        if (remainingTime.TotalSeconds >= 0)
+        {
+            days = remainingTime.Days.ToString("D2");
+            hours = remainingTime.Hours.ToString("D2");
+            minutes = remainingTime.Minutes.ToString("D2");
+
+            // Обновление UI
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            // Остановка таймера, если отсчет завершен
+            timer!.Stop();
+        }
+    }
 }
