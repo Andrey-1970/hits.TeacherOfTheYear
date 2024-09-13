@@ -18,28 +18,21 @@ using YourProject.Data.Services;
 
 namespace ServerApp.Data.Services
 {
-    public class SqlDbDataService : IDataService
+    public class SqlDbDataService(
+        ApplicationDbContext _context,
+        AuthenticationStateProvider _userStateProvider,
+        UserManager<ApplicationUser> _userManager) : IDataService
     {
-        private readonly ApplicationDbContext context;
-        private readonly AuthenticationStateProvider userStateProvider;
-        private readonly UserManager<ApplicationUser> userManager;
-
-        public SqlDbDataService(
-            ApplicationDbContext _context,
-            AuthenticationStateProvider _userStateProvider,
-            UserManager<ApplicationUser> _userManager)
-        {
-            context = _context;
-            userStateProvider = _userStateProvider;
-            userManager = _userManager;
-        }
+        private readonly ApplicationDbContext context = _context;
+        private readonly AuthenticationStateProvider userStateProvider = _userStateProvider;
+        private readonly UserManager<ApplicationUser> userManager = _userManager;
 
         public async Task DeleteUserInfoAsync(Guid userId)
         {
             var userInfo = await context.UserInfos.FirstAsync(e => e.Id == userId);
 
             context.Remove(userInfo);
-            
+
             await context.SaveChangesAsync();
         }
 
@@ -58,7 +51,7 @@ namespace ServerApp.Data.Services
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
 
             List<string>? res = null;
-            
+
             if (app != null && app.BlockReviews.Any(e => e.Commentary is not null))
             {
                 var currentBlocks = app.BlockReviews.Where(e => e.Commentary is not null);
@@ -85,7 +78,7 @@ namespace ServerApp.Data.Services
 
             await userManager.RemoveFromRoleAsync(await userManager.FindByEmailAsync(user.Username!) ??
                       throw new InvalidOperationException("Not found user by email"), "Participant");
-            
+
             await context.SaveChangesAsync();
         }
 
@@ -128,7 +121,7 @@ namespace ServerApp.Data.Services
 
             await context.SaveChangesAsync();
         }
-        
+
         public async Task<ApplicationFormVoteModel> GetApplicationAsync(Guid applicationId, Guid? userId)
         {
             var model = await context.ApplicationForms.FirstAsync(x => x.Id == applicationId);
@@ -737,8 +730,8 @@ namespace ServerApp.Data.Services
         {
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var userInfos = await context.UserInfos
-                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 || 
-                                                    (a.ApplicationStatus.Number == 6 && 
+                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 ||
+                                                    (a.ApplicationStatus.Number == 6 &&
                                                      a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))))
                 .ToListAsync();
 
@@ -780,9 +773,9 @@ namespace ServerApp.Data.Services
                 var markModels = markBlock.Marks.Select(e =>
                 {
                     var markVal = context.Marks.FirstOrDefault(m => m.Id == e.Id)?.MarkVals.FirstOrDefault(mv => mv.ApplicationId == app.Id && (mv.IsAuto || mv.ExpertId == authorizedUserId)) ?? new MarkVal()
-                        {
-                            Value = 0
-                        };
+                    {
+                        Value = 0
+                    };
                     return new MarkModel()
                     {
                         Id = e.Id,
@@ -1034,7 +1027,7 @@ namespace ServerApp.Data.Services
                         ApplicationId = appId,
                         ExpertId = user.Id,
                         Value = 0,
-                        MarkId = mark.Id, 
+                        MarkId = mark.Id,
                         IsAuto = false
                     };
                     context.MarkVals.Add(newMark);
@@ -1065,7 +1058,7 @@ namespace ServerApp.Data.Services
                 }
             }
 
-            
+
 
             if (!app.ApplicationFormExperts.Any(afe => afe.UserInfoId == user.Id))
             {
@@ -1189,8 +1182,8 @@ namespace ServerApp.Data.Services
             if (context.Votes.Any(e =>
                     e.VoterId == user.Id && e.ApplicationForm.CategoryId == app.CategoryId &&
                     e.ApplicationForm.TrackId == app.TrackId))
-                //.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
-                //.Any(e => e.VoterId == user.Id))
+            //.Where(v => v.ApplicationForm.CategoryId == app.CategoryId && v.ApplicationForm.TrackId == app.TrackId)
+            //.Any(e => e.VoterId == user.Id))
             {
                 var vote = context.Votes
                     .Where(v => v.ApplicationForm.CategoryId == app.CategoryId &&
@@ -1202,7 +1195,7 @@ namespace ServerApp.Data.Services
             else
             {
                 context.Votes.Add(new Vote()
-                    { Id = Guid.NewGuid(), VoteTime = DateTime.UtcNow, VoterId = user.Id, ApplicationFormId = app.Id });
+                { Id = Guid.NewGuid(), VoteTime = DateTime.UtcNow, VoterId = user.Id, ApplicationFormId = app.Id });
             }
 
             await context.SaveChangesAsync();
