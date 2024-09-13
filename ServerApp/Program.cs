@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ServerApp.Components;
@@ -51,6 +52,11 @@ namespace ServerApp
             builder.Services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAdmin, AdminService>();
+            
+            builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 10 MB
+            });
 
             var app = builder.Build();
 

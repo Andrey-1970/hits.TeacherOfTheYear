@@ -19,6 +19,12 @@
                     Заполните заявку для участия
                 </div>
 
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/photo-editor">
+                    Загрузить фото
+                </Button>
+
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
                         Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
