@@ -5,7 +5,7 @@ namespace ServerApp.Data.Entities
     public class FieldVal
     {
         public Guid Id { get; set; }
-        [MaxLength(255)] 
+        [MaxLength(512)] 
         public string? Value { get; set; }
         public virtual Guid ApplicationId { get; set; }
         public virtual ApplicationForm? Application { get; set; }

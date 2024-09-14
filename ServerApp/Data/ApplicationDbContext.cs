@@ -1983,10 +1983,6 @@ namespace ServerApp.Data
 
             #endregion
 
-            var feedback1 = new FeedBack() { Id = Guid.NewGuid(), Name = "SYSTEM", Email = "system@system.ru", Message="Test Message for System" };
-            builder.Entity<FeedBack>()
-                .HasData([feedback1]);
-
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<Category>().HasData([category1, category2]);

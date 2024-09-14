@@ -1,4 +1,4 @@
-﻿.circle-stage {
+﻿.circle-stage-1, .circle-stage-2, .circle-stage-3 {
     display: flex;
     width: 10em;
     height: 10em;
@@ -7,9 +7,18 @@
     align-items: center;
 }
 
+.circle-stage-2 {
+    background: #9747FF;
+}
+
+.circle-stage-3 {
+    background: #C1BFFF;
+}
+
 .circle-stage-number {
-    padding-left: 5vh;
-    font-size: 200px;
+    padding-top: 3.5vh;
+    padding-left: 6vh;
+    font-size: 190px;
     color: #fff;
 }
 

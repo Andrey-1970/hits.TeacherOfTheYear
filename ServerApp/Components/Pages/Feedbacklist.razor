@@ -1,63 +1,84 @@
 ﻿@page "/feedbacklist"
 
-@inject IDataService data
-@inject NavigationManager NavigationManager
 @using ServerApp.Data.Entities
 
-<PageTitle>Список оставленных фидбеков</PageTitle>
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
+@inject IDataService data
+@inject NavigationManager NavigationManager
+
+<PageTitle>Список оставленных сообщений</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Список оставленных фидбеков
+            Список оставленных сообщений
         </div>
     </div>
     <div style="align-items: flex-start; overflow: auto;">
-        <Grid TItem="FeedBack"
-              Class="table-filter"
-              FiltersRowCssClass="filters-row"
-              HeaderRowCssClass="header-row"
-              DataProvider="FeedbackDataProvider"
-              FiltersTranslationProvider="GridFiltersTranslationProvider"
-              AllowFiltering="true"
-              AllowPaging="true"
-              PageSize="8"
-              AllowSorting="true"
-              Responsive="true"
-              AllowRowClick="true"
-              OnRowClick="OnRowClick">
+        @if (isLoading)
+        {
+            <div class="d-flex justify-content-center">
+                <Spinner Color="SpinnerColor.Primary" />
+            </div>
+        }
+        else if (feedbacks == null || !feedbacks.Any())
+        {
+            <p>Нет данных для отображения.</p>
+        }
+        else
+        {
+            <Grid TItem="FeedBack"
+                  Class="table-filter"
+                  FiltersRowCssClass="filters-row"
+                  HeaderRowCssClass="header-row"
+                  DataProvider="FeedbackDataProvider"
+                  FiltersTranslationProvider="GridFiltersTranslationProvider"
+                  AllowFiltering="true"
+                  AllowPaging="true"
+                  PageSize="8"
+                  AllowSorting="true"
+                  Responsive="true"
+                  AllowRowClick="true"
+                  OnRowClick="OnRowClick">
 
-            <GridColumn TItem="FeedBack" HeaderText="ФИО" PropertyName="FullName" SortKeySelector="item => item.Name">
-                @context.Name
-            </GridColumn>
-            <GridColumn TItem="FeedBack" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
-                @context.Email
-            </GridColumn>
-            <GridColumn TItem="FeedBack" HeaderText="Статус" PropertyName="Checked" SortKeySelector="item => item.Checked"
-                IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
-                @if (context.Checked)
-                {
-                    <div class="text-success">Да</div>
-                }
-                else
-                {
-                    <div class="text-danger">Нет</div>
-                }
-            </GridColumn>
-        </Grid>
+                <GridColumn TItem="FeedBack" HeaderText="ФИО" PropertyName="FullName" SortKeySelector="item => item.Name">
+                    @context.Name
+                </GridColumn>
+                <GridColumn TItem="FeedBack" HeaderText="Электронная почта" PropertyName="Email" SortKeySelector="item => item.Email">
+                    @context.Email
+                </GridColumn>
+                <GridColumn TItem="FeedBack" HeaderText="Статус" PropertyName="Checked" SortKeySelector="item => item.Checked"
+                            IsDefaultSortColumn="true" SortDirection="SortDirection.Ascending">
+                    @if (context.Checked)
+                    {
+                        <div class="text-success">Да</div>
+                    }
+                    else
+                    {
+                        <div class="text-danger">Нет</div>
+                    }
+                </GridColumn>
+            </Grid>
+        }
     </div>
 </div>
 
 @code {
-    FeedBack[] feedbacks = default!;
+    FeedBack[]? feedbacks;
+    private bool isLoading = true;
+
     protected override async void OnInitialized()
     {
         feedbacks = await data.GetFeedbacksAsync();
+        isLoading = false;
+        StateHasChanged();
     }
 
     private async Task<GridDataProviderResult<FeedBack>> FeedbackDataProvider(GridDataProviderRequest<FeedBack> request)
     {
-        return await Task.FromResult(request.ApplyTo(feedbacks));
+        var data = feedbacks ?? Array.Empty<FeedBack>();
+        return await Task.FromResult(request.ApplyTo(data));
     }
 
     private async Task<IEnumerable<FilterOperatorInfo>> GridFiltersTranslationProvider()

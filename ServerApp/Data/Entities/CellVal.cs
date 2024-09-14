@@ -5,7 +5,7 @@ namespace ServerApp.Data.Entities
     public class CellVal
     {
         public Guid Id { get; set; }
-        [MaxLength(255)]
+        [MaxLength(8000)]
         public string? Value { get; set; }        
         public bool IsPrefilled { get; set; } = false;
         public bool Disable { get; set; } = false;

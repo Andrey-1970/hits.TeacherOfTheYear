@@ -122,7 +122,7 @@ else
 
     async Task SetVote()
     {
-        if (await data.VoteInThisCategoryAsync(applicationFormVoteModel.TrackId, applicationFormVoteModel.CategoryId, userInfo.Id))
+        if (data.VoteInThisCategoryAsync(applicationFormVoteModel.TrackId, applicationFormVoteModel.CategoryId, userInfo!.Id))
         {
             await ShowRevoteConfirmAsync();
         }

@@ -2,15 +2,17 @@
 
 @using ServerApp.Data.Entities
 
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
 @inject IDataService data
 @inject NavigationManager NavigationManager
 
-<PageTitle>Просмотр фидбека</PageTitle>
+<PageTitle>Просмотр сообщения</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="block-title-text">
-            Просмотр фидбека
+            Просмотр сообщения
         </div>
     </div>
     @if (feedback is not null)
@@ -60,8 +62,7 @@
 
     private async Task SaveApplication()
     {
-        Console.WriteLine(feedback.Checked);
-        await data.SaveFeedbackAsync(feedback);
+        await data.SaveFeedbackAsync(feedback!);
         NavigationManager.NavigateTo("/feedbacklist#");
     }
 }
