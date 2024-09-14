@@ -25,11 +25,14 @@
                     Загрузить фото
                 </Button>
 
-                <PhotoEditorModal IsVisible="@isPhotoEditorVisible"
-                                  IsVisibleChanged="@((bool visible) => isPhotoEditorVisible = visible)"
-                                  OnSave="HandlePhotoSave" 
-                                  imageDataUrl="@photoData.ImageUrl"
-                                  SavedCoordinates="@photoData.Coordinates" />
+                @if (photoData is not null)
+                {
+                    <PhotoEditorModal IsVisible="@isPhotoEditorVisible"
+                                      IsVisibleChanged="@((bool visible) => isPhotoEditorVisible = visible)"
+                                      OnSave="HandlePhotoSave" 
+                                      imageDataUrl="@photoData.ImageUrl"
+                                      SavedCoordinates="@photoData.Coordinates" />
+                }
 
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
@@ -235,7 +238,7 @@ else
 
     private ConfirmDialog? dialog;
     private bool isPhotoEditorVisible = false;
-    private PhotoData photoData = new PhotoData();
+    private PhotoData? photoData;
 
     protected override async Task OnInitializedAsync()
     {
@@ -244,14 +247,14 @@ else
         {
             model.Tracks = await data.GetTrackModelsAsync();
             model.Categories = await data.GetCategoryModelsAsync();
-            await LoadPhotoData(); // Перезагружаем данные фото после сохранен
+            await LoadPhotoData(model); // Перезагружаем данные фото после сохранен
             await OnTrackIdChanged(model.SelectedTrackId);
         }
     }
 
-    private async Task LoadPhotoData()
+    private async Task LoadPhotoData(EditModel model)
     {
-        photoData = await data.GetPhotoAsync(model.ApplicationId);
+        photoData = await data.GetPhotoAsync(model.ApplicationId) ?? new PhotoData();
     }
 
     private void OpenPhotoEditor()
@@ -263,7 +266,7 @@ else
     private async Task HandlePhotoSave((string imageDataUrl, PhotoEditorModal.CropCoordinates coordinates) saveData)
     {
         await data.SavePhotoAsync(saveData.imageDataUrl, saveData.coordinates);
-        await LoadPhotoData(); // Перезагружаем данные фото после сохранен
+        if (model is not null) await LoadPhotoData(model); // Перезагружаем данные фото после сохранен
         toastService.Notify(new(ToastType.Success, "Фото успешно сохранено"));
     }
 
@@ -459,7 +462,7 @@ else
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
 
         var userInfo = await data.GetCurrentUserInfoAsync();
-        await data.SetDatetimeNowForApplicationAync(userInfo.Applications.First().Id);
+        if (userInfo is not null) await data.SetDatetimeNowForApplicationAync(userInfo.Applications.First().Id);
         navigate.NavigateTo("/account/manage/participation-status");
     }
 
