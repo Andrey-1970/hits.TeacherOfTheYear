@@ -24,6 +24,7 @@ namespace ServerApp.Data
         public DbSet<Mark> Marks { get; set; }
         public DbSet<MarkBlock> MarkBlocks { get; set; }
         public DbSet<MarkVal> MarkVals { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public DbSet<Row> Rows { get; set; }
         public DbSet<SelectValue> SelectValues { get; set; }
         public DbSet<Table> Tables { get; set; }
@@ -87,6 +88,11 @@ namespace ServerApp.Data
                 entity.HasMany(af => af.ApplicationFormExperts)
                     .WithOne(afe => afe.ApplicationForm)
                     .HasForeignKey(afe => afe.ApplicationFormId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasOne(af => af.Photo)
+                    .WithOne(p => p.ApplicationForm)
+                    .HasForeignKey<Photo>(p => p.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 

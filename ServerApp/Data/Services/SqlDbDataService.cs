@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using ServerApp.Components;
 using ServerApp.Components.Admin;
+using ServerApp.Components.Pages;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
@@ -31,6 +32,74 @@ namespace ServerApp.Data.Services
             context = _context;
             userStateProvider = _userStateProvider;
             userManager = _userManager;
+        }
+
+        public async Task<Components.Pages.ApplicationForm.PhotoData?> GetPhotoAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            if (app != null)
+            {
+                var photo = app.Photo;
+                return new Components.Pages.ApplicationForm.PhotoData()
+                {
+                    ImageUrl = photo.Base64Data,
+                    Coordinates = new PhotoEditorModal.CropCoordinates()
+                    {
+                        X = photo.X,
+                        Y = photo.Y,
+                        Height = photo.Height,
+                        Width = photo.Width
+                    }
+                };
+            }
+
+            return null;
+        }
+
+        public async Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates)
+        {
+            var user = await GetUserAsync();
+            var app = user.Applications.FirstOrDefault();
+
+            if (app == null)
+            {
+                app = new ApplicationForm()
+                {
+                    Id = Guid.NewGuid(),
+                    UserInfoId = user.Id,
+                    ApplicationStatusId = context.ApplicationStatuses.First(e => e.Number == 1).Id
+                };
+
+                context.Add(app);
+
+                await context.SaveChangesAsync();
+
+                var photo = new Photo()
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationFormId = app.Id,
+                    Base64Data = base64Data,
+                    X = cropCoordinates.X,
+                    Y = cropCoordinates.Y,
+                    Width = cropCoordinates.Width,
+                    Height = cropCoordinates.Height
+                };
+
+                context.Add(photo);
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                var photo = app.Photo;
+                photo.Base64Data = base64Data;
+                photo.X = cropCoordinates.X;
+                photo.Y = cropCoordinates.Y;
+                photo.Width = cropCoordinates.Width;
+                photo.Height = cropCoordinates.Height;
+                
+                context.Update(photo);
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteUserInfoAsync(Guid userId)
@@ -1208,7 +1277,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
+        public async Task<bool> VoteInThisCategoryAsync(Guid? trackId, Guid categoryId, Guid userId)
         {
             return context.Votes.Any(e =>
                 e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&

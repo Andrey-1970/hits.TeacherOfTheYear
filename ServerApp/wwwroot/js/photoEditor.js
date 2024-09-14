@@ -7,6 +7,8 @@ let cropRectangle;
 let image;
 let isDragging = false;
 let startX, startY;
+let loadingOverlay;
+
 
 // Сброс состояния перед загрузкой нового изображения
 function reset() {
@@ -19,11 +21,13 @@ function reset() {
     isDragging = false;
 }
 
+
 function initPhotoEditor() {
     cropRectangle = document.getElementById('crop-rectangle');
     image = document.getElementById('uploaded-image');
+    loadingOverlay = document.getElementById('loading-overlay');
 
-    if (!cropRectangle || !image) {
+    if (!cropRectangle || !image || !loadingOverlay) {
         console.error("Required elements are not found in the DOM.");
         return;
     }
@@ -35,17 +39,15 @@ function initPhotoEditor() {
     console.log("Photo editor initialized");
 }
 
-function imageLoaded() {
-    console.log("Image successfully loaded with natural dimensions:", image.naturalWidth, image.naturalHeight);
-    adjustImageAndInitializeCrop();
+function showLoading() {
+    loadingOverlay.style.display = 'flex';
 }
 
-function imageLoadError() {
-    console.error("Failed to load image");
-    alert("Error loading image! Please try again.");
+function hideLoading() {
+    loadingOverlay.style.display = 'none';
 }
 
-function loadImage(imageDataUrl) {
+function loadImage(imageDataUrl, savedCoordinates = null) {
     if (!image) {
         console.error("Image element not found in the DOM.");
         return;
@@ -58,22 +60,24 @@ function loadImage(imageDataUrl) {
         return;
     }
 
+    showLoading();
+
     image.onload = () => {
         console.log("Image has fully loaded");
-        imageLoaded();
+        hideLoading();
+        adjustImageAndInitializeCrop(savedCoordinates);
     };
 
     image.onerror = () => {
         console.error("Failed to load image");
-        imageLoadError();
+        hideLoading();
+        alert("Error loading image! Please try again.");
     };
 
     image.src = imageDataUrl;
-    console.log("Setting image source to:", imageDataUrl);
-    image.style.display = 'block';
 }
 
-function adjustImageAndInitializeCrop() {
+function adjustImageAndInitializeCrop(savedCoordinates = null) {
     const aspectRatio = image.naturalWidth / image.naturalHeight;
     const container = image.parentElement;
     let containerWidth = container.clientWidth;
@@ -87,13 +91,22 @@ function adjustImageAndInitializeCrop() {
 
     image.style.width = `${containerWidth}px`;
     image.style.height = `${containerHeight}px`;
+    image.style.display = 'block';
 
-    const initialSize = Math.min(containerWidth, containerHeight) / 2;
+    if (savedCoordinates) {
+        console.log({savedCoordinates})
+        cropRectangle.style.width = `${savedCoordinates.width}px`;
+        cropRectangle.style.height = `${savedCoordinates.height}px`;
+        cropRectangle.style.left = `${savedCoordinates.x}px`;
+        cropRectangle.style.top = `${savedCoordinates.y}px`;
+    } else {
+        const initialSize = Math.min(containerWidth, containerHeight) / 2;
+        cropRectangle.style.width = `${initialSize}px`;
+        cropRectangle.style.height = `${initialSize * 4 / 3}px`;
+        cropRectangle.style.left = `${(containerWidth - initialSize) / 2}px`;
+        cropRectangle.style.top = `${(containerHeight - initialSize * 4 / 3) / 2}px`;
+    }
 
-    cropRectangle.style.width = `${initialSize}px`;
-    cropRectangle.style.height = `${initialSize * 4 / 3}px`;
-    cropRectangle.style.left = `${(containerWidth - initialSize) / 2}px`;
-    cropRectangle.style.top = `${(containerHeight - initialSize * 4 / 3) / 2}px`;
     cropRectangle.style.display = 'block';
 
     console.log("Crop rectangle initialized with dimensions:", cropRectangle.offsetWidth, cropRectangle.offsetHeight);
