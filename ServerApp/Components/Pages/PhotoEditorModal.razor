@@ -8,11 +8,11 @@
                 <button type="button" class="btn-close" @onclick="CloseModal"></button>
             </div>
             <div class="modal-body">
-                <div id="photo-editor-container" style="position: relative; overflow-x:auto; height: 500px;">
+                <div id="photo-editor-container">
                     <img id="uploaded-image" src="@imageDataUrl" alt="Загруженное изображение" style="display: none; object-position: center;" />
                     <div id="crop-overlay"></div>
                     <div id="crop-rectangle"></div>
-                    <div id="loading-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); display: none; justify-content: center; align-items: center;">
+                    <div id="loading-overlay">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Загрузка...</span>
                         </div>

@@ -80,37 +80,37 @@ function loadImage(imageDataUrl, savedCoordinates = null) {
 function adjustImageAndInitializeCrop(savedCoordinates = null) {
     const aspectRatio = image.naturalWidth / image.naturalHeight;
     const container = image.parentElement;
+    const fixedHeight = 400; // фиксированная высота контейнера (можно изменить на нужное значение)
     let containerWidth = container.clientWidth;
-    let containerHeight = container.clientHeight;
+    const containerHeight = fixedHeight; // фиксируем высоту
 
-    if (containerWidth / containerHeight > aspectRatio) {
-        containerWidth = containerHeight * aspectRatio;
-    } else {
-        containerHeight = containerWidth / aspectRatio;
-    }
+    // Рассчитываем новую ширину на основе фиксированной высоты и соотношения сторон
+    const newWidth = containerHeight * aspectRatio;
 
-    image.style.width = `${containerWidth}px`;
-    image.style.height = `${containerHeight}px`;
+    // Устанавливаем размеры изображения
+    image.style.width = `${newWidth}px`; // ширина изменяется в зависимости от высоты
+    image.style.height = `${containerHeight}px`; // фиксируем высоту
     image.style.display = 'block';
 
+    // Инициализация прямоугольника обрезки
     if (savedCoordinates) {
-        console.log({savedCoordinates})
+        console.log({ savedCoordinates });
         cropRectangle.style.width = `${savedCoordinates.width}px`;
         cropRectangle.style.height = `${savedCoordinates.height}px`;
         cropRectangle.style.left = `${savedCoordinates.x}px`;
         cropRectangle.style.top = `${savedCoordinates.y}px`;
     } else {
-        const initialSize = Math.min(containerWidth, containerHeight) / 2;
+        const initialSize = Math.min(newWidth, containerHeight) / 2;
         cropRectangle.style.width = `${initialSize}px`;
-        cropRectangle.style.height = `${initialSize * 4 / 3}px`;
-        cropRectangle.style.left = `${(containerWidth - initialSize) / 2}px`;
-        cropRectangle.style.top = `${(containerHeight - initialSize * 4 / 3) / 2}px`;
+        cropRectangle.style.height = `${(initialSize * 4) / 3}px`;
+        cropRectangle.style.left = `${(newWidth - initialSize) / 2}px`;
+        cropRectangle.style.top = `${(containerHeight - (initialSize * 4) / 3) / 2}px`;
     }
 
     cropRectangle.style.display = 'block';
 
     console.log("Crop rectangle initialized with dimensions:", cropRectangle.offsetWidth, cropRectangle.offsetHeight);
-    console.log("Image container dimensions:", containerWidth, containerHeight);
+    console.log("Image container dimensions:", newWidth, containerHeight);
     console.log("Crop rectangle position:", cropRectangle.style.left, cropRectangle.style.top);
 }
 
