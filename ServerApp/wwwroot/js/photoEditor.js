@@ -25,9 +25,8 @@ function reset() {
 function initPhotoEditor() {
     cropRectangle = document.getElementById('crop-rectangle');
     image = document.getElementById('uploaded-image');
-    loadingOverlay = document.getElementById('loading-overlay');
 
-    if (!cropRectangle || !image || !loadingOverlay) {
+    if (!cropRectangle || !image) {
         console.error("Required elements are not found in the DOM.");
         return;
     }
@@ -37,14 +36,6 @@ function initPhotoEditor() {
     document.addEventListener('mouseup', stopDragging);
     document.addEventListener('wheel', resizeCropRectangle);
     console.log("Photo editor initialized");
-}
-
-function showLoading() {
-    loadingOverlay.style.display = 'flex';
-}
-
-function hideLoading() {
-    loadingOverlay.style.display = 'none';
 }
 
 function loadImage(imageDataUrl, savedCoordinates = null) {
@@ -60,17 +51,13 @@ function loadImage(imageDataUrl, savedCoordinates = null) {
         return;
     }
 
-    showLoading();
-
     image.onload = () => {
         console.log("Image has fully loaded");
-        hideLoading();
         adjustImageAndInitializeCrop(savedCoordinates);
     };
 
     image.onerror = () => {
         console.error("Failed to load image");
-        hideLoading();
         alert("Error loading image! Please try again.");
     };
 

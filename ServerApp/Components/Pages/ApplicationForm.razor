@@ -21,15 +21,14 @@
 
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Primary"
-                        @onclick="OpenPhotoEditor">
+                        @onclick="async () => await photoEditor.modal.ShowAsync()">
                     Загрузить фото
                 </Button>
 
                 @if (photoData is not null)
                 {
-                    <PhotoEditorModal IsVisible="@isPhotoEditorVisible"
-                                      IsVisibleChanged="@((bool visible) => isPhotoEditorVisible = visible)"
-                                      OnSave="HandlePhotoSave" 
+                    <PhotoEditorModal @ref="photoEditor"
+                                      OnSave="async (value) => await HandlePhotoSaveAsync(value)"
                                       imageDataUrl="@photoData.ImageUrl"
                                       SavedCoordinates="@photoData.Coordinates" />
                 }
@@ -37,7 +36,7 @@
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
                         Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
-                        @onclick="ShowConfirmationAsync">
+                        @onclick="async () => await ShowConfirmationAsync()">
                     Отправить заявку
                 </Button>
             </div>
@@ -58,7 +57,7 @@
                 }
                 <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?"
                              ValueExpression="() => model.SelectedTrackId"
-                             ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
+                             ValueChanged="async (trackId) => await OnTrackIdChangedAsync(trackId)">
                     <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
                     @foreach (var track in model.Tracks)
                     {
@@ -78,12 +77,12 @@
                 {
                     <div class="block-content-text">
                         <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId"
-                                           OnBlockChanged="OnBlockIdChanged">
+                                           OnBlockChanged="async (blockId) => await OnBlockIdChangedAsync(blockId)">
                         </TabsForEditBlocks>
                     </div>
                     @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
                     {
-                        <EditForm EditContext="editContext" OnValidSubmit="Submit" class="block-content-text">
+                        <EditForm EditContext="editContext" OnValidSubmit="async () => await Submit()" class="block-content-text">
                             @if (model.Fields is not null && model.Fields.Any())
                             {
                                 @foreach (var fld in model.Fields)
@@ -178,7 +177,7 @@
                                                         {
                                                             <td style="width: 50px;">
                                                                 <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);"
-                                                                      @onclick="async () => await DeleteRow(table, row)" type="button"/>
+                                                                      @onclick="async () => await DeleteRowAsync(table, row)" type="button"/>
                                                             </td>
                                                         }
                                                     </tr>
@@ -189,7 +188,7 @@
                                         @if (!table.IsPrefilled)
                                         {
                                             <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary"
-                                                  Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)"
+                                                  Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRowAsync(table)"
                                                   type="button"/>
                                         }
                                     </div>
@@ -236,8 +235,9 @@ else
     EditContext? editContext;
     ValidationMessageStore? messageStore;
 
+    PhotoEditorModal photoEditor = default!;
+
     private ConfirmDialog? dialog;
-    private bool isPhotoEditorVisible = false;
     private PhotoData? photoData;
 
     protected override async Task OnInitializedAsync()
@@ -247,30 +247,24 @@ else
         {
             model.Tracks = await data.GetTrackModelsAsync();
             model.Categories = await data.GetCategoryModelsAsync();
-            await LoadPhotoData(model); // Перезагружаем данные фото после сохранен
-            await OnTrackIdChanged(model.SelectedTrackId);
+            await LoadPhotoDataAsync(model);
+            await OnTrackIdChangedAsync(model.SelectedTrackId);
         }
     }
 
-    private async Task LoadPhotoData(EditModel model)
+    private async Task LoadPhotoDataAsync(EditModel model)
     {
         photoData = await data.GetPhotoAsync(model.ApplicationId) ?? new PhotoData();
     }
 
-    private void OpenPhotoEditor()
-    {
-        isPhotoEditorVisible = true;
-    }
-
-
-    private async Task HandlePhotoSave((string imageDataUrl, PhotoEditorModal.CropCoordinates coordinates) saveData)
+    private async Task HandlePhotoSaveAsync((string imageDataUrl, PhotoEditorModal.CropCoordinates coordinates) saveData)
     {
         await data.SavePhotoAsync(saveData.imageDataUrl, saveData.coordinates);
-        if (model is not null) await LoadPhotoData(model); // Перезагружаем данные фото после сохранен
+        if (model is not null) await LoadPhotoDataAsync(model);
         toastService.Notify(new(ToastType.Success, "Фото успешно сохранено"));
     }
 
-    async Task OnTrackIdChanged(Guid? trackId)
+    async Task OnTrackIdChangedAsync(Guid? trackId)
     {
         if (model == null || trackId == Guid.Empty) return;
 
@@ -279,11 +273,11 @@ else
 
         if (model.EditBlocks.Any())
         {
-            await OnBlockIdChanged(model.EditBlocks.First().Id);
+            await OnBlockIdChangedAsync(model.EditBlocks.First().Id);
         }
     }
 
-    async Task OnBlockIdChanged(Guid? blockId)
+    async Task OnBlockIdChangedAsync(Guid? blockId)
     {
         if (model == null || blockId == Guid.Empty) return;
 
@@ -294,7 +288,7 @@ else
         InitializeEditContext(model);
     }
 
-    async Task AddRow(TableModel table)
+    async Task AddRowAsync(TableModel table)
     {
         if (model == null || table == null) return;
 
@@ -307,7 +301,7 @@ else
         }
     }
 
-    async Task DeleteRow(TableModel table, RowModel row)
+    async Task DeleteRowAsync(TableModel table, RowModel row)
     {
         if (model == null || table == null || row == null) return;
 
@@ -429,7 +423,7 @@ else
         }
     }
 
-    private async Task ShowConfirmationAsync()
+    async Task ShowConfirmationAsync()
     {
         var options = new ConfirmDialogOptions
         {
@@ -445,11 +439,11 @@ else
 
         if (confirmation)
         {
-            await ChangeStatus();
+            await ChangeStatusAsync();
         }
     }
 
-    async Task ChangeStatus()
+    async Task ChangeStatusAsync()
     {
         var newModel = new EditModel()
         {
@@ -468,7 +462,7 @@ else
 
     public class PhotoData
     {
-        public string ImageUrl { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
         public PhotoEditorModal.CropCoordinates Coordinates { get; set; } = new PhotoEditorModal.CropCoordinates();
     }
 

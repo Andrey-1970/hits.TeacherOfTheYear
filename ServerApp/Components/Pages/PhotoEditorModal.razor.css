@@ -1,6 +1,5 @@
 #photo-editor-container {
     position: relative;
-    width: 100%;
     overflow-x: auto;
 }
 
