@@ -9,8 +9,8 @@ public class Photo
     public virtual ApplicationForm ApplicationForm { get; set; } = default!;
 
     public string Base64Data { get; set; } = default!;
-    public int X { get; set; }
-    public int Y { get; set; }
-    public int Width { get; set; }
-    public int Height { get; set; }
+    public int? X { get; set; }
+    public int? Y { get; set; }
+    public int? Width { get; set; }
+    public int? Height { get; set; }
 }

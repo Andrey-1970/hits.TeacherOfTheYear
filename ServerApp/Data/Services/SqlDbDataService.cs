@@ -35,72 +35,30 @@ namespace ServerApp.Data.Services
         private readonly AuthenticationStateProvider userStateProvider = _userStateProvider;
         private readonly UserManager<ApplicationUser> userManager = _userManager;
 
-        public async Task<string> GetCropPhotoCurrentUserAsync()
+        public async Task<string?> GetCropPhotoCurrentUserAsync()
         {
             var user = await GetUserAsync();
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
-            var base64 = app.Photo.Base64Data;
-            var x = app.Photo.X;
-            var y = app.Photo.Y;
-            var width = app.Photo.Width;
-            var height = app.Photo.Height;
-
-            // Удаление префикса, если он присутствует
-            const string base64Prefix = "data:image/jpeg;base64,";
-            if (base64.StartsWith(base64Prefix))
+            if (app != null && app.CropPhoto != null)
             {
-                base64 = base64.Substring(base64Prefix.Length);
+                return app.CropPhoto.Base64Data;
             }
 
-            // Проверка валидности base64 строки
-            if (!IsValidBase64String(base64))
-            {
-                throw new ArgumentException("Предоставленная строка не является валидной base64 строкой.");
-            }
-
-            // Преобразование base64 в изображение
-            byte[] imageBytes = Convert.FromBase64String(base64);
-            using (var ms = new MemoryStream(imageBytes))
-            using (var image = Image.Load(ms))
-            {
-                // Вычисление коэффициента масштабирования
-                float scaleFactor = 400f / image.Height;
-
-                // Пересчет координат и размеров для оригинального изображения
-                int originalX = (int)(x / scaleFactor);
-                int originalY = (int)(y / scaleFactor);
-                int originalWidth = (int)(width / scaleFactor);
-                int originalHeight = (int)(height / scaleFactor);
-
-                // Проверка и корректировка координат и размеров
-                originalX = Math.Max(0, originalX);
-                originalY = Math.Max(0, originalY);
-                originalWidth = Math.Min(image.Width - originalX, originalWidth);
-                originalHeight = Math.Min(image.Height - originalY, originalHeight);
-
-                // Обрезка изображения
-                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
-
-                // Преобразование обрезанного изображения обратно в base64
-                using (var outStream = new MemoryStream())
-                {
-                    image.Save(outStream, new JpegEncoder());
-                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
-            
-                    // Возвращаем строку с префиксом
-                    return $"{base64Prefix}{croppedBase64}";
-                }
-            }
+            return null;
         }
 
         public async Task<string> GetCropPhotoAsync(Guid appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            var base64 = app.Photo.Base64Data;
-            var x = app.Photo.X;
-            var y = app.Photo.Y;
-            var width = app.Photo.Width;
-            var height = app.Photo.Height;
+            return app.CropPhoto.Base64Data;
+        }
+        
+        private Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
+        {
+            var x = coordinates.X;
+            var y = coordinates.Y;
+            var width = coordinates.Width;
+            var height = coordinates.Height;
 
             // Удаление префикса, если он присутствует
             const string base64Prefix = "data:image/jpeg;base64,";
@@ -145,7 +103,7 @@ namespace ServerApp.Data.Services
                     string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
             
                     // Возвращаем строку с префиксом
-                    return $"{base64Prefix}{croppedBase64}";
+                    return Task.FromResult($"{base64Prefix}{croppedBase64}");
                 }
             }
         }
@@ -169,7 +127,7 @@ namespace ServerApp.Data.Services
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
             if (app != null)
             {
-                var photo = app.Photo;
+                var photo = app.FullPhoto;
                 if (photo != null)
                 {
                     return new Components.Pages.ApplicationForm.PhotoData()
@@ -177,10 +135,10 @@ namespace ServerApp.Data.Services
                         ImageUrl = photo.Base64Data,
                         Coordinates = new PhotoEditorModal.CropCoordinates()
                         {
-                            X = photo.X,
-                            Y = photo.Y,
-                            Height = photo.Height,
-                            Width = photo.Width
+                            X = (int)photo.X!,
+                            Y = (int)photo.Y!,
+                            Height = (int)photo.Height!,
+                            Width = (int)photo.Width!
                         }
                     };
                 }
@@ -195,6 +153,9 @@ namespace ServerApp.Data.Services
         {
             var user = await GetUserAsync();
             var app = user.Applications.FirstOrDefault();
+            var photo = new Photo();
+            var cropPhoto = new Photo();
+            var base64Crop = await CropPhoto(base64Data, cropCoordinates);
 
             if (app == null)
             {
@@ -209,7 +170,7 @@ namespace ServerApp.Data.Services
 
                 await context.SaveChangesAsync();
 
-                var photo = new Photo()
+                photo = new Photo()
                 {
                     Id = Guid.NewGuid(),
                     ApplicationFormId = app.Id,
@@ -221,12 +182,23 @@ namespace ServerApp.Data.Services
                 };
 
                 context.Add(photo);
+
+                cropPhoto = new Photo()
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationFormId = app.Id,
+                    Base64Data = base64Crop
+                };
+
+                context.Add(cropPhoto);
+                
                 await context.SaveChangesAsync();
             }
             else
             {
-                var photo = app.Photo;
-                if (photo != null)
+                photo = app.FullPhoto;
+                cropPhoto = app.CropPhoto;
+                if (photo != null && cropPhoto != null)
                 {
                     photo.Base64Data = base64Data;
                     photo.X = cropCoordinates.X;
@@ -235,6 +207,11 @@ namespace ServerApp.Data.Services
                     photo.Height = cropCoordinates.Height;
                     
                     context.Update(photo);
+
+                    cropPhoto.Base64Data = base64Crop;
+
+                    context.Update(cropPhoto);
+                    
                     await context.SaveChangesAsync();
                 }
                 else
@@ -251,10 +228,25 @@ namespace ServerApp.Data.Services
                     };
 
                     context.Add(photo);
+                    
+                    cropPhoto = new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationFormId = app.Id,
+                        Base64Data = base64Crop
+                    };
+
+                    context.Add(cropPhoto);
+                    
                     await context.SaveChangesAsync();
                 }
-                
             }
+
+            app.FullPhotoId = photo.Id;
+            app.CropPhotoId = cropPhoto.Id;
+
+            context.Update(app);
+            await context.SaveChangesAsync();
         }
 
         public async Task<Guid?> GetCategoryIdFromEmail(string email)

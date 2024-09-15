@@ -90,10 +90,22 @@ namespace ServerApp.Data
                     .HasForeignKey(afe => afe.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
                 
-                entity.HasOne(af => af.Photo)
+                entity.HasMany(a => a.Photos)
                     .WithOne(p => p.ApplicationForm)
-                    .HasForeignKey<Photo>(p => p.ApplicationFormId)
+                    .HasForeignKey(p => p.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Отношение один к одному `ApplicationForm` -> `CropPhoto`
+                entity.HasOne(a => a.CropPhoto)
+                    .WithOne()
+                    .HasForeignKey<ApplicationForm>(a => a.CropPhotoId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Отношение один к одному `ApplicationForm` -> `FullPhoto`
+                entity.HasOne(a => a.FullPhoto)
+                    .WithOne()
+                    .HasForeignKey<ApplicationForm>(a => a.FullPhotoId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<CellVal>(entity =>
