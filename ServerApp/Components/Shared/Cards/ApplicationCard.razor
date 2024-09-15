@@ -1,12 +1,16 @@
 @using ServerApp.Data.Models.VoteModel
 
+@inject IDataService data
 @inject NavigationManager navigate
 
 <div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
     <div class="d-flex professor-avatar justify-content-end align-items-start">
-        @if (Application != null && Application.IsVoted)
+        <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+        @if (Application is not null && Application.IsVoted)
         {
-            <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
+            <div class="d-flex position-absolute top-0 end-0">
+                <Icon Class="m-2" Name="IconName.CheckSquareFill" Color="IconColor.White" Size="IconSize.x3"></Icon>
+            </div>
         }
     </div>
     <div class="description">
@@ -28,6 +32,13 @@
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
+
+    string? cropPhoto;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Application is not null) cropPhoto = await data.GetCropPhotoAsync(Application.Id);
+    }
 
     async Task OnClickHandler()
     {

@@ -1,14 +1,8 @@
-﻿using System.Drawing;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Abstractions;
-using Microsoft.IdentityModel.Tokens;
-using ServerApp.Components;
-using ServerApp.Components.Account.Pages.Manage;
-using ServerApp.Components.Admin;
 using ServerApp.Components.Pages;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
@@ -20,7 +14,6 @@ using SixLabors.ImageSharp.Formats.Jpeg;
 using YourProject.Data.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using Rectangle = SixLabors.ImageSharp.Rectangle;
 
 
@@ -37,7 +30,7 @@ namespace ServerApp.Data.Services
 
         public async Task<string?> GetCropPhotoCurrentUserAsync()
         {
-            var user = await GetUserAsync();
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
             if (app != null && app.CropPhoto != null)
             {
@@ -50,7 +43,7 @@ namespace ServerApp.Data.Services
         public async Task<string> GetCropPhotoAsync(Guid appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            return app.CropPhoto.Base64Data;
+            return app!.CropPhoto!.Base64Data;
         }
         
         private Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
@@ -151,7 +144,7 @@ namespace ServerApp.Data.Services
 
         public async Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates)
         {
-            var user = await GetUserAsync();
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var app = user.Applications.FirstOrDefault();
             var photo = new Photo();
             var cropPhoto = new Photo();

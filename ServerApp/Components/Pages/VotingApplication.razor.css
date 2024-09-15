@@ -65,8 +65,11 @@ a:link {
     background: #7a78fc;
     align-self: stretch;
     flex-shrink: 0;
-    height: 353px;
+    height: 400px;
+    width: 300px;
     position: relative;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 @media (max-width: 992px) {

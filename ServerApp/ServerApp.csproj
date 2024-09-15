@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Components\Pages\ApplicationForm.razor.css" />
     <None Remove="Data\SQLite\data.db" />
   </ItemGroup>
 
@@ -39,6 +40,7 @@
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+    <Content Include="Components\Pages\ApplicationForm.razor.css" />
   </ItemGroup>
 
 </Project>
