@@ -1,0 +1,101 @@
+@inject IJSRuntime JSRuntime
+
+<Modal @ref="modal" Title="Редактор фотографии" Size="ModalSize.Large" OnShown="async () => await OnModalShownAsync()">
+    <BodyTemplate>
+        @if (isLoading == true)
+        {
+            <div class="d-flex justify-content-center mb-2">
+                <Spinner Color="SpinnerColor.Primary" />
+            </div>
+        }
+        else if (isLoading == false && string.IsNullOrWhiteSpace(imageDataUrl))
+        {
+            <div class="d-flex justify-content-center mb-2">
+                <div>Нет загруженного фото</div>
+            </div>
+        }
+        <div id="photo-editor-container">
+            <img id="uploaded-image" src="@imageDataUrl" alt="Загруженное изображение" style="display: none; object-position: center;" />
+            <div id="crop-overlay"></div>
+            <div id="crop-rectangle"></div>
+        </div>
+        <InputFile OnChange="async (e) => await OnInputFileChangeAsync(e)" class="form-control mb-3" />
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="async () => await modal.HideAsync()">Закрыть</Button>
+        <Button Color="ButtonColor.Primary" @onclick="async () => await SaveCropCoordinatesAsync()">Сохранить</Button>
+    </FooterTemplate>
+</Modal>
+
+@code {
+    [Parameter] 
+    public EventCallback<(string, CropCoordinates)> OnSave { get; set; }
+    [Parameter] 
+    public string? imageDataUrl { get; set; }
+    [Parameter] 
+    public CropCoordinates? SavedCoordinates { get; set; }
+
+    public Modal modal = default!;
+
+    bool isLoading = true;
+    bool IsNewPhoto = false;
+
+    private async Task OnModalShownAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("initPhotoEditor");
+        @if (!string.IsNullOrWhiteSpace(imageDataUrl))
+        {
+            await JSRuntime.InvokeVoidAsync("loadImage", imageDataUrl, SavedCoordinates);
+        }
+        isLoading = false;
+    }
+
+    private async Task OnInputFileChangeAsync(InputFileChangeEventArgs e)
+    {
+        IsNewPhoto = true;
+        var file = e.File;
+        if (file != null)
+        {
+            const int maxAllowedSize = 104857600; // 100 MB
+
+            if (file.Size > maxAllowedSize)
+            {
+                Console.WriteLine("File size exceeds the maximum allowed size.");
+                return;
+            }
+
+            using var memoryStream = new MemoryStream();
+            await file.OpenReadStream(maxAllowedSize).CopyToAsync(memoryStream);
+
+            var buffer = memoryStream.ToArray();
+
+            if (buffer.Length == file.Size)
+            {
+                imageDataUrl = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+                StateHasChanged();
+                await JSRuntime.InvokeVoidAsync("loadImage", imageDataUrl, null);
+            }
+            else
+            {
+                Console.WriteLine("The buffer length does not match the expected file size. The file might not have been fully read.");
+            }
+        }
+    }
+
+    private async Task SaveCropCoordinatesAsync()
+    {
+        var coordinates = await JSRuntime.InvokeAsync<CropCoordinates>("getCropCoordinates");
+        Console.WriteLine($"X: {coordinates.X}, Y: {coordinates.Y}, Width: {coordinates.Width}, Height: {coordinates.Height}");
+        await modal.HideAsync();
+        await OnSave.InvokeAsync((imageDataUrl, coordinates)!);
+        IsNewPhoto = false;
+    }
+
+    public class CropCoordinates
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+    }
+}

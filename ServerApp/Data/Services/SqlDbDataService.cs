@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using System.Drawing;
 using System.Reflection;
 using System.Security;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -9,13 +9,20 @@ using Microsoft.IdentityModel.Tokens;
 using ServerApp.Components;
 using ServerApp.Components.Account.Pages.Manage;
 using ServerApp.Components.Admin;
+using ServerApp.Components.Pages;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using YourProject.Data.Services;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using Rectangle = SixLabors.ImageSharp.Rectangle;
+
 
 namespace ServerApp.Data.Services
 {
@@ -27,6 +34,228 @@ namespace ServerApp.Data.Services
         private readonly ApplicationDbContext context = _context;
         private readonly AuthenticationStateProvider userStateProvider = _userStateProvider;
         private readonly UserManager<ApplicationUser> userManager = _userManager;
+
+        public async Task<string> GetCropPhotoCurrentUserAsync()
+        {
+            var user = await GetUserAsync();
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
+            var base64 = app.Photo.Base64Data;
+            var x = app.Photo.X;
+            var y = app.Photo.Y;
+            var width = app.Photo.Width;
+            var height = app.Photo.Height;
+
+            // Удаление префикса, если он присутствует
+            const string base64Prefix = "data:image/jpeg;base64,";
+            if (base64.StartsWith(base64Prefix))
+            {
+                base64 = base64.Substring(base64Prefix.Length);
+            }
+
+            // Проверка валидности base64 строки
+            if (!IsValidBase64String(base64))
+            {
+                throw new ArgumentException("Предоставленная строка не является валидной base64 строкой.");
+            }
+
+            // Преобразование base64 в изображение
+            byte[] imageBytes = Convert.FromBase64String(base64);
+            using (var ms = new MemoryStream(imageBytes))
+            using (var image = Image.Load(ms))
+            {
+                // Вычисление коэффициента масштабирования
+                float scaleFactor = 400f / image.Height;
+
+                // Пересчет координат и размеров для оригинального изображения
+                int originalX = (int)(x / scaleFactor);
+                int originalY = (int)(y / scaleFactor);
+                int originalWidth = (int)(width / scaleFactor);
+                int originalHeight = (int)(height / scaleFactor);
+
+                // Проверка и корректировка координат и размеров
+                originalX = Math.Max(0, originalX);
+                originalY = Math.Max(0, originalY);
+                originalWidth = Math.Min(image.Width - originalX, originalWidth);
+                originalHeight = Math.Min(image.Height - originalY, originalHeight);
+
+                // Обрезка изображения
+                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
+
+                // Преобразование обрезанного изображения обратно в base64
+                using (var outStream = new MemoryStream())
+                {
+                    image.Save(outStream, new JpegEncoder());
+                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
+            
+                    // Возвращаем строку с префиксом
+                    return $"{base64Prefix}{croppedBase64}";
+                }
+            }
+        }
+
+        public async Task<string> GetCropPhotoAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var base64 = app.Photo.Base64Data;
+            var x = app.Photo.X;
+            var y = app.Photo.Y;
+            var width = app.Photo.Width;
+            var height = app.Photo.Height;
+
+            // Удаление префикса, если он присутствует
+            const string base64Prefix = "data:image/jpeg;base64,";
+            if (base64.StartsWith(base64Prefix))
+            {
+                base64 = base64.Substring(base64Prefix.Length);
+            }
+
+            // Проверка валидности base64 строки
+            if (!IsValidBase64String(base64))
+            {
+                throw new ArgumentException("Предоставленная строка не является валидной base64 строкой.");
+            }
+
+            // Преобразование base64 в изображение
+            byte[] imageBytes = Convert.FromBase64String(base64);
+            using (var ms = new MemoryStream(imageBytes))
+            using (var image = Image.Load(ms))
+            {
+                // Вычисление коэффициента масштабирования
+                float scaleFactor = 400f / image.Height;
+
+                // Пересчет координат и размеров для оригинального изображения
+                int originalX = (int)(x / scaleFactor);
+                int originalY = (int)(y / scaleFactor);
+                int originalWidth = (int)(width / scaleFactor);
+                int originalHeight = (int)(height / scaleFactor);
+
+                // Проверка и корректировка координат и размеров
+                originalX = Math.Max(0, originalX);
+                originalY = Math.Max(0, originalY);
+                originalWidth = Math.Min(image.Width - originalX, originalWidth);
+                originalHeight = Math.Min(image.Height - originalY, originalHeight);
+
+                // Обрезка изображения
+                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
+
+                // Преобразование обрезанного изображения обратно в base64
+                using (var outStream = new MemoryStream())
+                {
+                    image.Save(outStream, new JpegEncoder());
+                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
+            
+                    // Возвращаем строку с префиксом
+                    return $"{base64Prefix}{croppedBase64}";
+                }
+            }
+        }
+
+        private bool IsValidBase64String(string base64)
+        {
+            try
+            {
+                Convert.FromBase64String(base64);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        public async Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync()
+        {
+            var user = await GetUserAsync();
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
+            if (app != null)
+            {
+                var photo = app.Photo;
+                if (photo != null)
+                {
+                    return new Components.Pages.ApplicationForm.PhotoData()
+                    {
+                        ImageUrl = photo.Base64Data,
+                        Coordinates = new PhotoEditorModal.CropCoordinates()
+                        {
+                            X = photo.X,
+                            Y = photo.Y,
+                            Height = photo.Height,
+                            Width = photo.Width
+                        }
+                    };
+                }
+
+                return null;
+            }
+
+            return null;
+        }
+
+        public async Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates)
+        {
+            var user = await GetUserAsync();
+            var app = user.Applications.FirstOrDefault();
+
+            if (app == null)
+            {
+                app = new ApplicationForm()
+                {
+                    Id = Guid.NewGuid(),
+                    UserInfoId = user.Id,
+                    ApplicationStatusId = context.ApplicationStatuses.First(e => e.Number == 1).Id
+                };
+
+                context.Add(app);
+
+                await context.SaveChangesAsync();
+
+                var photo = new Photo()
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationFormId = app.Id,
+                    Base64Data = base64Data,
+                    X = cropCoordinates.X,
+                    Y = cropCoordinates.Y,
+                    Width = cropCoordinates.Width,
+                    Height = cropCoordinates.Height
+                };
+
+                context.Add(photo);
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                var photo = app.Photo;
+                if (photo != null)
+                {
+                    photo.Base64Data = base64Data;
+                    photo.X = cropCoordinates.X;
+                    photo.Y = cropCoordinates.Y;
+                    photo.Width = cropCoordinates.Width;
+                    photo.Height = cropCoordinates.Height;
+                    
+                    context.Update(photo);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    photo = new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationFormId = app.Id,
+                        Base64Data = base64Data,
+                        X = cropCoordinates.X,
+                        Y = cropCoordinates.Y,
+                        Width = cropCoordinates.Width,
+                        Height = cropCoordinates.Height
+                    };
+
+                    context.Add(photo);
+                    await context.SaveChangesAsync();
+                }
+                
+            }
+        }
 
         public async Task<Guid?> GetCategoryIdFromEmail(string email)
         {
@@ -1217,7 +1446,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public bool VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
+        public bool VoteInThisCategoryAsync(Guid? trackId, Guid categoryId, Guid userId)
         {
             return context.Votes.Any(e =>
                 e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&

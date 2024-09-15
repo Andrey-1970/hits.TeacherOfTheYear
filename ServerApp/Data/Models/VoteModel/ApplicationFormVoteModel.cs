@@ -19,7 +19,7 @@ public class ApplicationFormVoteModel
     public Guid Id => applicationForm.Id;
     public string? FullName => applicationForm.UserInfo.Name;
     public int? TotalVotes => applicationForm.Votes.Count;
-    public Guid TrackId => applicationForm.TrackId;
+    public Guid? TrackId => applicationForm.TrackId;
     public Guid CategoryId => (Guid)applicationForm.CategoryId!;
 
     public bool IsVoteOfThisApplication => userId != null ? applicationForm.Votes.Any(x => x.VoterId == userId) : false;
