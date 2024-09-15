@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOMContentLoaded event fired.");
-    initPhotoEditor();
 });
 
 let cropRectangle;

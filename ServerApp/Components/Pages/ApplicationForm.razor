@@ -35,7 +35,7 @@
 
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
-                        Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
+                        Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null || string.IsNullOrWhiteSpace(photoData.ImageUrl)"
                         @onclick="async () => await ShowConfirmationAsync()">
                     Отправить заявку
                 </Button>
@@ -247,20 +247,20 @@ else
         {
             model.Tracks = await data.GetTrackModelsAsync();
             model.Categories = await data.GetCategoryModelsAsync();
-            await LoadPhotoDataAsync(model);
+            await LoadPhotoDataAsync();
             await OnTrackIdChangedAsync(model.SelectedTrackId);
         }
     }
 
-    private async Task LoadPhotoDataAsync(EditModel model)
+    private async Task LoadPhotoDataAsync()
     {
-        photoData = await data.GetPhotoAsync(model.ApplicationId) ?? new PhotoData();
+        photoData = await data.GetCurrentUserPhotoAsync() ?? new PhotoData();
     }
 
     private async Task HandlePhotoSaveAsync((string imageDataUrl, PhotoEditorModal.CropCoordinates coordinates) saveData)
     {
         await data.SavePhotoAsync(saveData.imageDataUrl, saveData.coordinates);
-        if (model is not null) await LoadPhotoDataAsync(model);
+        await LoadPhotoDataAsync();
         toastService.Notify(new(ToastType.Success, "Фото успешно сохранено"));
     }
 

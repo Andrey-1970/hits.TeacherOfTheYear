@@ -34,23 +34,29 @@ namespace ServerApp.Data.Services
             userManager = _userManager;
         }
 
-        public async Task<Components.Pages.ApplicationForm.PhotoData?> GetPhotoAsync(Guid appId)
+        public async Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync()
         {
-            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var user = await GetUserAsync();
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
             if (app != null)
             {
                 var photo = app.Photo;
-                return new Components.Pages.ApplicationForm.PhotoData()
+                if (photo != null)
                 {
-                    ImageUrl = photo.Base64Data,
-                    Coordinates = new PhotoEditorModal.CropCoordinates()
+                    return new Components.Pages.ApplicationForm.PhotoData()
                     {
-                        X = photo.X,
-                        Y = photo.Y,
-                        Height = photo.Height,
-                        Width = photo.Width
-                    }
-                };
+                        ImageUrl = photo.Base64Data,
+                        Coordinates = new PhotoEditorModal.CropCoordinates()
+                        {
+                            X = photo.X,
+                            Y = photo.Y,
+                            Height = photo.Height,
+                            Width = photo.Width
+                        }
+                    };
+                }
+
+                return null;
             }
 
             return null;
@@ -91,14 +97,34 @@ namespace ServerApp.Data.Services
             else
             {
                 var photo = app.Photo;
-                photo.Base64Data = base64Data;
-                photo.X = cropCoordinates.X;
-                photo.Y = cropCoordinates.Y;
-                photo.Width = cropCoordinates.Width;
-                photo.Height = cropCoordinates.Height;
+                if (photo != null)
+                {
+                    photo.Base64Data = base64Data;
+                    photo.X = cropCoordinates.X;
+                    photo.Y = cropCoordinates.Y;
+                    photo.Width = cropCoordinates.Width;
+                    photo.Height = cropCoordinates.Height;
+                    
+                    context.Update(photo);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    photo = new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationFormId = app.Id,
+                        Base64Data = base64Data,
+                        X = cropCoordinates.X,
+                        Y = cropCoordinates.Y,
+                        Width = cropCoordinates.Width,
+                        Height = cropCoordinates.Height
+                    };
+
+                    context.Add(photo);
+                    await context.SaveChangesAsync();
+                }
                 
-                context.Update(photo);
-                await context.SaveChangesAsync();
             }
         }
 

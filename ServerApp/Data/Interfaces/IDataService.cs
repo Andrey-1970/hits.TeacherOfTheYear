@@ -9,7 +9,7 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
-        Task<Components.Pages.ApplicationForm.PhotoData?> GetPhotoAsync(Guid appId);
+        Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync();
         Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates);
         Task DeleteUserInfoAsync(Guid userId);
         Task SetDatetimeNowForApplicationAync(Guid? appId);
