@@ -9,6 +9,8 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task<string> GetCropPhotoCurrentUserAsync();
+        Task<string> GetCropPhotoAsync(Guid appId);
         Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync();
         Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates);
         Task DeleteUserInfoAsync(Guid userId);
