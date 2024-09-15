@@ -8,6 +8,8 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task<Guid?> GetCategoryIdFromEmail(string email);
+        Task SaveExpertCategoryId(string email, Guid categoryId);
         Task DeleteUserInfoAsync(Guid userId);
         Task SetDatetimeNowForApplicationAync(Guid? appId);
         Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId);

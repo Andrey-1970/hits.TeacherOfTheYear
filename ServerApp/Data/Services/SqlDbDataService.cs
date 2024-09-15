@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using ServerApp.Components;
+using ServerApp.Components.Account.Pages.Manage;
 using ServerApp.Components.Admin;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
@@ -26,6 +27,20 @@ namespace ServerApp.Data.Services
         private readonly ApplicationDbContext context = _context;
         private readonly AuthenticationStateProvider userStateProvider = _userStateProvider;
         private readonly UserManager<ApplicationUser> userManager = _userManager;
+
+        public async Task<Guid?> GetCategoryIdFromEmail(string email)
+        {
+            var user = await context.UserInfos.FirstOrDefaultAsync(e => e.Username == email);
+            return user!.ExpertCategoryId;
+        }
+
+        public async Task SaveExpertCategoryId(string email, Guid categoryId)
+        {
+            var user = await context.UserInfos.FirstOrDefaultAsync(e => e.Username == email);
+            user!.ExpertCategoryId = categoryId;
+            context.Update(user);
+            await context.SaveChangesAsync();
+        }
 
         public async Task DeleteUserInfoAsync(Guid userId)
         {
@@ -730,9 +745,10 @@ namespace ServerApp.Data.Services
         {
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
             var userInfos = await context.UserInfos
-                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 ||
+                .Where(e => e.Applications.Any(a => (a.ApplicationStatus.Number == 4 ||
                                                     (a.ApplicationStatus.Number == 6 &&
-                                                     a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))))
+                                                     a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))) &&
+                                                     a.CategoryId == user.ExpertCategoryId))
                 .ToListAsync();
 
             var userInfoModels = userInfos

@@ -12,6 +12,10 @@ public class UserInfo
     [MaxLength(255)]
     public string? Username { get; set; }
 
+    public virtual Guid? ExpertCategoryId { get; set; }
+
+    public virtual Category? ExpertCategory { get; set; }
+
     public virtual List<ApplicationForm> Applications { get; set; } = new();
     
     [InverseProperty("Reviewer")]
