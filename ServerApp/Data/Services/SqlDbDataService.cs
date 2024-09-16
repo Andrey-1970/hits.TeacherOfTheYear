@@ -958,11 +958,15 @@ namespace ServerApp.Data.Services
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            
+            var appUser = await userManager.FindByEmailAsync(user.Username);
+            var userRoles = await userManager.GetRolesAsync(appUser);
+            
             var userInfos = await context.UserInfos
                 .Where(e => e.Applications.Any(a => (a.ApplicationStatus.Number == 4 ||
                                                     (a.ApplicationStatus.Number == 6 &&
                                                      a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))) &&
-                                                     a.CategoryId == user.ExpertCategoryId))
+                                                    (userRoles.Contains("Admin") || a.CategoryId == user.ExpertCategoryId)))
                 .ToListAsync();
 
             var userInfoModels = userInfos
