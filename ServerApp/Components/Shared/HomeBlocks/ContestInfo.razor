@@ -22,7 +22,7 @@
 
             <div class="block-subtitle-text text-center pb-2">
                 Первый этап
-                <Tooltip Title="с 9:00 МСК 16.09.2024 до 24:00 МСК 15.10.2024 (включительно)"
+                <Tooltip Title="с 9:00 МСК 20.09.2024 до 24:00 МСК 19.10.2024 (включительно)"
                          Placement="TooltipPlacement.Bottom">
                     <Icon Name="IconName.InfoCircle" />
                 </Tooltip>
@@ -42,7 +42,7 @@
 
             <div class="block-subtitle-text text-center pb-2">
                 Второй этап
-                <Tooltip Title="с 16.10.2024 по 19.11.2024"
+                <Tooltip Title="с 21.10.2024 по 24.11.2024"
                          Placement="TooltipPlacement.Bottom">
                     <Icon Name="IconName.InfoCircle" />
                 </Tooltip>
@@ -73,39 +73,71 @@
     </div>
 
     <div class="d-flex flex-column">
-        <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
-        <div class="countdown mb-3">
-            <div class="countdown-item">
-                <span id="days">@days</span>
-                <span class="label">Дней</span>
+        @if (targetDate == new DateTime(2024, 10, 20))
+        {
+            <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
+            <div class="countdown mb-3">
+                <div class="countdown-item">
+                    <span id="days">@days</span>
+                    <span class="label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">@hours</span>
+                    <span class="label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">@minutes</span>
+                    <span class="label">Минут</span>
+                </div>
             </div>
-            <div class="countdown-item">
-                <span id="hours">@hours</span>
-                <span class="label">Часов</span>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <Button Type="ButtonType.Link"
+                                Color="ButtonColor.Primary"
+                                @onclick="ShowConfirmationAsync">
+                            Подать заявку на участие
+                        </Button>
+                    </NotAuthorized>
+                    <Authorized>
+                        <Button Type="ButtonType.Link"
+                                Color="ButtonColor.Primary"
+                                To="/application-form#">
+                            Подать заявку на участие
+                        </Button>
+                    </Authorized>
+                </AuthorizeView>
             </div>
-            <div class="countdown-item">
-                <span id="minutes">@minutes</span>
-                <span class="label">Минут</span>
+        }
+        else if (targetDate == new DateTime(2024, 12, 1))
+        {
+            <div class="block-title-text text-center mb-3">До конца голосования осталось:</div>
+            <div class="countdown mb-3">
+                <div class="countdown-item">
+                    <span id="days">@days</span>
+                    <span class="label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">@hours</span>
+                    <span class="label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">@minutes</span>
+                    <span class="label">Минут</span>
+                </div>
             </div>
-        </div>
-        <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
-            <AuthorizeView>
-                <NotAuthorized>
-                    <Button Type="ButtonType.Link"
-                            Color="ButtonColor.Primary"
-                            @onclick="ShowConfirmationAsync">
-                        Подать заявку на участие
-                    </Button>
-                </NotAuthorized>
-                <Authorized>
-                    <Button Type="ButtonType.Link"
-                            Color="ButtonColor.Primary"
-                            To="/application-form#">
-                        Подать заявку на участие
-                    </Button>
-                </Authorized>
-            </AuthorizeView>
-        </div>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/voting#">
+                    К голосованию
+                </Button>
+            </div> 
+        }
+        else
+        {
+            <div class="block-title-text text-center mb-3">Ожидайте оглашения итогов конкурса</div>
+        }
     </div>
 
     <ConfirmDialog @ref="dialog" />
@@ -155,7 +187,7 @@
 </div>
 
 @code {
-    private DateTime targetDate = new DateTime(2024, 10, 16); // Целевая дата
+    private DateTime targetDate = new DateTime(2024, 10, 20); // Отсчет до конца приема заявок
 
     private string? days;
     private string? hours;
@@ -212,9 +244,18 @@
             // Обновление UI
             InvokeAsync(StateHasChanged);
         }
-        else
+        else if (targetDate == new DateTime(2024, 10, 20))
         {
             // Остановка таймера, если отсчет завершен
+            timer!.Stop();
+
+            targetDate = new DateTime(2024, 12, 1); // Отсчет до конца голосования
+
+            // Перезапуск таймера
+            timer.Start();
+        }
+        else
+        {
             timer!.Stop();
         }
     }

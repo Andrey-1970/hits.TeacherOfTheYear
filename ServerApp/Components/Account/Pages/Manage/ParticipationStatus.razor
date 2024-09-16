@@ -11,15 +11,23 @@
 @if (status == "Нет заявки")
 {
     <div class="w-100">
-        <div class="alert alert-primary" role="alert">
-            Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
-            и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
-        </div>
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Success"
-                To="/application-form#">
-            Подать заявку
-        </Button>
+        
+        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+        {
+            <div class="alert alert-primary" role="alert">
+                Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
+                и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
+            </div>
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Success"
+                    To="/application-form#">
+                Подать заявку
+            </Button>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
+        }
     </div>
 }
 else if (status == "В ожидании заполнения")
@@ -27,19 +35,27 @@ else if (status == "В ожидании заполнения")
     <form @formname="AwaitingCompletion" class="w-100" method="post">
         <AntiforgeryToken />
 
-        <div class="alert alert-secondary" role="alert">
-            Заявка на участие создана и <strong>ожидает заполнения</strong>.
-        </div>
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Primary"
-                To="/application-form#">
-            Продолжить заполнение
-        </Button>
-        <Button Type="ButtonType.Link"
-                Color="ButtonColor.Danger"
-                To="/account/manage/delete-application#">
-            Удалить заявку
-        </Button>
+        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+        {
+            <div class="alert alert-secondary" role="alert">
+                Заявка на участие создана и <strong>ожидает заполнения</strong>.
+            </div>
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Primary"
+                    To="/application-form#">
+                Продолжить заполнение
+            </Button>
+            <Button Type="ButtonType.Link"
+                    Color="ButtonColor.Danger"
+                    To="/account/manage/delete-application#">
+                Удалить заявку
+            </Button>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
+        }
+        
     </form>
 }
 else if (status == "В ожидании рассмотрения")

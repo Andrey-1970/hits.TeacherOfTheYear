@@ -15,9 +15,16 @@
                 </div>
             </div>
             <div class="block-subtitle-text">@category?.Name</div>
-            <div class="form-text">
-                Выберите кандидата для голосования
-            </div>
+            @if (DateTime.Now <= new DateTime(2024, 12, 1))
+            {
+                <div class="form-text">
+                    Выберите кандидата для голосования
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning w-100 mb-1" role="alert">Голосование завершено. Вам доступен просмотр кандидатов, но отдать или изменить голос Вы не можете.</div>
+            }
             <input type="text" class="form-control" placeholder="Поиск по ФИО, учебному заведению или институту" @bind="searchQuery" @oninput="OnSearchInput" />
         </div>
 

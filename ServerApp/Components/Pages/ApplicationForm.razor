@@ -13,211 +13,227 @@
 {
     @if (model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения" || model.ApplicationStatus == "Отклонена")
     {
-        <div class="block">
-            <div class="d-flex flex-row justify-content-between block-title">
-                <div class="block-title-text">
-                    Заполните заявку для участия
+        if ((model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения") && DateTime.Now > new DateTime(2024, 10, 20))
+        {
+            <div>
+                <div class="d-flex justify-content-center mt-5 mb-3 block-subtitle-text">Прием заявок завершен</div>
+                <div class="d-flex justify-content-center">
+                    <Button Type="ButtonType.Link"
+                            Color="ButtonColor.Primary"
+                            To="/account/manage/participation-status#">
+                        В личный кабинет
+                    </Button>
                 </div>
-
-                <Button Type="ButtonType.Button"
-                        Color="ButtonColor.Success"
-                        Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null || string.IsNullOrWhiteSpace(photoData?.ImageUrl)"
-                        @onclick="async () => await ShowConfirmationAsync()">
-                    Отправить заявку
-                </Button>
             </div>
-            <div class="block-content">
-                @if (model.ApplicationStatus == "Отклонена" && model.Comments.Any())
-                {
-                    <div class="alert alert-danger w-100 m-0" role="alert">
-                        <p>
-                            Комментарии от проверяющего эксперта:
-                        </p>
-                        <ul class="m-0">
-                            @foreach (var comment in model.Comments)
-                            {
-                                <li>@comment</li>
-                            }
-                        </ul>
+        }
+        else
+        {
+            <div class="block">
+                <div class="d-flex flex-row justify-content-between block-title">
+                    <div class="block-title-text">
+                        Заполните заявку для участия
                     </div>
-                }
-                <div class="row w-100">
-                    @if (photoData is not null)
-                    {
-                        <div class="col-auto">
-                            <div class="photo mb-2" @onclick="async () => await photoEditor.modal.ShowAsync()">
-                                @if (string.IsNullOrWhiteSpace(cropPhoto))
-                                {
-                                    <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%;">
-                                        <Icon Name="IconName.CameraFill" Color="IconColor.Secondary" Size="IconSize.x1"></Icon>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <img src="@cropPhoto" style="height: 100%; width: 100%;" />
-                                }
-                            </div>
 
-                            <PhotoEditorModal @ref="photoEditor"
-                                              OnSave="async (value) => await HandlePhotoSaveAsync(value)"
-                                              imageDataUrl="@photoData.ImageUrl"
-                                              SavedCoordinates="@photoData.Coordinates" />
+                    <Button Type="ButtonType.Button"
+                            Color="ButtonColor.Success"
+                            Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null || string.IsNullOrWhiteSpace(photoData?.ImageUrl)"
+                            @onclick="async () => await ShowConfirmationAsync()">
+                        Отправить заявку
+                    </Button>
+                </div>
+                <div class="block-content">
+                    @if (model.ApplicationStatus == "Отклонена" && model.Comments.Any())
+                    {
+                        <div class="alert alert-danger w-100 m-0" role="alert">
+                            <p>
+                                Комментарии от проверяющего эксперта:
+                            </p>
+                            <ul class="m-0">
+                                @foreach (var comment in model.Comments)
+                                {
+                                    <li>@comment</li>
+                                }
+                            </ul>
                         </div>
                     }
-                    <div class="d-flex flex-column block-content-text col gap-2">
-                        <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?"
-                                     ValueExpression="() => model.SelectedTrackId"
-                                     ValueChanged="async (trackId) => await OnTrackIdChangedAsync(trackId)">
-                            <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
-                            @foreach (var track in model.Tracks)
-                            {
-                                <option value="@track!.Id">@track.Name</option>
-                            }
-                        </InputSelect>
-                        <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?"
-                                     ValueExpression="() => model.SelectedCategoryId"
-                                     ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
-                            <option value="@Guid.Empty" disabled selected hidden>Выберите научное направление конкурса</option>
-                            @foreach (var category in model.Categories)
-                            {
-                                <option value="@category!.Id">@category.Name</option>
-                            }
-                        </InputSelect>
-                    </div>
-                </div>
-                @if (model.SelectedTrackId != Guid.Empty)
-                {
-                    <div class="block-content-text">
-                        <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId"
-                                           OnBlockChanged="async (blockId) => await OnBlockIdChangedAsync(blockId)">
-                        </TabsForEditBlocks>
-                    </div>
-                    @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
-                    {
-                        <EditForm EditContext="editContext" OnValidSubmit="async () => await Submit()" class="block-content-text">
-                            @if (model.Fields is not null && model.Fields.Any())
-                            {
-                                @foreach (var fld in model.Fields)
-                                {
-                                    @if (!string.IsNullOrEmpty(fld.EditGroup))
+                    <div class="row w-100">
+                        @if (photoData is not null)
+                        {
+                            <div class="col-auto">
+                                <div class="photo mb-2" @onclick="async () => await photoEditor.modal.ShowAsync()">
+                                    @if (string.IsNullOrWhiteSpace(cropPhoto))
                                     {
-                                        <div class="block-subtitle-text">@fld.EditGroup</div>
+                                        <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%;">
+                                            <Icon Name="IconName.CameraFill" Color="IconColor.Secondary" Size="IconSize.x1"></Icon>
+                                        </div>
                                     }
+                                    else
+                                    {
+                                        <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                                    }
+                                </div>
 
-                                    <div class="form-text">
-                                        @fld.Name <span class="text-danger">*</span>
-                                    </div>
-                                    <div class="form-input w-100 mb-2">
-                                        <ValidationMessage For="() => fld.Value" />
-                                        @if (fld.SelectValues is not null && fld.SelectValues.Any())
-                                        {
-                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
-                                                         @bind-Value="fld.Value">
-                                                <option value="@string.Empty" disabled selected hidden>@fld.Placeholder</option>
-                                                @foreach (var value in fld.SelectValues)
-                                                {
-                                                    <option value="@value">@value</option>
-                                                }
-                                            </InputSelect>
-                                        }
-                                        else if (fld.ValueType == "TextArea")
-                                        {
-                                            <InputTextArea class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
-                                        }
-                                        else
-                                        {
-                                            <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
-                                        }
-                                    </div>
-                                }
-                            }
-                            @if (model.Tables.Any())
-                            {
-                                @foreach (var table in model.Tables)
+                                <PhotoEditorModal @ref="photoEditor"
+                                                  OnSave="async (value) => await HandlePhotoSaveAsync(value)"
+                                                  imageDataUrl="@photoData.ImageUrl"
+                                                  SavedCoordinates="@photoData.Coordinates" />
+                            </div>
+                        }
+                        <div class="d-flex flex-column block-content-text col gap-2">
+                            <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?"
+                                         ValueExpression="() => model.SelectedTrackId"
+                                         ValueChanged="async (trackId) => await OnTrackIdChangedAsync(trackId)">
+                                <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
+                                @foreach (var track in model.Tracks)
                                 {
-                                    <div class="table-container mb-2">
-                                        <div class="block-subtitle-text">@table.Name</div>
-                                        @if (table.Rows.Any())
+                                    <option value="@track!.Id">@track.Name</option>
+                                }
+                            </InputSelect>
+                            <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?"
+                                         ValueExpression="() => model.SelectedCategoryId"
+                                         ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
+                                <option value="@Guid.Empty" disabled selected hidden>Выберите научное направление конкурса</option>
+                                @foreach (var category in model.Categories)
+                                {
+                                    <option value="@category!.Id">@category.Name</option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    @if (model.SelectedTrackId != Guid.Empty)
+                    {
+                        <div class="block-content-text">
+                            <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId"
+                                               OnBlockChanged="async (blockId) => await OnBlockIdChangedAsync(blockId)">
+                            </TabsForEditBlocks>
+                        </div>
+                        @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
+                        {
+                            <EditForm EditContext="editContext" OnValidSubmit="async () => await Submit()" class="block-content-text">
+                                @if (model.Fields is not null && model.Fields.Any())
+                                {
+                                    @foreach (var fld in model.Fields)
+                                    {
+                                        @if (!string.IsNullOrEmpty(fld.EditGroup))
                                         {
-                                            <table class="table-stand">
-                                                <thead>
-                                                    <tr>
-                                                        @foreach (var column in table.Columns)
-                                                        {
-                                                            <th>@column.Name</th>
-                                                        }
-                                                        @if (!table.IsPrefilled)
-                                                        {
-                                                            <th></th>
-                                                        }
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var row in table.Rows)
+                                            <div class="block-subtitle-text">@fld.EditGroup</div>
+                                        }
+
+                                        <div class="form-text">
+                                            @fld.Name <span class="text-danger">*</span>
+                                        </div>
+                                        <div class="form-input w-100 mb-2">
+                                            <ValidationMessage For="() => fld.Value" />
+                                            @if (fld.SelectValues is not null && fld.SelectValues.Any())
+                                            {
+                                                <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
+                                                             @bind-Value="fld.Value">
+                                                    <option value="@string.Empty" disabled selected hidden>@fld.Placeholder</option>
+                                                    @foreach (var value in fld.SelectValues)
                                                     {
+                                                        <option value="@value">@value</option>
+                                                    }
+                                                </InputSelect>
+                                            }
+                                            else if (fld.ValueType == "TextArea")
+                                            {
+                                                <InputTextArea class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                            }
+                                            else
+                                            {
+                                                <InputText class="form-control" @bind-Value="fld.Value" Placeholder="@fld.Placeholder" />
+                                            }
+                                        </div>
+                                    }
+                                }
+                                @if (model.Tables.Any())
+                                {
+                                    @foreach (var table in model.Tables)
+                                    {
+                                        <div class="table-container mb-2">
+                                            <div class="block-subtitle-text">@table.Name</div>
+                                            @if (table.Rows.Any())
+                                            {
+                                                <table class="table-stand">
+                                                    <thead>
                                                         <tr>
-                                                            @foreach (var cell in row.Cells)
+                                                            @foreach (var column in table.Columns)
                                                             {
-                                                                <td>
-                                                                    @if (cell is { Disable: true, Value: not null })
-                                                                    {
-                                                                        @cell.Value
-                                                                    }
-                                                                    else if (cell.SelectValues.Any())
-                                                                    {
-                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
-                                                                                     @bind-Value="cell.Value">
-                                                                            <option value="@string.Empty" disabled selected hidden></option>
-                                                                            @foreach (var value in cell.SelectValues)
-                                                                            {
-                                                                                <option value="@value">@value</option>
-                                                                            }
-                                                                        </InputSelect>
-                                                                    }
-                                                                    else if (cell.ValueType == "TextArea")
-                                                                    {
-                                                                        <InputTextArea class="form-control" style="font-size: 14px; min-width: 800px"
-                                                                                       @bind-Value="cell.Value" />
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value" />
-                                                                    }
-                                                                </td>
+                                                                <th>@column.Name</th>
                                                             }
                                                             @if (!table.IsPrefilled)
                                                             {
-                                                                <td style="width: 50px;">
-                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);"
-                                                                          @onclick="async () => await DeleteRowAsync(table, row)" type="button" />
-                                                                </td>
+                                                                <th></th>
                                                             }
                                                         </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        }
-                                        @if (!table.IsPrefilled)
-                                        {
-                                            <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary"
-                                                  Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRowAsync(table)"
-                                                  type="button" />
-                                        }
-                                    </div>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var row in table.Rows)
+                                                        {
+                                                            <tr>
+                                                                @foreach (var cell in row.Cells)
+                                                                {
+                                                                    <td>
+                                                                        @if (cell is { Disable: true, Value: not null })
+                                                                        {
+                                                                            @cell.Value
+                                                                        }
+                                                                        else if (cell.SelectValues.Any())
+                                                                        {
+                                                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
+                                                                                         @bind-Value="cell.Value">
+                                                                                <option value="@string.Empty" disabled selected hidden></option>
+                                                                                @foreach (var value in cell.SelectValues)
+                                                                                {
+                                                                                    <option value="@value">@value</option>
+                                                                                }
+                                                                            </InputSelect>
+                                                                        }
+                                                                        else if (cell.ValueType == "TextArea")
+                                                                        {
+                                                                            <InputTextArea class="form-control" style="font-size: 14px; min-width: 800px"
+                                                                                           @bind-Value="cell.Value" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <InputText Disabled="@cell.Disable" class="form-control" @bind-Value="cell.Value" />
+                                                                        }
+                                                                    </td>
+                                                                }
+                                                                @if (!table.IsPrefilled)
+                                                                {
+                                                                    <td style="width: 50px;">
+                                                                        <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);"
+                                                                              @onclick="async () => await DeleteRowAsync(table, row)" type="button" />
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            }
+                                            @if (!table.IsPrefilled)
+                                            {
+                                                <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary"
+                                                      Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRowAsync(table)"
+                                                      type="button" />
+                                            }
+                                        </div>
+                                    }
                                 }
-                            }
-                            <ValidationSummary />
-                            <div class="d-flex justify-content-center">
-                                <Button Type="ButtonType.Submit"
-                                        Color="ButtonColor.Primary">
-                                    Сохранить
-                                </Button>
-                            </div>
-                        </EditForm>
+                                <ValidationSummary />
+                                <div class="d-flex justify-content-center">
+                                    <Button Type="ButtonType.Submit"
+                                            Color="ButtonColor.Primary">
+                                        Сохранить
+                                    </Button>
+                                </div>
+                            </EditForm>
+                        }
                     }
-                }
+                </div>
             </div>
-        </div>
+        }
     }
     else
     {

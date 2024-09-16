@@ -76,23 +76,38 @@
                 <div class="photo">
                     <img src="@cropPhoto" style="height: 100%; width: 100%;" />
                 </div>
-                <AuthorizeView>
-                    <NotAuthorized>
-                        <Button Color="ButtonColor.Primary"
+                @if (DateTime.Now <= new DateTime(2024, 12, 1))
+                {
+                    <AuthorizeView>
+                        <NotAuthorized>
+                            <Button Color="ButtonColor.Primary"
+                                    Class="w-100"
+                                    @onclick="ShowConfirmationAsync">
+                                Проголосовать за участника
+                            </Button>
+                        </NotAuthorized>
+                        <Authorized>
+                            <Button Color="ButtonColor.Primary"
+                                    Class="w-100"
+                                    Disabled="applicationFormVoteModel.IsVoteOfThisApplication"
+                                    @onclick="SetVote">
+                                Проголосовать за участника
+                            </Button>
+                        </Authorized>
+                    </AuthorizeView>
+                }
+                else
+                {
+                    <Tooltip Title="Голосование доступно с 21.10.2024 по 30.11.2024"
+                             Placement="TooltipPlacement.Bottom">
+                        <Button Outline="true"
+                                Color="ButtonColor.Danger"
                                 Class="w-100"
-                                @onclick="ShowConfirmationAsync">
-                            Проголосовать за участника
+                                Disabled="true">
+                            Голосование завершено
                         </Button>
-                    </NotAuthorized>
-                    <Authorized>
-                        <Button Color="ButtonColor.Primary"
-                                Class="w-100"
-                                Disabled="applicationFormVoteModel.IsVoteOfThisApplication"
-                                @onclick="SetVote">
-                            Проголосовать за участника
-                        </Button>
-                    </Authorized>
-                </AuthorizeView>
+                    </Tooltip> 
+                }
             </div>
         </div>
     </div>
