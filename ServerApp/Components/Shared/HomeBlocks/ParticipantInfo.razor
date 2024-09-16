@@ -13,7 +13,7 @@
             <p>Каждый участник конкурса может подать <strong>не более одной заявки</strong> в одно из направлений деятельности. Не принимаются заявки от авторских коллективов.</p>
 
             <p>
-                Срок и время приема заявок: с 9:00 МСК 16.09.2024 до 24:00 МСК 15.10.2024 (включительно).
+                Срок и время приема заявок: с 9:00 МСК 20.09.2024 до 24:00 МСК 19.10.2024 (включительно).
             </p>
 
             @* <p>
@@ -22,22 +22,34 @@
             </p> *@
         </div>
     </div>
-    <AuthorizeView>
-        <NotAuthorized>
-            <Button Type="ButtonType.Link"
-                    Color="ButtonColor.Primary"
-                    @onclick="ShowConfirmationAsync">
-                Подать заявку на участие
-            </Button>
-        </NotAuthorized>
-        <Authorized>
-            <Button Type="ButtonType.Link"
-                    Color="ButtonColor.Primary"
-                    To="/application-form#">
-                Подать заявку на участие
-            </Button>
-        </Authorized>
-    </AuthorizeView>
+    @if (DateTime.Now <= new DateTime(2024, 10, 20))
+    {
+        <AuthorizeView>
+            <NotAuthorized>
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        @onclick="ShowConfirmationAsync">
+                    Подать заявку на участие
+                </Button>
+            </NotAuthorized>
+            <Authorized>
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/application-form#">
+                    Подать заявку на участие
+                </Button>
+            </Authorized>
+        </AuthorizeView>
+    }
+    else
+    {
+        <Button Outline="true"
+                Color="ButtonColor.Danger"
+                Disabled="true">
+            Прием заявок завершен
+        </Button>    
+    }
+    
     <div class="block-content">
         <div class="block-content-photo" style="background-image: url('img/Participant.jpg');"></div>
     </div>
