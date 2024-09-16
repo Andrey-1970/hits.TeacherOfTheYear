@@ -18,7 +18,19 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @trackName</div>
+                <div class="row w-100">
+                    <div class="col-auto">
+                        <div style="height: 320px; width: 240px; background-color: darkgrey; border-radius: 10px; border: 2px solid darkslategrey; overflow: hidden">
+                            @if (cropPhoto is not null)
+                            {
+                                <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column block-content-text col gap-2">
+                        <div class="form-text">Выбранный трек: @trackName</div>
+                    </div>
+                </div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
@@ -110,10 +122,15 @@
                                     {
                                         <tr>
                                             <td>@block.Name</td>
-                                            <td>@if ((model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id) ?? new BlockReviewModel()).Status)
-                                                { <div>Проверен</div> }
-                                                else 
-                                                { <div>Не проверен</div> } 
+                                            <td>
+                                                @if ((model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id) ?? new BlockReviewModel()).Status)
+                                                {
+                                                    <div>Проверен</div>
+                                                }
+                                                else
+                                                {
+                                                    <div>Не проверен</div>
+                                                }
                                             </td>
                                             <td>@model.ReviewedBlocks.FirstOrDefault(b => b.MarkBlockId == block.Id)?.Commentary</td>
                                         </tr>
@@ -123,7 +140,7 @@
                         </table>
                     </div>
                     <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center">
-                        <Button Type="ButtonType.Button" 
+                        <Button Type="ButtonType.Button"
                                 Color="ButtonColor.Danger"
                                 @onclick="async () => await RejectApplication()"
                                 Disabled="model.ReviewedBlocks.Any(e => e.Status == false) || model.ReviewedBlocks.All(e => string.IsNullOrWhiteSpace(e.Commentary))">
@@ -153,9 +170,11 @@
     public string? Id { get; set; }
 
     ReviewMarkModel? model;
+    MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
+
     string? Comment;
-    MarkBlockModel ResultBlock = new MarkBlockModel() {Id = Guid.NewGuid(), Name = "Итог"};
-    string trackName;
+    string? trackName;
+    string? cropPhoto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,26 +182,32 @@
         {
             return;
         }
+
         model = await data.GetUserMarkModelAsync(userId);
-        if (model?.SelectedTrackId != null)
+
+        if (model is not null && model.SelectedTrackId != null)
         {
+            cropPhoto = await data.GetCropPhotoAsync(model.ApplicationId);
+
+            var track = await data.GetTrackAsync(model.SelectedTrackId);
+            trackName = track.Name;
+
             model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+
             var newMarkBlocks = model.MarkBlocks.ToList();
             newMarkBlocks.Add(ResultBlock);
             model.MarkBlocks = newMarkBlocks.ToArray();
+
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
-
-        var track = await data.GetTrackAsync(model.SelectedTrackId);
-        trackName = track.Name;
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
     {
         if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
-        
+
         model.SelectedMarkBlockId = blockId.Value;
-        
+
         if (blockId == ResultBlock.Id) return;
         model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
         model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);

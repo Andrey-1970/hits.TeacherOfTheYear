@@ -18,7 +18,19 @@
         <div class="block-content">
             @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
-                <div class="form-text">Выбранный трек: @trackName</div>
+                <div class="row w-100">
+                    <div class="col-auto">
+                        <div style="height: 320px; width: 240px; background-color: darkgrey; border-radius: 10px; border: 2px solid darkslategrey; overflow: hidden">
+                            @if (cropPhoto is not null)
+                            {
+                                <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column block-content-text col gap-2">
+                        <div class="form-text">Выбранный трек: @trackName</div>
+                    </div>
+                </div>
                 <div class="block-content-text">
                     <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
                 </div>
@@ -175,13 +187,16 @@
 </div>
 
 @code {
-    [Parameter] public string? Id { get; set; }
+    [Parameter]
+    public string? Id { get; set; }
 
     AssessmentModel? model;
     EditContext? editContext;
     ValidationMessageStore? messageStore;
     MarkBlockModel ResultBlock = new MarkBlockModel() { Id = Guid.NewGuid(), Name = "Итог" };
+
     string? trackName;
+    string? cropPhoto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -191,8 +206,14 @@
         }
 
         model = await data.GetUserAssessmentModelAsync(userId);
-        if (model?.SelectedTrackId != null)
+
+        if (model is not null && model.SelectedTrackId != null)
         {
+            cropPhoto = await data.GetCropPhotoAsync(model.ApplicationId);
+
+            var track = await data.GetTrackAsync(model.SelectedTrackId);
+            trackName = track.Name;
+
             model.MarkBlocks = await data.GetAssessmentMarkBlockModelsAsync(model.SelectedTrackId, model.ApplicationId);
 
             var newMarkBlocks = model.MarkBlocks.ToList();
@@ -207,9 +228,6 @@
 
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
         }
-
-        var track = await data.GetTrackAsync(model.SelectedTrackId);
-        trackName = track.Name;
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
