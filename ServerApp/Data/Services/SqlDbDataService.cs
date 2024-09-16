@@ -1,20 +1,22 @@
-﻿using System.Data;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Abstractions;
-using Microsoft.IdentityModel.Tokens;
-using ServerApp.Components;
-using ServerApp.Components.Admin;
+using ServerApp.Components.Pages;
+using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using YourProject.Data.Services;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using Rectangle = SixLabors.ImageSharp.Rectangle;
+
 
 namespace ServerApp.Data.Services
 {
@@ -26,6 +28,234 @@ namespace ServerApp.Data.Services
         private readonly ApplicationDbContext context = _context;
         private readonly AuthenticationStateProvider userStateProvider = _userStateProvider;
         private readonly UserManager<ApplicationUser> userManager = _userManager;
+
+        public async Task<string?> GetCropPhotoCurrentUserAsync()
+        {
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
+            if (app != null && app.CropPhoto != null)
+            {
+                return app.CropPhoto.Base64Data;
+            }
+
+            return null;
+        }
+
+        public async Task<string> GetCropPhotoAsync(Guid appId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            return app!.CropPhoto!.Base64Data;
+        }
+        
+        private Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
+        {
+            var x = coordinates.X;
+            var y = coordinates.Y;
+            var width = coordinates.Width;
+            var height = coordinates.Height;
+
+            // Удаление префикса, если он присутствует
+            const string base64Prefix = "data:image/jpeg;base64,";
+            if (base64.StartsWith(base64Prefix))
+            {
+                base64 = base64.Substring(base64Prefix.Length);
+            }
+
+            // Проверка валидности base64 строки
+            if (!IsValidBase64String(base64))
+            {
+                throw new ArgumentException("Предоставленная строка не является валидной base64 строкой.");
+            }
+
+            // Преобразование base64 в изображение
+            byte[] imageBytes = Convert.FromBase64String(base64);
+            using (var ms = new MemoryStream(imageBytes))
+            using (var image = Image.Load(ms))
+            {
+                // Вычисление коэффициента масштабирования
+                float scaleFactor = 400f / image.Height;
+
+                // Пересчет координат и размеров для оригинального изображения
+                int originalX = (int)(x / scaleFactor);
+                int originalY = (int)(y / scaleFactor);
+                int originalWidth = (int)(width / scaleFactor);
+                int originalHeight = (int)(height / scaleFactor);
+
+                // Проверка и корректировка координат и размеров
+                originalX = Math.Max(0, originalX);
+                originalY = Math.Max(0, originalY);
+                originalWidth = Math.Min(image.Width - originalX, originalWidth);
+                originalHeight = Math.Min(image.Height - originalY, originalHeight);
+
+                // Обрезка изображения
+                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
+
+                // Преобразование обрезанного изображения обратно в base64
+                using (var outStream = new MemoryStream())
+                {
+                    image.Save(outStream, new JpegEncoder());
+                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
+            
+                    // Возвращаем строку с префиксом
+                    return Task.FromResult($"{base64Prefix}{croppedBase64}");
+                }
+            }
+        }
+
+        private bool IsValidBase64String(string base64)
+        {
+            try
+            {
+                Convert.FromBase64String(base64);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        public async Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync()
+        {
+            var user = await GetUserAsync();
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e == user.Applications.FirstOrDefault());
+            if (app != null)
+            {
+                var photo = app.FullPhoto;
+                if (photo != null)
+                {
+                    return new Components.Pages.ApplicationForm.PhotoData()
+                    {
+                        ImageUrl = photo.Base64Data,
+                        Coordinates = new PhotoEditorModal.CropCoordinates()
+                        {
+                            X = (int)photo.X!,
+                            Y = (int)photo.Y!,
+                            Height = (int)photo.Height!,
+                            Width = (int)photo.Width!
+                        }
+                    };
+                }
+
+                return null;
+            }
+
+            return null;
+        }
+
+        public async Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates)
+        {
+            var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            var app = user.Applications.FirstOrDefault();
+            var photo = new Photo();
+            var cropPhoto = new Photo();
+            var base64Crop = await CropPhoto(base64Data, cropCoordinates);
+
+            if (app == null)
+            {
+                app = new ApplicationForm()
+                {
+                    Id = Guid.NewGuid(),
+                    UserInfoId = user.Id,
+                    ApplicationStatusId = context.ApplicationStatuses.First(e => e.Number == 1).Id
+                };
+
+                context.Add(app);
+
+                await context.SaveChangesAsync();
+
+                photo = new Photo()
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationFormId = app.Id,
+                    Base64Data = base64Data,
+                    X = cropCoordinates.X,
+                    Y = cropCoordinates.Y,
+                    Width = cropCoordinates.Width,
+                    Height = cropCoordinates.Height
+                };
+
+                context.Add(photo);
+
+                cropPhoto = new Photo()
+                {
+                    Id = Guid.NewGuid(),
+                    ApplicationFormId = app.Id,
+                    Base64Data = base64Crop
+                };
+
+                context.Add(cropPhoto);
+                
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                photo = app.FullPhoto;
+                cropPhoto = app.CropPhoto;
+                if (photo != null && cropPhoto != null)
+                {
+                    photo.Base64Data = base64Data;
+                    photo.X = cropCoordinates.X;
+                    photo.Y = cropCoordinates.Y;
+                    photo.Width = cropCoordinates.Width;
+                    photo.Height = cropCoordinates.Height;
+                    
+                    context.Update(photo);
+
+                    cropPhoto.Base64Data = base64Crop;
+
+                    context.Update(cropPhoto);
+                    
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    photo = new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationFormId = app.Id,
+                        Base64Data = base64Data,
+                        X = cropCoordinates.X,
+                        Y = cropCoordinates.Y,
+                        Width = cropCoordinates.Width,
+                        Height = cropCoordinates.Height
+                    };
+
+                    context.Add(photo);
+                    
+                    cropPhoto = new Photo()
+                    {
+                        Id = Guid.NewGuid(),
+                        ApplicationFormId = app.Id,
+                        Base64Data = base64Crop
+                    };
+
+                    context.Add(cropPhoto);
+                    
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            app.FullPhotoId = photo.Id;
+            app.CropPhotoId = cropPhoto.Id;
+
+            context.Update(app);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Guid?> GetCategoryIdFromEmail(string email)
+        {
+            var user = await context.UserInfos.FirstOrDefaultAsync(e => e.Username == email);
+            return user!.ExpertCategoryId;
+        }
+
+        public async Task SaveExpertCategoryId(string email, Guid categoryId)
+        {
+            var user = await context.UserInfos.FirstOrDefaultAsync(e => e.Username == email);
+            user!.ExpertCategoryId = categoryId;
+            context.Update(user);
+            await context.SaveChangesAsync();
+        }
 
         public async Task DeleteUserInfoAsync(Guid userId)
         {
@@ -729,10 +959,15 @@ namespace ServerApp.Data.Services
         public async Task<UserInfoModel[]> GetUserInfosModelsAssesmentAsync()
         {
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
+            
+            var appUser = await userManager.FindByEmailAsync(user.Username);
+            var userRoles = await userManager.GetRolesAsync(appUser);
+            
             var userInfos = await context.UserInfos
-                .Where(e => e.Applications.Any(a => a.ApplicationStatus.Number == 4 ||
+                .Where(e => e.Applications.Any(a => (a.ApplicationStatus.Number == 4 ||
                                                     (a.ApplicationStatus.Number == 6 &&
-                                                     a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))))
+                                                     a.ApplicationFormExperts.Any(e => e.UserInfoId == user.Id))) &&
+                                                    (userRoles.Contains("Admin") || a.CategoryId == user.ExpertCategoryId)))
                 .ToListAsync();
 
             var userInfoModels = userInfos
@@ -1201,7 +1436,7 @@ namespace ServerApp.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public bool VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId)
+        public bool VoteInThisCategoryAsync(Guid? trackId, Guid categoryId, Guid userId)
         {
             return context.Votes.Any(e =>
                 e.VoterId == userId && e.ApplicationForm.TrackId == trackId &&

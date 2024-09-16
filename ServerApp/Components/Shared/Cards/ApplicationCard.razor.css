@@ -14,7 +14,7 @@
   gap: 0px;
   align-items: center;
   flex-shrink: 0;
-  width: 320px;
+  width: 330px;
   position: relative;
   box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -23,7 +23,7 @@
   background: #7a78fc;
   align-self: stretch;
   flex-shrink: 0;
-  height: 313px;
+  height: 440px;
   position: relative;
   overflow: hidden;
 }

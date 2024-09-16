@@ -21,8 +21,8 @@
 
                 <Button Type="ButtonType.Button"
                         Color="ButtonColor.Success"
-                        Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null"
-                        @onclick="ShowConfirmationAsync">
+                        Disabled="model.EditBlocks.Any(e => e.Status == false) || model.SelectedTrackId == Guid.Empty || model.SelectedCategoryId == null || string.IsNullOrWhiteSpace(photoData?.ImageUrl)"
+                        @onclick="async () => await ShowConfirmationAsync()">
                     Отправить заявку
                 </Button>
             </div>
@@ -41,28 +41,60 @@
                         </ul>
                     </div>
                 }
-                <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?" ValueExpression="() => model.SelectedTrackId" ValueChanged="(trackId) => OnTrackIdChanged(trackId)">
-                    <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
-                    @foreach (var track in model.Tracks)
+                <div class="row w-100">
+                    @if (photoData is not null)
                     {
-                        <option value="@track!.Id">@track.Name</option>
+                        <div class="col-auto">
+                            <div class="photo mb-2" @onclick="async () => await photoEditor.modal.ShowAsync()">
+                                @if (string.IsNullOrWhiteSpace(cropPhoto))
+                                {
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%;">
+                                        <Icon Name="IconName.CameraFill" Color="IconColor.Secondary" Size="IconSize.x1"></Icon>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                                }
+                            </div>
+
+                            <PhotoEditorModal @ref="photoEditor"
+                                              OnSave="async (value) => await HandlePhotoSaveAsync(value)"
+                                              imageDataUrl="@photoData.ImageUrl"
+                                              SavedCoordinates="@photoData.Coordinates" />
+                        </div>
                     }
-                </InputSelect>
-                <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?" ValueExpression="() => model.SelectedCategoryId" ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
-                    <option value="@Guid.Empty" disabled selected hidden>Выберите научное направление конкурса</option>
-                    @foreach (var category in model.Categories)
-                    {
-                        <option value="@category!.Id">@category.Name</option>
-                    }
-                </InputSelect>
+                    <div class="d-flex flex-column block-content-text col gap-2">
+                        <InputSelect class="form-control" Value="model.SelectedTrackId" TValue="Guid?"
+                                     ValueExpression="() => model.SelectedTrackId"
+                                     ValueChanged="async (trackId) => await OnTrackIdChangedAsync(trackId)">
+                            <option value="@Guid.Empty" disabled selected hidden>Выберите направление деятельности</option>
+                            @foreach (var track in model.Tracks)
+                            {
+                                <option value="@track!.Id">@track.Name</option>
+                            }
+                        </InputSelect>
+                        <InputSelect class="form-control" Value="model.SelectedCategoryId" TValue="Guid?"
+                                     ValueExpression="() => model.SelectedCategoryId"
+                                     ValueChanged="(categoryId) => model.SelectedCategoryId = categoryId">
+                            <option value="@Guid.Empty" disabled selected hidden>Выберите научное направление конкурса</option>
+                            @foreach (var category in model.Categories)
+                            {
+                                <option value="@category!.Id">@category.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
                 @if (model.SelectedTrackId != Guid.Empty)
                 {
                     <div class="block-content-text">
-                        <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForEditBlocks>
+                        <TabsForEditBlocks EditBlocks="model.EditBlocks" SelectedEditBlockId="model.SelectedEditBlockId"
+                                           OnBlockChanged="async (blockId) => await OnBlockIdChangedAsync(blockId)">
+                        </TabsForEditBlocks>
                     </div>
                     @if ((model.Fields is not null && model.Fields.Any()) || (model.Tables is not null && model.Tables.Any()))
                     {
-                        <EditForm EditContext="editContext" OnValidSubmit="Submit" class="block-content-text">
+                        <EditForm EditContext="editContext" OnValidSubmit="async () => await Submit()" class="block-content-text">
                             @if (model.Fields is not null && model.Fields.Any())
                             {
                                 @foreach (var fld in model.Fields)
@@ -71,12 +103,16 @@
                                     {
                                         <div class="block-subtitle-text">@fld.EditGroup</div>
                                     }
-                                    <div class="form-text">@fld.Name <span class="text-danger">*</span></div>
+
+                                    <div class="form-text">
+                                        @fld.Name <span class="text-danger">*</span>
+                                    </div>
                                     <div class="form-input w-100 mb-2">
                                         <ValidationMessage For="() => fld.Value" />
                                         @if (fld.SelectValues is not null && fld.SelectValues.Any())
                                         {
-                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="fld.Value">
+                                            <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
+                                                         @bind-Value="fld.Value">
                                                 <option value="@string.Empty" disabled selected hidden>@fld.Placeholder</option>
                                                 @foreach (var value in fld.SelectValues)
                                                 {
@@ -129,7 +165,8 @@
                                                                     }
                                                                     else if (cell.SelectValues.Any())
                                                                     {
-                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;" @bind-Value="cell.Value">
+                                                                        <InputSelect class="form-control" style="white-space: normal; word-wrap: break-word;"
+                                                                                     @bind-Value="cell.Value">
                                                                             <option value="@string.Empty" disabled selected hidden></option>
                                                                             @foreach (var value in cell.SelectValues)
                                                                             {
@@ -139,7 +176,8 @@
                                                                     }
                                                                     else if (cell.ValueType == "TextArea")
                                                                     {
-                                                                        <InputTextArea class="form-control" style="font-size: 14px; min-width: 800px" @bind-Value="cell.Value" />
+                                                                        <InputTextArea class="form-control" style="font-size: 14px; min-width: 800px"
+                                                                                       @bind-Value="cell.Value" />
                                                                     }
                                                                     else
                                                                     {
@@ -150,7 +188,8 @@
                                                             @if (!table.IsPrefilled)
                                                             {
                                                                 <td style="width: 50px;">
-                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);" @onclick="async () => await DeleteRow(table, row)" type="button" />
+                                                                    <Icon Color="IconColor.Danger" Name="IconName.XSquareFill" Style="transform: scale(1.5);"
+                                                                          @onclick="async () => await DeleteRowAsync(table, row)" type="button" />
                                                                 </td>
                                                             }
                                                         </tr>
@@ -160,7 +199,9 @@
                                         }
                                         @if (!table.IsPrefilled)
                                         {
-                                            <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary" Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRow(table)" type="button" />
+                                            <Icon Class="d-flex justify-content-center w-100" Color="IconColor.Primary"
+                                                  Name="IconName.PlusCircleFill" Size="IconSize.x2" @onclick="async () => await AddRowAsync(table)"
+                                                  type="button" />
                                         }
                                     </div>
                                 }
@@ -206,7 +247,10 @@ else
     EditContext? editContext;
     ValidationMessageStore? messageStore;
 
-    private ConfirmDialog? dialog;
+    PhotoEditorModal photoEditor = default!;
+    ConfirmDialog? dialog;
+    PhotoData? photoData;
+    string? cropPhoto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -215,11 +259,25 @@ else
         {
             model.Tracks = await data.GetTrackModelsAsync();
             model.Categories = await data.GetCategoryModelsAsync();
-            await OnTrackIdChanged(model.SelectedTrackId);
+            await LoadPhotoDataAsync();
+            await OnTrackIdChangedAsync(model.SelectedTrackId);
         }
     }
 
-    async Task OnTrackIdChanged(Guid? trackId)
+    private async Task LoadPhotoDataAsync()
+    {
+        photoData = await data.GetCurrentUserPhotoAsync() ?? new PhotoData();
+        cropPhoto = await data.GetCropPhotoCurrentUserAsync();
+    }
+
+    private async Task HandlePhotoSaveAsync((string imageDataUrl, PhotoEditorModal.CropCoordinates coordinates) saveData)
+    {
+        await data.SavePhotoAsync(saveData.imageDataUrl, saveData.coordinates);
+        await LoadPhotoDataAsync();
+        toastService.Notify(new(ToastType.Success, "Фото успешно сохранено"));
+    }
+
+    async Task OnTrackIdChangedAsync(Guid? trackId)
     {
         if (model == null || trackId == Guid.Empty) return;
 
@@ -228,11 +286,11 @@ else
 
         if (model.EditBlocks.Any())
         {
-            await OnBlockIdChanged(model.EditBlocks.First().Id);
+            await OnBlockIdChangedAsync(model.EditBlocks.First().Id);
         }
     }
 
-    async Task OnBlockIdChanged(Guid? blockId)
+    async Task OnBlockIdChangedAsync(Guid? blockId)
     {
         if (model == null || blockId == Guid.Empty) return;
 
@@ -243,7 +301,7 @@ else
         InitializeEditContext(model);
     }
 
-    async Task AddRow(TableModel table)
+    async Task AddRowAsync(TableModel table)
     {
         if (model == null || table == null) return;
 
@@ -256,7 +314,7 @@ else
         }
     }
 
-    async Task DeleteRow(TableModel table, RowModel row)
+    async Task DeleteRowAsync(TableModel table, RowModel row)
     {
         if (model == null || table == null || row == null) return;
 
@@ -289,6 +347,7 @@ else
             messageStore?.Clear(() => cell.Value!);
             CheckCell(cell);
         }
+
         editContext?.NotifyValidationStateChanged();
     }
 
@@ -301,6 +360,7 @@ else
             {
                 CheckField(fld);
             }
+
             foreach (var table in model.Tables)
             {
                 foreach (var row in table.Rows)
@@ -312,6 +372,7 @@ else
                 }
             }
         }
+
         editContext?.NotifyValidationStateChanged();
     }
 
@@ -333,7 +394,7 @@ else
             messageStore?.Add(() => fld.Value, $"Поле '{fld.Name}' превышает допустимое количество символов.");
         }
     }
-    
+
     void CheckCell(CellModel cell)
     {
         if (cell.Disable)
@@ -375,7 +436,7 @@ else
         }
     }
 
-    private async Task ShowConfirmationAsync()
+    async Task ShowConfirmationAsync()
     {
         var options = new ConfirmDialogOptions
             {
@@ -391,11 +452,11 @@ else
 
         if (confirmation)
         {
-            await ChangeStatus();
+            await ChangeStatusAsync();
         }
     }
 
-    async Task ChangeStatus()
+    async Task ChangeStatusAsync()
     {
         var newModel = new EditModel()
             {
@@ -408,7 +469,14 @@ else
         await data.SetCurrentUserApplicationStatusWaitingForReviewedAsync();
 
         var userInfo = await data.GetCurrentUserInfoAsync();
-        await data.SetDatetimeNowForApplicationAync(userInfo.Applications.First().Id);
+        if (userInfo is not null) await data.SetDatetimeNowForApplicationAync(userInfo.Applications.First().Id);
         navigate.NavigateTo("/account/manage/participation-status");
     }
+
+    public class PhotoData
+    {
+        public string? ImageUrl { get; set; }
+        public PhotoEditorModal.CropCoordinates Coordinates { get; set; } = new PhotoEditorModal.CropCoordinates();
+    }
+
 }

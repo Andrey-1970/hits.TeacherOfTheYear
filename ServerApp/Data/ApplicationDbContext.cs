@@ -24,6 +24,7 @@ namespace ServerApp.Data
         public DbSet<Mark> Marks { get; set; }
         public DbSet<MarkBlock> MarkBlocks { get; set; }
         public DbSet<MarkVal> MarkVals { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public DbSet<Row> Rows { get; set; }
         public DbSet<SelectValue> SelectValues { get; set; }
         public DbSet<Table> Tables { get; set; }
@@ -88,6 +89,23 @@ namespace ServerApp.Data
                     .WithOne(afe => afe.ApplicationForm)
                     .HasForeignKey(afe => afe.ApplicationFormId)
                     .OnDelete(DeleteBehavior.Cascade);
+                
+                entity.HasMany(a => a.Photos)
+                    .WithOne(p => p.ApplicationForm)
+                    .HasForeignKey(p => p.ApplicationFormId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Отношение один к одному `ApplicationForm` -> `CropPhoto`
+                entity.HasOne(a => a.CropPhoto)
+                    .WithOne()
+                    .HasForeignKey<ApplicationForm>(a => a.CropPhotoId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Отношение один к одному `ApplicationForm` -> `FullPhoto`
+                entity.HasOne(a => a.FullPhoto)
+                    .WithOne()
+                    .HasForeignKey<ApplicationForm>(a => a.FullPhotoId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<CellVal>(entity =>

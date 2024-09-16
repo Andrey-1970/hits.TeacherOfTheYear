@@ -1,4 +1,6 @@
-﻿using ServerApp.Data.Entities;
+﻿using ServerApp.Components.Pages;
+using ServerApp.Components.Shared;
+using ServerApp.Data.Entities;
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
@@ -8,6 +10,12 @@ namespace ServerApp.Data.Interfaces
 {
     public interface IDataService
     {
+        Task<string?> GetCropPhotoCurrentUserAsync();
+        Task<string> GetCropPhotoAsync(Guid appId);
+        Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync();
+        Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates);
+        Task<Guid?> GetCategoryIdFromEmail(string email);
+        Task SaveExpertCategoryId(string email, Guid categoryId);
         Task DeleteUserInfoAsync(Guid userId);
         Task SetDatetimeNowForApplicationAync(Guid? appId);
         Task<List<string>?> GetCommentsForApplicationAsync(Guid? appId);
@@ -55,7 +63,7 @@ namespace ServerApp.Data.Interfaces
         Task<FieldModel[]> GetFieldModelsForVotePageAsync(Guid appId);
         Task<TableModel[]> GetTableModelsForVotePageAsync(Guid appId);
         Task CastVoteAsync(Guid appId);
-        bool VoteInThisCategoryAsync(Guid trackId, Guid categoryId, Guid userId);
+        bool VoteInThisCategoryAsync(Guid? trackId, Guid categoryId, Guid userId);
         Task<FeedBack[]> GetFeedbacksAsync();
         Task SaveFeedbackAsync(FeedBack feedback);
         Task<FeedBack> GetFeedbackAsync(Guid feedbackId);

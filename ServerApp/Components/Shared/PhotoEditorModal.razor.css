@@ -1,0 +1,33 @@
+#photo-editor-container {
+    position: relative;
+    overflow-x: auto;
+}
+
+#crop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+#crop-rectangle {
+    position: absolute;
+    border: 2px dashed white;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+#loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}

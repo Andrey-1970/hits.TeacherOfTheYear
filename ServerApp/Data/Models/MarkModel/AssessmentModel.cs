@@ -18,7 +18,7 @@ public class AssessmentModel
     }
     
     public Guid ApplicationId { get; set; }
-    public Guid SelectedTrackId { get; set; }
+    public Guid? SelectedTrackId { get; set; }
     public Guid SelectedMarkBlockId { get; set; }
     public MarkBlockModel[] MarkBlocks { get; set; } = [];
     public FieldMarkModel[] Fields { get; set; } = [];

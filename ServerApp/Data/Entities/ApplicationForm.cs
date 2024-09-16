@@ -6,11 +6,16 @@ public class ApplicationForm
     public Guid Id { get; set; }
     public Guid ApplicationStatusId { get; set; }
     public virtual ApplicationStatus ApplicationStatus { get; set; }
-    public Guid UserInfoId { get; set; }
     public DateTime? DateTime { get; set; }
+    public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
+    public virtual Guid? FullPhotoId { get; set; }
+    public virtual Photo? FullPhoto { get; set; }
+    public virtual Guid? CropPhotoId { get; set; }
+    public virtual Photo? CropPhoto { get; set; }
+    public Guid UserInfoId { get; set; }
     public virtual UserInfo UserInfo { get; set; }
-    public Guid TrackId { get; set; }
-    public virtual Track Track { get; set; }
+    public Guid? TrackId { get; set; }
+    public virtual Track? Track { get; set; }
     public virtual Guid? CategoryId { get; set; }
     public virtual Category? Category { get; set; }
     public Guid? ReviewerId { get; set; }
