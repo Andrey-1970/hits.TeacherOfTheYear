@@ -5,7 +5,7 @@
 
 <div class="card-form" type="button" @onclick="async () => await OnClickHandler()">
     <div class="d-flex professor-avatar justify-content-end align-items-start">
-        <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+        <img src="@Application!.CropPhoto" style="height: 100%; width: 100%;" />
         @if (Application is not null && Application.IsVoted)
         {
             <div class="d-flex position-absolute top-0 end-0">
@@ -32,13 +32,6 @@
 
     [Parameter, EditorRequired]
     public EventCallback OnClick { get; set; }
-
-    string? cropPhoto;
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Application is not null) cropPhoto = await data.GetCropPhotoAsync(Application.Id);
-    }
 
     async Task OnClickHandler()
     {
