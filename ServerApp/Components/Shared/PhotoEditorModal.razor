@@ -19,7 +19,7 @@
             <div id="crop-overlay"></div>
             <div id="crop-rectangle"></div>
         </div>
-        <InputFile OnChange="async (e) => await OnInputFileChangeAsync(e)" class="form-control mb-3" />
+        <InputFile OnChange="async (e) => await OnInputFileChangeAsync(e)" class="form-control mb-3" accept=".jpg,.jpeg" />
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="async () => await modal.HideAsync()">Закрыть</Button>
