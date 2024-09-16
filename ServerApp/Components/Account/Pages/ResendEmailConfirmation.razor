@@ -60,19 +60,34 @@
                 NavigationManager.ToAbsoluteUri("account/confirm-email").AbsoluteUri,
                 new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
             string htmlBody = $@"
-            <div class='text-left' style='font-family: Arial, sans-serif; padding: 20px;'>
-                Здравствуйте, уважаемый участник всеросийского конкурса Педагог Года!<br><br>
+            <div style=""font-family: Arial, Helvetica, sans-serif; padding: 20px; background-color: #D5EBF5; border-radius: 10px; text-align: center;  line-height: 1.5"">
+                <img style=""height: 60px"" src=""https://tofy.tyuiu.ru/img/white-min-logo.png"">
+                
+                <hr style=""border: 1px solid blue; margin: 20px 0;"">
+                
+                <h1>Активация учетной записи</h1>
+                
+                <p>Здравствуйте, уважаемый пользователь!</p>
 
-                Вы зарегистрировались в личном кабинете на сайте
-                <a href='https://google.com' style='color: blue; text-decoration: underline;'>клик</a>.
-                Ваша учетная запись создана, но нуждается в активации.<br><br>
+                <p>Вы зарегистрировались в личном кабинете на сайте
+                <a href=""https://tofy.tyuiu.ru' style='color: blue; text-decoration: underline;"">tofy.tyuiu.ru</a>.
+                Ваша учетная запись создана, но нуждается в активации. Чтобы активировать Вашу учетную запись, нажмите на кнопку ниже.</p>
+                
+                <a href=""{{emailConfirmationLink}}"" style=""display: flex; justify-content: center; text-decoration: none"">
+                    <button style=""height: 50px; width: 200px; background-color: white; border-color: blue; border-radius: 5px"">
+                        <div style=""font-size: 16px; color: blue;"">
+                            Подтвердить почту
+                        </div>
+                    </button>
+                </a>
 
-                Чтобы активировать Вашу учетную запись, нужно перейти по
-                <a href='{callbackUrl}' style='color: blue; text-decoration: underline;'>ссылке клик</a>.<br><br>
-
-                На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.<br><br>
-                <hr style='border: 1px solid #ccc; margin: 20px 0;'>
-                В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.<br
+                <p>На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.</p>
+                
+                <p>В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.</p>
+                
+                <hr style=""border: 1px solid blue; margin: 20px 0;"">
+                
+                <p>&#169 2024 Конкурс на соискание премий. Все права защищены</p>
             </div>";
 
 
