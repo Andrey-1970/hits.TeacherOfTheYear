@@ -2007,7 +2007,7 @@ namespace ServerApp.Data
             var mskTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
             var deadline1 = new Deadline()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Прием заявок",
                 Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 9, 20, 9, 0, 0), mskTimeZone),
@@ -2016,7 +2016,7 @@ namespace ServerApp.Data
 
             var deadline2 = new Deadline()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Голосование",
                 Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 10, 21), mskTimeZone),
@@ -2025,6 +2025,7 @@ namespace ServerApp.Data
 
             #endregion
 
+            builder.Entity<Deadline>().HasData([deadline1, deadline2]);
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<Category>().HasData([category1, category2]);

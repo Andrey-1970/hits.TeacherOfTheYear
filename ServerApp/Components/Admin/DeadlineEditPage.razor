@@ -23,11 +23,11 @@
             </div>
             <div class="form-text">Дата начала Deadline (МСК)</div>
             <div class="form-input w-100 mb-3">
-                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату начала Deadline" @bind-Value="deadline.Start" />
+                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату начала Deadline" @bind-Value="StartDate"/>
             </div>
             <div class="form-text">Дата окончания Deadline (МСК)</div>
             <div class="form-input w-100 mb-3">
-                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату окончания Deadline" @bind-Value="deadline.End" />
+                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату окончания Deadline" @bind-Value="EndDate"/>
             </div>
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
@@ -39,16 +39,27 @@
 </div>
 
 @code {
-    [Parameter]
-    public Guid Id { set; get; }
+    [Parameter] public string Id { get; set; }
     Deadline deadline = new();
+
+    public DateTime StartDate
+    {
+        get => deadline.Start.LocalDateTime;
+        set => deadline.Start = new DateTimeOffset(value, TimeZoneInfo.Local.GetUtcOffset(value));
+    }
+
+    public DateTime EndDate
+    {
+        get => deadline.End.LocalDateTime;
+        set => deadline.End = new DateTimeOffset(value, TimeZoneInfo.Local.GetUtcOffset(value));
+    }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        if (Id != Guid.Empty)
+        if (!string.IsNullOrEmpty(Id))
         {
-            deadline = await data.Deadline.GetByIdAsync(Id);
+            deadline = await data.Deadline.GetByIdAsync(Guid.Parse(Id));
         }
     }
 
@@ -59,4 +70,5 @@
         navigation.NavigateTo("/admin/deadlines");
         toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
+
 }
