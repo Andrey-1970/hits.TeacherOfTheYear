@@ -1,0 +1,62 @@
+﻿@page "/admin/deadlines/{Id:Guid}"
+@page "/admin/deadlines/new"
+
+<PageTitle>Настройка Deadline</PageTitle>
+
+@inject IDataService dataService
+
+<div class="block">
+    <div class="block-title">
+        <div class="block-title-text">
+            Редактирование Deadline
+        </div>
+    </div>
+    <div class="block-content">
+        <EditForm Class="w-100" Model="deadline" OnValidSubmit="OnValidSumbit">
+            <div class="form-text">Номер Deadline</div>
+            <div class="form-input w-100 mb-3">
+                <InputNumber class="form-control" placeholder="Введите номер Deadline" @bind-Value="deadline.Number" disabled="true" />
+            </div>
+            <div class="form-text">Название Deadline</div>
+            <div class="form-input w-100 mb-3">
+                <InputText class="form-control mb-3" placeholder="Введите название Deadline" @bind-Value="deadline.Name" />
+            </div>
+            <div class="form-text">Дата начала Deadline (МСК)</div>
+            <div class="form-input w-100 mb-3">
+                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату начала Deadline" @bind-Value="deadline.Start" />
+            </div>
+            <div class="form-text">Дата окончания Deadline (МСК)</div>
+            <div class="form-input w-100 mb-3">
+                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату окончания Deadline" @bind-Value="deadline.End" />
+            </div>
+
+            <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
+                <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
+                <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { set; get; }
+    Deadline deadline = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Id != Guid.Empty)
+        {
+            deadline = await data.Deadline.GetByIdAsync(Id);
+        }
+    }
+
+    async Task OnValidSumbit()
+    {
+        await data.Deadline.SaveAsync(deadline);
+
+        navigation.NavigateTo("/admin/deadlines");
+        toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
+    }
+}

@@ -33,6 +33,7 @@ namespace ServerApp.Data
         public DbSet<ValuesType> ValueTypes { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<FeedBack> Feedbacks { get; set; }
+        public DbSet<Deadline> Deadlines { get; set; }
 
         #endregion
 
@@ -1998,6 +1999,29 @@ namespace ServerApp.Data
             var role4 = new IdentityRole()
                 { Id = Guid.NewGuid().ToString(), Name = "Organiser", NormalizedName = "ORGANISER" };
             var role5 = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" };
+
+            #endregion
+
+            #region Deadlines
+
+            var mskTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+            var deadline1 = new Deadline()
+            {
+                Id = new Guid(),
+                Number = 1,
+                Name = "Прием заявок",
+                Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 9, 20, 9, 0, 0), mskTimeZone),
+                End = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 10, 20, 23, 59, 59), mskTimeZone)
+            };
+
+            var deadline2 = new Deadline()
+            {
+                Id = new Guid(),
+                Number = 2,
+                Name = "Голосование",
+                Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 10, 21), mskTimeZone),
+                End = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 12, 1), mskTimeZone)
+            };
 
             #endregion
 

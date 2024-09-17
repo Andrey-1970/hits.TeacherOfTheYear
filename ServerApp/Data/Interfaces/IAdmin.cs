@@ -14,5 +14,6 @@ namespace ServerApp.Data.Interfaces
         IAdminBase<Column> Column { get; }
         IAdminBase<ValuesType> ValuesType { get; }
         IAdminBase<SelectValue> SelectValue { get; }
+        IAdminBase<Deadline> Deadline { get; }
     }
 }

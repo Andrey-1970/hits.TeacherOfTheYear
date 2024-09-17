@@ -24,5 +24,7 @@ namespace ServerApp.Data.Services
         public IAdminBase<ValuesType> ValuesType => new AdminBaseService<ValuesType>(context);
 
         public IAdminBase<SelectValue> SelectValue => new AdminBaseService<SelectValue>(context);
+
+        public IAdminBase<Deadline> Deadline => new AdminBaseService<Deadline>(context);
     }
 }
