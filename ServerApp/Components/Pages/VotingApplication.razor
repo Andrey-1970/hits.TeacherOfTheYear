@@ -76,7 +76,7 @@
                 <div class="photo">
                     <img src="@cropPhoto" style="height: 100%; width: 100%;" />
                 </div>
-                @if (DateTime.Now <= new DateTime(2024, 12, 1))
+                @if (dateNow <= endDeadline)
                 {
                     <AuthorizeView>
                         <NotAuthorized>
@@ -98,7 +98,7 @@
                 }
                 else
                 {
-                    <Tooltip Title="Голосование доступно с 21.10.2024 по 30.11.2024"
+                    <Tooltip Title="@GetTooltipText(startDeadline, endDeadline)"
                              Placement="TooltipPlacement.Bottom">
                         <Button Outline="true"
                                 Color="ButtonColor.Danger"
@@ -129,6 +129,26 @@ else
     UserInfo? userInfo;
     ConfirmDialog? dialog;
     string? cropPhoto;
+
+    DateTimeOffset startDeadline = new();
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Голосование");
+        if (deadline != null)
+        {
+            startDeadline = deadline.Start;
+            endDeadline = deadline.End;
+        }
+    }
+
+    private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
+    {
+        return $"Голосование доступно с {TimeOnly.FromDateTime(start.DateTime)} МСК {DateOnly.FromDateTime(start.Date)} по {TimeOnly.FromDateTime(end.DateTime)} МСК {DateOnly.FromDateTime(end.Date)}";
+    }
 
     protected override async Task OnParametersSetAsync()
     {

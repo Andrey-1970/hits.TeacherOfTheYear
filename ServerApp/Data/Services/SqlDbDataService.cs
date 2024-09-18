@@ -1466,6 +1466,11 @@ namespace ServerApp.Data.Services
                        throw new UnauthorizedAccessException("Feedback not found");
         }
 
+        public async Task<Deadline> GetDeadlineAsync(string name)
+        {
+            return await context.Deadlines.FirstAsync(e => e.Name == name);
+        }
+
 
 
 

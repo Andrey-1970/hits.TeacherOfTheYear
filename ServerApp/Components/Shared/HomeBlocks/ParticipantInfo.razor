@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager navigation
+@inject IDataService data
 
 <div class="block">
     <div class="block-title">
@@ -13,7 +14,8 @@
             <p>Каждый участник конкурса может подать <strong>не более одной заявки</strong> в одно из направлений деятельности. Не принимаются заявки от авторских коллективов.</p>
 
             <p>
-                Срок и время приема заявок: с 9:00 МСК 20.09.2024 до 24:00 МСК 19.10.2024 (включительно).
+                Срок и время приема заявок: с @TimeOnly.FromDateTime(startDeadline.DateTime) МСК @DateOnly.FromDateTime(startDeadline.Date)
+                до @TimeOnly.FromDateTime(endDeadline.DateTime) МСК @DateOnly.FromDateTime(endDeadline.Date) (включительно).
             </p>
 
             @* <p>
@@ -22,7 +24,7 @@
             </p> *@
         </div>
     </div>
-    @if (DateTime.Now <= new DateTime(2024, 10, 20))
+    @if (dateNow <= endDeadline)
     {
         <AuthorizeView>
             <NotAuthorized>
@@ -59,6 +61,21 @@
 
 @code {
     private ConfirmDialog? dialog;
+
+    DateTimeOffset startDeadline = new();
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
+        if (deadline != null)
+        {
+            startDeadline = deadline.Start;
+            endDeadline = deadline.End;
+        }       
+    }
 
     private async Task ShowConfirmationAsync()
     {

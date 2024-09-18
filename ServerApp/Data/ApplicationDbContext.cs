@@ -2004,14 +2004,13 @@ namespace ServerApp.Data
 
             #region Deadlines
 
-            var mskTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
             var deadline1 = new Deadline()
             {
                 Id = Guid.NewGuid(),
                 Number = 1,
                 Name = "Прием заявок",
-                Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 9, 20, 9, 0, 0), mskTimeZone),
-                End = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 10, 20, 23, 59, 59), mskTimeZone)
+                Start = new DateTimeOffset(2024, 9, 20, 9, 0, 0, new TimeSpan(3, 0, 0)),
+                End = new DateTimeOffset(2024, 10, 20, 23, 59, 59, new TimeSpan(3, 0, 0))
             };
 
             var deadline2 = new Deadline()
@@ -2019,8 +2018,8 @@ namespace ServerApp.Data
                 Id = Guid.NewGuid(),
                 Number = 2,
                 Name = "Голосование",
-                Start = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 10, 21), mskTimeZone),
-                End = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2024, 12, 1), mskTimeZone)
+                Start = new DateTimeOffset(2024, 10, 21, 0, 0, 0, new TimeSpan(3, 0, 0)),
+                End = new DateTimeOffset(2024, 11, 30, 23, 59, 59, new TimeSpan(3, 0, 0))
             };
 
             #endregion

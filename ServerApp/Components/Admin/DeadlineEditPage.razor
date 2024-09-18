@@ -15,7 +15,7 @@
         <EditForm Class="w-100" Model="deadline" OnValidSubmit="OnValidSumbit">
             <div class="form-text">Номер Deadline</div>
             <div class="form-input w-100 mb-3">
-                <InputNumber class="form-control" placeholder="Введите номер Deadline" @bind-Value="deadline.Number" disabled="true" />
+                <InputNumber class="form-control" placeholder="Введите номер Deadline" @bind-Value="deadline.Number" disabled="@(deadline.Id != Guid.Empty)" />
             </div>
             <div class="form-text">Название Deadline</div>
             <div class="form-input w-100 mb-3">
@@ -23,11 +23,12 @@
             </div>
             <div class="form-text">Дата начала Deadline (МСК)</div>
             <div class="form-input w-100 mb-3">
-                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату начала Deadline" @bind-Value="StartDate"/>
+                <InputDate TValue="DateTime" Type="InputDateType.DateTimeLocal" class="form-control mb-3" @bind-Value="StartDate" />
             </div>
             <div class="form-text">Дата окончания Deadline (МСК)</div>
             <div class="form-input w-100 mb-3">
-                <DateInput TValue="DateTime" class="form-control mb-3" placeholder="Введите дату окончания Deadline" @bind-Value="EndDate"/>
+                <InputDate TValue="DateTime" Type="InputDateType.DateTimeLocal" class="form-control mb-3" @bind-Value="EndDate" />
+
             </div>
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
@@ -39,7 +40,7 @@
 </div>
 
 @code {
-    [Parameter] public string Id { get; set; }
+    [Parameter] public string? Id { get; set; }
     Deadline deadline = new();
 
     public DateTime StartDate

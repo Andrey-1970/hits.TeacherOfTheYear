@@ -11,8 +11,8 @@
 @if (status == "Нет заявки")
 {
     <div class="w-100">
-        
-        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+
+        @if (dateNow <= endDeadline)
         {
             <div class="alert alert-primary" role="alert">
                 Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
@@ -35,7 +35,7 @@ else if (status == "В ожидании заполнения")
     <form @formname="AwaitingCompletion" class="w-100" method="post">
         <AntiforgeryToken />
 
-        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+        @if (dateNow <= endDeadline)
         {
             <div class="alert alert-secondary" role="alert">
                 Заявка на участие создана и <strong>ожидает заполнения</strong>.
@@ -153,11 +153,21 @@ else if (status == "Оценена")
     string? status;
     IEnumerable<string>? comments = [];
 
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
     protected override async Task OnInitializedAsync()
     {
         status = await data.GetApplicationStatusNameAsync();
 
         var userInfo = await data.GetCurrentUserInfoAsync();
         comments = await data.GetCommentsForApplicationAsync(userInfo!.Applications.FirstOrDefault()?.Id);
+
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
+        if (deadline != null)
+        {
+            endDeadline = deadline.End;
+        }
     }
 }
