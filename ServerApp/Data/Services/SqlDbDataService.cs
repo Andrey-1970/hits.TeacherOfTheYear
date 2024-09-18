@@ -718,6 +718,9 @@ namespace ServerApp.Data.Services
         {
             var user = await GetUserAsync() ?? throw new UnauthorizedAccessException("User unauthorized.");
 
+            var appUser = await userManager.FindByEmailAsync(user.Username);
+            var userRoles = await userManager.GetRolesAsync(appUser);
+
             var participant = context.UserInfos
                                   .FirstOrDefault(e => e.Id == userId) ??
                               throw new NullReferenceException("Current user not found.");
@@ -731,7 +734,11 @@ namespace ServerApp.Data.Services
             if (app.ApplicationStatus != newStatus)
             {
                 app.ApplicationStatus = newStatus;
-                app.ReviewerId = user.Id;
+                
+                if (!userRoles.Contains("Admin"))
+                {
+                    app.ReviewerId = user.Id;
+                }
                 context.Update(app);
                 await context.SaveChangesAsync();
 

@@ -1986,6 +1986,15 @@ namespace ServerApp.Data
                 TableId = tbl01.Id,
                 MaxValue = 15
             };
+            var mark27 = new Mark()
+            {
+                Id = Guid.NewGuid(),
+                Number = 27,
+                Name = "Баллы за голосование",
+                IsAuto = true,
+                MaxValue = 10,
+                EvaluationMethodName = "EvaluateMark25"
+            };
 
             #endregion
 
@@ -2087,7 +2096,7 @@ namespace ServerApp.Data
             ]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
-                mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
+                mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26, mark27
             ]);
             builder.Entity<IdentityRole>().HasData([role1, role2, role3, role4, role5]);
 
