@@ -1,5 +1,5 @@
-﻿@inject NavigationManager navigation
-@inject IDataService data
+﻿@using ServerApp.Data.Entities
+@inject NavigationManager navigation
 
 <div class="block">
     <div class="block-title">
@@ -60,6 +60,8 @@
 <ConfirmDialog @ref="dialog" />
 
 @code {
+    [Parameter]
+    public Deadline deadline { get; set; }
     private ConfirmDialog? dialog;
 
     DateTimeOffset startDeadline = new();
@@ -69,7 +71,6 @@
     protected override async Task OnInitializedAsync()
     {
         dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
-        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
         if (deadline != null)
         {
             startDeadline = deadline.Start;

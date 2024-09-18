@@ -1,7 +1,7 @@
 ﻿@using System.Timers;
+@using ServerApp.Data.Entities
 
 @inject NavigationManager navigate
-@inject IDataService data
 
 <div class="block">
     <div class="block-title">
@@ -187,6 +187,11 @@
 </div>
 
 @code {
+    [Parameter]
+    public Deadline deadlineFirst { get; set; }
+    [Parameter]
+    public Deadline deadlineSecond { get; set; }
+    
     private DateTimeOffset targetDate = new();
 
     private string? days;
@@ -214,14 +219,12 @@
         timer.Start();
 
         dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
-        Data.Entities.Deadline deadlineFirst = await data.GetDeadlineAsync("Прием заявок");
         if (deadlineFirst != null)
         {
             startFirstDeadline = deadlineFirst.Start;
             endFirstDeadline = deadlineFirst.End;
         }
 
-        Data.Entities.Deadline deadlineSecond = await data.GetDeadlineAsync("Голосование");
         if (deadlineSecond != null)
         {
             startSecondDeadline = deadlineSecond.Start;
