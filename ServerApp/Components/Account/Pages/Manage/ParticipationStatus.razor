@@ -27,7 +27,8 @@
                 Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
                 и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
             </div>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Success"
                     To="/application-form#">
                 Подать заявку
@@ -45,12 +46,14 @@ else if (status == "В ожидании заполнения")
             <div class="alert alert-secondary" role="alert">
                 Заявка на участие создана и <strong>ожидает заполнения</strong>.
             </div>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Primary"
                     To="/application-form#">
                 Продолжить заполнение
             </Button>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Danger"
                     To="/account/manage/delete-application#">
                 Удалить заявку
@@ -71,7 +74,8 @@ else if (status == "В ожидании рассмотрения")
         <div class="alert alert-warning" role="alert">
             Ваша заявка <strong>ожидает рассмотрения экспертами</strong>. Пожалуйста, дождитесь решения.
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/withdraw-application#">
             Отозвать заявку
@@ -94,7 +98,8 @@ else if (status == "Одобрена")
         <div class="alert alert-success" role="alert">
             Поздравляем! Наши эксперты <strong>одобрили вашу заявку на участие</strong> в конкурсе. Вы получаете статус <strong>Участник</strong>.
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/withdraw-application#">
             Отозвать заявку
@@ -121,17 +126,20 @@ else if (status == "Отклонена")
                 </ul>
             }
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Primary"
                 To="/application-form#">
             Редактировать заявку
         </Button>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/delete-application#">
             Удалить заявку
         </Button>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Primary"
                 To="/feedback#">
             Связаться с поддержкой
@@ -146,7 +154,8 @@ else if (status == "Оценена")
         <div class="alert alert-success" role="alert">
             Ваша анкета была оценена экспертом
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/delete-application#">
             Удалить заявку
