@@ -12,7 +12,16 @@
 {
     <div class="w-100">
 
-        @if (dateNow <= endDeadline)
+        @if (dateNow < startDeadline)
+        {
+            <div class="alert alert-warning" role="alert">Прием заявок пока не начался.</div>
+
+        }
+        else if (dateNow > endDeadline)
+        {
+            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
+        }
+        else
         {
             <div class="alert alert-primary" role="alert">
                 Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
@@ -23,10 +32,6 @@
                     To="/application-form#">
                 Подать заявку
             </Button>
-        }
-        else
-        {
-            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
         }
     </div>
 }
@@ -153,6 +158,7 @@ else if (status == "Оценена")
     string? status;
     IEnumerable<string>? comments = [];
 
+    DateTimeOffset startDeadline = new();
     DateTimeOffset endDeadline = new();
     DateTimeOffset dateNow = new();
 
@@ -167,7 +173,8 @@ else if (status == "Оценена")
         Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
         if (deadline != null)
         {
-            endDeadline = deadline.End;
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
         }
     }
 }

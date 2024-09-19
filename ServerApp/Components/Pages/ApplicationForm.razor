@@ -11,7 +11,20 @@
 
 @if (model is not null)
 {
-    @if (model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения" || model.ApplicationStatus == "Отклонена")
+    @if (dateNow < startDeadline)
+    {
+        <div>
+            <div class="d-flex justify-content-center mt-5 mb-3 block-subtitle-text">Прием заявок пока не начался</div>
+            <div class="d-flex justify-content-center">
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/account/manage/participation-status#">
+                    В личный кабинет
+                </Button>
+            </div>
+        </div>
+    }
+    else if (model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения" || model.ApplicationStatus == "Отклонена")
     {
         if ((model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения") && dateNow > endDeadline)
         {
@@ -268,6 +281,7 @@ else
     PhotoData? photoData;
     string? cropPhoto;
 
+    DateTimeOffset startDeadline = new();
     DateTimeOffset endDeadline = new();
     DateTimeOffset dateNow = new();
 
@@ -286,7 +300,8 @@ else
         Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
         if (deadline != null)
         {
-            endDeadline = deadline.End;
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
         }
     }
 

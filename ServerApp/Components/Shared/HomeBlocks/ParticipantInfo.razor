@@ -24,7 +24,23 @@
             </p> *@
         </div>
     </div>
-    @if (dateNow <= endDeadline)
+    @if (dateNow < startDeadline)
+    {
+        <Button Outline="true"
+                Color="ButtonColor.Danger"
+                Disabled="true">
+            Прием заявок не начат
+        </Button>
+    }
+    else if (dateNow > startDeadline)
+    {
+        <Button Outline="true"
+                Color="ButtonColor.Danger"
+                Disabled="true">
+            Прием заявок завершен
+        </Button>
+    }
+    else
     {
         <AuthorizeView>
             <NotAuthorized>
@@ -43,14 +59,6 @@
             </Authorized>
         </AuthorizeView>
     }
-    else
-    {
-        <Button Outline="true"
-                Color="ButtonColor.Danger"
-                Disabled="true">
-            Прием заявок завершен
-        </Button>    
-    }
     
     <div class="block-content">
         <div class="block-content-photo" style="background-image: url('img/Participant.jpg');"></div>
@@ -61,7 +69,7 @@
 
 @code {
     [Parameter]
-    public Deadline deadline { get; set; }
+    public Deadline? deadline { get; set; }
     private ConfirmDialog? dialog;
 
     DateTimeOffset startDeadline = new();
@@ -73,8 +81,8 @@
         dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
         if (deadline != null)
         {
-            startDeadline = deadline.Start;
-            endDeadline = deadline.End;
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
         }       
     }
 

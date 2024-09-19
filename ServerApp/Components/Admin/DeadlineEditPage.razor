@@ -33,7 +33,7 @@
 
             <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100">
                 <Button Color="ButtonColor.Success" Type="ButtonType.Submit">Сохранить</Button>
-                <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+                <a type="button" class="btn btn-secondary" href="/admin/deadlines">Назад</a>
             </div>
         </EditForm>
     </div>
@@ -45,14 +45,14 @@
 
     public DateTime StartDate
     {
-        get => deadline.Start.LocalDateTime;
-        set => deadline.Start = new DateTimeOffset(value, TimeZoneInfo.Local.GetUtcOffset(value));
+        get => deadline.Start.UtcDateTime.AddHours(3);
+        set => deadline.Start.ToOffset(TimeSpan.FromHours(3));
     }
 
     public DateTime EndDate
     {
-        get => deadline.End.LocalDateTime;
-        set => deadline.End = new DateTimeOffset(value, TimeZoneInfo.Local.GetUtcOffset(value));
+        get => deadline.End.UtcDateTime.AddHours(3);
+        set => deadline.End.ToOffset(TimeSpan.FromHours(3));
     }
 
     protected override async Task OnInitializedAsync()

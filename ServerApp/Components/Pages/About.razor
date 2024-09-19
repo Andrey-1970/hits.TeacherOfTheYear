@@ -76,7 +76,25 @@
     </div>
 
     <div class="d-flex flex-column">
-        @if (targetDate == endFirstDeadline)
+        @if (targetDate == startFirstDeadline)
+        {
+            <div class="block-title-text text-center mb-3">До начала приема заявок осталось:</div>
+            <div class="countdown mb-3">
+                <div class="countdown-item">
+                    <span id="days">@days</span>
+                    <span class="label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">@hours</span>
+                    <span class="label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">@minutes</span>
+                    <span class="label">Минут</span>
+                </div>
+            </div>
+        }
+        else if (targetDate == endFirstDeadline)
         {
             <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
             <div class="countdown mb-3">
@@ -137,7 +155,7 @@
                 </Button>
             </div>
         }
-        else
+        else if (dateNow > endSecondDeadline)
         {
             <div class="block-title-text text-center mb-3">Ожидайте оглашения итогов конкурса</div>
         }
@@ -307,27 +325,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        timer = new Timer(1000);
+        timer = new Timer(1000); // Таймер обновляется каждую секунду
+        timer.Elapsed += UpdateCountdown!; // Событие для обновления таймера
+        timer.Start(); // Запуск таймера
 
-        // событие Elapsed
-        timer.Elapsed += UpdateCountdown!;
-
-        // Запуск таймера
-        timer.Start();
-
+        // Устанавливаем текущее время в московском часовом поясе
         dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
         Data.Entities.Deadline deadlineFirst = await data.GetDeadlineAsync("Прием заявок");
         if (deadlineFirst != null)
         {
-            startFirstDeadline = deadlineFirst.Start;
-            endFirstDeadline = deadlineFirst.End;
+            startFirstDeadline = deadlineFirst.Start.ToOffset(TimeSpan.FromHours(3));
+            endFirstDeadline = deadlineFirst.End.ToOffset(TimeSpan.FromHours(3));
         }
 
         Data.Entities.Deadline deadlineSecond = await data.GetDeadlineAsync("Голосование");
         if (deadlineSecond != null)
         {
-            startSecondDeadline = deadlineSecond.Start;
-            endSecondDeadline = deadlineSecond.End;
+            startSecondDeadline = deadlineSecond.Start.ToOffset(TimeSpan.FromHours(3));
+            endSecondDeadline = deadlineSecond.End.ToOffset(TimeSpan.FromHours(3));
         }
     }
 
@@ -358,7 +373,7 @@
 
     private void UpdateCountdown(object sender, ElapsedEventArgs e)
     {
-        targetDate = endFirstDeadline;
+        targetDate = startFirstDeadline;
         TimeSpan remainingTime = targetDate - dateNow;
 
         // Проверка завершения отсчета
@@ -370,6 +385,16 @@
 
             // Обновление UI
             InvokeAsync(StateHasChanged);
+        }
+        else if (targetDate == startFirstDeadline)
+        {
+            // Остановка таймера, если отсчет завершен
+            timer!.Stop();
+
+            targetDate = endFirstDeadline;
+
+            // Перезапуск таймера
+            timer.Start();
         }
         else if (targetDate == endFirstDeadline)
         {
