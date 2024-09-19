@@ -1,7 +1,7 @@
 ﻿@using System.Timers;
+@using ServerApp.Data.Entities
 
 @inject NavigationManager navigate
-
 
 <div class="block">
     <div class="block-title">
@@ -22,7 +22,7 @@
 
             <div class="block-subtitle-text text-center pb-2">
                 Первый этап
-                <Tooltip Title="с 9:00 МСК 20.09.2024 до 24:00 МСК 19.10.2024 (включительно)"
+                <Tooltip Title="@GetTooltipText(startFirstDeadline, endFirstDeadline)"
                          Placement="TooltipPlacement.Bottom">
                     <Icon Name="IconName.InfoCircle" />
                 </Tooltip>
@@ -42,7 +42,7 @@
 
             <div class="block-subtitle-text text-center pb-2">
                 Второй этап
-                <Tooltip Title="с 21.10.2024 по 24.11.2024"
+                <Tooltip Title="@GetTooltipText(startSecondDeadline, endSecondDeadline)"
                          Placement="TooltipPlacement.Bottom">
                     <Icon Name="IconName.InfoCircle" />
                 </Tooltip>
@@ -73,7 +73,25 @@
     </div>
 
     <div class="d-flex flex-column">
-        @if (targetDate == new DateTime(2024, 10, 20))
+        @if (targetDate == startFirstDeadline)
+        {
+            <div class="block-title-text text-center mb-3">До начала приема заявок осталось:</div>
+            <div class="countdown mb-3">
+                <div class="countdown-item">
+                    <span id="days">@days</span>
+                    <span class="label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">@hours</span>
+                    <span class="label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">@minutes</span>
+                    <span class="label">Минут</span>
+                </div>
+            </div>
+        }
+        else if (targetDate == endFirstDeadline)
         {
             <div class="block-title-text text-center mb-3">До конца приема заявок осталось:</div>
             <div class="countdown mb-3">
@@ -109,7 +127,7 @@
                 </AuthorizeView>
             </div>
         }
-        else if (targetDate == new DateTime(2024, 12, 1))
+        else if (targetDate == endSecondDeadline)
         {
             <div class="block-title-text text-center mb-3">До конца голосования осталось:</div>
             <div class="countdown mb-3">
@@ -134,7 +152,7 @@
                 </Button>
             </div> 
         }
-        else
+        else if (dateNow > endSecondDeadline)
         {
             <div class="block-title-text text-center mb-3">Ожидайте оглашения итогов конкурса</div>
         }
@@ -187,7 +205,12 @@
 </div>
 
 @code {
-    private DateTime targetDate = new DateTime(2024, 10, 20); // Отсчет до конца приема заявок
+    [Parameter]
+    public Deadline? deadlineFirst { get; set; }
+    [Parameter]
+    public Deadline? deadlineSecond { get; set; }
+    
+    private DateTimeOffset targetDate = new();
 
     private string? days;
     private string? hours;
@@ -197,17 +220,79 @@
 
     private ConfirmDialog? dialog;
 
-    protected override void OnInitialized()
+    DateTimeOffset startFirstDeadline = new();
+    DateTimeOffset endFirstDeadline = new();
+    DateTimeOffset startSecondDeadline = new();
+    DateTimeOffset endSecondDeadline = new();
+    DateTimeOffset dateNow = new();
+
+    protected override async Task OnInitializedAsync()
     {
+        timer = new Timer(1000); // Таймер обновляется каждую секунду
+        timer.Elapsed += UpdateCountdown!; // Событие для обновления таймера
+        timer.Start(); // Запуск таймера
 
-        // Timer с интервалом 1 секунда
-        timer = new Timer(1000);
+        // Устанавливаем текущее время в московском часовом поясе
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        if (deadlineFirst != null)
+        {
+            startFirstDeadline = deadlineFirst.Start.ToOffset(TimeSpan.FromHours(3));
+            endFirstDeadline = deadlineFirst.End.ToOffset(TimeSpan.FromHours(3));
+        }
 
-        // событие Elapsed
-        timer.Elapsed += UpdateCountdown!;
+        if (deadlineSecond != null)
+        {
+            startSecondDeadline = deadlineSecond.Start.ToOffset(TimeSpan.FromHours(3));
+            endSecondDeadline = deadlineSecond.End.ToOffset(TimeSpan.FromHours(3));
+        }
 
-        // Запуск таймера
-        timer.Start();
+        // Устанавливаем начальную целевую дату
+        targetDate = startFirstDeadline;
+    }
+
+    private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
+    {
+        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {DateOnly.FromDateTime(start.Date)} по {TimeOnly.FromDateTime(end.DateTime)} МСК {DateOnly.FromDateTime(end.Date)}";
+    }
+
+    private void UpdateCountdown(object sender, ElapsedEventArgs e)
+    {
+        // Обновляем текущее время
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+
+        TimeSpan remainingTime = targetDate - dateNow;
+
+        if (remainingTime.TotalSeconds >= 0)
+        {
+            // Отсчитываем оставшееся время
+            days = remainingTime.Days.ToString("D2");
+            hours = remainingTime.Hours.ToString("D2");
+            minutes = remainingTime.Minutes.ToString("D2");
+
+            // Обновляем UI
+            InvokeAsync(StateHasChanged);
+        }
+        else
+        {
+            // Проверяем, какой этап завершён, и переключаемся на следующий
+            if (targetDate == startFirstDeadline)
+            {
+                // Остановка таймера и переход на следующий дедлайн
+                targetDate = endFirstDeadline;
+            }
+            else if (targetDate == endFirstDeadline)
+            {
+                targetDate = endSecondDeadline;
+            }
+            else
+            {
+                // Остановка таймера, когда все этапы завершены
+                timer!.Stop();
+            }
+
+            // Перезапуск таймера для нового этапа
+            timer!.Start();
+        }
     }
 
     private async Task ShowConfirmationAsync()
@@ -227,36 +312,6 @@
         if (confirmation)
         {
             navigate.NavigateTo("/application-form#");
-        }
-    }
-
-    private void UpdateCountdown(object sender, ElapsedEventArgs e)
-    {
-        TimeSpan remainingTime = targetDate - DateTime.Now;
-
-        // Проверка завершения отсчета
-        if (remainingTime.TotalSeconds >= 0)
-        {
-            days = remainingTime.Days.ToString("D2");
-            hours = remainingTime.Hours.ToString("D2");
-            minutes = remainingTime.Minutes.ToString("D2");
-
-            // Обновление UI
-            InvokeAsync(StateHasChanged);
-        }
-        else if (targetDate == new DateTime(2024, 10, 20))
-        {
-            // Остановка таймера, если отсчет завершен
-            timer!.Stop();
-
-            targetDate = new DateTime(2024, 12, 1); // Отсчет до конца голосования
-
-            // Перезапуск таймера
-            timer.Start();
-        }
-        else
-        {
-            timer!.Stop();
         }
     }
 }

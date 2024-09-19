@@ -67,5 +67,7 @@ namespace ServerApp.Data.Interfaces
         Task<FeedBack[]> GetFeedbacksAsync();
         Task SaveFeedbackAsync(FeedBack feedback);
         Task<FeedBack> GetFeedbackAsync(Guid feedbackId);
+
+        Task<Deadline> GetDeadlineAsync(string name);
     }
 }

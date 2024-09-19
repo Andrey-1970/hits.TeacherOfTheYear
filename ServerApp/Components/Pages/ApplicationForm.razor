@@ -11,9 +11,22 @@
 
 @if (model is not null)
 {
-    @if (model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения" || model.ApplicationStatus == "Отклонена")
+    @if (dateNow < startDeadline)
     {
-        if ((model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения") && DateTime.Now > new DateTime(2024, 10, 20))
+        <div>
+            <div class="d-flex justify-content-center mt-5 mb-3 block-subtitle-text">Прием заявок пока не начался</div>
+            <div class="d-flex justify-content-center">
+                <Button Type="ButtonType.Link"
+                        Color="ButtonColor.Primary"
+                        To="/account/manage/participation-status#">
+                    В личный кабинет
+                </Button>
+            </div>
+        </div>
+    }
+    else if (model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения" || model.ApplicationStatus == "Отклонена")
+    {
+        if ((model.ApplicationStatus == null || model.ApplicationStatus == "В ожидании заполнения") && dateNow > endDeadline)
         {
             <div>
                 <div class="d-flex justify-content-center mt-5 mb-3 block-subtitle-text">Прием заявок завершен</div>
@@ -268,6 +281,10 @@ else
     PhotoData? photoData;
     string? cropPhoto;
 
+    DateTimeOffset startDeadline = new();
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
     protected override async Task OnInitializedAsync()
     {
         model = await data.GetCurrentUserEditModelAsync();
@@ -277,6 +294,14 @@ else
             model.Categories = await data.GetCategoryModelsAsync();
             await LoadPhotoDataAsync();
             await OnTrackIdChangedAsync(model.SelectedTrackId);
+        }
+
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
+        if (deadline != null)
+        {
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
         }
     }
 

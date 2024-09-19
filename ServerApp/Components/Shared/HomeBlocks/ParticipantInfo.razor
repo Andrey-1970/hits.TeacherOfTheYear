@@ -1,4 +1,5 @@
-﻿@inject NavigationManager navigation
+﻿@using ServerApp.Data.Entities
+@inject NavigationManager navigation
 
 <div class="block">
     <div class="block-title">
@@ -13,7 +14,8 @@
             <p>Каждый участник конкурса может подать <strong>не более одной заявки</strong> в одно из направлений деятельности. Не принимаются заявки от авторских коллективов.</p>
 
             <p>
-                Срок и время приема заявок: с 9:00 МСК 20.09.2024 до 24:00 МСК 19.10.2024 (включительно).
+                Срок и время приема заявок: с @TimeOnly.FromDateTime(startDeadline.DateTime) МСК @DateOnly.FromDateTime(startDeadline.Date)
+                до @TimeOnly.FromDateTime(endDeadline.DateTime) МСК @DateOnly.FromDateTime(endDeadline.Date) (включительно).
             </p>
 
             @* <p>
@@ -22,7 +24,23 @@
             </p> *@
         </div>
     </div>
-    @if (DateTime.Now <= new DateTime(2024, 10, 20))
+    @if (dateNow < startDeadline)
+    {
+        <Button Outline="true"
+                Color="ButtonColor.Danger"
+                Disabled="true">
+            Прием заявок не начат
+        </Button>
+    }
+    else if (dateNow > startDeadline)
+    {
+        <Button Outline="true"
+                Color="ButtonColor.Danger"
+                Disabled="true">
+            Прием заявок завершен
+        </Button>
+    }
+    else
     {
         <AuthorizeView>
             <NotAuthorized>
@@ -41,14 +59,6 @@
             </Authorized>
         </AuthorizeView>
     }
-    else
-    {
-        <Button Outline="true"
-                Color="ButtonColor.Danger"
-                Disabled="true">
-            Прием заявок завершен
-        </Button>    
-    }
     
     <div class="block-content">
         <div class="block-content-photo" style="background-image: url('img/Participant.jpg');"></div>
@@ -58,7 +68,23 @@
 <ConfirmDialog @ref="dialog" />
 
 @code {
+    [Parameter]
+    public Deadline? deadline { get; set; }
     private ConfirmDialog? dialog;
+
+    DateTimeOffset startDeadline = new();
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        if (deadline != null)
+        {
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
+        }       
+    }
 
     private async Task ShowConfirmationAsync()
     {

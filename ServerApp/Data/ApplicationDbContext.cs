@@ -33,6 +33,7 @@ namespace ServerApp.Data
         public DbSet<ValuesType> ValueTypes { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<FeedBack> Feedbacks { get; set; }
+        public DbSet<Deadline> Deadlines { get; set; }
 
         #endregion
 
@@ -1985,6 +1986,15 @@ namespace ServerApp.Data
                 TableId = tbl01.Id,
                 MaxValue = 15
             };
+            var mark27 = new Mark()
+            {
+                Id = Guid.NewGuid(),
+                Number = 27,
+                Name = "Баллы за голосование",
+                IsAuto = true,
+                MaxValue = 10,
+                EvaluationMethodName = "EvaluateMark25"
+            };
 
             #endregion
 
@@ -2001,6 +2011,29 @@ namespace ServerApp.Data
 
             #endregion
 
+            #region Deadlines
+
+            var deadline1 = new Deadline()
+            {
+                Id = Guid.NewGuid(),
+                Number = 1,
+                Name = "Прием заявок",
+                Start = new DateTimeOffset(2024, 9, 20, 9, 0, 0, new TimeSpan(3, 0, 0)),
+                End = new DateTimeOffset(2024, 10, 20, 23, 59, 59, new TimeSpan(3, 0, 0))
+            };
+
+            var deadline2 = new Deadline()
+            {
+                Id = Guid.NewGuid(),
+                Number = 2,
+                Name = "Голосование",
+                Start = new DateTimeOffset(2024, 10, 21, 0, 0, 0, new TimeSpan(3, 0, 0)),
+                End = new DateTimeOffset(2024, 11, 30, 23, 59, 59, new TimeSpan(3, 0, 0))
+            };
+
+            #endregion
+
+            builder.Entity<Deadline>().HasData([deadline1, deadline2]);
             builder.Entity<ApplicationStatus>()
                 .HasData([appStatus1, appStatus2, appStatus3, appStatus4, appStatus5, appStatus6]);
             builder.Entity<Category>().HasData([category1, category2]);
@@ -2063,7 +2096,7 @@ namespace ServerApp.Data
             ]);
             builder.Entity<Mark>().HasData([
                 mark1, mark2, mark3, mark4, mark5, mark6, mark7, mark8, mark9, mark10, mark11, mark12, mark13, mark14,
-                mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26,
+                mark15, mark16, mark19, mark20, mark21, mark22, mark23, mark24, mark25, mark26, mark27
             ]);
             builder.Entity<IdentityRole>().HasData([role1, role2, role3, role4, role5]);
 

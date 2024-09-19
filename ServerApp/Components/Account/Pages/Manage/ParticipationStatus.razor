@@ -11,22 +11,28 @@
 @if (status == "Нет заявки")
 {
     <div class="w-100">
-        
-        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+
+        @if (dateNow < startDeadline)
+        {
+            <div class="alert alert-warning" role="alert">Прием заявок пока не начался.</div>
+
+        }
+        else if (dateNow > endDeadline)
+        {
+            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
+        }
+        else
         {
             <div class="alert alert-primary" role="alert">
                 Ваш текущий статус — <strong>Посетитель</strong>. Чтобы получить статус <strong>Участник</strong>, вам нужно подать заявку
                 и дождаться решения администрации. Вы можете сделать это с помощью кнопки ниже.
             </div>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Success"
                     To="/application-form#">
                 Подать заявку
             </Button>
-        }
-        else
-        {
-            <div class="alert alert-danger" role="alert">Прием заявок завершен.</div>
         }
     </div>
 }
@@ -35,17 +41,19 @@ else if (status == "В ожидании заполнения")
     <form @formname="AwaitingCompletion" class="w-100" method="post">
         <AntiforgeryToken />
 
-        @if (DateTime.Now <= new DateTime(2024, 10, 20))
+        @if (dateNow <= endDeadline)
         {
             <div class="alert alert-secondary" role="alert">
                 Заявка на участие создана и <strong>ожидает заполнения</strong>.
             </div>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Primary"
                     To="/application-form#">
                 Продолжить заполнение
             </Button>
-            <Button Type="ButtonType.Link"
+            <Button Class="mb-2"
+                    Type="ButtonType.Link"
                     Color="ButtonColor.Danger"
                     To="/account/manage/delete-application#">
                 Удалить заявку
@@ -66,7 +74,8 @@ else if (status == "В ожидании рассмотрения")
         <div class="alert alert-warning" role="alert">
             Ваша заявка <strong>ожидает рассмотрения экспертами</strong>. Пожалуйста, дождитесь решения.
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/withdraw-application#">
             Отозвать заявку
@@ -89,7 +98,8 @@ else if (status == "Одобрена")
         <div class="alert alert-success" role="alert">
             Поздравляем! Наши эксперты <strong>одобрили вашу заявку на участие</strong> в конкурсе. Вы получаете статус <strong>Участник</strong>.
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/withdraw-application#">
             Отозвать заявку
@@ -116,17 +126,20 @@ else if (status == "Отклонена")
                 </ul>
             }
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Primary"
                 To="/application-form#">
             Редактировать заявку
         </Button>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/delete-application#">
             Удалить заявку
         </Button>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Primary"
                 To="/feedback#">
             Связаться с поддержкой
@@ -141,7 +154,8 @@ else if (status == "Оценена")
         <div class="alert alert-success" role="alert">
             Ваша анкета была оценена экспертом
         </div>
-        <Button Type="ButtonType.Link"
+        <Button Class="mb-2"
+                Type="ButtonType.Link"
                 Color="ButtonColor.Danger"
                 To="/account/manage/delete-application#">
             Удалить заявку
@@ -153,11 +167,23 @@ else if (status == "Оценена")
     string? status;
     IEnumerable<string>? comments = [];
 
+    DateTimeOffset startDeadline = new();
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
     protected override async Task OnInitializedAsync()
     {
         status = await data.GetApplicationStatusNameAsync();
 
         var userInfo = await data.GetCurrentUserInfoAsync();
         comments = await data.GetCommentsForApplicationAsync(userInfo!.Applications.FirstOrDefault()?.Id);
+
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Прием заявок");
+        if (deadline != null)
+        {
+            startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
+            endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
+        }
     }
 }

@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using ServerApp.Data.Entities
+
+@inject IDataService data
 
 <PageTitle>Конкурс на соискание премий в области научно-педагогической и научно-исследовательской деятельности</PageTitle>
 
@@ -9,10 +12,25 @@
             <div class="intro-text">в области научно-педагогической и научно-исследовательской деятельности</div>
         </div>
     </div>
+    
+    @if (deadlineParticipant != null)
+    {
+        <ContestInfo deadlineFirst="deadlineParticipant" deadlineSecond="deadlineVoting" />
 
-    <ContestInfo />
+        <VotingInfo />
 
-    <VotingInfo />
-
-    <ParticipantInfo />
+        <ParticipantInfo deadline="deadlineParticipant"/>
+    }
 </div>
+
+@code
+{
+    private Deadline deadlineParticipant;
+    private Deadline deadlineVoting;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        deadlineParticipant = await data.GetDeadlineAsync("Прием заявок");
+        deadlineVoting = await data.GetDeadlineAsync("Голосование");
+    }
+}

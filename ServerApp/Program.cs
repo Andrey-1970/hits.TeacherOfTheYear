@@ -66,13 +66,14 @@ namespace ServerApp
                             .AddUserManager<UserManager<ApplicationUser>>()
                             .AddEntityFrameworkStores<ApplicationDbContext>()
                             .AddSignInManager()
-                            .AddDefaultTokenProviders();
+                            .AddDefaultTokenProviders()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>();
 
             builder.Services.AddBlazorBootstrap();
             builder.Services.AddScoped<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
             builder.Services.AddScoped<IDataService, SqlDbDataService>();
             builder.Services.AddScoped<IAdmin, AdminService>();
-            
+
             builder.Services.Configure<FormOptions>(options =>
             {
                 options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 10 MB

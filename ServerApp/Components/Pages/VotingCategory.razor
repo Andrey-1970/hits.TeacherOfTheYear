@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="block-subtitle-text">@category?.Name</div>
-            @if (DateTime.Now <= new DateTime(2024, 12, 1))
+            @if (DateTime.Now <= endDeadline)
             {
                 <div class="form-text">
                     Выберите кандидата для голосования
@@ -68,6 +68,19 @@
 
     string searchQuery = string.Empty;
     ApplicationCardModel[]? filtredApplications;
+
+    DateTimeOffset endDeadline = new();
+    DateTimeOffset dateNow = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
+        Data.Entities.Deadline deadline = await data.GetDeadlineAsync("Голосование");
+        if (deadline != null)
+        {
+            endDeadline = deadline.End;
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {
