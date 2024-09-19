@@ -147,7 +147,7 @@ else
 
     private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
     {
-        return $"Голосование доступно с {TimeOnly.FromDateTime(start.DateTime)} МСК {DateOnly.FromDateTime(start.Date)} по {TimeOnly.FromDateTime(end.DateTime)} МСК {DateOnly.FromDateTime(end.Date)}";
+        return $"Голосование доступно с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day:D2}.{start.Month:D2}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day:D2}.{end.Month:D2}.{end.Year}";
     }
 
     protected override async Task OnParametersSetAsync()

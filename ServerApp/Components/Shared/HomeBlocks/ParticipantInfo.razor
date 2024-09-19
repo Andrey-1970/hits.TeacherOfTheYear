@@ -14,8 +14,7 @@
             <p>Каждый участник конкурса может подать <strong>не более одной заявки</strong> в одно из направлений деятельности. Не принимаются заявки от авторских коллективов.</p>
 
             <p>
-                Срок и время приема заявок: с @TimeOnly.FromDateTime(startDeadline.DateTime) МСК @DateOnly.FromDateTime(startDeadline.Date)
-                до @TimeOnly.FromDateTime(endDeadline.DateTime) МСК @DateOnly.FromDateTime(endDeadline.Date) (включительно).
+                Срок и время приема заявок: @GetTooltipText(startDeadline, endDeadline) (включительно).
             </p>
 
             @* <p>
@@ -84,6 +83,11 @@
             startDeadline = deadline.Start.ToOffset(TimeSpan.FromHours(3));
             endDeadline = deadline.End.ToOffset(TimeSpan.FromHours(3));
         }       
+    }
+
+    private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
+    {
+        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day:D2}.{start.Month:D2}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day:D2}.{end.Month:D2}.{end.Year}";
     }
 
     private async Task ShowConfirmationAsync()
