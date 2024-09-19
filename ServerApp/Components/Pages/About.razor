@@ -65,7 +65,7 @@
 
             <div class="block-subtitle-text text-center pb-2">
                 Третий этап
-                <Tooltip Title="не позднее 30.11.2024. Награждение победителей – 5.12.2024"
+                <Tooltip Title="не позднее 30.11.2024. Награждение победителей – 05.12.2024"
                          Placement="TooltipPlacement.Bottom">
                     <Icon Name="IconName.InfoCircle" />
                 </Tooltip>
@@ -285,7 +285,7 @@
 </div>
 <div class="block-content">
     <div class="block-content-text">
-        <p>Награждение победителей – 5.12.2024</p>
+        <p>Награждение победителей – 05.12.2024</p>
         <p>Победителям будут вручаться денежные вознаграждения, размер которого устанавливается дополнительно, а также диплом лауреата Премии, сертификат Премии, диплом Премии.</p>
     </div>
 </div>
@@ -348,7 +348,7 @@
 
     private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
     {
-        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {DateOnly.FromDateTime(start.Date)} по {TimeOnly.FromDateTime(end.DateTime)} МСК {DateOnly.FromDateTime(end.Date)}";
+        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day:D2}.{start.Month:D2}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day:D2}.{end.Month:D2}.{end.Year}"; return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day}.{start.Month}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day}.{end.Month}.{end.Year}";
     }
 
     private async Task ShowConfirmationAsync()
