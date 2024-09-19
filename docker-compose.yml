@@ -27,7 +27,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-        
+  
   migrate:
     build:
       context: .
@@ -37,6 +37,15 @@ services:
     depends_on:
       - db
 
+  backup:
+    build:
+      context: .
+      dockerfile: ./ServerApp/Dockerfile.backup
+    volumes:
+      - postgres_backup:/backup
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
-
+  postgres_backup:

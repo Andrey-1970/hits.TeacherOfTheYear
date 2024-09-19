@@ -1,0 +1,26 @@
+FROM ubuntu:20.04
+
+# Обновление пакетов и установка postgresql-client и cron
+RUN apt-get update && \
+    apt-get install -y postgresql-client cron
+
+# Копирование backup.sh в контейнер
+COPY ./ServerApp/backup.sh /usr/local/bin/backup.sh
+
+# Установка прав на выполнение
+RUN chmod +x /usr/local/bin/backup.sh
+
+# Копирование файла crontab в контейнер
+COPY ./ServerApp/crontab /etc/cron.d/backup-cron
+
+# Добавить права на выполнение задачи cron
+RUN chmod 0644 /etc/cron.d/backup-cron
+
+# Применение crontab
+RUN crontab /etc/cron.d/backup-cron
+
+# Создание директории для хранения бекапов
+RUN mkdir /backup
+
+# Запуск cron в фоновом режиме
+CMD ["cron", "-f"]
