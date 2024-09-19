@@ -46,13 +46,13 @@
     public DateTime StartDate
     {
         get => deadline.Start.UtcDateTime.AddHours(3);
-        set => deadline.Start.ToOffset(TimeSpan.FromHours(3));
+        set => deadline.Start = new DateTimeOffset(value).ToOffset(TimeSpan.FromHours(3)).ToUniversalTime();
     }
 
     public DateTime EndDate
     {
         get => deadline.End.UtcDateTime.AddHours(3);
-        set => deadline.End.ToOffset(TimeSpan.FromHours(3));
+        set => deadline.End = new DateTimeOffset(value).ToOffset(TimeSpan.FromHours(3)).ToUniversalTime();
     }
 
     protected override async Task OnInitializedAsync()
@@ -71,5 +71,4 @@
         navigation.NavigateTo("/admin/deadlines");
         toastService.Notify(new(ToastType.Success, "Запись успешно сохранена"));
     }
-
 }
