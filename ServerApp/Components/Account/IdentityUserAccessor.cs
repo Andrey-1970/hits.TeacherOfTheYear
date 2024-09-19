@@ -11,7 +11,7 @@ namespace ServerApp.Components.Account
 
             if (user is null)
             {
-                redirectManager.RedirectToWithStatus("account/invalid-user", $"������: ���������� ��������� ������������ � ID '{userManager.GetUserId(context.User)}'.", context);
+                redirectManager.RedirectToWithStatus("account/invalid-user", $"Ошибка: Невозможен вход пользователя с ID '{userManager.GetUserId(context.User)}'.", context);
             }
 
             return user;
