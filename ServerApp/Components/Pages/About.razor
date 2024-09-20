@@ -344,6 +344,8 @@
             startSecondDeadline = deadlineSecond.Start.ToOffset(TimeSpan.FromHours(3));
             endSecondDeadline = deadlineSecond.End.ToOffset(TimeSpan.FromHours(3));
         }
+
+        targetDate = startFirstDeadline;
     }
 
     private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
@@ -373,7 +375,6 @@
 
     private void UpdateCountdown(object sender, ElapsedEventArgs e)
     {
-        targetDate = startFirstDeadline;
         TimeSpan remainingTime = targetDate - dateNow;
 
         // Проверка завершения отсчета
