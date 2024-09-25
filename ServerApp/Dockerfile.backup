@@ -1,8 +1,8 @@
-FROM ubuntu:20.04
+FROM postgres:latest
 
-# Обновление пакетов и установка postgresql-client и cron
+# Обновление пакетов и установка cron
 RUN apt-get update && \
-    apt-get install -y postgresql-client cron
+    apt-get install -y cron
 
 # Копирование backup.sh в контейнер
 COPY ./ServerApp/backup.sh /usr/local/bin/backup.sh

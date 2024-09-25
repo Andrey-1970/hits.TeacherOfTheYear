@@ -733,14 +733,15 @@ namespace ServerApp.Data.Services
                             throw new InvalidOperationException("Application status with number 3 not found.");
             if (app.ApplicationStatus != newStatus)
             {
-                app.ApplicationStatus = newStatus;
                 
                 if (!userRoles.Contains("Admin"))
                 {
+                    app.ApplicationStatus = newStatus;
                     app.ReviewerId = user.Id;
+                    
+                    context.Update(app);
+                    await context.SaveChangesAsync();
                 }
-                context.Update(app);
-                await context.SaveChangesAsync();
 
                 foreach (var markBlock in app.Track.MarkBlocks)
                 {
