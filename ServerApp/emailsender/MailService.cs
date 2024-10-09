@@ -25,7 +25,7 @@ namespace ServerApp.Services
             using (var smtp = new MailKit.Net.Smtp.SmtpClient())
             {
                 Console.Write(email.From);
-                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.None);
+                await smtp.ConnectAsync(_mailConfig.Host, _mailConfig.Port, SecureSocketOptions.StartTls);
                 await smtp.AuthenticateAsync(_mailConfig.Username, _mailConfig.Password);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);

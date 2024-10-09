@@ -1,0 +1,194 @@
+﻿@page "/admin/users"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using ServerApp.Data
+
+@inject RoleManager<IdentityRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+@inject IDataService dataService
+
+<PageTitle>Настройка пользователей</PageTitle>
+
+<div class="block">
+    <div class="block-content">
+        <Card class="w-100">
+            <CardHeader>Пользователи</CardHeader>
+            <CardBody>
+                <div class="d-flex flex-column gap-3">
+                    <input type="text" class="form-control" placeholder="Поиск по email" @bind="searchQuery" @oninput="OnSearchInput" />
+
+                    <div class="table-container">
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="p-2">Email</th>
+                                    <th class="p-2">Роли</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (filteredUsers.Any())
+                                {
+                                    @foreach (var user in filteredUsers)
+                                    {
+                                        <tr style="vertical-align: middle;">
+                                            <td class="p-2">
+                                                @user.AppUser.Email
+                                            </td>
+                                            <td class="p-2">
+                                                @if (roleSelections.Any())
+                                                {
+                                                    @foreach (var role in roles)
+                                                    {
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                   id="@role.Name-@user.AppUser.Id"
+                                                                   checked="@roleSelections[user.AppUser.Id][role.Name!]"
+                                                                   @onchange="(e) => OnRoleChanged(user, role.Name!, ((ChangeEventArgs)e).Value)" />
+                                                            <label class="form-check-label" for="@role.Name-@user.AppUser.Id">@role.Name</label>
+                                                        </div>
+                                                    }
+                                                }
+                                                @if (user.isExpert)
+                                                {
+                                                    <div class="form-input w-100 mb-3">
+                                                        <InputSelect class="form-control" Value="user.CategoryId" TValue="Guid?" ValueExpression="() => user.CategoryId" ValueChanged="(value) => CategoryChanged(value, user)">
+                                                            <option value="@Guid.Empty" disabled selected hidden>Выберите категорию оценивания</option>
+                                                            @foreach (var category in categories)
+                                                            {
+                                                                <option value="@category.Id">@category.Name</option>
+                                                            }
+                                                        </InputSelect>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2" class="text-center">Не найдено</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+         <div class="d-flex flex-row gap-2 mt-2 mb-2 justify-content-center w-100"> 
+            <Button Color="ButtonColor.Success" @onclick="SaveChanges">Сохранить</Button>
+            <a type="button" class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<IdentityRole> roles = new List<IdentityRole>();
+    List<UserExpert> users = new List<UserExpert>();
+    List<UserExpert> filteredUsers = new List<UserExpert>();
+
+    IEnumerable<Category> categories = default!;
+
+    Dictionary<string, Dictionary<string, bool>> roleSelections = new();
+    string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        roles = roleManager.Roles.ToList();
+
+        foreach (var user in userManager.Users.ToList())
+        {
+            users.Add(new() { AppUser = user, CategoryId = await IsExpert(user) ? await dataService.GetCategoryIdFromEmail(user.Email!) : null, isExpert = await IsExpert(user) });
+        }
+        filteredUsers = users;
+
+        categories = await data.Category.GetAllAsync();
+        categories = categories.ToList();
+
+        foreach (var user in users)
+        {
+            var userRoles = await userManager.GetRolesAsync(user.AppUser);
+            roleSelections[user.AppUser.Id] = roles.ToDictionary(
+                role => role.Name!,
+                role => userRoles.Contains(role.Name!)
+            );
+        }
+    }
+
+    private async Task<bool> IsExpert(ApplicationUser user)
+    {
+        var userRoles = await userManager.GetRolesAsync(user);
+        return userRoles.Contains("Expert");
+    }
+
+    private void CategoryChanged(Guid? categoryId, UserExpert user)
+    {
+        user.isCategoryChanged = true;
+        user.CategoryId = categoryId;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? string.Empty;
+        FilterUsers();
+    }
+
+    private void FilterUsers()
+    {
+        if (string.IsNullOrEmpty(searchQuery))
+        {
+            filteredUsers = users;
+        }
+        else
+        {
+            filteredUsers = users.Where(u => u.AppUser.Email != null && u.AppUser.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        foreach (var user in filteredUsers)
+        {
+            var currentRoles = await userManager.GetRolesAsync(user.AppUser);
+            var rolesToRemove = currentRoles.Where(role => !roleSelections[user.AppUser.Id].TryGetValue(role, out var isSelected) || !isSelected).ToList();
+            var rolesToAdd = roleSelections[user.AppUser.Id].Where(kvp => kvp.Value && !currentRoles.Contains(kvp.Key)).Select(kvp => kvp.Key).ToList();
+
+            if (rolesToRemove.Any())
+            {
+                await userManager.RemoveFromRolesAsync(user.AppUser, rolesToRemove);
+            }
+            if (rolesToAdd.Any())
+            {
+                await userManager.AddToRolesAsync(user.AppUser, rolesToAdd);
+            }
+
+            if (await IsExpert(user.AppUser) && user.isCategoryChanged)
+            {
+                await dataService.SaveExpertCategoryId(user.AppUser.Email!, (Guid)user.CategoryId!);
+            }
+        }
+        toastService.Notify(new(ToastType.Success, "Сохранение прошло успешно"));
+    }
+    
+    private void OnRoleChanged(UserExpert user, string roleName, object value)
+    {
+        var isSelected = (value as bool?) ?? false;
+        roleSelections[user.AppUser.Id][roleName] = isSelected;
+
+        if (roleName == "Expert")
+        {
+            user.isExpert = isSelected;
+        }
+    }
+
+    public class UserExpert
+    {
+        public ApplicationUser AppUser { get; set; } = default!;
+        public bool isExpert { get; set; } = false;
+        public Guid? CategoryId { get; set; }
+        public bool isCategoryChanged { get; set; } = false;
+    }
+}

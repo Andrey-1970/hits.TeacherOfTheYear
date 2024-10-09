@@ -367,3 +367,4 @@ FodyWeavers.xsd
 
 .idea/
 *.sln.iml
+/ServerApp/Dockerfile — копия
