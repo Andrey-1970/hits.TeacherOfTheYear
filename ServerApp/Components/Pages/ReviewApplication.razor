@@ -4,6 +4,8 @@
 
 @inject IDataService data
 @inject NavigationManager navigate
+@using ServerApp.Services;
+@inject IMailService MailService
 
 <PageTitle>Проверка заявки</PageTitle>
 
@@ -175,6 +177,7 @@
     string? Comment;
     string? trackName;
     string? cropPhoto;
+    string? Email;
 
     protected override async Task OnInitializedAsync()
     {
@@ -199,6 +202,12 @@
             model.MarkBlocks = newMarkBlocks.ToArray();
 
             await OnBlockIdChanged(model.MarkBlocks.FirstOrDefault()?.Id);
+
+            Guid targetUserId = Guid.Parse(Id);
+
+            var listinfo = await data.GetUserInfosModelsAsync();
+            var targetUser = listinfo.FirstOrDefault(u => u.Id == targetUserId);
+            Email = targetUser.Email;
         }
     }
 
@@ -217,12 +226,52 @@
     async Task ApproveApplication()
     {
         await data.ApproveApplicationFormAsync(model!.ApplicationId);
+        string htmlBody = $@"
+                        <div style='font-family: Arial, Helvetica, sans-serif; padding: 10%; text-align: center;  line-height: 1.5'>
+                            <h1>Ваша заявка одобрена!</h1>
+
+                            <hr style='border: 1px solid blue; margin: 20px 0;'>
+
+                            <p>Здравствуйте, уважаемый пользователь!</p>
+
+                            <p>Ваша заявка одобрена на сайте
+                            <a href='https://tofy.tyuiu.ru' style='color: blue; text-decoration: underline;'>tofy.tyuiu.ru</a>.
+                            Чтобы узнать новый статус перейдите в личный кабинет</p>
+                            <hr style='border: 1px solid blue; margin: 20px 0;'>
+
+                            <p>На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.</p>
+
+                            <p>В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.</p>
+                        </div>";
+
+
+        await MailService.SendEmailAsync(Email, "Ваша заявка одобрена!", htmlBody);
         navigate.NavigateTo("/review#");
     }
 
     async Task RejectApplication()
     {
         await data.RejectApplicationFormAsync(model!.ApplicationId);
+        string htmlBody = $@"
+                        <div style='font-family: Arial, Helvetica, sans-serif; padding: 10%; text-align: center;  line-height: 1.5'>
+                            <h1>Ваша заявка отклонена!</h1>
+
+                            <hr style='border: 1px solid blue; margin: 20px 0;'>
+
+                            <p>Здравствуйте, уважаемый пользователь!</p>
+
+                            <p>Ваша заявка отклонена на сайте
+                            <a href='https://tofy.tyuiu.ru' style='color: blue; text-decoration: underline;'>tofy.tyuiu.ru</a>.
+                            Чтобы уточнить статус и дополнить заявку перейдите на сайт</p>
+                            <hr style='border: 1px solid blue; margin: 20px 0;'>
+
+                            <p>На это письмо не нужно отвечать, так как оно создано автоматически и предназначено только для уведомления.</p>
+
+                            <p>В случае, если Вы считаете, что письмо поступило ошибочно - проигнорируйте его.</p>
+                        </div>";
+
+
+        await MailService.SendEmailAsync(Email, "Ваша заявка отклонена!", htmlBody);
         navigate.NavigateTo("/review#");
     }
 
