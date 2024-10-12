@@ -44,12 +44,23 @@
 </div>
 
 @code {
-    private FeedBack feedback = new();
+    FeedbackModel feedback = new();
 
     private async Task HandleOnValidSubmit()
     {
-        await data.SaveFeedbackAsync(feedback);
+        await data.SaveFeedbackAsync(new FeedBack(){Name = feedback.Name, Email = feedback.Email, Message = feedback.Message});
         toastService.Notify(new(ToastType.Success, "Ваше сообщение успешно отправлено"));
         feedback = new();
+    }
+
+    class FeedbackModel
+    {
+        [Required(ErrorMessage = "Необходимо ввести имя")]
+        public string? Name { get; set; }
+        [Required(ErrorMessage = "Необходимо ввести адрес электронной почты")]
+        [EmailAddress(ErrorMessage = "Указан некорректный адрес электронной почты")]
+        public string? Email { get; set; }
+        [Required(ErrorMessage = "Необходимо ввести сообщение")]
+        public string? Message { get; set; }
     }
 }
