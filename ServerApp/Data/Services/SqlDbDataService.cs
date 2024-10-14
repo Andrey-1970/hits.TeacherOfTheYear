@@ -8,6 +8,7 @@ using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.InspectionModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
@@ -1480,7 +1481,29 @@ namespace ServerApp.Data.Services
         }
 
 
+        public async Task<string> GetStatusNameAsync(Guid statusId)
+        {
+            var status = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Id == statusId);
+            return status?.Status ?? "Все заявки";
+        }
 
+        public async Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId)
+        {
+            var userInfos = context.UserInfos.Where(e => 
+                statusId != null ?
+                e.Applications != null && 
+                e.Applications.Any() &&
+                e.Applications.FirstOrDefault().ApplicationStatusId == statusId 
+                : true
+            );
 
+            return await userInfos.Select(e => new UserInfoModel(e)).ToArrayAsync();
+        }
+
+        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId)
+        {
+            var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            return new ApplicationFormInspectionModel(model);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.InspectionModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
@@ -69,5 +70,8 @@ namespace ServerApp.Data.Interfaces
         Task<FeedBack> GetFeedbackAsync(Guid feedbackId);
 
         Task<Deadline> GetDeadlineAsync(string name);
+        Task<string> GetStatusNameAsync(Guid statusId);
+        Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId);
+        Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId);
     }
 }
