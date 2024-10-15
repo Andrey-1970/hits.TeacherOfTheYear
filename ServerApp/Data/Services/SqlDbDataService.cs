@@ -1485,13 +1485,15 @@ namespace ServerApp.Data.Services
 
         public async Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId)
         {
-            var userInfos = context.UserInfos.Where(e => 
+            var userInfos = await context.UserInfos.Where(e => 
                 statusId == null || e.Applications != null && 
                 e.Applications.Count != 0 &&
                 e.Applications.FirstOrDefault().ApplicationStatusId == statusId
-            );
+            ).ToListAsync();
 
-            return await userInfos.Select(e => new UserInfoModel(e)).ToArrayAsync();
+            var userInfosModels = userInfos.Select(e => new UserInfoModel(e));
+
+            return userInfosModels.ToArray();
         }
 
         public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId)
