@@ -1,0 +1,137 @@
+﻿@page "/statuses/{StatusId}/applications"
+
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
+@inject IDataService data
+@inject NavigationManager navigate
+
+<PageTitle>Список анкет</PageTitle>
+
+<div class="block">
+    <div class="block-title">
+        <div class="title-direction">
+            <div class="block-title-text">
+                Список анкет со статусом "@statusName"
+            </div>
+            <div class="text-direction">
+                <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
+            </div>
+        </div>
+    </div>
+    <div style="align-items: flex-start; overflow: auto;">
+        @if (isLoading)
+        {
+            <div class="d-flex justify-content-center">
+                <Spinner Color="SpinnerColor.Primary" />
+            </div>
+        }
+        else if (participants == null || !participants.Any())
+        {
+            <p>Нет данных для отображения.</p>
+        }
+        else
+        {
+            <Grid TItem="UserInfoModel"
+                  Class="table-filter"
+                  FiltersRowCssClass="filters-row"
+                  HeaderRowCssClass="header-row"
+                  DataProvider="UserDataProvider"
+                  FiltersTranslationProvider="GridFiltersTranslationProvider"
+                  AllowFiltering="true"
+                  AllowPaging="true"
+                  PageSize="8"
+                  AllowSorting="true"
+                  Responsive="true"
+                  AllowRowClick="true"
+                  OnRowClick="OnRowClick">
+                <GridColumn TItem="UserInfoModel"
+                            HeaderText="ФИО кандидата"
+                            PropertyName="FullName"
+                            SortKeySelector="item => item.FullName">
+                    @context.FullName
+                </GridColumn>
+                <GridColumn TItem="UserInfoModel"
+                            HeaderText="Номер телефона"
+                            PropertyName="PhoneNumber"
+                            SortKeySelector="item => item.PhoneNumber">
+                    @context.PhoneNumber
+                </GridColumn>
+                <GridColumn TItem="UserInfoModel"
+                            HeaderText="Электронная почта"
+                            PropertyName="Email"
+                            SortKeySelector="item => item.Email">
+                    @context.Email
+                </GridColumn>
+            </Grid>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? StatusId { get; set; }
+
+    string? statusName;
+    UserInfoModel[]? participants;
+    bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (StatusId is not null)
+        {
+            if (StatusId == "all")
+            {
+                statusName = "Все";
+                participants = await data.GetUserInfoModelsAsync(null);
+            }
+            else if (Guid.TryParse(StatusId, out Guid statusId))
+            {
+                statusName = await data.GetStatusNameAsync(statusId);
+                participants = await data.GetUserInfoModelsAsync(statusId);
+            }
+        }
+
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task<GridDataProviderResult<UserInfoModel>> UserDataProvider(GridDataProviderRequest<UserInfoModel> request)
+    {
+        var data = participants ?? Array.Empty<UserInfoModel>();
+        return await Task.FromResult(request.ApplyTo(data));
+    }
+
+    private async Task<IEnumerable<FilterOperatorInfo>> GridFiltersTranslationProvider()
+    {
+        var filtersTranslation = new List<FilterOperatorInfo>
+        {
+            // number/date/boolean
+            new("=", "Равно", FilterOperator.Equals),
+            new("!=", "Не равно", FilterOperator.NotEquals),
+            // number/date
+            new("<", "Меньше", FilterOperator.LessThan),
+            new("<=", "Меньше или равно", FilterOperator.LessThanOrEquals),
+            new(">", "Больше", FilterOperator.GreaterThan),
+            new(">=", "Больше или равно", FilterOperator.GreaterThanOrEquals),
+            // string
+            new("*a*", "Включает", FilterOperator.Contains),
+            new("a**", "Начинается с", FilterOperator.StartsWith),
+            new("**a", "Заканчивается на", FilterOperator.EndsWith),
+            new("=", "Равно", FilterOperator.Equals),
+            // common
+            new("x", "Очистить фильтр", FilterOperator.Clear)
+        };
+
+        return await Task.FromResult(filtersTranslation);
+    }
+
+    private async Task OnRowClick(GridRowEventArgs<UserInfoModel> row)
+    {
+        await Task.Run(() => navigate.NavigateTo($"/statuses/{StatusId}/applications/{row.Item.Id}"));
+    }
+
+    async Task Back()
+    {
+        await Task.Run(() => navigate.NavigateTo("/statuses#"));
+    }
+}

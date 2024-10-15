@@ -3,11 +3,13 @@ using System.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using ServerApp.Components.Pages;
 using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Interfaces;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.InspectionModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
@@ -46,8 +48,14 @@ namespace ServerApp.Data.Services
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
             return app!.CropPhoto!.Base64Data;
         }
+
+        public async Task<string> GetCropPhotoUserAsync(Guid userId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.UserInfoId == userId);
+            return app!.CropPhoto!.Base64Data;
+        }
         
-        private Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
+        private static Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
         {
             var x = coordinates.X;
             var y = coordinates.Y;
@@ -58,7 +66,7 @@ namespace ServerApp.Data.Services
             const string base64Prefix = "data:image/jpeg;base64,";
             if (base64.StartsWith(base64Prefix))
             {
-                base64 = base64.Substring(base64Prefix.Length);
+                base64 = base64[base64Prefix.Length..];
             }
 
             // Проверка валидности base64 строки
@@ -69,40 +77,36 @@ namespace ServerApp.Data.Services
 
             // Преобразование base64 в изображение
             byte[] imageBytes = Convert.FromBase64String(base64);
-            using (var ms = new MemoryStream(imageBytes))
-            using (var image = Image.Load(ms))
-            {
-                // Вычисление коэффициента масштабирования
-                float scaleFactor = 400f / image.Height;
+            using var ms = new MemoryStream(imageBytes);
+            using var image = Image.Load(ms);
+            // Вычисление коэффициента масштабирования
+            float scaleFactor = 400f / image.Height;
 
-                // Пересчет координат и размеров для оригинального изображения
-                int originalX = (int)(x / scaleFactor);
-                int originalY = (int)(y / scaleFactor);
-                int originalWidth = (int)(width / scaleFactor);
-                int originalHeight = (int)(height / scaleFactor);
+            // Пересчет координат и размеров для оригинального изображения
+            int originalX = (int)(x / scaleFactor);
+            int originalY = (int)(y / scaleFactor);
+            int originalWidth = (int)(width / scaleFactor);
+            int originalHeight = (int)(height / scaleFactor);
 
-                // Проверка и корректировка координат и размеров
-                originalX = Math.Max(0, originalX);
-                originalY = Math.Max(0, originalY);
-                originalWidth = Math.Min(image.Width - originalX, originalWidth);
-                originalHeight = Math.Min(image.Height - originalY, originalHeight);
+            // Проверка и корректировка координат и размеров
+            originalX = Math.Max(0, originalX);
+            originalY = Math.Max(0, originalY);
+            originalWidth = Math.Min(image.Width - originalX, originalWidth);
+            originalHeight = Math.Min(image.Height - originalY, originalHeight);
 
-                // Обрезка изображения
-                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
+            // Обрезка изображения
+            image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
 
-                // Преобразование обрезанного изображения обратно в base64
-                using (var outStream = new MemoryStream())
-                {
-                    image.Save(outStream, new JpegEncoder());
-                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
-            
-                    // Возвращаем строку с префиксом
-                    return Task.FromResult($"{base64Prefix}{croppedBase64}");
-                }
-            }
+            // Преобразование обрезанного изображения обратно в base64
+            using var outStream = new MemoryStream();
+            image.Save(outStream, new JpegEncoder());
+            string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
+
+            // Возвращаем строку с префиксом
+            return Task.FromResult($"{base64Prefix}{croppedBase64}");
         }
 
-        private bool IsValidBase64String(string base64)
+        private static bool IsValidBase64String(string base64)
         {
             try
             {
@@ -1480,7 +1484,35 @@ namespace ServerApp.Data.Services
         }
 
 
+        public async Task<string> GetStatusNameAsync(Guid statusId)
+        {
+            var status = await context.ApplicationStatuses.FirstOrDefaultAsync(e => e.Id == statusId);
+            return status?.Status ?? "Все заявки";
+        }
 
+        public async Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId)
+        {
+            var userInfos = await context.UserInfos.Where(e => 
+                statusId == null && e.Applications.Any() || e.Applications != null && 
+                e.Applications.Count != 0 &&
+                e.Applications.FirstOrDefault().ApplicationStatusId == statusId
+            ).ToListAsync();
 
+            var userInfosModels = userInfos.Select(e => new UserInfoModel(e));
+
+            return userInfosModels.ToArray();
+        }
+
+        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid userId, Guid? markBlockId)
+        {
+            var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.UserInfoId == userId);
+            return new ApplicationFormInspectionModel(model, markBlockId);
+        }
+
+        public async Task<ApplicationStatusInspectionModel[]> GetApplicationStatusInspectionModelsAsync()
+        {
+            var statuses = context.ApplicationStatuses;
+            return await statuses.Select(e => new ApplicationStatusInspectionModel(e)).ToArrayAsync();
+        }
     }
 }

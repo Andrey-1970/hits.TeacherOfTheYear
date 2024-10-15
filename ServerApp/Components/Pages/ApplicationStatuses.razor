@@ -1,0 +1,47 @@
+﻿@page "/statuses"
+
+@attribute [Authorize(Roles = "Admin, Organiser")]
+
+@inject IDataService data
+@inject NavigationManager navigate
+
+<PageTitle>Статусы анкет</PageTitle>
+
+<div class="block-group">
+    <div class="block">
+        <div class="block-title">
+            <div class="block-title-text">
+                Статусы анкет
+            </div>
+        </div>
+        <div class="block-content">
+            @if (statuses is not null)
+            {
+                <StatusCard OnClick="async () => await ViewAllApplicationsHandler()" StatusName="Все" />
+                @foreach (var status in statuses!)
+                {
+                    <StatusCard OnClick="async () => await ViewApplicationsHandler(status.Id)" StatusName="@status.Name" />
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    ApplicationStatusInspectionModel[]? statuses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statuses = await data.GetApplicationStatusInspectionModelsAsync();
+    }
+
+    async Task ViewAllApplicationsHandler()
+    {
+        await Task.Run(() => navigate.NavigateTo($"/statuses/all/applications#"));
+    }
+
+    async Task ViewApplicationsHandler(Guid statusId)
+    {
+        await Task.Run(() => navigate.NavigateTo($"/statuses/{statusId.ToString()}/applications#"));
+    }
+}

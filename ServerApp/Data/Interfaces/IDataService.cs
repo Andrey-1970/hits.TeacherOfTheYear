@@ -2,6 +2,7 @@
 using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.InspectionModel;
 using ServerApp.Data.Models.MarkModel;
 using ServerApp.Data.Models.ReviewModel;
 using ServerApp.Data.Models.VoteModel;
@@ -12,6 +13,7 @@ namespace ServerApp.Data.Interfaces
     {
         Task<string?> GetCropPhotoCurrentUserAsync();
         Task<string> GetCropPhotoAsync(Guid appId);
+        Task<string> GetCropPhotoUserAsync(Guid userId);
         Task<Components.Pages.ApplicationForm.PhotoData?> GetCurrentUserPhotoAsync();
         Task SavePhotoAsync(string base64Data, PhotoEditorModal.CropCoordinates cropCoordinates);
         Task<Guid?> GetCategoryIdFromEmail(string email);
@@ -69,5 +71,9 @@ namespace ServerApp.Data.Interfaces
         Task<FeedBack> GetFeedbackAsync(Guid feedbackId);
 
         Task<Deadline> GetDeadlineAsync(string name);
+        Task<string> GetStatusNameAsync(Guid statusId); //Получить имя статуса по его айди
+        Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId); // Получить список пользователей для 1 конкретного статуса
+        Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid userId, Guid? markBlockId); // Получить модель для страницы 1 конкретной заявки
+        Task<ApplicationStatusInspectionModel[]> GetApplicationStatusInspectionModelsAsync(); //Получить все статусы для заявок
     }
 }

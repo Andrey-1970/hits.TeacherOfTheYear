@@ -10,7 +10,7 @@
   border-width: 1px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   gap: 0px;
   align-items: center;
   flex-shrink: 0;
