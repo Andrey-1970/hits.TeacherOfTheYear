@@ -21,7 +21,7 @@
     @if (model is not null)
     {
         <div class="block-content">
-            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
+            @if (model.TrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
             {
                 <div class="row w-100">
                     <div class="col-auto">
@@ -29,6 +29,12 @@
                             @if (cropPhoto is not null)
                             {
                                 <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%;">
+                                    <Icon Name="IconName.CameraFill" Color="IconColor.Secondary" Size="IconSize.x1"></Icon>
+                                </div>
                             }
                         </div>
                     </div>
@@ -100,6 +106,28 @@
                     }
                 }
             }
+            else
+            {
+                <div class="row w-100">
+                    <div class="col-auto">
+                        <div style="height: 320px; width: 240px; background-color: darkgrey; border-radius: 10px; border: 2px solid darkslategrey; overflow: hidden">
+                            @if (cropPhoto is not null)
+                            {
+                                <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center align-items-center" style="height: 100%; width: 100%;">
+                                    <Icon Name="IconName.CameraFill" Color="IconColor.Secondary" Size="IconSize.x1"></Icon>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center w-100">
+                    <div class="text-danger">Информация отсутствует</div>
+                </div>
+            }
         </div>
     }
     else
@@ -111,10 +139,8 @@
 </div>
 
 @code {
-    [Parameter]
-    public string? StatusId { get; set; }
-    [Parameter]
-    public string? ApplicationId { get; set; }
+    [Parameter] public string? StatusId { get; set; }
+    [Parameter] public string? ApplicationId { get; set; }
 
     ApplicationFormInspectionModel? model;
     string? trackName;
@@ -127,28 +153,36 @@
             return;
         }
 
-        model = await data.GetApplicationFormInspectionModel(appId);
+        model = await data.GetApplicationFormInspectionModel(appId, null);
 
-        if (model is not null && model.SelectedTrackId != null)
+        if (model is not null && model.TrackId != null)
         {
-            cropPhoto = await data.GetCropPhotoAsync(model.ApplicationId);
+            try
+            {
+                cropPhoto = await data.GetCropPhotoAsync(model.Id);
+            }
+            catch (Exception e)
+            {
+                cropPhoto = null;
+            }
 
-            var track = await data.GetTrackAsync(model.SelectedTrackId);
+            var track = await data.GetTrackAsync(model.TrackId);
             trackName = track.Name;
-
-            model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+        }
+        else if (model is not null)
+        {
+            cropPhoto = await data.GetCropPhotoUserAsync(appId);
         }
     }
 
     async Task OnBlockIdChanged(Guid? blockId)
     {
-        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
+        if (ApplicationId == null || !Guid.TryParse(ApplicationId, out Guid appId))
+        {
+            return;
+        }
 
-        model.SelectedMarkBlockId = blockId.Value;
-
-        if (blockId == ResultBlock.Id) return;
-        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
-        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model = await data.GetApplicationFormInspectionModel(appId, (Guid)blockId);
     }
 
     async Task Back()

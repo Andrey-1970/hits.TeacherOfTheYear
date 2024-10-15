@@ -1,4 +1,3 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ServerApp.Data.Models.EditModel;
 using ServerApp.Data.Models.ReviewModel;
 
@@ -7,29 +6,34 @@ namespace ServerApp.Data.Models.InspectionModel;
 public class ApplicationFormInspectionModel
 {
     private readonly ApplicationForm applicationForm;
-    private readonly Guid markBlockId;
+    private readonly Guid? markBlockId;
 
     public ApplicationFormInspectionModel()
     {
     }
 
-    public ApplicationFormInspectionModel(ApplicationForm applicationForm, Guid markBlockId)
+    public ApplicationFormInspectionModel(ApplicationForm applicationForm, Guid? markBlockId)
     {
         this.applicationForm = applicationForm;
-        this.markBlockId = markBlockId;
+        this.markBlockId = markBlockId != null ? (Guid)markBlockId : applicationForm.Track != null ?  applicationForm.Track.MarkBlocks.FirstOrDefault(e => e.Number == 1).Id : null;
     }
 
     public Guid Id => applicationForm.Id;
     public string? FullName => applicationForm.UserInfo.Name;
     public Guid? TrackId => applicationForm.TrackId;
     public Guid? CategoryId => applicationForm.CategoryId;
-    public MarkBlockModel[] MarkBlocks => applicationForm.Track.MarkBlocks.Select(e => new MarkBlockModel(e)).ToArray();
 
-    public FieldModel[] Fields => applicationForm.Track.MarkBlocks.FirstOrDefault(e => e.Id == markBlockId).Fields
-        .SelectMany(e => e.FieldVals)
-        .Select(e => new FieldModel(e.Field, applicationForm.UserInfoId)).ToArray();
+    public Guid SelectedMarkBlockId => (Guid)markBlockId;
+    public MarkBlockModel[] MarkBlocks => applicationForm.Track != null ? applicationForm.Track.MarkBlocks.OrderBy(e => e.Number).Select(e => new MarkBlockModel(e)).ToArray() : [];
 
-    public TableModel[] Tables => applicationForm.Track.MarkBlocks.Where(e => e.Id == markBlockId)
+    public FieldModel[] Fields => applicationForm.Track != null ? applicationForm.Track.MarkBlocks
+        .FirstOrDefault(e => e.Id == markBlockId)
+        .Fields
+        .OrderBy(e => e.Number)
+        .Select(e => new FieldModel(e, applicationForm.UserInfoId))
+        .ToArray() : [];
+
+    public TableModel[] Tables => applicationForm.Track != null ? applicationForm.Track.MarkBlocks.Where(e => e.Id == markBlockId)
         .SelectMany(eb => eb.Tables)
         .OrderBy(t => t.Number).Select(t =>
             new TableModel
@@ -54,5 +58,5 @@ public class ApplicationFormInspectionModel
                                 ColumnId = cv.ColumnId
                             }).ToList()
                     }).ToList()
-            }).ToArray();
+            }).ToArray() : [];
 }

@@ -3,6 +3,7 @@ using System.Security;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using ServerApp.Components.Pages;
 using ServerApp.Components.Shared;
 using ServerApp.Data.Entities;
@@ -45,6 +46,12 @@ namespace ServerApp.Data.Services
         public async Task<string> GetCropPhotoAsync(Guid appId)
         {
             var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            return app!.CropPhoto!.Base64Data;
+        }
+
+        public async Task<string> GetCropPhotoUserAsync(Guid userId)
+        {
+            var app = await context.ApplicationForms.FirstOrDefaultAsync(e => e.UserInfoId == userId);
             return app!.CropPhoto!.Base64Data;
         }
         
@@ -1486,7 +1493,7 @@ namespace ServerApp.Data.Services
         public async Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId)
         {
             var userInfos = await context.UserInfos.Where(e => 
-                statusId == null || e.Applications != null && 
+                statusId == null && e.Applications.Any() || e.Applications != null && 
                 e.Applications.Count != 0 &&
                 e.Applications.FirstOrDefault().ApplicationStatusId == statusId
             ).ToListAsync();
@@ -1496,9 +1503,9 @@ namespace ServerApp.Data.Services
             return userInfosModels.ToArray();
         }
 
-        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId, Guid markBlockId)
+        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid userId, Guid? markBlockId)
         {
-            var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
+            var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.UserInfoId == userId);
             return new ApplicationFormInspectionModel(model, markBlockId);
         }
 
