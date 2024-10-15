@@ -6,12 +6,16 @@ namespace ServerApp.Data.Models.InspectionModel;
 public class ApplicationFormInspectionModel
 {
     private readonly ApplicationForm applicationForm;
-    
-    public ApplicationFormInspectionModel() { }
+    private readonly Guid markBlockId;
 
-    public ApplicationFormInspectionModel(ApplicationForm applicationForm)
+    public ApplicationFormInspectionModel()
+    {
+    }
+
+    public ApplicationFormInspectionModel(ApplicationForm applicationForm, Guid markBlockId)
     {
         this.applicationForm = applicationForm;
+        this.markBlockId = markBlockId;
     }
 
     public Guid Id => applicationForm.Id;
@@ -19,9 +23,11 @@ public class ApplicationFormInspectionModel
     public Guid? TrackId => applicationForm.TrackId;
     public Guid? CategoryId => applicationForm.CategoryId;
 
-    public FieldModel[] Fields => applicationForm.FieldVals
+    public FieldModel[] Fields => applicationForm.Track.MarkBlocks.FirstOrDefault(e => e.Id == markBlockId).Fields
+        .SelectMany(e => e.FieldVals)
         .Select(e => new FieldModel(e.Field, applicationForm.UserInfoId)).ToArray();
-    public TableModel[] Tables => applicationForm.Track.EditBlocks
+
+    public TableModel[] Tables => applicationForm.Track.MarkBlocks.Where(e => e.Id == markBlockId)
         .SelectMany(eb => eb.Tables)
         .OrderBy(t => t.Number).Select(t =>
             new TableModel
@@ -30,7 +36,8 @@ public class ApplicationFormInspectionModel
                 Name = t.Name,
                 Columns = t.Columns.OrderBy(c => c.Number).Select(e => new ColumnModel(e)).ToList(),
                 Rows = t.Rows
-                    .Where(r => r.CellVals.OrderBy(c => c.Column!.Number).Any(cv => cv.ApplicationId == applicationForm.Id))
+                    .Where(r => r.CellVals.OrderBy(c => c.Column!.Number)
+                        .Any(cv => cv.ApplicationId == applicationForm.Id))
                     .OrderBy(r => r.Number)
                     .Select(r => new RowModel
                     {

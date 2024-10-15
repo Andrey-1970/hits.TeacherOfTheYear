@@ -1496,10 +1496,10 @@ namespace ServerApp.Data.Services
             return userInfosModels.ToArray();
         }
 
-        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId)
+        public async Task<ApplicationFormInspectionModel> GetApplicationFormInspectionModel(Guid appId, Guid markBlockId)
         {
             var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
-            return new ApplicationFormInspectionModel(model);
+            return new ApplicationFormInspectionModel(model, markBlockId);
         }
 
         public async Task<ApplicationStatusInspectionModel[]> GetApplicationStatusInspectionModelsAsync()
