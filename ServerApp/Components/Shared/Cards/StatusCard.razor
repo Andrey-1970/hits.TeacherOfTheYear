@@ -1,0 +1,18 @@
+﻿<div class="category-card" type="button" @onclick="async () => await OnClickHandler()">
+    <div class="block-title-text text-center text-white">
+        <div class="category-title">@StatusName</div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? StatusName { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback OnClick { get; set; }
+
+    async Task OnClickHandler()
+    {
+        await OnClick.InvokeAsync();
+    }
+}

@@ -75,7 +75,7 @@
     DateTimeOffset endDeadline = new();
     DateTimeOffset dateNow = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         dateNow = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(3));
         if (deadline != null)

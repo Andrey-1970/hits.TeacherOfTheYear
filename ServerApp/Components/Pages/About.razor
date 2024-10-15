@@ -350,7 +350,7 @@
 
     private string GetTooltipText(DateTimeOffset start, DateTimeOffset end)
     {
-        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day:D2}.{start.Month:D2}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day:D2}.{end.Month:D2}.{end.Year}"; return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day}.{start.Month}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day}.{end.Month}.{end.Year}";
+        return $"с {TimeOnly.FromDateTime(start.DateTime)} МСК {start.Day:D2}.{start.Month:D2}.{start.Year} по {TimeOnly.FromDateTime(end.DateTime)} МСК {end.Day:D2}.{end.Month:D2}.{end.Year}"; 
     }
 
     private async Task ShowConfirmationAsync()

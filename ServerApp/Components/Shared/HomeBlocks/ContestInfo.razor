@@ -226,7 +226,7 @@
     DateTimeOffset endSecondDeadline = new();
     DateTimeOffset dateNow = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         timer = new Timer(1000); // Таймер обновляется каждую секунду
         timer.Elapsed += UpdateCountdown!; // Событие для обновления таймера

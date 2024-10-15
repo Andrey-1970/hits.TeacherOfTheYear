@@ -48,7 +48,7 @@ namespace ServerApp.Data.Services
             return app!.CropPhoto!.Base64Data;
         }
         
-        private Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
+        private static Task<string> CropPhoto(string base64, PhotoEditorModal.CropCoordinates coordinates)
         {
             var x = coordinates.X;
             var y = coordinates.Y;
@@ -59,7 +59,7 @@ namespace ServerApp.Data.Services
             const string base64Prefix = "data:image/jpeg;base64,";
             if (base64.StartsWith(base64Prefix))
             {
-                base64 = base64.Substring(base64Prefix.Length);
+                base64 = base64[base64Prefix.Length..];
             }
 
             // Проверка валидности base64 строки
@@ -70,40 +70,36 @@ namespace ServerApp.Data.Services
 
             // Преобразование base64 в изображение
             byte[] imageBytes = Convert.FromBase64String(base64);
-            using (var ms = new MemoryStream(imageBytes))
-            using (var image = Image.Load(ms))
-            {
-                // Вычисление коэффициента масштабирования
-                float scaleFactor = 400f / image.Height;
+            using var ms = new MemoryStream(imageBytes);
+            using var image = Image.Load(ms);
+            // Вычисление коэффициента масштабирования
+            float scaleFactor = 400f / image.Height;
 
-                // Пересчет координат и размеров для оригинального изображения
-                int originalX = (int)(x / scaleFactor);
-                int originalY = (int)(y / scaleFactor);
-                int originalWidth = (int)(width / scaleFactor);
-                int originalHeight = (int)(height / scaleFactor);
+            // Пересчет координат и размеров для оригинального изображения
+            int originalX = (int)(x / scaleFactor);
+            int originalY = (int)(y / scaleFactor);
+            int originalWidth = (int)(width / scaleFactor);
+            int originalHeight = (int)(height / scaleFactor);
 
-                // Проверка и корректировка координат и размеров
-                originalX = Math.Max(0, originalX);
-                originalY = Math.Max(0, originalY);
-                originalWidth = Math.Min(image.Width - originalX, originalWidth);
-                originalHeight = Math.Min(image.Height - originalY, originalHeight);
+            // Проверка и корректировка координат и размеров
+            originalX = Math.Max(0, originalX);
+            originalY = Math.Max(0, originalY);
+            originalWidth = Math.Min(image.Width - originalX, originalWidth);
+            originalHeight = Math.Min(image.Height - originalY, originalHeight);
 
-                // Обрезка изображения
-                image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
+            // Обрезка изображения
+            image.Mutate(ctx => ctx.Crop(new Rectangle(originalX, originalY, originalWidth, originalHeight)));
 
-                // Преобразование обрезанного изображения обратно в base64
-                using (var outStream = new MemoryStream())
-                {
-                    image.Save(outStream, new JpegEncoder());
-                    string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
-            
-                    // Возвращаем строку с префиксом
-                    return Task.FromResult($"{base64Prefix}{croppedBase64}");
-                }
-            }
+            // Преобразование обрезанного изображения обратно в base64
+            using var outStream = new MemoryStream();
+            image.Save(outStream, new JpegEncoder());
+            string croppedBase64 = Convert.ToBase64String(outStream.ToArray());
+
+            // Возвращаем строку с префиксом
+            return Task.FromResult($"{base64Prefix}{croppedBase64}");
         }
 
-        private bool IsValidBase64String(string base64)
+        private static bool IsValidBase64String(string base64)
         {
             try
             {
@@ -1490,11 +1486,9 @@ namespace ServerApp.Data.Services
         public async Task<UserInfoModel[]> GetUserInfoModelsAsync(Guid? statusId)
         {
             var userInfos = context.UserInfos.Where(e => 
-                statusId != null ?
-                e.Applications != null && 
-                e.Applications.Any() &&
-                e.Applications.FirstOrDefault().ApplicationStatusId == statusId 
-                : true
+                statusId == null || e.Applications != null && 
+                e.Applications.Count != 0 &&
+                e.Applications.FirstOrDefault().ApplicationStatusId == statusId
             );
 
             return await userInfos.Select(e => new UserInfoModel(e)).ToArrayAsync();
