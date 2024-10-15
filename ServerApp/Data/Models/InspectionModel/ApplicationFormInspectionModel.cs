@@ -1,5 +1,6 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ServerApp.Data.Models.EditModel;
+using ServerApp.Data.Models.ReviewModel;
 
 namespace ServerApp.Data.Models.InspectionModel;
 
@@ -22,6 +23,7 @@ public class ApplicationFormInspectionModel
     public string? FullName => applicationForm.UserInfo.Name;
     public Guid? TrackId => applicationForm.TrackId;
     public Guid? CategoryId => applicationForm.CategoryId;
+    public MarkBlockModel[] MarkBlocks => applicationForm.Track.MarkBlocks.Select(e => new MarkBlockModel(e)).ToArray();
 
     public FieldModel[] Fields => applicationForm.Track.MarkBlocks.FirstOrDefault(e => e.Id == markBlockId).Fields
         .SelectMany(e => e.FieldVals)
