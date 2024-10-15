@@ -5,20 +5,109 @@
 @inject IDataService data
 @inject NavigationManager navigate
 
-<PageTitle>Анкета</PageTitle>
+<PageTitle>Просмотр анкеты</PageTitle>
 
 <div class="block">
     <div class="block-title">
         <div class="title-direction">
             <div class="block-title-text">
-                Анкета "@ApplicationId"
+                Просмотр анкеты
             </div>
             <div class="text-direction">
                 <Icon Name="IconName.ArrowLeft" Size="IconSize.x2" @onclick="async () => await Back()" type="button" />
             </div>
         </div>
     </div>
-
+    @if (model is not null)
+    {
+        <div class="block-content">
+            @if (model.SelectedTrackId != Guid.Empty && model.MarkBlocks is not null && model.MarkBlocks.Any() && model.SelectedMarkBlockId != Guid.Empty)
+            {
+                <div class="row w-100">
+                    <div class="col-auto">
+                        <div style="height: 320px; width: 240px; background-color: darkgrey; border-radius: 10px; border: 2px solid darkslategrey; overflow: hidden">
+                            @if (cropPhoto is not null)
+                            {
+                                <img src="@cropPhoto" style="height: 100%; width: 100%;" />
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column block-content-text col gap-2">
+                        <div class="form-text">Выбранный трек: @trackName</div>
+                    </div>
+                </div>
+                <div class="block-content-text">
+                    <TabsForMarkBlocks MarkBlocks="model.MarkBlocks" SelectedMarkBlockId="model.SelectedMarkBlockId" OnBlockChanged="OnBlockIdChanged"></TabsForMarkBlocks>
+                </div>
+                @if (model.Fields is not null && model.Fields.Any())
+                {
+                    @foreach (var fld in model.Fields)
+                    {
+                        @if (!string.IsNullOrEmpty(fld.EditGroup))
+                        {
+                            <div class="block-subtitle-text">@fld.EditGroup</div>
+                        }
+                        <div class="row block-content-text border border-primary rounded m-0 mb-2">
+                            <div class="col border-end border-primary p-2">@fld.Name</div>
+                            @if (fld.Value is not null)
+                            {
+                                <div class="col p-2">@fld.Value</div>
+                            }
+                            else
+                            {
+                                <div class="col p-2 text-danger">Информация отсутствует</div>
+                            }
+                        </div>
+                    }
+                }
+                @if (model.Tables is not null && model.Tables.Any())
+                {
+                    @foreach (var table in model.Tables)
+                    {
+                        <div class="table-container mb-2">
+                            <div class="block-subtitle-text">@table.Name</div>
+                            @if (table.Rows is not null && table.Rows.Any())
+                            {
+                                <table class="table-stand">
+                                    <thead>
+                                        <tr>
+                                            @foreach (var column in table.Columns)
+                                            {
+                                                <th>@column.Name</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var row in table.Rows)
+                                        {
+                                            <tr>
+                                                @foreach (var cell in row.Cells)
+                                                {
+                                                    <td>@cell.Value</td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <div class="d-flex justify-content-center w-100">
+                                    <div class="text-danger">Информация отсутствует</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <Spinner Color="SpinnerColor.Primary" />
+        </div>
+    }
 </div>
 
 @code {
@@ -26,6 +115,41 @@
     public string? StatusId { get; set; }
     [Parameter]
     public string? ApplicationId { get; set; }
+
+    ApplicationFormInspectionModel? model;
+    string? trackName;
+    string? cropPhoto;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ApplicationId == null || !Guid.TryParse(ApplicationId, out Guid appId))
+        {
+            return;
+        }
+
+        model = await data.GetApplicationFormInspectionModel(appId);
+
+        if (model is not null && model.SelectedTrackId != null)
+        {
+            cropPhoto = await data.GetCropPhotoAsync(model.ApplicationId);
+
+            var track = await data.GetTrackAsync(model.SelectedTrackId);
+            trackName = track.Name;
+
+            model.MarkBlocks = await data.GetMarkBlockModelsAsync(model.SelectedTrackId);
+        }
+    }
+
+    async Task OnBlockIdChanged(Guid? blockId)
+    {
+        if (model == null || !blockId.HasValue || blockId.Value == Guid.Empty) return;
+
+        model.SelectedMarkBlockId = blockId.Value;
+
+        if (blockId == ResultBlock.Id) return;
+        model.Fields = await data.GetFieldModelsForMarkBlockAsync(blockId, model.ApplicationId);
+        model.Tables = await data.GetTableModelsForMarkBlockAsync(blockId, model.ApplicationId);
+    }
 
     async Task Back()
     {
