@@ -1505,5 +1505,11 @@ namespace ServerApp.Data.Services
             var model = await context.ApplicationForms.FirstOrDefaultAsync(e => e.Id == appId);
             return new ApplicationFormInspectionModel(model);
         }
+
+        public async Task<ApplicationStatusInspectionModel[]> GetApplicationStatusInspectionModelsAsync()
+        {
+            var statuses = context.ApplicationStatuses;
+            return await statuses.Select(e => new ApplicationStatusInspectionModel(e)).ToArrayAsync();
+        }
     }
 }
